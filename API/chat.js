@@ -1,1 +1,53 @@
+const BASE =
+  "Tu es un chef cuisinier convivial et précis. Réponds toujours en français. " +
+  "Quand on te demande une recette, donne : un titre, le nombre de portions (4 par défaut), " +
+  "les ingrédients avec quantités, les étapes numérotées avec temps et températures. " +
+  "Quand l’utilisateur demande une adaptation (ingrédient manquant, changement de portions, régime, matériel), " +
+  "redonne la recette COMPLÈTE mise à jour (quantités recalculées, étapes ajustées) en commençant par une phrase courte " +
+  "sur ce qui change. Sois concis. Format : texte brut, titres de section précédés de '## ', pas d’autre markdown. " +
+  "Tu ne réponds qu’à des questions de cuisine.";
 
+export default async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).json({ error: "method" });
+
+  // Code d'accès optionnel (variable APP_PASSWORD sur Vercel)
+  const need = process.env.APP_PASSWORD;
+  if (need && req.headers["x-code"] !== need) {
+    return res.status(401).json({ error: "code" });
+  }
+
+  const body = req.body || {};
+  const persona = typeof body.persona === "string" ? body.persona.slice(0, 300) : "";
+  const messages = Array.isArray(body.messages)
+    ? body.messages
+        .slice(-20)
+        .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+        .map((m) => ({ role: m.role, content: m.content.slice(0, 4000) }))
+    : [];
+  if (!messages.length || messages[0].role !== "user" || messages[messages.length - 1].role !== "user") {
+    return res.status(400).json({ error: "messages" });
+  }
+
+  try {
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: process.env.MODEL || "claude-haiku-5-5",
+        max_tokens: 1500,
+        system: persona ? BASE + " " + persona : BASE,
+        messages,
+      }),
+    });
+    if (!r.ok) return res.status(r.status === 429 ? 429 : 502).json({ error: "upstream" });
+    const data = await r.json();
+    const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+    return res.status(200).json({ text });
+  } catch (e) {
+    return res.status(502).json({ error: "network" });
+  }
+}
