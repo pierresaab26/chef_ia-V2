@@ -80,6 +80,19 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 #hfilter{display:flex;gap:8px;padding:10px 18px 0}
 .hheart{padding:0 4px;font-size:14px}
 @media (min-width:768px){#app{max-width:760px}.grid{grid-template-columns:repeat(4,1fr)}.cphoto{height:300px}}
+#scrim{position:fixed;inset:0;background:rgba(10,8,20,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
+#scrim.on{opacity:1;pointer-events:auto}
+#drawer{position:fixed;top:0;bottom:0;left:0;width:min(300px,82vw);background:var(--card);z-index:41;transform:translateX(-102%);transition:transform .28s ease;display:flex;flex-direction:column;padding:calc(14px + env(safe-area-inset-top,0px)) 14px 14px;box-shadow:4px 0 24px rgba(0,0,0,.2);visibility:hidden}
+#drawer.on{transform:none;visibility:visible}
+.dhead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.dhead b{flex:1;font-size:17px}
+.dclose{font-size:20px;padding:6px 10px;color:var(--mut)}
+.ditem{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:14px;font-size:16px;font-weight:600;text-align:left}
+.ditem.on{background:var(--green);color:#10200a}
+.ditem span.n{margin-left:auto;color:var(--mut);font-size:13px;font-weight:600}
+.ditem.on span.n{color:#10200a}
+.menubtn{font-size:22px;padding:0 6px;line-height:1;flex:none}
+@media (min-width:768px){#drawer{width:320px}}
 #chat.on~nav{display:none}
 nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-around;background:var(--card);border-radius:999px;padding:10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
 nav button{padding:6px 22px;font-size:22px;opacity:.5}
@@ -124,6 +137,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
   <section class="view on" id="home">
     <div class="scroll">
       <div class="top">
+        <button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button>
         <svg class="mascot"><use href="#mascot"/></svg>
         <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><select id="lang" aria-label="Language"></select>
       </div>
@@ -139,22 +153,35 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
   </section>
 
   <section class="view" id="card">
-    <div class="chead"><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b></div>
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b></div>
     <div class="scroll" id="cardbody"></div>
   </section>
 
+  <section class="view" id="favs">
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="fback" aria-label="Home">🏠</button><b id="fpT"></b></div>
+    <div class="scroll" id="flist"></div>
+  </section>
+
   <section class="view" id="history">
-    <div class="chead"><button class="back" id="hback" aria-label="Accueil">🏠</button><b id="hpT"></b></div>
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="hback" aria-label="Accueil">🏠</button><b id="hpT"></b></div>
     <div id="hfilter"></div>
     <div class="scroll" id="hlist"></div>
   </section>
 
   <section class="view" id="chat">
-    <div class="chead"><button class="back" id="back" aria-label="Accueil">🏠</button><svg class="mascot" style="width:38px;height:38px"><use href="#mascot"/></svg><button class="back" id="tocard" aria-label="Card" style="display:none;order:3;margin-left:auto">📖</button><div><b id="cname">Chef Claude</b><span class="sub" id="cdesc">Cuisine du monde</span></div></div>
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="back" aria-label="Accueil">🏠</button><svg class="mascot" style="width:38px;height:38px"><use href="#mascot"/></svg><button class="back" id="tocard" aria-label="Card" style="display:none;order:3;margin-left:auto">📖</button><div><b id="cname">Chef Claude</b><span class="sub" id="cdesc">Cuisine du monde</span></div></div>
     <div id="log"></div>
     <div id="quick"></div>
     <div id="bar"><button id="home2" aria-label="Accueil">🏠</button><input id="inp" autocomplete="off"><button id="mic" aria-label="Parler">🎤</button><button id="send"></button></div>
   </section>
+
+  <div id="scrim"></div>
+  <aside id="drawer" aria-hidden="true" aria-label="Menu">
+    <div class="dhead"><svg class="mascot" style="width:40px;height:40px"><use href="#mascot"/></svg><b>Chef Claude</b><button class="dclose" id="dclose" aria-label="Close">✕</button></div>
+    <button class="ditem" data-go="home">🏠 <span id="dHome"></span></button>
+    <button class="ditem" data-go="history">🕘 <span id="dHist"></span></button>
+    <button class="ditem" data-go="favs">❤️ <span id="dFav"></span><span class="n" id="dFavN"></span></button>
+  </aside>
 
   <nav>
     <button id="n1" class="on" aria-label="Accueil">🏠</button>
@@ -188,13 +215,15 @@ try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
 
-function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home')}
+let curView='home';
+function show(id){curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer()}
+function markDrawer(){document.querySelectorAll('.ditem').forEach(b=>b.classList.toggle('on',b.dataset.go===curView))}
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
   $('#hi').textContent=t.hi;$('#sub').textContent=t.sub;$('#hq').placeholder=t.ask;
   $('#hT').textContent=t.hist;$('#hmore').textContent=t.more;$('#hpT').textContent=t.hist;$('#thT').textContent=t.themes;$('#chT').textContent=t.chefs;
   inp.placeholder=t.ph;sendB.textContent=t.send;
-  drawGrid();drawChefs();refreshChat();drawHistory();
+  drawGrid();drawChefs();refreshChat();drawHistory();drawFavs();drawerText();
 }
 function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML='';add('a',t.w)}
   $('#cname').textContent=chefNow?"Chef "+chefNow.n:"Chef Claude";$('#cdesc').textContent=chefNow?t.cu[chefNow.k]:t.cd;
@@ -275,7 +304,22 @@ de:{card:"Karte",fav:"Favorit",favs:"Favoriten",all:"Alle",nofav:"Noch keine Fav
 it:{card:"Scheda",fav:"Preferito",favs:"Preferiti",all:"Tutte",nofav:"Ancora nessun preferito. Tocca ❤️ su una ricetta.",share:"Condividi",copied:"Ricetta copiata negli appunti",cont:"Continua con lo chef",com:"Commenti",nocom:"Ancora nessun commento. Sii il primo!",pub:"Pubblica",nm:"Il tuo nome",wr:"Scrivi un commento…",cdel:"Elimina",cdq:"Eliminare questo commento?",cOff:"I commenti non sono attivi su questo sito.",cErr:"Impossibile caricare i commenti.",cRate:"Troppi commenti, riprova tra un minuto.",credit:"Foto: Wikipedia",anon:"Anonimo",now:"adesso"},
 pt:{card:"Ficha",fav:"Favorito",favs:"Favoritos",all:"Todas",nofav:"Ainda sem favoritos. Toque em ❤️ numa receita.",share:"Partilhar",copied:"Receita copiada para a área de transferência",cont:"Continuar com o chef",com:"Comentários",nocom:"Ainda sem comentários. Seja o primeiro!",pub:"Publicar",nm:"O seu nome",wr:"Escreva um comentário…",cdel:"Eliminar",cdq:"Eliminar este comentário?",cOff:"Os comentários não estão ativados neste site.",cErr:"Não foi possível carregar os comentários.",cRate:"Demasiados comentários, tente novamente num minuto.",credit:"Foto: Wikipedia",anon:"Anónimo",now:"agora mesmo"}};
 Object.keys(I18B).forEach(k=>Object.assign(I18[k],I18B[k]));
+const I18C={fr:{home:"Accueil",menu:"Menu",close:"Fermer",favT:"Mes recettes favorites"},en:{home:"Home",menu:"Menu",close:"Close",favT:"My favorite recipes"},es:{home:"Inicio",menu:"Menú",close:"Cerrar",favT:"Mis recetas favoritas"},de:{home:"Start",menu:"Menü",close:"Schließen",favT:"Meine Lieblingsrezepte"},it:{home:"Home",menu:"Menu",close:"Chiudi",favT:"Le mie ricette preferite"},pt:{home:"Início",menu:"Menu",close:"Fechar",favT:"As minhas receitas favoritas"}};
+Object.keys(I18C).forEach(k=>Object.assign(I18[k],I18C[k]));
 let cardId=null,hfav=false;
+// ---------- Menu latéral ----------
+function drawerText(){const t=T();$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#fpT').textContent=t.favT;
+  document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
+let lastFocus=null;
+function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
+function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','false'));if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
+function goTo(v){closeDrawer();if(v==='history')drawHistory();if(v==='favs')drawFavs();show(v)}
+function drawFavs(){
+  const a=loadH().filter(e=>e.fav),l=$('#flist');l.innerHTML='';
+  $('#dFavN').textContent=a.length?a.length:'';
+  if(!a.length){const p=document.createElement('div');p.className='empty';p.textContent=T().nofav;l.appendChild(p);return}
+  a.forEach(e=>l.appendChild(rowFor(e,false)));
+}
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recette';
 function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);saveH(a)}return e}
 function syncCardBtn(){$('#tocard').style.display=currentId?'':'none'}
@@ -300,7 +344,7 @@ async function getPhoto(e){
   }catch(x){return null}
   updEntry(e.id,z=>{z.photo=url});return url;
 }
-function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();return e&&e.fav}
+function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();drawFavs();return e&&e.fav}
 async function shareRecipe(e){
   const body=e.title+'\n\n'+plain(recipeText(e))+(/^https?:/.test(location.href)?'\n\n'+location.origin:'');
   if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
@@ -401,6 +445,11 @@ $('#hgo').onclick=()=>{const v=$('#hq').value.trim();if(v){$('#hq').value='';sta
 $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
 $('#hback').onclick=()=>show('home');
+$('#fback').onclick=()=>show('home');
+document.querySelectorAll('.menubtn').forEach(b=>b.onclick=()=>$('#drawer').classList.contains('on')?closeDrawer():openDrawer());
+$('#dclose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;
+document.querySelectorAll('.ditem').forEach(b=>b.onclick=()=>goTo(b.dataset.go));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classList.contains('on'))closeDrawer()});
 $('#cardback').onclick=()=>show('home');
 $('#tocard').onclick=()=>{if(currentId)openCard(currentId)};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
