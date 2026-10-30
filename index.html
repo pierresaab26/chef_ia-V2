@@ -374,7 +374,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v22',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v23',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -560,8 +560,11 @@ function renderRecipe(el,txt,title,chat){
     const h=document.createElement('h3');const ic=secIcon(sec.h);h.textContent=(ic?ic+' ':'')+sec.h;box.appendChild(h);
     let list=null,kind='';
     const close=()=>{list=null;kind=''};
+    const ingS=/ingr|zutat|ingred/i.test(sec.h),stS=!ingS&&/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);let cnt=0;
     sec.lines.forEach(l=>{
-      const b=l.match(/^[-•*]\s+(.*)$/),n=l.match(/^(\d+)[.)]\s+(.*)$/);
+      let b=l.match(/^[-•*]\s+(.*)$/),n=l.match(/^(\d+)[.)]\s+(.*)$/);
+      if(!b&&!n){if(ingS&&l.length<=160)b=[l,l];else if(stS&&l.length>12)n=[l,String(cnt+1),l]} // lignes sans tiret ni numéro : on les rattrape
+      if(n)cnt=parseInt(n[1],10)||cnt+1;
       if(b){
         if(kind!=='b'){list=document.createElement('ul');list.className='ring';box.appendChild(list);kind='b'}
         const li=document.createElement('li'),ck=document.createElement('span');ck.className='ck';const tx=document.createElement('span');tx.className='tx';tx.textContent=b[1];
