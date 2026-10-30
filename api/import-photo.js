@@ -1,9 +1,9 @@
 import { authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES } from "./_lib.js";
 
 const SYSTEM =
-  "Tu extrais une recette de cuisine ou de boisson depuis une image : page de livre, recette manuscrite, capture d'écran, " +
-  "photo d'une fiche ou image trouvée sur Internet. " + EXTRACT_RULES +
-  " Si l'image ne montre qu'un plat ou une boisson sans texte de recette, mets « found »:false.";
+  "You extract a food or drink recipe from an image: book page, handwritten recipe, screenshot, " +
+  "photo of a recipe card or an image found on the internet. " + EXTRACT_RULES +
+  ' If the image only shows a dish or a drink with no recipe text, set "found":false.';
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       max_tokens: 3000,
       content: [
         { type: "image", source: { type: "base64", media_type: m[1], data: m[2] } },
-        { type: "text", text: "Extrais la recette de cette image." },
+        { type: "text", text: "Extract the recipe from this image." },
       ],
     });
     const recipe = normRecipe(parseJsonLoose(out));

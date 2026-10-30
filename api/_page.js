@@ -1,4 +1,4 @@
-// Récupération sécurisée d'une page web + extraction d'une recette.
+// Safe retrieval of a web page + recipe extraction.
 import dns from "node:dns";
 import http from "node:http";
 import https from "node:https";
@@ -9,7 +9,7 @@ import { normRecipe } from "./_lib.js";
 const MAX_BYTES = 2_000_000;
 const err = (code) => Object.assign(new Error(code), { code });
 
-// ---------- Protection contre l'accès à des adresses internes (SSRF) ----------
+// ---------- Protection against access to internal addresses (SSRF) ----------
 export function isPrivateIp(ip) {
   if (net.isIPv4(ip)) {
     const [a, b] = ip.split(".").map(Number);
@@ -36,7 +36,7 @@ export function isPrivateIp(ip) {
   return true;
 }
 
-// Vérifie l'adresse au moment même de la connexion (évite le détournement par DNS).
+// Checks the address at connection time (prevents DNS rebinding).
 function safeLookup(hostname, options, cb) {
   dns.lookup(hostname, { all: true, verbatim: true }, (e, addrs) => {
     if (e) return cb(e);

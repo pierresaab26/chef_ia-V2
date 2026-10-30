@@ -1,7 +1,7 @@
-// Notes de 1 à 5 étoiles par recette. Stockage : Upstash Redis (mêmes variables que les commentaires).
-// Chaque personne (identifiée par x-owner) a UNE note par recette, modifiable.
-// En plus, chaque note est ajoutée à un journal (r:log) : titre, étoiles, langue, date.
-// C'est la matière première pour, plus tard, analyser ce qui plaît et adapter le chef.
+// 1-to-5 star ratings per recipe. Storage: Upstash Redis (same variables as the comments).
+// Each person (identified by x-owner) has ONE rating per recipe, which they can change.
+// In addition, every rating is appended to a log (r:log): title, stars, language, date.
+// That log is the raw material to later analyse what people like and adapt the chef.
 const URL_ = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
 const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 

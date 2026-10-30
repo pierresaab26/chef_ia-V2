@@ -2,7 +2,7 @@ import { authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES } fr
 import { fetchPage, recipeFromJsonLd, pageText, looksBlocked, looksLogin } from "./_page.js";
 
 const SYSTEM =
-  "Tu extrais une recette de cuisine ou de boisson depuis le texte d'une page web (balises <page>). " + EXTRACT_RULES;
+  "You extract a food or drink recipe from the text of a web page (<page> tags). " + EXTRACT_RULES;
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
   const ct = String(page.headers["content-type"] || "");
   if (ct && !/html|xml|text\/plain/i.test(ct)) return fail(res, "norecipe");
 
-  // 1) Données structurées publiées par le site (sans IA, donc sans clé API)
+  // 1) Structured data published by the site (no AI, so no API key needed)
   const direct = recipeFromJsonLd(page.body);
   if (direct) return res.status(200).json({ recipe: direct, source: "structured", host });
 

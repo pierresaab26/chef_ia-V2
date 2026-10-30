@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-// Stockage : Upstash Redis (intégration Vercel). Les deux jeux de noms de variables sont acceptés.
+// Storage: Upstash Redis (Vercel integration). Both sets of variable names are accepted.
 const URL_ = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
 const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 
@@ -27,7 +27,7 @@ const clean = (s, n) =>
 export default async function handler(req, res) {
   if (!URL_ || !TOKEN) return res.status(501).json({ error: "storage" });
 
-  // Code d'accès optionnel (même variable que le chat)
+  // Optional access code (same variable as the chat)
   const need = process.env.APP_PASSWORD;
   if (need && req.headers["x-code"] !== need) return res.status(401).json({ error: "code" });
 
@@ -53,10 +53,10 @@ export default async function handler(req, res) {
 
     if (req.method === "POST") {
       const text = clean(body.text, 500);
-      const name = clean(body.name, 30) || "Anonyme";
+      const name = clean(body.name, 30) || "Anonymous";
       if (!text) return res.status(400).json({ error: "text" });
 
-      // Limite : 5 commentaires par minute et par adresse IP
+      // Limit: 5 comments per minute per IP address
       const ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "x";
       const rk = "rl:" + ip + ":" + Math.floor(Date.now() / 60000);
       const [n] = await redis([["INCR", rk], ["EXPIRE", rk, 120]]);
