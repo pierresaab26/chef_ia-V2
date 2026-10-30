@@ -53,7 +53,15 @@ export default async function handler(req, res) {
         messages,
       }),
     });
-    if (!r.ok) return res.status(r.status === 429 ? 429 : 502).json({ error: "upstream" });
+    if (!r.ok) {
+      let msg = "";
+      try { msg = String(((await r.json()).error || {}).message || ""); } catch {}
+      const code = r.status === 401 || r.status === 403 ? "badkey"
+        : /credit balance|billing|spend limit|usage limit/i.test(msg) ? "credit"
+        : r.status === 404 ? "model"
+        : r.status === 429 ? "rate" : "upstream";
+      return res.status(code === "rate" ? 429 : 502).json({ error: code });
+    }
     const data = await r.json();
     const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
     return res.status(200).json({ text });
