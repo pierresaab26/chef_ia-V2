@@ -163,6 +163,16 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .rp{margin:6px 0;line-height:1.5}
 .m.rich{background:none;box-shadow:none;padding:0;max-width:100%;width:100%;white-space:normal}
 .rtitle{font-size:20px;font-weight:700;color:var(--ink);margin:2px 4px 10px;line-height:1.25}
+
+.tap{position:relative;cursor:pointer}
+.camb{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;font-size:16px;pointer-events:none}
+#isheetwrap{position:fixed;inset:0;background:rgba(10,8,20,.5);display:none;align-items:flex-end;justify-content:center;z-index:60}
+#isheetwrap.on{display:flex}
+.isheet{width:100%;max-width:520px;background:var(--card);border-radius:24px 24px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px}
+.isheet h3{margin:0 0 4px;font-size:17px}
+.isheet .cbtn{border:1px solid var(--bd);text-align:left;padding:13px 16px;width:100%}
+.isheet .urlrow{margin-top:2px}
+#imgMsg{font-size:13px;color:var(--pink);min-height:18px}
 </style>
 </head>
 <body>
@@ -242,6 +252,18 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
     <div id="bar"><button id="home2" aria-label="Accueil">🏠</button><input id="inp" autocomplete="off"><button id="impChat" aria-label="Import">📎</button><button id="mic" aria-label="Parler">🎤</button><button id="send"></button></div>
   </section>
 
+  <div id="isheetwrap"><div class="isheet" role="dialog" aria-modal="true" aria-labelledby="imgTt">
+    <h3 id="imgTt"></h3>
+    <button class="cbtn" id="imgCam"></button>
+    <button class="cbtn" id="imgGal"></button>
+    <div class="urlrow"><input id="imgUrl" type="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="imgGo"></button></div>
+    <div id="imgMsg" role="status"></div>
+    <button class="cbtn" id="imgReset"></button>
+    <button class="cbtn" id="imgCancel"></button>
+    <input type="file" id="fileImgCam" accept="image/*" capture="environment" hidden>
+    <input type="file" id="fileImgGal" accept="image/*" hidden>
+  </div></div>
+
   <div id="scrim"></div>
   <aside id="drawer" aria-hidden="true" aria-label="Menu">
     <div class="dhead"><svg class="mascot" style="width:40px;height:40px"><use href="#mascot"/></svg><b>Chef IA</b><button class="dclose" id="dclose" aria-label="Close">✕</button></div>
@@ -319,7 +341,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v14',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v15',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -334,7 +356,7 @@ function readStore(){
 function loadH(){return readStore().recipes}
 function saveH(a){
   let n=0;const out=a.filter(x=>x.fav||(n++<MAX_RECENT)); // les favoris ne sont jamais supprimés automatiquement
-  try{localStorage.setItem(STORE_KEY,JSON.stringify({v:STORE_V,updatedAt:Date.now(),device:deviceId(),recipes:out}))}catch(e){}
+  try{localStorage.setItem(STORE_KEY,JSON.stringify({v:STORE_V,updatedAt:Date.now(),device:deviceId(),recipes:out}));return true}catch(e){return false}
 }
 const LOOK=[[/pizza/i,"🍕"],[/cupcake|muffin/i,"🧁"],[/pancake|crêpe|crepe|panqueca|tortita|pfannkuchen/i,"🥞"],[/cake|gâteau|gateau|torta|kuchen|bolo|tarta|chocolat|chocolate|tiramisu/i,"🎂"],[/curry|tikka/i,"🍛"],[/ramen|soup|soupe|potage|pho|gazpacho|tom yum/i,"🍜"],[/pasta|pâtes|pates|carbonara|spaghetti|lasagn|gnocchi|nouille|noodle|massa|nudel/i,"🍝"],[/sushi|saumon|salmon|teriyaki/i,"🍣"],[/burger/i,"🍔"],[/salad|salade|buddha|insalata|ensalada|salat/i,"🥗"],[/steak|rosbif|roast|beef|bœuf|boeuf|bourguignon|goulash/i,"🥩"],[/œuf|oeuf|egg|omelette|huevo|ovo|uova|shakshuka|rührei/i,"🍳"],[/poulet|chicken|pollo|hähnchen|frango|coq/i,"🍗"],[/poisson|fish|pescado|fisch|pesce|peixe/i,"🐟"],[/taco|enchilada|burrito/i,"🌮"],[/riz|rice|risotto|paella|reis|arroz|riso/i,"🍚"],[/pain|bread|brot|pane|pão/i,"🍞"],[/tarte|tart|pie|quiche/i,"🥧"],[/cookie|biscuit|galleta|keks/i,"🍪"]];
 const BGS=["#fde4d8","#fdf1c9","#f6dbe8","#dcefc9","#dbe6fb","#e6dcf7"];
@@ -361,6 +383,7 @@ function rowFor(e,del,heart){
   const r=document.createElement('div');r.className='hrow';
   const o=document.createElement('button');o.className='hopen';
   const p=document.createElement('div');p.className='hpic';p.style.background=bg;p.textContent=em;
+  if(e.img){p.textContent='';const im=document.createElement('img');im.alt='';im.referrerPolicy='no-referrer';im.src=e.img;im.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:14px;display:block';im.onerror=()=>{im.remove();p.textContent=em};p.appendChild(im)}
   const x=document.createElement('div');x.className='htx';
   const b=document.createElement('b');b.textContent=(e.fav?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
   x.append(b,d);o.append(p,x);o.onclick=()=>openCard(e.id);r.appendChild(o);
@@ -510,8 +533,14 @@ function openCard(id){
   const ph=document.createElement('div');ph.className='cphoto';const [em,bg]=dishLook(e.title);ph.style.background=bg;
   const emo=document.createElement('span');emo.textContent=em;ph.appendChild(emo);body.appendChild(ph);
   const credit=document.createElement('small');credit.className='credit';body.appendChild(credit);
-  {const art=()=>{if(cardId!==id||!emo.isConnected)return;ph.style.background='linear-gradient(to bottom,transparent 76.4%,rgba(255,255,255,.35) 76.4%),'+bg;emo.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.appendChild(a)};
-  art();getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+u+'")';credit.textContent=/^data:/.test(u)?'':T().credit}})}
+  ph.classList.add('tap');ph.setAttribute('role','button');ph.tabIndex=0;ph.setAttribute('aria-label',t.imgT);
+  const cam=document.createElement('span');cam.className='camb';cam.textContent='📷';
+  ph.onclick=()=>openImgSheet(id);ph.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
+  if(e.img){emo.remove();const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=e.img;im.style.cssText='display:block;width:100%;height:100%;object-fit:cover';
+    im.onerror=()=>{im.remove();toast(T().imgBad)};ph.appendChild(im)}
+  else{const art=()=>{if(cardId!==id||!emo.isConnected)return;ph.style.background='linear-gradient(to bottom,transparent 76.4%,rgba(255,255,255,.35) 76.4%),'+bg;emo.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.appendChild(a)};
+  art();getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+encodeURI(u).replace(/"/g,'%22').replace(/\)/g,'%29')+'")';ph.appendChild(cam);credit.textContent=/^data:/.test(u)?'':T().credit}})}
+  ph.appendChild(cam);
   const h=document.createElement('h1');h.className='ctitle';h.textContent=e.title;body.appendChild(h);
   const txt=recipeText(e);const chips=document.createElement('div');chips.className='cchips';
   [fmtDate(e.date),e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:'',...infoChips(txt)].filter(Boolean).forEach(c=>{const s=document.createElement('span');s.textContent=c;chips.appendChild(s)});body.appendChild(chips);
@@ -612,8 +641,12 @@ function dishPic(b,text){
   if(!b||log.querySelector('.dphoto')||!looksLikeRecipe(text||''))return;
   const e=currentId?loadH().find(x=>x.id===currentId):null;if(!e)return;
   const box=document.createElement('div');box.className='dphoto';b.after(box);
-  if(typeof e.photo==='string'&&/^data:/.test(e.photo)){const im=document.createElement('img');im.alt=e.title;im.src=e.photo;box.appendChild(im)} // miniature de la photo importée
+  const mine=e.img||(typeof e.photo==='string'&&/^data:/.test(e.photo)?e.photo:'');
+  if(mine){const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=mine;im.onerror=()=>{im.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;border-radius:18px';box.insertBefore(a,box.firstChild)};box.appendChild(im)} // image choisie, ou miniature de la photo importée
   else{const a=dishArt(e.title);a.style.cssText='display:block;width:100%;border-radius:18px';box.appendChild(a)}
+  box.classList.add('tap');box.setAttribute('role','button');box.tabIndex=0;box.setAttribute('aria-label',T().imgT);
+  const cb=document.createElement('span');cb.className='camb';cb.textContent='📷';box.appendChild(cb);
+  const id=currentId;box.onclick=()=>openImgSheet(id);box.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
   log.scrollTop=log.scrollHeight;
 }
 function openChat(chef){
@@ -682,7 +715,7 @@ async function prepareImage(file){
     const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(bmp,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};
   let img='';for(const m of [1800,1400,1100,800]){img=draw(m,.85);if(img.length<=3200000)break}
   if(img.length>3200000)throw {code:'toobig'};
-  return {image:img,thumb:draw(360,.55)};
+  return {image:img,thumb:draw(360,.55),mid:draw(900,.78)};
 }
 async function importPhoto(file){
   if(!file)return;const tok=++impTok;impBusy(true);imp=null;impStatus(T().imWait);
@@ -743,6 +776,53 @@ $('#impCamB').onclick=()=>$('#fileCam').click();$('#impGalB').onclick=()=>$('#fi
 ['#fileCam','#fileGal'].forEach(s=>$(s).addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];e.target.value='';importPhoto(f)}));
 $('#impGo').onclick=importLink;
 $('#impUrl').addEventListener('keydown',e=>{if(e.key==='Enter')importLink()});
+
+// ---------- Changer l'image d'une recette (photo, galerie ou lien) ----------
+const I18G={"fr": {"imgT": "Image du plat", "imgUrl": "Collez le lien d’une image", "imgUse": "Utiliser", "imgReset": "Revenir au dessin", "imgOk": "Image enregistrée", "imgBad": "Impossible de charger cette image. Vérifiez le lien.", "imgFull": "Mémoire de l’appareil pleine : image non enregistrée."}, "en": {"imgT": "Dish image", "imgUrl": "Paste an image link", "imgUse": "Use", "imgReset": "Back to the drawing", "imgOk": "Image saved", "imgBad": "Couldn’t load this image. Check the link.", "imgFull": "Device storage is full: image not saved."}, "es": {"imgT": "Imagen del plato", "imgUrl": "Pega el enlace de una imagen", "imgUse": "Usar", "imgReset": "Volver al dibujo", "imgOk": "Imagen guardada", "imgBad": "No se pudo cargar esta imagen. Revisa el enlace.", "imgFull": "Memoria del dispositivo llena: imagen no guardada."}, "de": {"imgT": "Bild des Gerichts", "imgUrl": "Bildlink einfügen", "imgUse": "Verwenden", "imgReset": "Zurück zur Zeichnung", "imgOk": "Bild gespeichert", "imgBad": "Dieses Bild konnte nicht geladen werden. Prüfe den Link.", "imgFull": "Gerätespeicher voll: Bild nicht gespeichert."}, "it": {"imgT": "Immagine del piatto", "imgUrl": "Incolla il link di un’immagine", "imgUse": "Usa", "imgReset": "Torna al disegno", "imgOk": "Immagine salvata", "imgBad": "Impossibile caricare questa immagine. Controlla il link.", "imgFull": "Memoria del dispositivo piena: immagine non salvata."}, "pt": {"imgT": "Imagem do prato", "imgUrl": "Cole o link de uma imagem", "imgUse": "Usar", "imgReset": "Voltar ao desenho", "imgOk": "Imagem guardada", "imgBad": "Não foi possível carregar esta imagem. Verifique o link.", "imgFull": "Memória do dispositivo cheia: imagem não guardada."}};
+Object.keys(I18G).forEach(k=>Object.assign(I18[k],I18G[k]));
+let imgTarget=null;
+function imgText(){const t=T();$('#imgTt').textContent=t.imgT;$('#imgCam').textContent='📷 '+t.imCam;$('#imgGal').textContent='🖼️ '+t.imGal;$('#imgUrl').placeholder=t.imgUrl;$('#imgGo').textContent=t.imgUse;$('#imgReset').textContent='↩︎ '+t.imgReset;$('#imgCancel').textContent=t.imCancel}
+function imgMsg(x){$('#imgMsg').textContent=x||''}
+function setImg(id,url){
+  const a=loadH(),e=a.find(x=>x.id===id);if(!e)return false;
+  if(url)e.img=url;else delete e.img;
+  e.updatedAt=Date.now();return saveH(a);
+}
+function openImgSheet(id){
+  const e=loadH().find(x=>x.id===id);if(!e)return;
+  imgTarget=id;imgText();imgMsg('');$('#imgUrl').value='';$('#imgReset').style.display=e.img?'':'none';
+  $('#isheetwrap').classList.add('on');
+}
+function closeImgSheet(){$('#isheetwrap').classList.remove('on');imgTarget=null}
+function repaintImgViews(id){
+  if(cardId===id&&curView==='card')openCard(id);
+  const box=log.querySelector('.dphoto');
+  if(box&&currentId===id){const b=box.previousElementSibling;box.remove();
+    const m=hist.find(x=>x.role==='assistant'&&looksLikeRecipe(x.content));if(b&&m)dishPic(b,m.content)}
+  drawHistory();drawFavs();
+}
+function finishImg(url){
+  const id=imgTarget;if(!id)return;
+  if(!setImg(id,url)){imgMsg(T().imgFull);return}
+  closeImgSheet();repaintImgViews(id);toast(url?T().imgOk:T().imgReset);
+}
+async function imgFromFile(file){
+  if(!file||!imgTarget)return;imgMsg(T().imWait);
+  try{const pr=await prepareImage(file);finishImg(pr.mid)}catch(e){imgMsg(impMsg(e&&e.code))}
+}
+function imgFromUrl(){
+  let u=$('#imgUrl').value.trim();if(!u)return;
+  if(!/^https?:\/\//i.test(u))u='https://'+u;
+  let x;try{x=new URL(u);if(!/^https?:$/.test(x.protocol)||!x.hostname.includes('.')||u.length>1500)throw 0}catch(e){imgMsg(T().e_badurl);return}
+  imgMsg(T().imWait);const im=new Image();im.referrerPolicy='no-referrer';
+  im.onload=()=>finishImg(x.href);im.onerror=()=>imgMsg(T().imgBad);im.src=x.href;
+}
+$('#imgCam').onclick=()=>$('#fileImgCam').click();$('#imgGal').onclick=()=>$('#fileImgGal').click();
+['#fileImgCam','#fileImgGal'].forEach(q=>$(q).addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];e.target.value='';imgFromFile(f)}));
+$('#imgGo').onclick=imgFromUrl;$('#imgUrl').addEventListener('keydown',e=>{if(e.key==='Enter')imgFromUrl()});
+$('#imgReset').onclick=()=>finishImg('');$('#imgCancel').onclick=closeImgSheet;
+$('#isheetwrap').addEventListener('click',e=>{if(e.target.id==='isheetwrap')closeImgSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#isheetwrap').classList.contains('on'))closeImgSheet()});
 $('#hgo').onclick=()=>{const v=$('#hq').value.trim();if(v){$('#hq').value='';start(v)}};
 $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
