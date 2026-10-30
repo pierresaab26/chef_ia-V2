@@ -93,6 +93,13 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .ditem.on span.n{color:#10200a}
 .menubtn{font-size:22px;padding:0 6px;line-height:1;flex:none}
 @media (min-width:768px){#drawer{width:320px}}
+#verpill{display:inline-flex;align-items:center;gap:7px;background:#111;color:#fff;border-radius:999px;padding:4px 12px 4px 10px;font-size:12px;font-weight:700;margin:0 0 12px;letter-spacing:.2px}
+#verpill i{width:8px;height:8px;border-radius:50%;background:#ff7a1a;box-shadow:0 0 0 3px rgba(255,122,26,.3)}
+#verpill.pv{background:#5b5866}
+#verpill.pv i{background:#a29cb3;box-shadow:none}
+.dver{margin-top:auto;color:var(--mut);font-size:12px;padding:10px 14px}
+#hsearchbox{padding:12px 18px 0}
+#hsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
 #chat.on~nav{display:none}
 nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-around;background:var(--card);border-radius:999px;padding:10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
 nav button{padding:6px 22px;font-size:22px;opacity:.5}
@@ -141,6 +148,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
         <svg class="mascot"><use href="#mascot"/></svg>
         <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><select id="lang" aria-label="Language"></select>
       </div>
+      <div id="verpill"><i></i><span></span></div>
       <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
       <h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
       <div id="hhome"></div>
@@ -164,6 +172,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 
   <section class="view" id="history">
     <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="hback" aria-label="Accueil">🏠</button><b id="hpT"></b></div>
+    <div id="hsearchbox"><input id="hsearch" type="search" autocomplete="off"></div>
     <div id="hfilter"></div>
     <div class="scroll" id="hlist"></div>
   </section>
@@ -181,6 +190,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
     <button class="ditem" data-go="home">🏠 <span id="dHome"></span></button>
     <button class="ditem" data-go="history">🕘 <span id="dHist"></span></button>
     <button class="ditem" data-go="favs">❤️ <span id="dFav"></span><span class="n" id="dFavN"></span></button>
+    <div class="dver" id="dver"></div>
   </aside>
 
   <nav>
@@ -244,9 +254,28 @@ function render(el,t){el.innerHTML='';t.split('\n').forEach(l=>{const m=l.match(
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else render(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x);q.appendChild(b)})}
 // ---------- Historique (stocké sur l'appareil, dans le navigateur) ----------
-const HK='chefHistory';
-function loadH(){try{return JSON.parse(localStorage.getItem(HK)||'[]')}catch(e){return []}}
-function saveH(a){try{localStorage.setItem(HK,JSON.stringify(a.slice(0,30)))}catch(e){}}
+// ---------- Stockage ----------
+// Tout passe par loadH() / saveH() : c'est le seul point d'accès aux recettes.
+// Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
+// Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
+// en fusionnant les recettes locales et distantes grâce à id + updatedAt.
+const APP_VERSION='v5',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
+function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
+function readStore(){
+  try{
+    const raw=localStorage.getItem(STORE_KEY);
+    if(raw){const o=JSON.parse(raw);if(o&&Array.isArray(o.recipes))return o}
+    const old=JSON.parse(localStorage.getItem(OLD_KEY)||'null');
+    if(Array.isArray(old))return {v:STORE_V,recipes:old.map(migrateOne)};
+  }catch(e){}
+  return {v:STORE_V,recipes:[]};
+}
+function loadH(){return readStore().recipes}
+function saveH(a){
+  let n=0;const out=a.filter(x=>x.fav||(n++<MAX_RECENT)); // les favoris ne sont jamais supprimés automatiquement
+  try{localStorage.setItem(STORE_KEY,JSON.stringify({v:STORE_V,updatedAt:Date.now(),device:deviceId(),recipes:out}))}catch(e){}
+}
 const LOOK=[[/pizza/i,"🍕"],[/cupcake|muffin/i,"🧁"],[/pancake|crêpe|crepe|panqueca|tortita|pfannkuchen/i,"🥞"],[/cake|gâteau|gateau|torta|kuchen|bolo|tarta|chocolat|chocolate|tiramisu/i,"🎂"],[/curry|tikka/i,"🍛"],[/ramen|soup|soupe|potage|pho|gazpacho|tom yum/i,"🍜"],[/pasta|pâtes|pates|carbonara|spaghetti|lasagn|gnocchi|nouille|noodle|massa|nudel/i,"🍝"],[/sushi|saumon|salmon|teriyaki/i,"🍣"],[/burger/i,"🍔"],[/salad|salade|buddha|insalata|ensalada|salat/i,"🥗"],[/steak|rosbif|roast|beef|bœuf|boeuf|bourguignon|goulash/i,"🥩"],[/œuf|oeuf|egg|omelette|huevo|ovo|uova|shakshuka|rührei/i,"🍳"],[/poulet|chicken|pollo|hähnchen|frango|coq/i,"🍗"],[/poisson|fish|pescado|fisch|pesce|peixe/i,"🐟"],[/taco|enchilada|burrito/i,"🌮"],[/riz|rice|risotto|paella|reis|arroz|riso/i,"🍚"],[/pain|bread|brot|pane|pão/i,"🍞"],[/tarte|tart|pie|quiche/i,"🥧"],[/cookie|biscuit|galleta|keks/i,"🍪"]];
 const BGS=["#fde4d8","#fdf1c9","#f6dbe8","#dcefc9","#dbe6fb","#e6dcf7"];
 function dishLook(t){let e="🍽️";for(const [r,x] of LOOK){if(r.test(t)){e=x;break}}let h=0;for(const c of t)h=(h+c.charCodeAt(0))%97;return [e,BGS[h%BGS.length]]}
@@ -260,13 +289,13 @@ function saveCurrent(){
     const first=hist.find(m=>m.role==='assistant');
     if(!first||!looksLikeRecipe(first.content))return;
     const t=recipeTitle(first.content)||hist[0].content.replace(/^\[UI\] /,'').slice(0,60);
-    e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1};
+    e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1,fav:false,lang};
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
-  e.messages=hist.map(m=>({role:m.role,content:m.content}));
+  e.messages=hist.map(m=>({role:m.role,content:m.content}));e.updatedAt=Date.now();
   a.unshift(e);saveH(a);drawHistory();syncCardBtn();
 }
-function rowFor(e,del){
+function rowFor(e,del,heart){
   const [em,bg]=dishLook(e.title);
   const r=document.createElement('div');r.className='hrow';
   const o=document.createElement('button');o.className='hopen';
@@ -274,19 +303,21 @@ function rowFor(e,del){
   const x=document.createElement('div');x.className='htx';
   const b=document.createElement('b');b.textContent=(e.fav?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
   x.append(b,d);o.append(p,x);o.onclick=()=>openCard(e.id);r.appendChild(o);
+  if(heart){const h=document.createElement('button');h.className='hdel';h.textContent=e.fav?'❤️':'🤍';h.setAttribute('aria-label',T().fav);h.onclick=()=>toggleFav(e.id);r.appendChild(h)}
   if(del){const k=document.createElement('button');k.className='hdel';k.textContent='✕';k.setAttribute('aria-label',T().del);
-    k.onclick=()=>{if(confirm(T().delq)){saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id)currentId=null;drawHistory()}};r.appendChild(k)}
+    k.onclick=()=>{if(confirm(T().delq)){saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs()}};r.appendChild(k)}
   return r;
 }
 function drawHistory(){
   const a=loadH(),h=$('#hhome'),l=$('#hlist');h.innerHTML='';l.innerHTML='';
-  $('#hmore').style.display=a.length?'':'none';
+  $('#hmore').style.display=a.length?'':'none';$('#hsearchbox').style.display=a.length?'':'none';
   if(!a.length){$('#hfilter').innerHTML='';[h,l].forEach(z=>{const p=document.createElement('div');p.className='empty';p.textContent=T().empty;z.appendChild(p)});return}
   a.slice(0,3).forEach(e=>h.appendChild(rowFor(e,false)));
   const f=$('#hfilter');f.innerHTML='';[[false,T().all],[true,'❤️ '+T().favs]].forEach(([v,lab])=>{const b=document.createElement('button');b.className='chip'+(hfav===v?' on':'');b.textContent=lab;b.onclick=()=>{hfav=v;drawHistory()};f.appendChild(b)});
-  const shown=hfav?a.filter(e=>e.fav):a;
-  if(!shown.length){const p=document.createElement('div');p.className='empty';p.textContent=T().nofav;l.appendChild(p)}
-  shown.forEach(e=>l.appendChild(rowFor(e,true)));
+  const nz=x=>x.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#hsearch').value.trim());
+  const shown=a.filter(e=>(!hfav||e.fav)&&(!q||nz(e.title).includes(q)));
+  if(!shown.length){const p=document.createElement('div');p.className='empty';p.textContent=q?T().noresult:(hfav?T().nofav:T().empty);l.appendChild(p)}
+  shown.forEach(e=>l.appendChild(rowFor(e,true,true)));
 }
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
@@ -306,9 +337,14 @@ pt:{card:"Ficha",fav:"Favorito",favs:"Favoritos",all:"Todas",nofav:"Ainda sem fa
 Object.keys(I18B).forEach(k=>Object.assign(I18[k],I18B[k]));
 const I18C={fr:{home:"Accueil",menu:"Menu",close:"Fermer",favT:"Mes recettes favorites"},en:{home:"Home",menu:"Menu",close:"Close",favT:"My favorite recipes"},es:{home:"Inicio",menu:"Menú",close:"Cerrar",favT:"Mis recetas favoritas"},de:{home:"Start",menu:"Menü",close:"Schließen",favT:"Meine Lieblingsrezepte"},it:{home:"Home",menu:"Menu",close:"Chiudi",favT:"Le mie ricette preferite"},pt:{home:"Início",menu:"Menu",close:"Fechar",favT:"As minhas receitas favoritas"}};
 Object.keys(I18C).forEach(k=>Object.assign(I18[k],I18C[k]));
+const I18D={fr:{search:"Rechercher une recette…",noresult:"Aucune recette trouvée.",nokey:"Le chef n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez."},en:{search:"Search a recipe…",noresult:"No recipe found.",nokey:"The chef isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy."},es:{search:"Buscar una receta…",noresult:"No se encontró ninguna receta.",nokey:"El chef aún no está conectado: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar."},de:{search:"Rezept suchen…",noresult:"Kein Rezept gefunden.",nokey:"Der Koch ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen."},it:{search:"Cerca una ricetta…",noresult:"Nessuna ricetta trovata.",nokey:"Lo chef non è ancora collegato: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy."},pt:{search:"Pesquisar uma receita…",noresult:"Nenhuma receita encontrada.",nokey:"O chef ainda não está ligado: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar."}};
+Object.keys(I18D).forEach(k=>Object.assign(I18[k],I18D[k]));
 let cardId=null,hfav=false;
 // ---------- Menu latéral ----------
-function drawerText(){const t=T();$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#fpT').textContent=t.favT;
+function drawerText(){const t=T();
+  const pv=typeof claude!=='undefined',lab=(pv?'Aperçu claude.ai':'▲ Vercel')+' · '+APP_VERSION;
+  $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
+  $('#hsearch').placeholder=t.search;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
@@ -318,10 +354,10 @@ function drawFavs(){
   const a=loadH().filter(e=>e.fav),l=$('#flist');l.innerHTML='';
   $('#dFavN').textContent=a.length?a.length:'';
   if(!a.length){const p=document.createElement('div');p.className='empty';p.textContent=T().nofav;l.appendChild(p);return}
-  a.forEach(e=>l.appendChild(rowFor(e,false)));
+  a.forEach(e=>l.appendChild(rowFor(e,false,true)));
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recette';
-function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);saveH(a)}return e}
+function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
 function syncCardBtn(){$('#tocard').style.display=currentId?'':'none'}
 function recipeText(e){const m=[...e.messages].reverse().find(x=>x.role==='assistant'&&looksLikeRecipe(x.content))||[...e.messages].reverse().find(x=>x.role==='assistant');return m?m.content:''}
 function plain(t){return t.replace(/^#{1,3}\s+/gm,'').replace(/\*\*/g,'')}
@@ -433,18 +469,19 @@ async function send(text,auto){
     const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:hist,persona,lang})});
     let res=await call();
     if(res.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(e){}res=await call()}}
-    if(!res.ok)throw {code:res.status===429?'rate_limited':'err'};
+    if(!res.ok)throw {code:res.status===429?'rate_limited':res.status===503?'nokey':'err'};
     const j=await res.json();
     render(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
   }catch(e){
     hist.pop();
-    render(out,e&&e.code==='rate_limited'?T().e429:T().err);
+    render(out,e&&e.code==='rate_limited'?T().e429:e&&e.code==='nokey'?T().nokey:T().err);
   }finally{busy=false;sendB.disabled=false;log.scrollTop=log.scrollHeight}
 }
 $('#hgo').onclick=()=>{const v=$('#hq').value.trim();if(v){$('#hq').value='';start(v)}};
 $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
 $('#hback').onclick=()=>show('home');
+$('#hsearch').addEventListener('input',drawHistory);
 $('#fback').onclick=()=>show('home');
 document.querySelectorAll('.menubtn').forEach(b=>b.onclick=()=>$('#drawer').classList.contains('on')?closeDrawer():openDrawer());
 $('#dclose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;
