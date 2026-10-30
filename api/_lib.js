@@ -12,7 +12,7 @@ export function authOk(req, res) {
 const STATUS = {
   badurl: 400, badimage: 400, private: 400, toobig: 413, nokey: 503,
   norecipe: 422, blocked: 422, login: 422, notfound: 422,
-  timeout: 504, unreachable: 502, upstream: 502,
+  timeout: 504, unreachable: 502, upstream: 502, badkey: 502, credit: 502, model: 502,
 };
 export function fail(res, code) {
   return res.status(STATUS[code] || 502).json({ error: code });
@@ -32,7 +32,14 @@ export async function askClaude({ system, content, model, max_tokens = 2500 }) {
   } catch {
     throw Object.assign(new Error("upstream"), { code: "upstream" });
   }
-  if (!r.ok) throw Object.assign(new Error("upstream"), { code: "upstream" });
+  if (!r.ok) {
+    let msg = "";
+    try { msg = String(((await r.json()).error || {}).message || ""); } catch {}
+    const code = r.status === 401 || r.status === 403 ? "badkey"
+      : /credit balance|billing|spend limit|usage limit/i.test(msg) ? "credit"
+      : r.status === 404 ? "model" : "upstream";
+    throw Object.assign(new Error(code), { code });
+  }
   const data = await r.json();
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
