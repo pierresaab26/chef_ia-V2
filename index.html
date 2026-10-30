@@ -59,6 +59,14 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .cchips span{background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mut)}
 .cact{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.rate{display:flex;align-items:center;gap:8px;flex:1 0 100%;margin:2px 4px 12px;flex-wrap:wrap}
+.cact .rate{margin:2px 4px 0}
+.rl{font-size:13px;color:var(--mut)}
+.stars{display:inline-flex;gap:2px}
+.stars button{background:none;border:0;padding:2px 3px;font-size:26px;line-height:1;color:#cfd0dc;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.stars button.on{color:#f5b301}
+.ri{font-size:13px;color:var(--mut);font-weight:600}
+.ract{flex:none;align-self:flex-start;margin:0 0 6px}
 .cbtn.go{background:var(--green);color:#10200a;flex:1;min-width:160px}
 .rtext{max-width:100%}
 .coms{margin-top:22px}
@@ -118,6 +126,9 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .a{align-self:flex-start;background:var(--card);border-bottom-left-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .a h3{margin:.7em 0 .2em;font-size:15px;color:var(--pink)}
 .a h3:first-child{margin-top:0}
+.m.fmt{white-space:normal;line-height:1.5}
+.fmt p{margin:0 0 .6em}.fmt p:last-child,.fmt .rl:last-child{margin-bottom:0}
+.fmt .rl{margin:.2em 0 .7em;padding-left:1.3em}.fmt .rl li{margin:.25em 0;padding-left:.2em}.fmt ul.rl li::marker{color:var(--pink)}
 #quick{display:flex;gap:8px;overflow-x:auto;padding:6px 14px}
 #bar{display:flex;gap:8px;padding:8px 14px 12px}
 #inp{flex:1;font:inherit;padding:11px 16px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
@@ -156,6 +167,13 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .rsec ul,.rsec ol{list-style:none;padding:0;margin:0}
 .ring li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ring li:last-child{border-bottom:0}
+.ring .tx{flex:1;min-width:0}
+.ring li.miss .tx{text-decoration:line-through;opacity:.55}.ring li.miss .ck{background:var(--pink)}
+.mt{display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--pink);text-decoration:none!important;vertical-align:middle}
+.swgo{display:block;width:100%;margin-top:10px;padding:12px 16px;border:0;border-radius:14px;background:var(--pink);color:#fff;font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
+.swgo[hidden],.mt[hidden]{display:none}
+.swp{flex:none;align-self:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--pink);font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}
+.swh{color:var(--mut);font-size:13px;margin:0 4px 10px}
 .ring .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);flex:none;margin-top:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
 .ring li.done .ck{background:var(--pink)}
 .ring li.done .tx{text-decoration:line-through;opacity:.5}
@@ -321,7 +339,7 @@ let lastDish="";
 function randomDish(){let d;do{d=DISHES[Math.floor(Math.random()*DISHES.length)]}while(d===lastDish);lastDish=d;return d}
 const $=s=>document.querySelector(s);
 const log=$('#log'),inp=$('#inp'),sendB=$('#send');
-let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null;
+let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null,branchFrom=null;
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
@@ -351,7 +369,17 @@ function drawGrid(){
 function drawChefs(){const t=T();$('#chefs').innerHTML='';CHEFS.forEach((c,k)=>{const b=document.createElement('button');b.className='chef';
   const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent="Chef "+c.n;const d=document.createElement('span');d.textContent=t.cu[k];const e=document.createElement('em');e.textContent=t.disc;
   b.append(i,n,d,e);b.onclick=()=>openChat({...c,k,d:t.cu[k]});$('#chefs').appendChild(b)})}
-function render(el,t){el.classList.remove('typing');el.innerHTML='';t.split('\n').forEach(l=>{const m=l.match(/^#{1,3}\s+(.*)/);if(m){const h=document.createElement('h3');h.textContent=m[1].replace(/\*\*/g,'');el.appendChild(h)}else el.appendChild(document.createTextNode(l.replace(/\*\*/g,'')+'\n'))})}
+function inl(p,t){t.split(/\*\*(.+?)\*\*/).forEach((x,i)=>{if(!x)return;if(i%2){const b=document.createElement('strong');b.textContent=x;p.appendChild(b)}else p.appendChild(document.createTextNode(x))})}
+function render(el,t){
+  el.classList.remove('typing');el.classList.add('fmt');el.innerHTML='';let list=null,kind='';
+  t.split('\n').forEach(raw=>{const l=raw.trim();
+    if(!l){list=null;kind='';return}
+    const h=l.match(/^#{1,3}\s+(.*)/),b=l.match(/^[-•*]\s+(.*)/),n=l.match(/^\d+[.)]\s+(.*)/);
+    if(h){list=null;kind='';const e=document.createElement('h3');inl(e,h[1]);el.appendChild(e);return}
+    if(b||n){const k=b?'ul':'ol';if(kind!==k){list=document.createElement(k);list.className='rl';el.appendChild(list);kind=k}
+      const li=document.createElement('li');inl(li,(b||n)[1]);list.appendChild(li);return}
+    list=null;kind='';const p=document.createElement('p');inl(p,l);el.appendChild(p)});
+}
 const I18H={"fr": {"wT": "Que voulons-nous cuisiner ?", "wS": "Recettes, desserts, cocktails… Demandez, puis adaptez : « sans persil, avec du Cajun », « pour 2 personnes ».", "wEx": "🍲 Un plat pour ce soir|🍰 Un dessert rapide|🍹 Un cocktail sans alcool|🥗 Une idée de menu"}, "en": {"wT": "What shall we cook?", "wS": "Recipes, desserts, cocktails… Ask, then adapt: “no parsley, with Cajun spice”, “for 2 people”.", "wEx": "🍲 A dish for tonight|🍰 A quick dessert|🍹 A non-alcoholic cocktail|🥗 A menu idea"}, "es": {"wT": "¿Qué cocinamos?", "wS": "Recetas, postres, cócteles… Pide y luego adapta: «sin perejil, con Cajun», «para 2 personas».", "wEx": "🍲 Un plato para esta noche|🍰 Un postre rápido|🍹 Un cóctel sin alcohol|🥗 Una idea de menú"}, "de": {"wT": "Was kochen wir?", "wS": "Rezepte, Desserts, Cocktails… Frag nach und passe an: „ohne Petersilie, mit Cajun“, „für 2 Personen“.", "wEx": "🍲 Ein Gericht für heute Abend|🍰 Ein schnelles Dessert|🍹 Ein alkoholfreier Cocktail|🥗 Eine Menüidee"}, "it": {"wT": "Cosa cuciniamo?", "wS": "Ricette, dolci, cocktail… Chiedi e poi adatta: «senza prezzemolo, con Cajun», «per 2 persone».", "wEx": "🍲 Un piatto per stasera|🍰 Un dolce veloce|🍹 Un cocktail analcolico|🥗 Un’idea di menu"}, "pt": {"wT": "O que vamos cozinhar?", "wS": "Receitas, sobremesas, cocktails… Peça e depois adapte: «sem salsa, com Cajun», «para 2 pessoas».", "wEx": "🍲 Um prato para esta noite|🍰 Uma sobremesa rápida|🍹 Um cocktail sem álcool|🥗 Uma ideia de menu"}};
 Object.keys(I18H).forEach(k=>Object.assign(I18[k],I18H[k]));
 function welcomeEl(){
@@ -365,7 +393,7 @@ function welcomeEl(){
 function showWelcome(){log.appendChild(welcomeEl())}
 const I18I={"fr": {"e_credit": "Crédit insuffisant sur votre compte Anthropic : ajoutez du crédit sur console.anthropic.com (Billing).", "e_badkey": "Clé API refusée : vérifiez ANTHROPIC_API_KEY dans Vercel, puis redéployez.", "e_model": "Modèle introuvable : vérifiez la variable MODEL (ou supprimez-la) dans Vercel.", "e_code": "Code d’accès incorrect. Réessayez."}, "en": {"e_credit": "Not enough credit on your Anthropic account: add credit at console.anthropic.com (Billing).", "e_badkey": "API key rejected: check ANTHROPIC_API_KEY in Vercel, then redeploy.", "e_model": "Model not found: check the MODEL variable (or remove it) in Vercel.", "e_code": "Wrong access code. Try again."}, "es": {"e_credit": "Crédito insuficiente en tu cuenta de Anthropic: añade crédito en console.anthropic.com (Billing).", "e_badkey": "Clave API rechazada: revisa ANTHROPIC_API_KEY en Vercel y vuelve a desplegar.", "e_model": "Modelo no encontrado: revisa la variable MODEL (o elimínala) en Vercel.", "e_code": "Código de acceso incorrecto. Inténtalo de nuevo."}, "de": {"e_credit": "Nicht genug Guthaben bei Anthropic: Guthaben auf console.anthropic.com (Billing) aufladen.", "e_badkey": "API-Schlüssel abgelehnt: ANTHROPIC_API_KEY in Vercel prüfen und neu deployen.", "e_model": "Modell nicht gefunden: Variable MODEL in Vercel prüfen (oder entfernen).", "e_code": "Falscher Zugangscode. Versuche es erneut."}, "it": {"e_credit": "Credito insufficiente sul tuo account Anthropic: aggiungi credito su console.anthropic.com (Billing).", "e_badkey": "Chiave API rifiutata: controlla ANTHROPIC_API_KEY su Vercel e rifai il deploy.", "e_model": "Modello non trovato: controlla la variabile MODEL (o rimuovila) su Vercel.", "e_code": "Codice di accesso errato. Riprova."}, "pt": {"e_credit": "Crédito insuficiente na sua conta Anthropic: adicione crédito em console.anthropic.com (Billing).", "e_badkey": "Chave API rejeitada: verifique ANTHROPIC_API_KEY na Vercel e volte a publicar.", "e_model": "Modelo não encontrado: verifique a variável MODEL (ou remova-a) na Vercel.", "e_code": "Código de acesso incorreto. Tente novamente."}};
 Object.keys(I18I).forEach(k=>Object.assign(I18[k],I18I[k]));
-function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');renderRecipe(el,t,recipeTitle(t)||'',true)}else{el.classList.remove('rich');render(el,t)}}
+function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,ings=>branchWith({text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings))}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x);q.appendChild(b)})}
 // ---------- Historique (stocké sur l'appareil, dans le navigateur) ----------
@@ -374,7 +402,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v23',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v30',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -401,10 +429,11 @@ function looksLikeRecipe(txt){if(txt.length<60)return false;const L=txt.split('\
 function saveCurrent(){
   const a=loadH();let e=currentId?a.find(x=>x.id===currentId):null;
   if(!e){
-    const first=hist.find(m=>m.role==='assistant');
+    const first=branchFrom?[...hist].reverse().find(m=>m.role==='assistant'&&looksLikeRecipe(m.content)):hist.find(m=>m.role==='assistant');
     if(!first||!looksLikeRecipe(first.content))return;
-    const fl=first.content.split('\n').find(x=>x.trim())||'';const t=recipeTitle(first.content)||(fl.length<70&&!/^[-•*\d]/.test(fl.trim())?fl.trim().replace(/[:：]$/,''):hist[0].content.replace(/^\[UI\] /,'').slice(0,60));
-    e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1,fav:false,lang};
+    const fl=first.content.split('\n').find(x=>x.trim())||'';let t=recipeTitle(first.content)||(fl.length<70&&!/^[-•*\d]/.test(fl.trim())?fl.trim().replace(/[:：]$/,''):hist[0].content.replace(/^\[UI\] /,'').slice(0,60));
+    if(branchFrom&&t.toLowerCase()===branchFrom.title.toLowerCase())t+=' ('+T().variant+')';
+    e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1,fav:false,lang};branchFrom=null;
     if(pendingMeta){Object.keys(pendingMeta).forEach(k=>{if(pendingMeta[k])e[k]=pendingMeta[k]})}
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
@@ -436,11 +465,22 @@ function drawHistory(){
   if(!shown.length){const p=document.createElement('div');p.className='empty';p.textContent=q?T().noresult:(hfav?T().nofav:T().empty);l.appendChild(p)}
   shown.forEach(e=>l.appendChild(rowFor(e,true,true)));
 }
+const I18J={"fr": {"swapT": "Remplacer cet ingrédient", "swapH": "Touchez le cercle d’un ingrédient que vous n’avez pas : il est barré. Puis lancez une nouvelle recette, ou touchez ↔. Votre favori reste intact.", "swapMsg": "Je n’ai pas : {i}. Crée-moi une nouvelle recette complète avec un autre ingrédient à la place, en ajustant les quantités et les étapes.", "variant": "variante", "swapCtx": "Recette d’origine :", "missT": "pas dispo", "swapGo": "Nouvelle recette sans : {i}", "rateT": "Votre note", "rateH": "1 = très mauvaise · 5 = excellente", "rateOk": "Note enregistrée : {n}/5"}, "en": {"swapT": "Replace this ingredient", "swapH": "Tap the circle of an ingredient you don’t have: it gets crossed out. Then start a new recipe, or tap ↔. Your favorite stays untouched.", "swapMsg": "I don’t have: {i}. Create a new complete recipe using another ingredient instead, adjusting quantities and steps.", "variant": "variation", "swapCtx": "Original recipe:", "missT": "missing", "swapGo": "New recipe without: {i}", "rateT": "Your rating", "rateH": "1 = terrible · 5 = the best", "rateOk": "Rating saved: {n}/5"}, "es": {"swapT": "Sustituir este ingrediente", "swapH": "Toca el círculo de un ingrediente que no tengas: se tacha. Luego crea una receta nueva, o toca ↔. Tu favorito no cambia.", "swapMsg": "No tengo: {i}. Crea una receta nueva y completa con otro ingrediente en su lugar, ajustando cantidades y pasos.", "variant": "variante", "swapCtx": "Receta original:", "missT": "no tengo", "swapGo": "Receta nueva sin: {i}", "rateT": "Tu nota", "rateH": "1 = muy mala · 5 = la mejor", "rateOk": "Nota guardada: {n}/5"}, "de": {"swapT": "Zutat ersetzen", "swapH": "Tippe auf den Kreis einer Zutat, die du nicht hast: Sie wird durchgestrichen. Dann neues Rezept starten oder ↔ tippen. Dein Favorit bleibt unverändert.", "swapMsg": "Ich habe nicht: {i}. Erstelle ein neues vollständiges Rezept mit einer anderen Zutat statt dieser, mit angepassten Mengen und Schritten.", "variant": "Variante", "swapCtx": "Originalrezept:", "missT": "fehlt", "swapGo": "Neues Rezept ohne: {i}", "rateT": "Deine Bewertung", "rateH": "1 = furchtbar · 5 = die beste", "rateOk": "Bewertung gespeichert: {n}/5"}, "it": {"swapT": "Sostituisci questo ingrediente", "swapH": "Tocca il cerchio di un ingrediente che non hai: viene barrato. Poi avvia una nuova ricetta, o tocca ↔. Il tuo preferito resta intatto.", "swapMsg": "Non ho: {i}. Crea una nuova ricetta completa con un altro ingrediente al suo posto, adattando quantità e passaggi.", "variant": "variante", "swapCtx": "Ricetta originale:", "missT": "manca", "swapGo": "Nuova ricetta senza: {i}", "rateT": "Il tuo voto", "rateH": "1 = pessima · 5 = la migliore", "rateOk": "Voto salvato: {n}/5"}, "pt": {"swapT": "Substituir este ingrediente", "swapH": "Toque no círculo de um ingrediente que não tem: fica riscado. Depois inicie uma nova receita, ou toque em ↔. O seu favorito fica intacto.", "swapMsg": "Não tenho: {i}. Crie uma nova receita completa com outro ingrediente no lugar, ajustando quantidades e passos.", "variant": "variante", "swapCtx": "Receita original:", "missT": "em falta", "swapGo": "Nova receita sem: {i}", "rateT": "A sua nota", "rateH": "1 = péssima · 5 = a melhor", "rateOk": "Nota guardada: {n}/5"}};
+Object.keys(I18J).forEach(k=>Object.assign(I18[k],I18J[k]));
+const shown=c=>c.replace(/\n\n§§[\s\S]*$/,'').replace(/^\[UI\] /,'');
+function branchWith(src,ings){ // nouvelle recette à part, enregistrée dans l'historique : la recette d'origine (et son favori) ne bouge pas
+  if(busy)return;
+  hist=[];log.innerHTML='';
+  chefNow=src.k>=0&&CHEFS[src.k]?{...CHEFS[src.k],k:src.k}:null;persona=chefNow?chefNow.p:"";currentId=null;branchFrom={title:src.title,k:src.k,lang:src.lang};
+  refreshChat();drawQuick();show('chat');
+  send(T().swapMsg.replace('{i}',ings.join(' ; ')),false,T().swapCtx+'\n'+src.text);
+}
+function openBranch(id,ings){const e=loadH().find(x=>x.id===id);if(e)branchWith({text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings)}
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
   hist=e.messages.map(m=>({role:m.role,content:m.content}));log.innerHTML='';
-  chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;persona=chefNow?chefNow.p:"";currentId=id;
-  hist.forEach(m=>add(m.role==='user'?'u':'a',m.content.replace(/^\[UI\] /,'')));
+  chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;persona=chefNow?chefNow.p:"";currentId=id;branchFrom=null;
+  hist.forEach(m=>add(m.role==='user'?'u':'a',shown(m.content)));
   refreshChat();drawQuick();show('chat');
   try{const i=hist.findIndex(m=>m.role==='assistant'&&looksLikeRecipe(m.content));if(i>=0)dishPic(log.children[i],hist[i].content)}catch(x){}
 }
@@ -547,7 +587,7 @@ function secIcon(h){
   if(/note|astuce|conseil|tip|hinweis|consej|dica|consigli/i.test(h))return '💡';
   return '';
 }
-function renderRecipe(el,txt,title,chat){
+function renderRecipe(el,txt,title,chat,swap){
   el.classList.remove('typing');el.removeAttribute('aria-label');el.innerHTML='';
   if(chat&&title){const t=document.createElement('div');t.className='rtitle';t.textContent=title;el.appendChild(t)}const nz=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
   const secs=recipeSections(txt);
@@ -560,7 +600,7 @@ function renderRecipe(el,txt,title,chat){
     const h=document.createElement('h3');const ic=secIcon(sec.h);h.textContent=(ic?ic+' ':'')+sec.h;box.appendChild(h);
     let list=null,kind='';
     const close=()=>{list=null;kind=''};
-    const ingS=/ingr|zutat|ingred/i.test(sec.h),stS=!ingS&&/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);let cnt=0;
+    const ingS=/ingr|zutat|ingred/i.test(sec.h),stS=!ingS&&/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);let cnt=0;const missing=new Set();let bar=null;const updBar=()=>{if(!bar)return;bar.hidden=!missing.size;bar.textContent='↔ '+T().swapGo.replace('{i}',[...missing].join(' ; '))};
     sec.lines.forEach(l=>{
       let b=l.match(/^[-•*]\s+(.*)$/),n=l.match(/^(\d+)[.)]\s+(.*)$/);
       if(!b&&!n){if(ingS&&l.length<=160)b=[l,l];else if(stS&&l.length>12)n=[l,String(cnt+1),l]} // lignes sans tiret ni numéro : on les rattrape
@@ -568,15 +608,36 @@ function renderRecipe(el,txt,title,chat){
       if(b){
         if(kind!=='b'){list=document.createElement('ul');list.className='ring';box.appendChild(list);kind='b'}
         const li=document.createElement('li'),ck=document.createElement('span');ck.className='ck';const tx=document.createElement('span');tx.className='tx';tx.textContent=b[1];
-        li.append(ck,tx);li.onclick=()=>{const d=li.classList.toggle('done');ck.textContent=d?'✓':''};list.appendChild(li);
+        const tag=document.createElement('span');tag.className='mt';tag.textContent=T().missT;tag.hidden=true;tx.appendChild(tag);
+        li.append(ck,tx);li.onclick=()=>{const d=li.classList.toggle('miss');ck.textContent=d?'✕':'';tag.hidden=!d;if(d)missing.add(b[1]);else missing.delete(b[1]);updBar()};
+        if(swap&&ingS){const sb=document.createElement('button');sb.type='button';sb.className='swp';sb.textContent='↔';sb.title=sb.ariaLabel=T().swapT;sb.onclick=ev=>{ev.stopPropagation();swap([b[1]])};li.appendChild(sb)}
+        list.appendChild(li);
       }else if(n){
         if(kind!=='n'){list=document.createElement('ol');list.className='rstep';box.appendChild(list);kind='n'}
         const li=document.createElement('li'),nm=document.createElement('span');nm.className='num';nm.textContent=n[1];const tx=document.createElement('span');tx.textContent=n[2];
         li.append(nm,tx);list.appendChild(li);
       }else{close();const p=document.createElement('p');p.className='rp';p.textContent=l;box.appendChild(p)}
     });
+    if(swap&&ingS){bar=document.createElement('button');bar.type='button';bar.className='swgo';bar.hidden=true;bar.onclick=()=>swap([...missing]);box.appendChild(bar)}
     el.appendChild(box);
   });
+}
+function rateBox(id){ // 1 à 5 étoiles : 1 = pourrie, 5 = la meilleure. Note gardée sur l'appareil + envoyée au serveur (si activé)
+  const t=T(),e0=loadH().find(x=>x.id===id);if(!e0)return document.createElement('span');
+  const box=document.createElement('div');box.className='rate';
+  const lb=document.createElement('span');lb.className='rl';lb.textContent=t.rateT;
+  const st=document.createElement('span');st.className='stars';st.title=t.rateH;
+  const info=document.createElement('span');info.className='ri';
+  const bs=[1,2,3,4,5].map(n=>{const b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('aria-label',n+'/5');b.title=n+'/5';st.appendChild(b);return b});
+  const paint=n=>bs.forEach((b,i)=>{b.classList.toggle('on',i<n);b.setAttribute('aria-pressed',String(i+1===n))});
+  paint(e0.stars||0);
+  const key=slug(e0.title);
+  const show=j=>{if(j&&j.count)info.textContent='· ★ '+j.avg.toFixed(1).replace('.',T().sr&&/^(fr|es|de|it|pt)/.test(T().sr)?',':'.')+' ('+j.count+')';if(j&&j.mine&&!e0.stars){paint(j.mine);updEntry(id,z=>{z.stars=j.mine})}};
+  capi('GET','?key='+key,null,'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
+  bs.forEach((b,i)=>b.onclick=()=>{const n=i+1;const cur=(loadH().find(x=>x.id===id)||{}).stars||0;if(n===cur)return;
+    updEntry(id,z=>{z.stars=n});paint(n);toast(t.rateOk.replace('{n}',n));
+    capi('POST','',{key,stars:n,title:e0.title,lang},'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{})});
+  box.append(lb,st,info);return box;
 }
 function openCard(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
@@ -600,16 +661,17 @@ function openCard(id){
   fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
   const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
-  act.append(fv,sh,ct);body.appendChild(act);
-  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title);body.appendChild(rt);
+  act.append(fv,sh,ct);body.appendChild(act);body.appendChild(rateBox(id));
+  const sh2=document.createElement('p');sh2.className='swh';sh2.textContent='↔ '+t.swapH;body.appendChild(sh2);
+  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title,false,ings=>openBranch(id,ings));body.appendChild(rt);
   buildComments(body,slug(e.title));
   show('card');body.scrollTop=0;
 }
 // ----- Commentaires (stockés côté serveur : /api/comments) -----
 const OWN=(()=>{try{let o=localStorage.getItem('owner');if(!o){o=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Math.random().toString(36).slice(2)+Date.now().toString(36));localStorage.setItem('owner',o)}return o}catch(x){return 'a'+Math.random().toString(36).slice(2)}})();
-async function capi(method,qs,data){
+async function capi(method,qs,data,path){
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
-    return fetch('/api/comments'+qs,{method,headers:{'Content-Type':'application/json','x-code':c,'x-owner':OWN},body:data?JSON.stringify(data):undefined})};
+    return fetch((path||'/api/comments')+qs,{method,headers:{'Content-Type':'application/json','x-code':c,'x-owner':OWN},body:data?JSON.stringify(data):undefined})};
   let r=await call();
   if(r.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(x){}r=await call()}}
   return r;
@@ -651,7 +713,7 @@ function buildComments(parent,key){
 function dishKind(t){
   if(/kafta|kofta|kefta|batata|gratin|lasagn|moussaka|rôti|roast|tajine|tagine/i.test(t))return 'tray';
   if(/houmous|hummus|baba|moutabal|tarator|tzatziki|guacamole|taboul[eé]|caviar d|trempette|\bdip\b|tapenade|rillette|pesto|salsa|sauce|chutney|confiture|compote/i.test(t))return 'dip';
-  if(/boulette|falafel|meatball|croquette|nugget|kibbeh|kebbe|arancin|polpett|alb[oó]ndiga|frikadell|k[oö]fte|beignet|fritter/i.test(t))return 'balls';
+  if(/boulette|falafel|meatball|croquette|nugget|kibb[eé]h?|kebb[eé]|arancin|polpett|alb[oó]ndiga|frikadell|k[oö]fte|beignet|fritter/i.test(t))return 'balls';
   if(/cocktail|mojito|smoothie|boisson|drink|jus\b|juice|limonade|lemonade|thé\b|tea\b|café|coffee|sangria|spritz|milkshake|punch|getränk|bebida|bevanda/i.test(t))return 'glass';
   if(/soupe|soup|velouté|bouillon|ramen|curry|ragoût|stew|chili|dal\b|sopa|suppe|zuppa|risotto|porridge/i.test(t))return 'bowl';
   if(/gâteau|gateau|cake|tarte|tart\b|brownie|cookie|muffin|cupcake|dessert|crème|cream|mousse|tiramisu|pie\b|torta|kuchen|bolo|tarta|flan|crêpe|crepe|pancake/i.test(t))return 'cake';
@@ -698,6 +760,7 @@ function dishArt(title){const d=document.createElement('div');d.innerHTML=dishSv
 function toBottom(){const f=()=>{log.scrollTop=log.scrollHeight};f();requestAnimationFrame(f);setTimeout(f,150)}
 function dishPic(b,text){
   if(!b||log.querySelector('.dphoto')||!looksLikeRecipe(text||''))return;
+  log.querySelectorAll('.ract').forEach(x=>x.remove());
   const e=currentId?loadH().find(x=>x.id===currentId):null;if(!e)return;
   const box=document.createElement('div');box.className='dphoto';b.after(box);
   const mine=e.img||(typeof e.photo==='string'&&/^data:/.test(e.photo)?e.photo:'');
@@ -706,10 +769,15 @@ function dishPic(b,text){
   box.classList.add('tap');box.setAttribute('role','button');box.tabIndex=0;box.setAttribute('aria-label',T().imgT);
   const cb=document.createElement('span');cb.className='camb';cb.textContent='📷';box.appendChild(cb);
   const id=currentId;box.onclick=()=>openImgSheet(id);box.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
+  const row=document.createElement('div');row.className='cact ract';const id2=currentId;
+  const fv=document.createElement('button');fv.className='cbtn'+(e.fav?' on':'');fv.textContent=(e.fav?'❤️ ':'🤍 ')+T().fav;
+  fv.onclick=()=>{const f=toggleFav(id2);fv.textContent=(f?'❤️ ':'🤍 ')+T().fav;fv.classList.toggle('on',!!f)};
+  const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+T().share;sh.onclick=()=>{const z=loadH().find(x=>x.id===id2);if(z)shareRecipe(z)};
+  row.append(fv,sh,rateBox(id2));box.after(row);
   toBottom();
 }
 function openChat(chef){
-  hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;
+  hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;
   persona=chef?chef.p:"";$('#cname').textContent=chef?"Chef "+chef.n:"Chef IA";$('#cdesc').textContent=chef?chef.d:T().cd;
   showWelcome();
   show('chat');
@@ -735,9 +803,9 @@ function looksCut(j){
   const last=j.text.trimEnd().split('\n').pop().trim();
   return /^\d+[.)]\s/.test(last)&&!/[.!?…)»"'\]:;*]$/.test(last);
 }
-async function send(text,auto){
+async function send(text,auto,ctx){
   text=(text||inp.value).trim();if(!text||busy)return;
-  inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text});
+  inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
   try{
     let j=await chatCall(hist,out);
@@ -877,7 +945,7 @@ function closeImgSheet(){$('#isheetwrap').classList.remove('on');imgTarget=null}
 function repaintImgViews(id){
   if(cardId===id&&curView==='card')openCard(id);
   const box=log.querySelector('.dphoto');
-  if(box&&currentId===id){const b=box.previousElementSibling;box.remove();
+  if(box&&currentId===id){const b=box.previousElementSibling;box.remove();log.querySelectorAll('.ract').forEach(x=>x.remove());
     const m=hist.find(x=>x.role==='assistant'&&looksLikeRecipe(x.content));if(b&&m)dishPic(b,m.content)}
   drawHistory();drawFavs();
 }
