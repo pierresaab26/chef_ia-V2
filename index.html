@@ -26,10 +26,6 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .ask button{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:8px 14px}
 h2{font-size:16px;margin:18px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
 h2 small{color:var(--pink);font-weight:600;font-size:12px}
-.hero{display:flex;align-items:flex-end;justify-content:space-between;width:100%;height:120px;border-radius:22px;padding:14px 16px;text-align:left;color:#fff;background:linear-gradient(120deg,#2b1d1d,#7a2d10);position:relative;overflow:hidden}
-.hero .big{position:absolute;right:56px;top:6px;font-size:70px;opacity:.95}
-.hero b{font-size:18px;display:block}
-.hero span{font-size:12px;opacity:.8}
 .go{width:34px;height:34px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-weight:700;flex:none}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .chip{flex:none;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 13px;font-size:13px;white-space:nowrap}
@@ -45,6 +41,15 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chef b{display:block;font-size:14px}
 .chef span{color:var(--mut);font-size:12px}
 .chef em{display:block;margin-top:6px;color:var(--pink);font-style:normal;font-weight:700;font-size:12px}
+.more{color:var(--pink);font-weight:600;font-size:13px}
+.hrow{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:18px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.hopen{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:10px;text-align:left}
+.hpic{width:64px;height:64px;border-radius:14px;display:grid;place-items:center;font-size:32px;flex:none}
+.htx{min-width:0}
+.htx b{display:block;font-size:15px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.htx span{color:var(--mut);font-size:12px}
+.hdel{padding:10px 14px;color:var(--mut);font-size:16px}
+.empty{color:var(--mut);background:var(--card);border-radius:18px;padding:16px;font-size:14px}
 #chat.on~nav{display:none}
 nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-around;background:var(--card);border-radius:999px;padding:10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
 nav button{padding:6px 22px;font-size:22px;opacity:.5}
@@ -93,14 +98,19 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
         <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><select id="lang" aria-label="Language"></select>
       </div>
       <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
-      <h2 id="today"></h2>
-      <button class="hero"><span class="big">🥩</span><div><b id="hn"></b><span id="hm"></span></div><div class="go">›</div></button>
+      <h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
+      <div id="hhome"></div>
       <h2 id="thT"></h2>
       <div class="chips" id="themes"></div>
       <div class="grid" id="grid"></div>
       <h2 id="chT"></h2>
       <div class="chefs" id="chefs"></div>
     </div>
+  </section>
+
+  <section class="view" id="history">
+    <div class="chead"><button class="back" id="hback" aria-label="Accueil">🏠</button><b id="hpT"></b></div>
+    <div class="scroll" id="hlist"></div>
   </section>
 
   <section class="view" id="chat">
@@ -119,12 +129,12 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 
 <script>
 const I18={
-fr:{n:"Français",hi:"Bonjour !",sub:"Votre chef de poche, propulsé par l’IA",ask:"Que voulez-vous cuisiner ?",today:"Recette du jour",themes:"Thèmes",chefs:"Chefs IA",hero:"Rosbif",hm:"Français · dîner · 45 min",disc:"Discuter ›",cd:"Cuisine du monde",w:"Que voulons-nous cuisiner ? Demandez une recette, puis adaptez-la : « je n’ai pas de persil, j’ai du Cajun », « redonne-la pour 2 »…",ph:"Ex. : je n’ai pas de persil, j’ai du Cajun",e429:"Trop de demandes, réessayez dans un instant.",err:"Une erreur est survenue, réessayez.",code:"Code d’accès :",send:"Envoyer",req:"Donne-moi une recette de ",sur:"Surprends-moi avec une recette facile pour ce soir",cu:["Cuisine italienne","Cuisine japonaise","Cuisine française"],th:"Tout|Anniversaire|Petit-déj|Dîner|Végé",rc:"Pizza Margherita|Pancakes moelleux|Gâteau au chocolat|Curry de légumes|Pâtes carbonara|Œufs brouillés|Cupcakes|Buddha bowl",q:"Pour 2 personnes|Pour 6 personnes|Sans gluten|Plus rapide|Version végétarienne",sr:"fr-FR"},
-en:{n:"English",hi:"Hello!",sub:"Your pocket chef, powered by AI",ask:"What do you want to cook?",today:"Recipe of the day",themes:"Themes",chefs:"AI Chefs",hero:"Roast beef",hm:"French · dinner · 45 min",disc:"Chat ›",cd:"World cuisine",w:"What shall we cook? Ask for a recipe, then adapt it: “I have no parsley, I have Cajun spice”, “give it to me again for 2”…",ph:"E.g. replace the olive oil with butter",e429:"Too many requests, please try again in a moment.",err:"Something went wrong, please try again.",code:"Access code:",send:"Send",req:"Give me a recipe for ",sur:"Surprise me with an easy recipe for tonight",cu:["Italian cuisine","Japanese cuisine","French cuisine"],th:"All|Birthday|Breakfast|Dinner|Veggie",rc:"Margherita pizza|Fluffy pancakes|Chocolate cake|Vegetable curry|Pasta carbonara|Scrambled eggs|Cupcakes|Buddha bowl",q:"For 2 people|For 6 people|Gluten-free|Faster|Vegetarian version",sr:"en-US"},
-es:{n:"Español",hi:"¡Hola!",sub:"Tu chef de bolsillo, con IA",ask:"¿Qué quieres cocinar?",today:"Receta del día",themes:"Temas",chefs:"Chefs IA",hero:"Rosbif",hm:"Francés · cena · 45 min",disc:"Hablar ›",cd:"Cocina del mundo",w:"¿Qué cocinamos? Pide una receta y luego adáptala: «no tengo perejil, tengo Cajun», «dámela otra vez para 2»…",ph:"Ej.: cambia el aceite de oliva por mantequilla",e429:"Demasiadas solicitudes, inténtalo de nuevo en un momento.",err:"Ha ocurrido un error, inténtalo de nuevo.",code:"Código de acceso:",send:"Enviar",req:"Dame una receta de ",sur:"Sorpréndeme con una receta fácil para esta noche",cu:["Cocina italiana","Cocina japonesa","Cocina francesa"],th:"Todo|Cumpleaños|Desayuno|Cena|Veg",rc:"Pizza Margarita|Tortitas esponjosas|Tarta de chocolate|Curry de verduras|Pasta carbonara|Huevos revueltos|Cupcakes|Buddha bowl",q:"Para 2 personas|Para 6 personas|Sin gluten|Más rápido|Versión vegetariana",sr:"es-ES"},
-de:{n:"Deutsch",hi:"Hallo!",sub:"Dein Taschenkoch mit KI",ask:"Was möchtest du kochen?",today:"Rezept des Tages",themes:"Themen",chefs:"KI-Köche",hero:"Roastbeef",hm:"Französisch · Abendessen · 45 Min.",disc:"Chatten ›",cd:"Weltküche",w:"Was kochen wir? Frag nach einem Rezept und passe es dann an: „Ich habe keine Petersilie, aber Cajun“, „gib es mir nochmal für 2“…",ph:"z. B. ersetze das Olivenöl durch Butter",e429:"Zu viele Anfragen, bitte gleich nochmal versuchen.",err:"Es ist ein Fehler aufgetreten, bitte erneut versuchen.",code:"Zugangscode:",send:"Senden",req:"Gib mir ein Rezept für ",sur:"Überrasche mich mit einem einfachen Rezept für heute Abend",cu:["Italienische Küche","Japanische Küche","Französische Küche"],th:"Alle|Geburtstag|Frühstück|Abendessen|Vegi",rc:"Pizza Margherita|Fluffige Pfannkuchen|Schokoladenkuchen|Gemüsecurry|Pasta Carbonara|Rührei|Cupcakes|Buddha Bowl",q:"Für 2 Personen|Für 6 Personen|Glutenfrei|Schneller|Vegetarische Version",sr:"de-DE"},
-it:{n:"Italiano",hi:"Ciao!",sub:"Il tuo chef tascabile, con l’IA",ask:"Cosa vuoi cucinare?",today:"Ricetta del giorno",themes:"Temi",chefs:"Chef IA",hero:"Roast beef",hm:"Francese · cena · 45 min",disc:"Parla ›",cd:"Cucina del mondo",w:"Cosa cuciniamo? Chiedi una ricetta, poi adattala: «non ho il prezzemolo, ho il Cajun», «dammela di nuovo per 2»…",ph:"Es.: sostituisci l’olio d’oliva con il burro",e429:"Troppe richieste, riprova tra poco.",err:"Si è verificato un errore, riprova.",code:"Codice di accesso:",send:"Invia",req:"Dammi una ricetta per ",sur:"Sorprendimi con una ricetta facile per stasera",cu:["Cucina italiana","Cucina giapponese","Cucina francese"],th:"Tutto|Compleanno|Colazione|Cena|Veg",rc:"Pizza Margherita|Pancake soffici|Torta al cioccolato|Curry di verdure|Pasta alla carbonara|Uova strapazzate|Cupcake|Buddha bowl",q:"Per 2 persone|Per 6 persone|Senza glutine|Più veloce|Versione vegetariana",sr:"it-IT"},
-pt:{n:"Português",hi:"Olá!",sub:"O seu chef de bolso, com IA",ask:"O que quer cozinhar?",today:"Receita do dia",themes:"Temas",chefs:"Chefs IA",hero:"Rosbife",hm:"Francês · jantar · 45 min",disc:"Conversar ›",cd:"Cozinha do mundo",w:"O que vamos cozinhar? Peça uma receita e depois adapte-a: «não tenho salsa, tenho Cajun», «dê-me de novo para 2»…",ph:"Ex.: troque o azeite por manteiga",e429:"Muitos pedidos, tente novamente daqui a pouco.",err:"Ocorreu um erro, tente novamente.",code:"Código de acesso:",send:"Enviar",req:"Dê-me uma receita de ",sur:"Surpreenda-me com uma receita fácil para esta noite",cu:["Cozinha italiana","Cozinha japonesa","Cozinha francesa"],th:"Tudo|Aniversário|Café da manhã|Jantar|Veg",rc:"Pizza Margherita|Panquecas fofas|Bolo de chocolate|Curry de legumes|Massa carbonara|Ovos mexidos|Cupcakes|Buddha bowl",q:"Para 2 pessoas|Para 6 pessoas|Sem glúten|Mais rápido|Versão vegetariana",sr:"pt-BR"}};
+fr:{n:"Français",hist:"Historique des recettes",more:"Voir plus",empty:"Vos recettes apparaîtront ici dès que vous en aurez demandé une.",del:"Supprimer",delq:"Supprimer cette recette de l’historique ?",hi:"Bonjour !",sub:"Votre chef de poche, propulsé par l’IA",ask:"Que voulez-vous cuisiner ?",today:"Recette du jour",themes:"Thèmes",chefs:"Chefs IA",hero:"Rosbif",hm:"Français · dîner · 45 min",disc:"Discuter ›",cd:"Cuisine du monde",w:"Que voulons-nous cuisiner ? Demandez une recette, puis adaptez-la : « je n’ai pas de persil, j’ai du Cajun », « redonne-la pour 2 »…",ph:"Ex. : je n’ai pas de persil, j’ai du Cajun",e429:"Trop de demandes, réessayez dans un instant.",err:"Une erreur est survenue, réessayez.",code:"Code d’accès :",send:"Envoyer",req:"Donne-moi une recette de ",sur:"Surprends-moi avec une recette facile pour ce soir",cu:["Cuisine italienne","Cuisine japonaise","Cuisine française"],th:"Tout|Anniversaire|Petit-déj|Dîner|Végé",rc:"Pizza Margherita|Pancakes moelleux|Gâteau au chocolat|Curry de légumes|Pâtes carbonara|Œufs brouillés|Cupcakes|Buddha bowl",q:"Pour 2 personnes|Pour 6 personnes|Sans gluten|Plus rapide|Version végétarienne",sr:"fr-FR"},
+en:{n:"English",hist:"Recipe history",more:"See more",empty:"Your recipes will show up here once you ask for one.",del:"Delete",delq:"Delete this recipe from your history?",hi:"Hello!",sub:"Your pocket chef, powered by AI",ask:"What do you want to cook?",today:"Recipe of the day",themes:"Themes",chefs:"AI Chefs",hero:"Roast beef",hm:"French · dinner · 45 min",disc:"Chat ›",cd:"World cuisine",w:"What shall we cook? Ask for a recipe, then adapt it: “I have no parsley, I have Cajun spice”, “give it to me again for 2”…",ph:"E.g. replace the olive oil with butter",e429:"Too many requests, please try again in a moment.",err:"Something went wrong, please try again.",code:"Access code:",send:"Send",req:"Give me a recipe for ",sur:"Surprise me with an easy recipe for tonight",cu:["Italian cuisine","Japanese cuisine","French cuisine"],th:"All|Birthday|Breakfast|Dinner|Veggie",rc:"Margherita pizza|Fluffy pancakes|Chocolate cake|Vegetable curry|Pasta carbonara|Scrambled eggs|Cupcakes|Buddha bowl",q:"For 2 people|For 6 people|Gluten-free|Faster|Vegetarian version",sr:"en-US"},
+es:{n:"Español",hist:"Historial de recetas",more:"Ver más",empty:"Tus recetas aparecerán aquí cuando pidas una.",del:"Eliminar",delq:"¿Eliminar esta receta del historial?",hi:"¡Hola!",sub:"Tu chef de bolsillo, con IA",ask:"¿Qué quieres cocinar?",today:"Receta del día",themes:"Temas",chefs:"Chefs IA",hero:"Rosbif",hm:"Francés · cena · 45 min",disc:"Hablar ›",cd:"Cocina del mundo",w:"¿Qué cocinamos? Pide una receta y luego adáptala: «no tengo perejil, tengo Cajun», «dámela otra vez para 2»…",ph:"Ej.: cambia el aceite de oliva por mantequilla",e429:"Demasiadas solicitudes, inténtalo de nuevo en un momento.",err:"Ha ocurrido un error, inténtalo de nuevo.",code:"Código de acceso:",send:"Enviar",req:"Dame una receta de ",sur:"Sorpréndeme con una receta fácil para esta noche",cu:["Cocina italiana","Cocina japonesa","Cocina francesa"],th:"Todo|Cumpleaños|Desayuno|Cena|Veg",rc:"Pizza Margarita|Tortitas esponjosas|Tarta de chocolate|Curry de verduras|Pasta carbonara|Huevos revueltos|Cupcakes|Buddha bowl",q:"Para 2 personas|Para 6 personas|Sin gluten|Más rápido|Versión vegetariana",sr:"es-ES"},
+de:{n:"Deutsch",hist:"Rezeptverlauf",more:"Mehr anzeigen",empty:"Deine Rezepte erscheinen hier, sobald du eines angefragt hast.",del:"Löschen",delq:"Dieses Rezept aus dem Verlauf löschen?",hi:"Hallo!",sub:"Dein Taschenkoch mit KI",ask:"Was möchtest du kochen?",today:"Rezept des Tages",themes:"Themen",chefs:"KI-Köche",hero:"Roastbeef",hm:"Französisch · Abendessen · 45 Min.",disc:"Chatten ›",cd:"Weltküche",w:"Was kochen wir? Frag nach einem Rezept und passe es dann an: „Ich habe keine Petersilie, aber Cajun“, „gib es mir nochmal für 2“…",ph:"z. B. ersetze das Olivenöl durch Butter",e429:"Zu viele Anfragen, bitte gleich nochmal versuchen.",err:"Es ist ein Fehler aufgetreten, bitte erneut versuchen.",code:"Zugangscode:",send:"Senden",req:"Gib mir ein Rezept für ",sur:"Überrasche mich mit einem einfachen Rezept für heute Abend",cu:["Italienische Küche","Japanische Küche","Französische Küche"],th:"Alle|Geburtstag|Frühstück|Abendessen|Vegi",rc:"Pizza Margherita|Fluffige Pfannkuchen|Schokoladenkuchen|Gemüsecurry|Pasta Carbonara|Rührei|Cupcakes|Buddha Bowl",q:"Für 2 Personen|Für 6 Personen|Glutenfrei|Schneller|Vegetarische Version",sr:"de-DE"},
+it:{n:"Italiano",hist:"Cronologia ricette",more:"Vedi altro",empty:"Le tue ricette appariranno qui dopo la prima richiesta.",del:"Elimina",delq:"Eliminare questa ricetta dalla cronologia?",hi:"Ciao!",sub:"Il tuo chef tascabile, con l’IA",ask:"Cosa vuoi cucinare?",today:"Ricetta del giorno",themes:"Temi",chefs:"Chef IA",hero:"Roast beef",hm:"Francese · cena · 45 min",disc:"Parla ›",cd:"Cucina del mondo",w:"Cosa cuciniamo? Chiedi una ricetta, poi adattala: «non ho il prezzemolo, ho il Cajun», «dammela di nuovo per 2»…",ph:"Es.: sostituisci l’olio d’oliva con il burro",e429:"Troppe richieste, riprova tra poco.",err:"Si è verificato un errore, riprova.",code:"Codice di accesso:",send:"Invia",req:"Dammi una ricetta per ",sur:"Sorprendimi con una ricetta facile per stasera",cu:["Cucina italiana","Cucina giapponese","Cucina francese"],th:"Tutto|Compleanno|Colazione|Cena|Veg",rc:"Pizza Margherita|Pancake soffici|Torta al cioccolato|Curry di verdure|Pasta alla carbonara|Uova strapazzate|Cupcake|Buddha bowl",q:"Per 2 persone|Per 6 persone|Senza glutine|Più veloce|Versione vegetariana",sr:"it-IT"},
+pt:{n:"Português",hist:"Histórico de receitas",more:"Ver mais",empty:"As suas receitas aparecerão aqui assim que pedir uma.",del:"Eliminar",delq:"Eliminar esta receita do histórico?",hi:"Olá!",sub:"O seu chef de bolso, com IA",ask:"O que quer cozinhar?",today:"Receita do dia",themes:"Temas",chefs:"Chefs IA",hero:"Rosbife",hm:"Francês · jantar · 45 min",disc:"Conversar ›",cd:"Cozinha do mundo",w:"O que vamos cozinhar? Peça uma receita e depois adapte-a: «não tenho salsa, tenho Cajun», «dê-me de novo para 2»…",ph:"Ex.: troque o azeite por manteiga",e429:"Muitos pedidos, tente novamente daqui a pouco.",err:"Ocorreu um erro, tente novamente.",code:"Código de acesso:",send:"Enviar",req:"Dê-me uma receita de ",sur:"Surpreenda-me com uma receita fácil para esta noite",cu:["Cozinha italiana","Cozinha japonesa","Cozinha francesa"],th:"Tudo|Aniversário|Café da manhã|Jantar|Veg",rc:"Pizza Margherita|Panquecas fofas|Bolo de chocolate|Curry de legumes|Massa carbonara|Ovos mexidos|Cupcakes|Buddha bowl",q:"Para 2 pessoas|Para 6 pessoas|Sem glúten|Mais rápido|Versão vegetariana",sr:"pt-BR"}};
 const RMETA=[["🍕",1,"30 min","#fde4d8"],["🥞",2,"20 min","#fdf1c9"],["🎂",0+1+0,"50 min","#f6dbe8"],["🍛",4,"35 min","#dcefc9"],["🍝",3,"15 min","#fde4d8"],["🍳",2,"10 min","#fdf1c9"],["🧁",0+1,"40 min","#f6dbe8"],["🥗",4,"25 min","#dcefc9"]];
 // catégories : 1 anniversaire, 2 petit-déj, 3 dîner, 4 végé (index dans th, 0 = Tout)
 RMETA[0][1]=3;RMETA[1][1]=2;RMETA[2][1]=1;RMETA[3][1]=4;RMETA[4][1]=3;RMETA[5][1]=2;RMETA[6][1]=1;RMETA[7][1]=4;
@@ -137,7 +147,7 @@ let lastDish="";
 function randomDish(){let d;do{d=DISHES[Math.floor(Math.random()*DISHES.length)]}while(d===lastDish);lastDish=d;return d}
 const $=s=>document.querySelector(s);
 const log=$('#log'),inp=$('#inp'),sendB=$('#send');
-let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en";
+let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null;
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
@@ -146,10 +156,9 @@ function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.togg
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
   $('#hi').textContent=t.hi;$('#sub').textContent=t.sub;$('#hq').placeholder=t.ask;
-  $('#today').textContent=t.today;$('#thT').textContent=t.themes;$('#chT').textContent=t.chefs;
-  $('#hn').textContent=t.hero;$('#hm').textContent=t.hm;
+  $('#hT').textContent=t.hist;$('#hmore').textContent=t.more;$('#hpT').textContent=t.hist;$('#thT').textContent=t.themes;$('#chT').textContent=t.chefs;
   inp.placeholder=t.ph;sendB.textContent=t.send;
-  drawGrid();drawChefs();refreshChat();
+  drawGrid();drawChefs();refreshChat();drawHistory();
 }
 function refreshChat(){const t=T();if(!hist.length){log.innerHTML='';add('a',t.w)}
   $('#cname').textContent=chefNow?"Chef "+chefNow.n:"Chef Claude";$('#cdesc').textContent=chefNow?t.cu[chefNow.k]:t.cd;
@@ -166,11 +175,60 @@ function drawGrid(){
 function drawChefs(){const t=T();$('#chefs').innerHTML='';CHEFS.forEach((c,k)=>{const b=document.createElement('button');b.className='chef';
   const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent="Chef "+c.n;const d=document.createElement('span');d.textContent=t.cu[k];const e=document.createElement('em');e.textContent=t.disc;
   b.append(i,n,d,e);b.onclick=()=>openChat({...c,k,d:t.cu[k]});$('#chefs').appendChild(b)})}
-function render(el,t){el.innerHTML='';t.split('\n').forEach(l=>{if(l.startsWith('## ')){const h=document.createElement('h3');h.textContent=l.slice(3);el.appendChild(h)}else el.appendChild(document.createTextNode(l+'\n'))})}
+function render(el,t){el.innerHTML='';t.split('\n').forEach(l=>{const m=l.match(/^#{1,3}\s+(.*)/);if(m){const h=document.createElement('h3');h.textContent=m[1].replace(/\*\*/g,'');el.appendChild(h)}else el.appendChild(document.createTextNode(l.replace(/\*\*/g,'')+'\n'))})}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else render(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x);q.appendChild(b)})}
+// ---------- Historique (stocké sur l'appareil, dans le navigateur) ----------
+const HK='chefHistory';
+function loadH(){try{return JSON.parse(localStorage.getItem(HK)||'[]')}catch(e){return []}}
+function saveH(a){try{localStorage.setItem(HK,JSON.stringify(a.slice(0,30)))}catch(e){}}
+const LOOK=[[/pizza/i,"🍕"],[/cupcake|muffin/i,"🧁"],[/pancake|crêpe|crepe|panqueca|tortita|pfannkuchen/i,"🥞"],[/cake|gâteau|gateau|torta|kuchen|bolo|tarta|chocolat|chocolate|tiramisu/i,"🎂"],[/curry|tikka/i,"🍛"],[/ramen|soup|soupe|potage|pho|gazpacho|tom yum/i,"🍜"],[/pasta|pâtes|pates|carbonara|spaghetti|lasagn|gnocchi|nouille|noodle|massa|nudel/i,"🍝"],[/sushi|saumon|salmon|teriyaki/i,"🍣"],[/burger/i,"🍔"],[/salad|salade|buddha|insalata|ensalada|salat/i,"🥗"],[/steak|rosbif|roast|beef|bœuf|boeuf|bourguignon|goulash/i,"🥩"],[/œuf|oeuf|egg|omelette|huevo|ovo|uova|shakshuka|rührei/i,"🍳"],[/poulet|chicken|pollo|hähnchen|frango|coq/i,"🍗"],[/poisson|fish|pescado|fisch|pesce|peixe/i,"🐟"],[/taco|enchilada|burrito/i,"🌮"],[/riz|rice|risotto|paella|reis|arroz|riso/i,"🍚"],[/pain|bread|brot|pane|pão/i,"🍞"],[/tarte|tart|pie|quiche/i,"🥧"],[/cookie|biscuit|galleta|keks/i,"🍪"]];
+const BGS=["#fde4d8","#fdf1c9","#f6dbe8","#dcefc9","#dbe6fb","#e6dcf7"];
+function dishLook(t){let e="🍽️";for(const [r,x] of LOOK){if(r.test(t)){e=x;break}}let h=0;for(const c of t)h=(h+c.charCodeAt(0))%97;return [e,BGS[h%BGS.length]]}
+function fmtDate(iso){try{return new Date(iso).toLocaleDateString(T().sr,{day:'numeric',month:'short',year:'numeric'})}catch(e){return ''}}
+const HEAD=/^\s{0,3}(?:#{1,3}\s+(.+?)|\*\*([^*\n]+)\*\*\s*:?)\s*$/;
+function recipeTitle(txt){const f=txt.split('\n').find(l=>l.trim());const m=f&&f.match(HEAD);return m?(m[1]||m[2]).replace(/[:：]\s*$/,'').replace(/\*\*/g,'').trim().slice(0,80):null}
+function looksLikeRecipe(txt){if(txt.length<60)return false;const L=txt.split('\n');const heads=L.filter(l=>HEAD.test(l)).length;const steps=L.filter(l=>/^\s*\d+[.)]\s+\S/.test(l)).length;return heads>=2||steps>=2}
+function saveCurrent(){
+  const a=loadH();let e=currentId?a.find(x=>x.id===currentId):null;
+  if(!e){
+    const first=hist.find(m=>m.role==='assistant');
+    if(!first||!looksLikeRecipe(first.content))return;
+    const t=recipeTitle(first.content)||hist[0].content.replace(/^\[UI\] /,'').slice(0,60);
+    e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1};
+    currentId=e.id;
+  }else{a.splice(a.indexOf(e),1)}
+  e.messages=hist.map(m=>({role:m.role,content:m.content}));
+  a.unshift(e);saveH(a);drawHistory();
+}
+function rowFor(e,del){
+  const [em,bg]=dishLook(e.title);
+  const r=document.createElement('div');r.className='hrow';
+  const o=document.createElement('button');o.className='hopen';
+  const p=document.createElement('div');p.className='hpic';p.style.background=bg;p.textContent=em;
+  const x=document.createElement('div');x.className='htx';
+  const b=document.createElement('b');b.textContent=e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
+  x.append(b,d);o.append(p,x);o.onclick=()=>openSaved(e.id);r.appendChild(o);
+  if(del){const k=document.createElement('button');k.className='hdel';k.textContent='✕';k.setAttribute('aria-label',T().del);
+    k.onclick=()=>{if(confirm(T().delq)){saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id)currentId=null;drawHistory()}};r.appendChild(k)}
+  return r;
+}
+function drawHistory(){
+  const a=loadH(),h=$('#hhome'),l=$('#hlist');h.innerHTML='';l.innerHTML='';
+  $('#hmore').style.display=a.length?'':'none';
+  if(!a.length){[h,l].forEach(z=>{const p=document.createElement('div');p.className='empty';p.textContent=T().empty;z.appendChild(p)});return}
+  a.slice(0,3).forEach(e=>h.appendChild(rowFor(e,false)));
+  a.forEach(e=>l.appendChild(rowFor(e,true)));
+}
+function openSaved(id){
+  const e=loadH().find(x=>x.id===id);if(!e)return;
+  hist=e.messages.map(m=>({role:m.role,content:m.content}));log.innerHTML='';
+  chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;persona=chefNow?chefNow.p:"";currentId=id;
+  hist.forEach(m=>add(m.role==='user'?'u':'a',m.content.replace(/^\[UI\] /,'')));
+  refreshChat();drawQuick();show('chat');
+}
 function openChat(chef){
-  hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;
+  hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;
   persona=chef?chef.p:"";$('#cname').textContent=chef?"Chef "+chef.n:"Chef Claude";$('#cdesc').textContent=chef?chef.d:T().cd;
   add('a',T().w);
   show('chat');
@@ -187,16 +245,17 @@ async function send(text,auto){
     if(res.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(e){}res=await call()}}
     if(!res.ok)throw {code:res.status===429?'rate_limited':'err'};
     const j=await res.json();
-    render(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();
+    render(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
   }catch(e){
     hist.pop();
     render(out,e&&e.code==='rate_limited'?T().e429:T().err);
   }finally{busy=false;sendB.disabled=false;log.scrollTop=log.scrollHeight}
 }
-document.querySelector('.hero').onclick=()=>start(T().req+T().hero);
 $('#hgo').onclick=()=>{const v=$('#hq').value.trim();if(v){$('#hq').value='';start(v)}};
 $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
+$('#hback').onclick=()=>show('home');
+$('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
 $('#n2').onclick=()=>{if(!log.children.length)openChat(null);else show('chat')};
