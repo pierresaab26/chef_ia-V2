@@ -111,11 +111,11 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .catwrap{display:flex;flex-wrap:wrap;gap:8px}
 .catwrap .chip{font-size:14px;padding:8px 14px}
 #chat.on~nav{display:none}
-nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-around;background:var(--card);border-radius:999px;padding:10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
-nav button{padding:6px 22px;font-size:22px;opacity:.5}
+nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(3,1fr);align-items:center;justify-items:center;background:var(--card);border-radius:999px;padding:8px 10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+nav button{width:48px;height:48px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:22px;line-height:1;opacity:.5}
 nav button.on{opacity:1}
-#n3{opacity:1;background:#5b5866;width:44px;height:44px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:20px}
-nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin-top:-26px;display:grid;place-items:center;font-size:24px;opacity:1;padding:0;box-shadow:0 4px 12px rgba(132,204,22,.5)}
+#n3{opacity:1;background:#5b5866;font-size:20px}
+nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1;box-shadow:0 4px 12px rgba(132,204,22,.5)}
 .chead{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--bd)}
 .chead .back{font-size:22px;padding:0 6px}
 .chead b{display:block;line-height:1.2}
@@ -402,7 +402,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v30',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v31',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
