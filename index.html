@@ -177,6 +177,21 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .typing i{width:8px;height:8px;border-radius:50%;background:var(--mut);animation:tb 1.2s infinite ease-in-out}
 .typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
 @keyframes tb{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-4px)}}
+
+.chathd{gap:10px;padding:10px 14px;border-bottom:0;border-radius:0 0 22px 22px;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;z-index:2}
+.chathd .rb{width:38px;height:38px;border-radius:50%;background:var(--bd);display:grid;place-items:center;font-size:18px;padding:0;flex:none}
+.chathd .menubtn{font-size:20px}
+.avw{position:relative;flex:none;margin-left:2px}
+.avw::after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:var(--green);border:2px solid var(--card)}
+.chtx{flex:1;min-width:0}
+.chtx b{font-size:16px;line-height:1.15}
+.chtx .sub{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.welcome{align-self:stretch;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:22px 10px 8px}
+.welcome .wm{width:76px;height:76px;border-radius:24px;box-shadow:0 6px 18px rgba(229,25,95,.18);margin-bottom:6px}
+.welcome h3{margin:0;font-size:21px;line-height:1.2}
+.welcome p{margin:0;color:var(--mut);font-size:14px;max-width:340px}
+.wex{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;width:100%}
+.wex .chip{font-size:14px;padding:9px 15px}
 </style>
 </head>
 <body>
@@ -250,7 +265,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
   </section>
 
   <section class="view" id="chat">
-    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="back" aria-label="Accueil">🏠</button><svg class="mascot" style="width:38px;height:38px"><use href="#mascot"/></svg><button class="back" id="tocard" aria-label="Card" style="display:none;order:3;margin-left:auto">📖</button><div><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div></div>
+    <div class="chead chathd"><button class="menubtn rb" aria-label="Menu" aria-expanded="false">☰</button><button class="back rb" id="back" aria-label="Accueil">🏠</button><div class="avw"><svg class="mascot" style="width:42px;height:42px"><use href="#mascot"/></svg></div><div class="chtx"><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div><button class="back rb" id="tocard" aria-label="Card" style="display:none">📖</button></div>
     <div id="log"></div>
     <div id="quick"></div>
     <div id="bar"><button id="home2" aria-label="Accueil">🏠</button><input id="inp" autocomplete="off"><button id="impChat" aria-label="Import">📎</button><button id="mic" aria-label="Parler">🎤</button><button id="send"></button></div>
@@ -320,7 +335,7 @@ function applyUI(){
   inp.placeholder=t.ph;sendB.textContent=t.send;
   drawGrid();drawChefs();refreshChat();drawHistory();drawFavs();drawerText();
 }
-function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML='';add('a',t.w)}
+function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML='';showWelcome()}
   $('#cname').textContent=chefNow?"Chef "+chefNow.n:"Chef IA";$('#cdesc').textContent=chefNow?t.cu[chefNow.k]:t.cd;
   if($('#quick').children.length)drawQuick()}
 function drawGrid(){
@@ -336,6 +351,17 @@ function drawChefs(){const t=T();$('#chefs').innerHTML='';CHEFS.forEach((c,k)=>{
   const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent="Chef "+c.n;const d=document.createElement('span');d.textContent=t.cu[k];const e=document.createElement('em');e.textContent=t.disc;
   b.append(i,n,d,e);b.onclick=()=>openChat({...c,k,d:t.cu[k]});$('#chefs').appendChild(b)})}
 function render(el,t){el.classList.remove('typing');el.innerHTML='';t.split('\n').forEach(l=>{const m=l.match(/^#{1,3}\s+(.*)/);if(m){const h=document.createElement('h3');h.textContent=m[1].replace(/\*\*/g,'');el.appendChild(h)}else el.appendChild(document.createTextNode(l.replace(/\*\*/g,'')+'\n'))})}
+const I18H={"fr": {"wT": "Que voulons-nous cuisiner ?", "wS": "Recettes, desserts, cocktails… Demandez, puis adaptez : « sans persil, avec du Cajun », « pour 2 personnes ».", "wEx": "🍲 Un plat pour ce soir|🍰 Un dessert rapide|🍹 Un cocktail sans alcool|🥗 Une idée de menu"}, "en": {"wT": "What shall we cook?", "wS": "Recipes, desserts, cocktails… Ask, then adapt: “no parsley, with Cajun spice”, “for 2 people”.", "wEx": "🍲 A dish for tonight|🍰 A quick dessert|🍹 A non-alcoholic cocktail|🥗 A menu idea"}, "es": {"wT": "¿Qué cocinamos?", "wS": "Recetas, postres, cócteles… Pide y luego adapta: «sin perejil, con Cajun», «para 2 personas».", "wEx": "🍲 Un plato para esta noche|🍰 Un postre rápido|🍹 Un cóctel sin alcohol|🥗 Una idea de menú"}, "de": {"wT": "Was kochen wir?", "wS": "Rezepte, Desserts, Cocktails… Frag nach und passe an: „ohne Petersilie, mit Cajun“, „für 2 Personen“.", "wEx": "🍲 Ein Gericht für heute Abend|🍰 Ein schnelles Dessert|🍹 Ein alkoholfreier Cocktail|🥗 Eine Menüidee"}, "it": {"wT": "Cosa cuciniamo?", "wS": "Ricette, dolci, cocktail… Chiedi e poi adatta: «senza prezzemolo, con Cajun», «per 2 persone».", "wEx": "🍲 Un piatto per stasera|🍰 Un dolce veloce|🍹 Un cocktail analcolico|🥗 Un’idea di menu"}, "pt": {"wT": "O que vamos cozinhar?", "wS": "Receitas, sobremesas, cocktails… Peça e depois adapte: «sem salsa, com Cajun», «para 2 pessoas».", "wEx": "🍲 Um prato para esta noite|🍰 Uma sobremesa rápida|🍹 Um cocktail sem álcool|🥗 Uma ideia de menu"}};
+Object.keys(I18H).forEach(k=>Object.assign(I18[k],I18H[k]));
+function welcomeEl(){
+  const t=T(),d=document.createElement('div');d.className='welcome';
+  d.innerHTML='<svg class="mascot wm"><use href="#mascot"/></svg>';
+  const h=document.createElement('h3');h.textContent=t.wT;const p=document.createElement('p');p.textContent=t.wS;
+  const w=document.createElement('div');w.className='wex';
+  t.wEx.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x.replace(/^\S+\s+/,''));w.appendChild(b)});
+  d.append(h,p,w);return d;
+}
+function showWelcome(){log.appendChild(welcomeEl())}
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');renderRecipe(el,t,recipeTitle(t)||'',true)}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x);q.appendChild(b)})}
@@ -345,7 +371,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v16',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v17',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -671,13 +697,13 @@ function dishPic(b,text){
 function openChat(chef){
   hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;
   persona=chef?chef.p:"";$('#cname').textContent=chef?"Chef "+chef.n:"Chef IA";$('#cdesc').textContent=chef?chef.d:T().cd;
-  add('a',T().w);
+  showWelcome();
   show('chat');
 }
 function start(q){openChat(null);send(q,true)}
 async function send(text,auto){
   text=(text||inp.value).trim();if(!text||busy)return;
-  inp.value='';add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text});
+  inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');busy=true;sendB.disabled=true;
   try{
     const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
