@@ -362,6 +362,8 @@ function welcomeEl(){
   d.append(h,p,w);return d;
 }
 function showWelcome(){log.appendChild(welcomeEl())}
+const I18I={"fr": {"e_credit": "Crédit insuffisant sur votre compte Anthropic : ajoutez du crédit sur console.anthropic.com (Billing).", "e_badkey": "Clé API refusée : vérifiez ANTHROPIC_API_KEY dans Vercel, puis redéployez.", "e_model": "Modèle introuvable : vérifiez la variable MODEL (ou supprimez-la) dans Vercel.", "e_code": "Code d’accès incorrect. Réessayez."}, "en": {"e_credit": "Not enough credit on your Anthropic account: add credit at console.anthropic.com (Billing).", "e_badkey": "API key rejected: check ANTHROPIC_API_KEY in Vercel, then redeploy.", "e_model": "Model not found: check the MODEL variable (or remove it) in Vercel.", "e_code": "Wrong access code. Try again."}, "es": {"e_credit": "Crédito insuficiente en tu cuenta de Anthropic: añade crédito en console.anthropic.com (Billing).", "e_badkey": "Clave API rechazada: revisa ANTHROPIC_API_KEY en Vercel y vuelve a desplegar.", "e_model": "Modelo no encontrado: revisa la variable MODEL (o elimínala) en Vercel.", "e_code": "Código de acceso incorrecto. Inténtalo de nuevo."}, "de": {"e_credit": "Nicht genug Guthaben bei Anthropic: Guthaben auf console.anthropic.com (Billing) aufladen.", "e_badkey": "API-Schlüssel abgelehnt: ANTHROPIC_API_KEY in Vercel prüfen und neu deployen.", "e_model": "Modell nicht gefunden: Variable MODEL in Vercel prüfen (oder entfernen).", "e_code": "Falscher Zugangscode. Versuche es erneut."}, "it": {"e_credit": "Credito insufficiente sul tuo account Anthropic: aggiungi credito su console.anthropic.com (Billing).", "e_badkey": "Chiave API rifiutata: controlla ANTHROPIC_API_KEY su Vercel e rifai il deploy.", "e_model": "Modello non trovato: controlla la variabile MODEL (o rimuovila) su Vercel.", "e_code": "Codice di accesso errato. Riprova."}, "pt": {"e_credit": "Crédito insuficiente na sua conta Anthropic: adicione crédito em console.anthropic.com (Billing).", "e_badkey": "Chave API rejeitada: verifique ANTHROPIC_API_KEY na Vercel e volte a publicar.", "e_model": "Modelo não encontrado: verifique a variável MODEL (ou remova-a) na Vercel.", "e_code": "Código de acesso incorreto. Tente novamente."}};
+Object.keys(I18I).forEach(k=>Object.assign(I18[k],I18I[k]));
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');renderRecipe(el,t,recipeTitle(t)||'',true)}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x);q.appendChild(b)})}
@@ -371,7 +373,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v17',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v18',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -710,13 +712,17 @@ async function send(text,auto){
     const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:hist,persona,lang})});
     let res=await call();
     if(res.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(e){}res=await call()}}
-    if(!res.ok)throw {code:res.status===429?'rate_limited':res.status===503?'nokey':'err'};
+    if(!res.ok){
+      if(res.status===401){try{localStorage.removeItem('code')}catch(e){}throw {code:'code'}}
+      let ec='';try{ec=(await res.json()).error||''}catch(e){}
+      throw {code:res.status===429||ec==='rate'?'rate_limited':res.status===503?'nokey':['credit','badkey','model'].includes(ec)?ec:'err'};
+    }
     const j=await res.json();
     renderMsg(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
     try{dishPic(out,j.text)}catch(e){}
   }catch(e){
     hist.pop();
-    render(out,e&&e.code==='rate_limited'?T().e429:e&&e.code==='nokey'?T().nokey:T().err);
+    render(out,e&&e.code==='rate_limited'?T().e429:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err);
   }finally{busy=false;sendB.disabled=false;log.scrollTop=log.scrollHeight}
 }
 
