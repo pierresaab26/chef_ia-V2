@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   try {
     const out = await askClaude({
       system: SYSTEM,
-      model: process.env.VISION_MODEL || "claude-sonnet-5-5",
+      model: process.env.VISION_MODEL || "claude-haiku-5-5",
       max_tokens: 3000,
       content: [
         { type: "image", source: { type: "base64", media_type: m[1], data: m[2] } },
