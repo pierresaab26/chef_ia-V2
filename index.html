@@ -173,6 +173,10 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .isheet .cbtn{border:1px solid var(--bd);text-align:left;padding:13px 16px;width:100%}
 .isheet .urlrow{margin-top:2px}
 #imgMsg{font-size:13px;color:var(--pink);min-height:18px}
+.typing{display:flex;gap:6px;align-items:center;padding:16px 18px}
+.typing i{width:8px;height:8px;border-radius:50%;background:var(--mut);animation:tb 1.2s infinite ease-in-out}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes tb{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-4px)}}
 </style>
 </head>
 <body>
@@ -331,7 +335,7 @@ function drawGrid(){
 function drawChefs(){const t=T();$('#chefs').innerHTML='';CHEFS.forEach((c,k)=>{const b=document.createElement('button');b.className='chef';
   const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent="Chef "+c.n;const d=document.createElement('span');d.textContent=t.cu[k];const e=document.createElement('em');e.textContent=t.disc;
   b.append(i,n,d,e);b.onclick=()=>openChat({...c,k,d:t.cu[k]});$('#chefs').appendChild(b)})}
-function render(el,t){el.innerHTML='';t.split('\n').forEach(l=>{const m=l.match(/^#{1,3}\s+(.*)/);if(m){const h=document.createElement('h3');h.textContent=m[1].replace(/\*\*/g,'');el.appendChild(h)}else el.appendChild(document.createTextNode(l.replace(/\*\*/g,'')+'\n'))})}
+function render(el,t){el.classList.remove('typing');el.innerHTML='';t.split('\n').forEach(l=>{const m=l.match(/^#{1,3}\s+(.*)/);if(m){const h=document.createElement('h3');h.textContent=m[1].replace(/\*\*/g,'');el.appendChild(h)}else el.appendChild(document.createTextNode(l.replace(/\*\*/g,'')+'\n'))})}
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');renderRecipe(el,t,recipeTitle(t)||'',true)}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x);q.appendChild(b)})}
@@ -341,7 +345,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v15',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v16',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -370,7 +374,7 @@ function saveCurrent(){
   if(!e){
     const first=hist.find(m=>m.role==='assistant');
     if(!first||!looksLikeRecipe(first.content))return;
-    const t=recipeTitle(first.content)||hist[0].content.replace(/^\[UI\] /,'').slice(0,60);
+    const fl=first.content.split('\n').find(x=>x.trim())||'';const t=recipeTitle(first.content)||(fl.length<70&&!/^[-•*\d]/.test(fl.trim())?fl.trim().replace(/[:：]$/,''):hist[0].content.replace(/^\[UI\] /,'').slice(0,60));
     e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1,fav:false,lang};
     if(pendingMeta){Object.keys(pendingMeta).forEach(k=>{if(pendingMeta[k])e[k]=pendingMeta[k]})}
     currentId=e.id;
@@ -490,6 +494,21 @@ function recipeSections(txt){
     if(!h&&l.length<=40&&/[:：]$/.test(l)&&!/^[-•*\d]/.test(l))h=l;
     if(h){cur={h:h.replace(/\*\*/g,'').replace(/[:：]\s*$/,'').trim(),lines:[]};secs.push(cur);return}
     cur.lines.push(l.replace(/\*\*/g,''))});
+  // Réponse sans aucun titre de section (le chef a oublié le format) : on reconstitue
+  // infos / ingrédients / étapes à partir des lignes numérotées.
+  if(secs.length===1||!secs.slice(1).some(x=>x.lines.length>1)){
+    const L=secs.flatMap(x=>x.h?[x.h,...x.lines]:x.lines),isStep=l=>/^\d+[.)]\s+\S/.test(l);
+    const first=L.findIndex(isStep);
+    if(first>0&&L.filter(isStep).length>=2){
+      const meta=/portion|personne|serving|people|porzion|persone|porç|pessoa|porcion|temps|time|\bmin\b|minute|heure|\bh\b|zeit|tempo|tiempo|cuisson|préparation/i;
+      let i=0;const intro=[];
+      if(L[0].length<80&&!/^[-•*\d]/.test(L[0])&&!isStep(L[0])){intro.push(L[0]);i=1} // titre sans « ## »
+      while(i<first&&L[i].length<45&&meta.test(L[i])&&!/^[-•*]/.test(L[i])&&!/^\d+(?:[.,/]\d+)?\s*(g|kg|ml|cl|l|c\.|cuill|tasse|cup|oz|lb)\b/i.test(L[i])){intro.push(L[i]);i++}
+      const ing=L.slice(i,first).map(x=>x.replace(/^[-•*]\s+/,'- ').replace(/^(?![-•*])/,'- '));
+      const rest=L.slice(first);
+      return [{h:'',lines:intro},{h:T().hIng,lines:ing},{h:T().hSteps,lines:rest.filter(isStep).concat(rest.filter(x=>!isStep(x)&&!/^[-•*]/.test(x)))}];
+    }
+  }
   return secs;
 }
 function secIcon(h){
@@ -507,7 +526,7 @@ function renderRecipe(el,txt,title,chat){
     const skipH=sec.h&&title&&nz(sec.h)===nz(title);
     const bul=sec.lines.filter(l=>/^[-•*]\s+/.test(l)),num=sec.lines.filter(l=>/^\d+[.)]\s+/.test(l));
     if(!sec.h||skipH){ // texte d'introduction (portions, temps…)
-      sec.lines.forEach(l=>{if(nz(l.replace(/[:：]\s*$/,''))===nz(title)||(!chat&&/^(portions?|servings?|personnes?|people|porzioni|persone|porções|porciones|portionen|personen)\s*[:：]?\s*\d/i.test(l)))return;const p=document.createElement('div');p.className=(bul.length||num.length)?'rp':'rmeta';p.textContent=l.replace(/^[-•*]\s+/,'');el.appendChild(p)});return}
+      sec.lines.forEach(l=>{if(nz(l.replace(/[:：]\s*$/,''))===nz(title)||(!chat&&(/^(portions?|servings?|personnes?|people|porzioni|persone|porções|porciones|portionen|personen)\s*[:：]?\s*\d/i.test(l)||/^\d+\s*(portions?|personnes?|servings?|people|porzioni|persone|porções|porciones|portionen|personen)\b/i.test(l))))return;const p=document.createElement('div');p.className=(bul.length||num.length)?'rp':'rmeta';p.textContent=l.replace(/^[-•*]\s+/,'');el.appendChild(p)});return}
     const box=document.createElement('section');box.className='rsec';
     const h=document.createElement('h3');const ic=secIcon(sec.h);h.textContent=(ic?ic+' ':'')+sec.h;box.appendChild(h);
     let list=null,kind='';
@@ -659,7 +678,7 @@ function start(q){openChat(null);send(q,true)}
 async function send(text,auto){
   text=(text||inp.value).trim();if(!text||busy)return;
   inp.value='';add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text});
-  const out=add('a','…');busy=true;sendB.disabled=true;
+  const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');busy=true;sendB.disabled=true;
   try{
     const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
     const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:hist,persona,lang})});
