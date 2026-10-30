@@ -50,6 +50,36 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .htx span{color:var(--mut);font-size:12px}
 .hdel{padding:10px 14px;color:var(--mut);font-size:16px}
 .empty{color:var(--mut);background:var(--card);border-radius:18px;padding:16px;font-size:14px}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translateX(-50%)}
+.cphoto{height:210px;border-radius:22px;background-size:cover;background-position:center;display:grid;place-items:center;font-size:84px;overflow:hidden}
+.credit{display:block;color:var(--mut);font-size:11px;text-align:right;margin:3px 6px 0;min-height:14px}
+.ctitle{font-size:22px;margin:6px 0 8px;line-height:1.2}
+.cchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.cchips span{background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mut)}
+.cact{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.cbtn.go{background:var(--green);color:#10200a;flex:1;min-width:160px}
+.rtext{max-width:100%}
+.coms{margin-top:22px}
+.clist{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
+.com{display:flex;gap:10px}
+.av{width:36px;height:36px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.cw{min-width:0}
+.cbub{background:var(--card);border-radius:18px;padding:8px 12px}
+.cbub b{display:block;font-size:13px}
+.cbub p{margin:2px 0 0;word-wrap:break-word;white-space:pre-wrap}
+.cmeta{display:flex;gap:12px;color:var(--mut);font-size:12px;padding:3px 10px}
+.cmeta button{color:var(--pink);font-size:12px;font-weight:600}
+.cmsg{color:var(--mut);font-size:14px;margin:6px 0 10px}
+.cform{display:flex;flex-direction:column;gap:8px}
+.cform input{font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
+.crow{display:flex;gap:8px}.crow input{flex:1}
+.cpub{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:0 18px}
+.cpub:disabled{opacity:.5}
+#hfilter{display:flex;gap:8px;padding:10px 18px 0}
+.hheart{padding:0 4px;font-size:14px}
+@media (min-width:768px){#app{max-width:760px}.grid{grid-template-columns:repeat(4,1fr)}.cphoto{height:300px}}
 #chat.on~nav{display:none}
 nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-around;background:var(--card);border-radius:999px;padding:10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
 nav button{padding:6px 22px;font-size:22px;opacity:.5}
@@ -108,13 +138,19 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
     </div>
   </section>
 
+  <section class="view" id="card">
+    <div class="chead"><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b></div>
+    <div class="scroll" id="cardbody"></div>
+  </section>
+
   <section class="view" id="history">
     <div class="chead"><button class="back" id="hback" aria-label="Accueil">🏠</button><b id="hpT"></b></div>
+    <div id="hfilter"></div>
     <div class="scroll" id="hlist"></div>
   </section>
 
   <section class="view" id="chat">
-    <div class="chead"><button class="back" id="back" aria-label="Accueil">🏠</button><svg class="mascot" style="width:38px;height:38px"><use href="#mascot"/></svg><div><b id="cname">Chef Claude</b><span class="sub" id="cdesc">Cuisine du monde</span></div></div>
+    <div class="chead"><button class="back" id="back" aria-label="Accueil">🏠</button><svg class="mascot" style="width:38px;height:38px"><use href="#mascot"/></svg><button class="back" id="tocard" aria-label="Card" style="display:none;order:3;margin-left:auto">📖</button><div><b id="cname">Chef Claude</b><span class="sub" id="cdesc">Cuisine du monde</span></div></div>
     <div id="log"></div>
     <div id="quick"></div>
     <div id="bar"><button id="home2" aria-label="Accueil">🏠</button><input id="inp" autocomplete="off"><button id="mic" aria-label="Parler">🎤</button><button id="send"></button></div>
@@ -160,7 +196,7 @@ function applyUI(){
   inp.placeholder=t.ph;sendB.textContent=t.send;
   drawGrid();drawChefs();refreshChat();drawHistory();
 }
-function refreshChat(){const t=T();if(!hist.length){log.innerHTML='';add('a',t.w)}
+function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML='';add('a',t.w)}
   $('#cname').textContent=chefNow?"Chef "+chefNow.n:"Chef Claude";$('#cdesc').textContent=chefNow?t.cu[chefNow.k]:t.cd;
   if($('#quick').children.length)drawQuick()}
 function drawGrid(){
@@ -199,7 +235,7 @@ function saveCurrent(){
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
   e.messages=hist.map(m=>({role:m.role,content:m.content}));
-  a.unshift(e);saveH(a);drawHistory();
+  a.unshift(e);saveH(a);drawHistory();syncCardBtn();
 }
 function rowFor(e,del){
   const [em,bg]=dishLook(e.title);
@@ -207,8 +243,8 @@ function rowFor(e,del){
   const o=document.createElement('button');o.className='hopen';
   const p=document.createElement('div');p.className='hpic';p.style.background=bg;p.textContent=em;
   const x=document.createElement('div');x.className='htx';
-  const b=document.createElement('b');b.textContent=e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
-  x.append(b,d);o.append(p,x);o.onclick=()=>openSaved(e.id);r.appendChild(o);
+  const b=document.createElement('b');b.textContent=(e.fav?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
+  x.append(b,d);o.append(p,x);o.onclick=()=>openCard(e.id);r.appendChild(o);
   if(del){const k=document.createElement('button');k.className='hdel';k.textContent='✕';k.setAttribute('aria-label',T().del);
     k.onclick=()=>{if(confirm(T().delq)){saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id)currentId=null;drawHistory()}};r.appendChild(k)}
   return r;
@@ -216,9 +252,12 @@ function rowFor(e,del){
 function drawHistory(){
   const a=loadH(),h=$('#hhome'),l=$('#hlist');h.innerHTML='';l.innerHTML='';
   $('#hmore').style.display=a.length?'':'none';
-  if(!a.length){[h,l].forEach(z=>{const p=document.createElement('div');p.className='empty';p.textContent=T().empty;z.appendChild(p)});return}
+  if(!a.length){$('#hfilter').innerHTML='';[h,l].forEach(z=>{const p=document.createElement('div');p.className='empty';p.textContent=T().empty;z.appendChild(p)});return}
   a.slice(0,3).forEach(e=>h.appendChild(rowFor(e,false)));
-  a.forEach(e=>l.appendChild(rowFor(e,true)));
+  const f=$('#hfilter');f.innerHTML='';[[false,T().all],[true,'❤️ '+T().favs]].forEach(([v,lab])=>{const b=document.createElement('button');b.className='chip'+(hfav===v?' on':'');b.textContent=lab;b.onclick=()=>{hfav=v;drawHistory()};f.appendChild(b)});
+  const shown=hfav?a.filter(e=>e.fav):a;
+  if(!shown.length){const p=document.createElement('div');p.className='empty';p.textContent=T().nofav;l.appendChild(p)}
+  shown.forEach(e=>l.appendChild(rowFor(e,true)));
 }
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
@@ -226,6 +265,113 @@ function openSaved(id){
   chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;persona=chefNow?chefNow.p:"";currentId=id;
   hist.forEach(m=>add(m.role==='user'?'u':'a',m.content.replace(/^\[UI\] /,'')));
   refreshChat();drawQuick();show('chat');
+}
+// ---------- Fiches recette : photo, favoris, partage, commentaires ----------
+const I18B={
+fr:{card:"Fiche",fav:"Favori",favs:"Favoris",all:"Toutes",nofav:"Aucun favori pour l’instant. Touchez ❤️ sur une recette.",share:"Partager",copied:"Recette copiée dans le presse-papiers",cont:"Continuer avec le chef",com:"Commentaires",nocom:"Aucun commentaire pour l’instant. Soyez le premier !",pub:"Publier",nm:"Votre prénom",wr:"Écrire un commentaire…",cdel:"Supprimer",cdq:"Supprimer ce commentaire ?",cOff:"Les commentaires ne sont pas activés sur ce site.",cErr:"Impossible de charger les commentaires.",cRate:"Trop de commentaires, réessayez dans une minute.",credit:"Photo : Wikipédia",anon:"Anonyme",now:"à l’instant"},
+en:{card:"Card",fav:"Favorite",favs:"Favorites",all:"All",nofav:"No favorites yet. Tap ❤️ on a recipe.",share:"Share",copied:"Recipe copied to clipboard",cont:"Continue with the chef",com:"Comments",nocom:"No comments yet. Be the first!",pub:"Post",nm:"Your first name",wr:"Write a comment…",cdel:"Delete",cdq:"Delete this comment?",cOff:"Comments are not enabled on this site.",cErr:"Could not load comments.",cRate:"Too many comments, try again in a minute.",credit:"Photo: Wikipedia",anon:"Anonymous",now:"just now"},
+es:{card:"Ficha",fav:"Favorito",favs:"Favoritos",all:"Todas",nofav:"Aún no hay favoritos. Toca ❤️ en una receta.",share:"Compartir",copied:"Receta copiada al portapapeles",cont:"Seguir con el chef",com:"Comentarios",nocom:"Aún no hay comentarios. ¡Sé el primero!",pub:"Publicar",nm:"Tu nombre",wr:"Escribe un comentario…",cdel:"Eliminar",cdq:"¿Eliminar este comentario?",cOff:"Los comentarios no están activados en este sitio.",cErr:"No se pudieron cargar los comentarios.",cRate:"Demasiados comentarios, inténtalo en un minuto.",credit:"Foto: Wikipedia",anon:"Anónimo",now:"ahora mismo"},
+de:{card:"Karte",fav:"Favorit",favs:"Favoriten",all:"Alle",nofav:"Noch keine Favoriten. Tippe auf ❤️ bei einem Rezept.",share:"Teilen",copied:"Rezept in die Zwischenablage kopiert",cont:"Mit dem Koch weitermachen",com:"Kommentare",nocom:"Noch keine Kommentare. Sei der Erste!",pub:"Posten",nm:"Dein Vorname",wr:"Kommentar schreiben…",cdel:"Löschen",cdq:"Diesen Kommentar löschen?",cOff:"Kommentare sind auf dieser Seite nicht aktiviert.",cErr:"Kommentare konnten nicht geladen werden.",cRate:"Zu viele Kommentare, versuche es in einer Minute erneut.",credit:"Foto: Wikipedia",anon:"Anonym",now:"gerade eben"},
+it:{card:"Scheda",fav:"Preferito",favs:"Preferiti",all:"Tutte",nofav:"Ancora nessun preferito. Tocca ❤️ su una ricetta.",share:"Condividi",copied:"Ricetta copiata negli appunti",cont:"Continua con lo chef",com:"Commenti",nocom:"Ancora nessun commento. Sii il primo!",pub:"Pubblica",nm:"Il tuo nome",wr:"Scrivi un commento…",cdel:"Elimina",cdq:"Eliminare questo commento?",cOff:"I commenti non sono attivi su questo sito.",cErr:"Impossibile caricare i commenti.",cRate:"Troppi commenti, riprova tra un minuto.",credit:"Foto: Wikipedia",anon:"Anonimo",now:"adesso"},
+pt:{card:"Ficha",fav:"Favorito",favs:"Favoritos",all:"Todas",nofav:"Ainda sem favoritos. Toque em ❤️ numa receita.",share:"Partilhar",copied:"Receita copiada para a área de transferência",cont:"Continuar com o chef",com:"Comentários",nocom:"Ainda sem comentários. Seja o primeiro!",pub:"Publicar",nm:"O seu nome",wr:"Escreva um comentário…",cdel:"Eliminar",cdq:"Eliminar este comentário?",cOff:"Os comentários não estão ativados neste site.",cErr:"Não foi possível carregar os comentários.",cRate:"Demasiados comentários, tente novamente num minuto.",credit:"Foto: Wikipedia",anon:"Anónimo",now:"agora mesmo"}};
+Object.keys(I18B).forEach(k=>Object.assign(I18[k],I18B[k]));
+let cardId=null,hfav=false;
+const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recette';
+function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);saveH(a)}return e}
+function syncCardBtn(){$('#tocard').style.display=currentId?'':'none'}
+function recipeText(e){const m=[...e.messages].reverse().find(x=>x.role==='assistant'&&looksLikeRecipe(x.content))||[...e.messages].reverse().find(x=>x.role==='assistant');return m?m.content:''}
+function plain(t){return t.replace(/^#{1,3}\s+/gm,'').replace(/\*\*/g,'')}
+function infoChips(txt){
+  const out=[];const p=txt.split('\n').find(l=>l.length<70&&/(portions?|personnes?|servings?|people|porci|persona|portionen|personen|porzioni|persone|porç|pessoa)/i.test(l)&&/\d/.test(l));
+  if(p)out.push('🍽️ '+plain(p).replace(/^[-•*\s]+/,'').slice(0,40));
+  const tm=txt.match(/(\d+\s*(?:h|std|ore|horas?)\s*\d*\s*(?:min)?|\d+\s*(?:min|minutes?|minuti|minutos|minuten)\b)/i);
+  if(tm)out.push('⏱ '+tm[1].trim());
+  return out;
+}
+async function getPhoto(e){
+  if(typeof e.photo==='string')return e.photo;
+  let url='';
+  try{
+    const r=await fetch('https://'+lang+'.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrlimit=3&gsrsearch='+encodeURIComponent(e.title)+'&prop=pageimages&piprop=thumbnail&pithumbsize=700');
+    if(!r.ok)return null;
+    const j=await r.json();
+    const pages=Object.values((j.query||{}).pages||{}).sort((a,b)=>a.index-b.index);
+    const p=pages.find(x=>x.thumbnail&&x.thumbnail.source);if(p)url=p.thumbnail.source;
+  }catch(x){return null}
+  updEntry(e.id,z=>{z.photo=url});return url;
+}
+function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();return e&&e.fav}
+async function shareRecipe(e){
+  const body=e.title+'\n\n'+plain(recipeText(e))+(/^https?:/.test(location.href)?'\n\n'+location.origin:'');
+  if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
+  let ok=false;
+  try{await navigator.clipboard.writeText(body);ok=true}catch(x){}
+  if(!ok){const ta=document.createElement('textarea');ta.value=body;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{ok=document.execCommand('copy')}catch(x){}ta.remove()}
+  toast(ok?T().copied:T().err);
+}
+let toastT=null;
+function toast(t){let d=$('#toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent=t;d.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>d.classList.remove('on'),2200)}
+function openCard(id){
+  const e=loadH().find(x=>x.id===id);if(!e)return;
+  cardId=id;const t=T(),body=$('#cardbody');body.innerHTML='';$('#cardT').textContent=t.card;
+  const ph=document.createElement('div');ph.className='cphoto';const [em,bg]=dishLook(e.title);ph.style.background=bg;
+  const emo=document.createElement('span');emo.textContent=em;ph.appendChild(emo);body.appendChild(ph);
+  const credit=document.createElement('small');credit.className='credit';body.appendChild(credit);
+  getPhoto(e).then(u=>{if(u&&cardId===id){ph.style.backgroundImage='url("'+u+'")';emo.remove();credit.textContent=T().credit}});
+  const h=document.createElement('h1');h.className='ctitle';h.textContent=e.title;body.appendChild(h);
+  const txt=recipeText(e);const chips=document.createElement('div');chips.className='cchips';
+  [fmtDate(e.date),...infoChips(txt)].filter(Boolean).forEach(c=>{const s=document.createElement('span');s.textContent=c;chips.appendChild(s)});body.appendChild(chips);
+  const act=document.createElement('div');act.className='cact';
+  const fv=document.createElement('button');fv.className='cbtn'+(e.fav?' on':'');fv.textContent=e.fav?'❤️':'🤍';fv.setAttribute('aria-label',t.fav);
+  fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
+  const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
+  const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
+  act.append(fv,sh,ct);body.appendChild(act);
+  const rt=document.createElement('div');rt.className='m a rtext';render(rt,txt);body.appendChild(rt);
+  buildComments(body,slug(e.title));
+  show('card');body.scrollTop=0;
+}
+// ----- Commentaires (stockés côté serveur : /api/comments) -----
+const OWN=(()=>{try{let o=localStorage.getItem('owner');if(!o){o=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Math.random().toString(36).slice(2)+Date.now().toString(36));localStorage.setItem('owner',o)}return o}catch(x){return 'a'+Math.random().toString(36).slice(2)}})();
+async function capi(method,qs,data){
+  const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
+    return fetch('/api/comments'+qs,{method,headers:{'Content-Type':'application/json','x-code':c,'x-owner':OWN},body:data?JSON.stringify(data):undefined})};
+  let r=await call();
+  if(r.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(x){}r=await call()}}
+  return r;
+}
+function ago(ts){const s=Math.round((ts-Date.now())/1000),a=Math.abs(s);if(a<60)return T().now;
+  const f=new Intl.RelativeTimeFormat(T().sr,{numeric:'auto'});
+  if(a<3600)return f.format(Math.round(s/60),'minute');if(a<86400)return f.format(Math.round(s/3600),'hour');return f.format(Math.round(s/86400),'day')}
+function buildComments(parent,key){
+  const t=T(),box=document.createElement('section');box.className='coms';
+  const h=document.createElement('h2');h.textContent=t.com;box.appendChild(h);
+  const list=document.createElement('div');list.className='clist';box.appendChild(list);
+  const msg=document.createElement('div');msg.className='cmsg';box.appendChild(msg);
+  const form=document.createElement('div');form.className='cform';
+  const nm=document.createElement('input');nm.placeholder=t.nm;nm.maxLength=30;try{nm.value=localStorage.getItem('uname')||''}catch(x){}
+  const row=document.createElement('div');row.className='crow';
+  const tx=document.createElement('input');tx.placeholder=t.wr;tx.maxLength=500;
+  const pb=document.createElement('button');pb.textContent=t.pub;pb.className='cpub';
+  row.append(tx,pb);form.append(nm,row);box.appendChild(form);parent.appendChild(box);
+  const draw=cs=>{list.innerHTML='';msg.textContent=cs.length?'':t.nocom;
+    cs.forEach(c=>{const d=document.createElement('div');d.className='com';
+      const av=document.createElement('div');av.className='av';av.textContent=(c.name||'?').trim().charAt(0).toUpperCase();
+      const w=document.createElement('div');w.className='cw';
+      const b=document.createElement('div');b.className='cbub';const n=document.createElement('b');n.textContent=c.name;const p=document.createElement('p');p.textContent=c.text;b.append(n,p);
+      const m=document.createElement('div');m.className='cmeta';const s=document.createElement('span');s.textContent=ago(c.ts);m.appendChild(s);
+      if(c.mine){const x=document.createElement('button');x.textContent=t.cdel;x.onclick=async()=>{if(!confirm(t.cdq))return;try{const r=await capi('DELETE','?key='+key+'&id='+encodeURIComponent(c.id));if(r.ok)load()}catch(e){}};m.appendChild(x)}
+      w.append(b,m);d.append(av,w);list.appendChild(d)})};
+  const load=async()=>{try{const r=await capi('GET','?key='+key);
+      if(r.status===501||r.status===404){form.style.display='none';msg.textContent=t.cOff;return}
+      if(!r.ok)throw 0;draw((await r.json()).comments||[])}catch(e){msg.textContent=t.cErr}};
+  const post=async()=>{const text=tx.value.trim();if(!text||pb.disabled)return;pb.disabled=true;
+    try{try{localStorage.setItem('uname',nm.value.trim())}catch(x){}
+      const r=await capi('POST','',{key,text,name:nm.value.trim()||t.anon});
+      if(r.status===429)toast(t.cRate);else if(!r.ok)toast(t.cErr);else{tx.value='';await load()}
+    }catch(e){toast(t.cErr)}finally{pb.disabled=false}};
+  pb.onclick=post;tx.addEventListener('keydown',e=>{if(e.key==='Enter')post()});
+  load();
 }
 function openChat(chef){
   hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;
@@ -255,6 +401,8 @@ $('#hgo').onclick=()=>{const v=$('#hq').value.trim();if(v){$('#hq').value='';sta
 $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
 $('#hback').onclick=()=>show('home');
+$('#cardback').onclick=()=>show('home');
+$('#tocard').onclick=()=>{if(currentId)openCard(currentId)};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
