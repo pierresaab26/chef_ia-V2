@@ -123,9 +123,26 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 #send{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:0 18px}
 #send:disabled{opacity:.5}
 #lang{appearance:none;-webkit-appearance:none;border:1px solid var(--bd);background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23888' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:11px;color:var(--ink);border-radius:999px;padding:8px 32px 8px 14px;font:inherit;font-size:13px;cursor:pointer}
-#mic,#home2{width:44px;border-radius:50%;background:var(--card);border:1px solid var(--bd);font-size:18px}
+#mic,#home2,#impChat{width:44px;border-radius:50%;background:var(--card);border:1px solid var(--bd);font-size:18px}
 #mic.on{background:var(--pink);animation:p 1s infinite}
 @keyframes p{50%{opacity:.6}}
+
+.impcard{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:20px;padding:12px 16px;margin-bottom:18px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.impcard i{font-style:normal;font-size:28px;flex:none}
+.impcard b{display:block;font-size:15px}
+.impcard span{color:var(--mut);font-size:12px}
+.imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
+.imsec{background:var(--card);border-radius:20px;padding:14px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.imsec h3{margin:0 0 10px;font-size:15px}
+.imbtns{display:flex;gap:10px;flex-wrap:wrap}
+.imbtns .cbtn{flex:1;min-width:140px;text-align:center;border:1px solid var(--bd)}
+.urlrow{display:flex;gap:8px}
+.urlrow input{flex:1;min-width:0;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:999px;padding:10px 14px;font:inherit;color:var(--ink);outline:0}
+.urlrow button{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:10px 16px}
+.imstat{padding:14px;border-radius:16px;background:var(--card);font-size:14px;margin-bottom:12px}
+.imstat.err{border:1px solid var(--pink)}
+.imthumb{display:block;max-width:100%;max-height:200px;border-radius:16px;margin:0 auto 12px}
+.imcheck{color:var(--mut);font-size:13px;margin:10px 2px}
 </style>
 </head>
 <body>
@@ -152,6 +169,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
       </div>
       <div id="verpill"><i></i><span></span></div>
       <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
+      <button class="impcard" id="impHome"><i>📥</i><div><b id="impHomeT"></b><span id="impHomeS"></span></div></button>
       <h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
       <div id="hhome"></div>
       <h2 id="catT"></h2>
@@ -181,11 +199,27 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
     <div class="scroll" id="hlist"></div>
   </section>
 
+  <section class="view" id="imp">
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="impback" aria-label="Home">🏠</button><b id="impT"></b></div>
+    <div class="scroll">
+      <p class="imhint" id="impHint"></p>
+      <div class="imsec"><h3 id="impPh"></h3>
+        <div class="imbtns"><button class="cbtn" id="impCamB"></button><button class="cbtn" id="impGalB"></button></div>
+        <input type="file" id="fileCam" accept="image/*" capture="environment" hidden>
+        <input type="file" id="fileGal" accept="image/*" hidden>
+      </div>
+      <div class="imsec"><h3 id="impLk"></h3>
+        <div class="urlrow"><input id="impUrl" type="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="impGo"></button></div>
+      </div>
+      <div id="impOut"></div>
+    </div>
+  </section>
+
   <section class="view" id="chat">
     <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="back" aria-label="Accueil">🏠</button><svg class="mascot" style="width:38px;height:38px"><use href="#mascot"/></svg><button class="back" id="tocard" aria-label="Card" style="display:none;order:3;margin-left:auto">📖</button><div><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div></div>
     <div id="log"></div>
     <div id="quick"></div>
-    <div id="bar"><button id="home2" aria-label="Accueil">🏠</button><input id="inp" autocomplete="off"><button id="mic" aria-label="Parler">🎤</button><button id="send"></button></div>
+    <div id="bar"><button id="home2" aria-label="Accueil">🏠</button><input id="inp" autocomplete="off"><button id="impChat" aria-label="Import">📎</button><button id="mic" aria-label="Parler">🎤</button><button id="send"></button></div>
   </section>
 
   <div id="scrim"></div>
@@ -194,6 +228,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
     <button class="ditem" data-go="home">🏠 <span id="dHome"></span></button>
     <button class="ditem" data-go="history">🕘 <span id="dHist"></span></button>
     <button class="ditem" data-go="favs">❤️ <span id="dFav"></span><span class="n" id="dFavN"></span></button>
+    <button class="ditem" data-go="imp">📥 <span id="dImp"></span></button>
     <div class="dver" id="dver"></div>
   </aside>
 
@@ -263,7 +298,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v6',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v7',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -294,6 +329,7 @@ function saveCurrent(){
     if(!first||!looksLikeRecipe(first.content))return;
     const t=recipeTitle(first.content)||hist[0].content.replace(/^\[UI\] /,'').slice(0,60);
     e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1,fav:false,lang};
+    if(pendingMeta){Object.keys(pendingMeta).forEach(k=>{if(pendingMeta[k])e[k]=pendingMeta[k]})}
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
   e.messages=hist.map(m=>({role:m.role,content:m.content}));e.updatedAt=Date.now();
@@ -353,12 +389,12 @@ function drawCats(){const t=T(),box=$('#cats');box.innerHTML='';$('#catT').textC
 function drawerText(){const t=T();drawCats();
   const pv=typeof claude!=='undefined',lab=(pv?'Aperçu claude.ai':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
-  $('#hsearch').placeholder=t.search;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#fpT').textContent=t.favT;
+  $('#hsearch').placeholder=t.search;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;impText();$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
 function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','false'));if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
-function goTo(v){closeDrawer();if(v==='history')drawHistory();if(v==='favs')drawFavs();show(v)}
+function goTo(v){closeDrawer();if(v==='history')drawHistory();if(v==='favs')drawFavs();if(v==='imp')resetImp();show(v)}
 function drawFavs(){
   const a=loadH().filter(e=>e.fav),l=$('#flist');l.innerHTML='';
   $('#dFavN').textContent=a.length?a.length:'';
@@ -406,10 +442,10 @@ function openCard(id){
   const ph=document.createElement('div');ph.className='cphoto';const [em,bg]=dishLook(e.title);ph.style.background=bg;
   const emo=document.createElement('span');emo.textContent=em;ph.appendChild(emo);body.appendChild(ph);
   const credit=document.createElement('small');credit.className='credit';body.appendChild(credit);
-  getPhoto(e).then(u=>{if(u&&cardId===id){ph.style.backgroundImage='url("'+u+'")';emo.remove();credit.textContent=T().credit}});
+  getPhoto(e).then(u=>{if(u&&cardId===id){ph.style.backgroundImage='url("'+u+'")';emo.remove();credit.textContent=/^data:/.test(u)?'':T().credit}});
   const h=document.createElement('h1');h.className='ctitle';h.textContent=e.title;body.appendChild(h);
   const txt=recipeText(e);const chips=document.createElement('div');chips.className='cchips';
-  [fmtDate(e.date),...infoChips(txt)].filter(Boolean).forEach(c=>{const s=document.createElement('span');s.textContent=c;chips.appendChild(s)});body.appendChild(chips);
+  [fmtDate(e.date),e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:'',...infoChips(txt)].filter(Boolean).forEach(c=>{const s=document.createElement('span');s.textContent=c;chips.appendChild(s)});body.appendChild(chips);
   const act=document.createElement('div');act.className='cact';
   const fv=document.createElement('button');fv.className='cbtn'+(e.fav?' on':'');fv.textContent=e.fav?'❤️':'🤍';fv.setAttribute('aria-label',t.fav);
   fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
@@ -486,6 +522,108 @@ async function send(text,auto){
     render(out,e&&e.code==='rate_limited'?T().e429:e&&e.code==='nokey'?T().nokey:T().err);
   }finally{busy=false;sendB.disabled=false;log.scrollTop=log.scrollHeight}
 }
+
+// ---------- Importer une recette (photo ou lien) ----------
+const I18F={"fr": {"imT": "Importer une recette", "imHomeS": "Depuis une photo ou un lien internet", "imHint": "Choisissez une photo (page de livre, recette manuscrite, capture d’écran…) ou collez un lien. Vous vérifiez la recette reconnue avant de l’utiliser.", "imPh": "📷 Photo", "imCam": "Prendre une photo", "imGal": "Choisir dans la galerie", "imLk": "🔗 Lien internet", "imUrl": "Collez le lien de la recette", "imGo": "Importer", "imWait": "Lecture de la recette en cours…", "imUse": "Utiliser cette recette", "imCancel": "Annuler", "imCheck": "Vérifiez que la recette est bien reconnue (quantités, étapes, temps). Rien n’a encore été modifié ni enregistré.", "pServ": "Portions", "pTime": "Temps", "pTemp": "Température", "hIng": "Ingrédients", "hSteps": "Préparation", "hNotes": "Notes", "srcL": "Source", "imUntitled": "Recette importée", "imMsgP": "J’ai importé cette recette depuis une photo.", "imMsgL": "J’ai importé cette recette depuis {x}.", "srcP": "Importée d’une photo", "e_badurl": "Ce lien n’est pas valide.", "e_private": "Ce lien n’est pas accessible (adresse interne ou non autorisée).", "e_blocked": "Ce site refuse la lecture automatique. Faites plutôt une capture d’écran de la recette et importez-la en photo.", "e_login": "Cette page demande une connexion : je ne peux pas la lire. Faites une capture d’écran de la recette et importez-la en photo.", "e_notfound": "Page introuvable : vérifiez le lien.", "e_timeout": "Le site met trop de temps à répondre. Réessayez plus tard.", "e_unreachable": "Impossible d’ouvrir ce site pour le moment.", "e_norecipe": "Aucune recette n’a été reconnue. Pour une photo, la recette doit être écrite sur l’image : une simple photo de plat ne suffit pas.", "e_toobig": "L’image ou la page est trop volumineuse.", "e_badimage": "Cette image n’a pas pu être lue (formats : JPG, PNG, WebP).", "e_nokey": "L’import n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.", "e_upstream": "Le service d’analyse est indisponible. Réessayez dans un instant.", "e_noapi": "L’import ne fonctionne que sur le site Vercel, pas dans l’aperçu claude.ai.", "e_network": "Connexion impossible. Vérifiez votre réseau."}, "en": {"imT": "Import a recipe", "imHomeS": "From a photo or a web link", "imHint": "Pick a photo (cookbook page, handwritten recipe, screenshot…) or paste a link. You check the recognized recipe before using it.", "imPh": "📷 Photo", "imCam": "Take a photo", "imGal": "Choose from gallery", "imLk": "🔗 Web link", "imUrl": "Paste the recipe link", "imGo": "Import", "imWait": "Reading the recipe…", "imUse": "Use this recipe", "imCancel": "Cancel", "imCheck": "Check that the recipe was recognized correctly (amounts, steps, times). Nothing has been changed or saved yet.", "pServ": "Servings", "pTime": "Time", "pTemp": "Temperature", "hIng": "Ingredients", "hSteps": "Method", "hNotes": "Notes", "srcL": "Source", "imUntitled": "Imported recipe", "imMsgP": "I imported this recipe from a photo.", "imMsgL": "I imported this recipe from {x}.", "srcP": "Imported from a photo", "e_badurl": "This link is not valid.", "e_private": "This link can’t be reached (internal or disallowed address).", "e_blocked": "This site blocks automatic reading. Take a screenshot of the recipe and import it as a photo instead.", "e_login": "This page requires a login, so I can’t read it. Take a screenshot of the recipe and import it as a photo.", "e_notfound": "Page not found: check the link.", "e_timeout": "The site is taking too long to respond. Try again later.", "e_unreachable": "Can’t open this site right now.", "e_norecipe": "No recipe was recognized. For a photo, the recipe must be written in the image: a plain photo of a dish isn’t enough.", "e_toobig": "The image or page is too large.", "e_badimage": "This image couldn’t be read (formats: JPG, PNG, WebP).", "e_nokey": "Import isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy.", "e_upstream": "The analysis service is unavailable. Try again in a moment.", "e_noapi": "Import only works on the Vercel site, not in the claude.ai preview.", "e_network": "Can’t connect. Check your network."}, "es": {"imT": "Importar una receta", "imHomeS": "Desde una foto o un enlace web", "imHint": "Elige una foto (página de libro, receta manuscrita, captura de pantalla…) o pega un enlace. Revisas la receta reconocida antes de usarla.", "imPh": "📷 Foto", "imCam": "Hacer una foto", "imGal": "Elegir de la galería", "imLk": "🔗 Enlace web", "imUrl": "Pega el enlace de la receta", "imGo": "Importar", "imWait": "Leyendo la receta…", "imUse": "Usar esta receta", "imCancel": "Cancelar", "imCheck": "Comprueba que la receta se reconoció bien (cantidades, pasos, tiempos). Todavía no se ha modificado ni guardado nada.", "pServ": "Porciones", "pTime": "Tiempo", "pTemp": "Temperatura", "hIng": "Ingredientes", "hSteps": "Preparación", "hNotes": "Notas", "srcL": "Fuente", "imUntitled": "Receta importada", "imMsgP": "He importado esta receta desde una foto.", "imMsgL": "He importado esta receta desde {x}.", "srcP": "Importada de una foto", "e_badurl": "Este enlace no es válido.", "e_private": "No se puede acceder a este enlace (dirección interna o no permitida).", "e_blocked": "Este sitio bloquea la lectura automática. Haz una captura de pantalla de la receta e impórtala como foto.", "e_login": "Esta página requiere iniciar sesión y no puedo leerla. Haz una captura de la receta e impórtala como foto.", "e_notfound": "Página no encontrada: revisa el enlace.", "e_timeout": "El sitio tarda demasiado en responder. Inténtalo más tarde.", "e_unreachable": "No se puede abrir este sitio ahora.", "e_norecipe": "No se reconoció ninguna receta. En una foto, la receta debe estar escrita en la imagen: una simple foto del plato no basta.", "e_toobig": "La imagen o la página es demasiado grande.", "e_badimage": "No se pudo leer esta imagen (formatos: JPG, PNG, WebP).", "e_nokey": "La importación aún no está conectada: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar.", "e_upstream": "El servicio de análisis no está disponible. Inténtalo en un momento.", "e_noapi": "La importación solo funciona en el sitio de Vercel, no en la vista previa de claude.ai.", "e_network": "No se puede conectar. Revisa tu red."}, "de": {"imT": "Rezept importieren", "imHomeS": "Aus einem Foto oder einem Weblink", "imHint": "Wähle ein Foto (Kochbuchseite, handgeschriebenes Rezept, Screenshot…) oder füge einen Link ein. Du prüfst das erkannte Rezept, bevor du es verwendest.", "imPh": "📷 Foto", "imCam": "Foto aufnehmen", "imGal": "Aus der Galerie wählen", "imLk": "🔗 Weblink", "imUrl": "Rezept-Link einfügen", "imGo": "Importieren", "imWait": "Rezept wird gelesen…", "imUse": "Dieses Rezept verwenden", "imCancel": "Abbrechen", "imCheck": "Prüfe, ob das Rezept richtig erkannt wurde (Mengen, Schritte, Zeiten). Noch wurde nichts geändert oder gespeichert.", "pServ": "Portionen", "pTime": "Zeit", "pTemp": "Temperatur", "hIng": "Zutaten", "hSteps": "Zubereitung", "hNotes": "Notizen", "srcL": "Quelle", "imUntitled": "Importiertes Rezept", "imMsgP": "Ich habe dieses Rezept aus einem Foto importiert.", "imMsgL": "Ich habe dieses Rezept von {x} importiert.", "srcP": "Aus einem Foto importiert", "e_badurl": "Dieser Link ist ungültig.", "e_private": "Dieser Link ist nicht erreichbar (interne oder nicht erlaubte Adresse).", "e_blocked": "Diese Seite blockiert das automatische Lesen. Mache stattdessen einen Screenshot des Rezepts und importiere ihn als Foto.", "e_login": "Diese Seite erfordert eine Anmeldung, ich kann sie nicht lesen. Mache einen Screenshot des Rezepts und importiere ihn als Foto.", "e_notfound": "Seite nicht gefunden: prüfe den Link.", "e_timeout": "Die Seite antwortet zu langsam. Versuche es später erneut.", "e_unreachable": "Diese Seite kann gerade nicht geöffnet werden.", "e_norecipe": "Kein Rezept erkannt. Bei einem Foto muss das Rezept im Bild geschrieben stehen: ein bloßes Foto eines Gerichts reicht nicht.", "e_toobig": "Das Bild oder die Seite ist zu groß.", "e_badimage": "Dieses Bild konnte nicht gelesen werden (Formate: JPG, PNG, WebP).", "e_nokey": "Der Import ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen.", "e_upstream": "Der Analysedienst ist nicht verfügbar. Versuche es gleich noch einmal.", "e_noapi": "Der Import funktioniert nur auf der Vercel-Seite, nicht in der claude.ai-Vorschau.", "e_network": "Keine Verbindung. Prüfe dein Netzwerk."}, "it": {"imT": "Importa una ricetta", "imHomeS": "Da una foto o da un link web", "imHint": "Scegli una foto (pagina di libro, ricetta scritta a mano, screenshot…) o incolla un link. Controlli la ricetta riconosciuta prima di usarla.", "imPh": "📷 Foto", "imCam": "Scatta una foto", "imGal": "Scegli dalla galleria", "imLk": "🔗 Link web", "imUrl": "Incolla il link della ricetta", "imGo": "Importa", "imWait": "Lettura della ricetta in corso…", "imUse": "Usa questa ricetta", "imCancel": "Annulla", "imCheck": "Controlla che la ricetta sia stata riconosciuta bene (quantità, passaggi, tempi). Per ora nulla è stato modificato o salvato.", "pServ": "Porzioni", "pTime": "Tempo", "pTemp": "Temperatura", "hIng": "Ingredienti", "hSteps": "Preparazione", "hNotes": "Note", "srcL": "Fonte", "imUntitled": "Ricetta importata", "imMsgP": "Ho importato questa ricetta da una foto.", "imMsgL": "Ho importato questa ricetta da {x}.", "srcP": "Importata da una foto", "e_badurl": "Questo link non è valido.", "e_private": "Questo link non è raggiungibile (indirizzo interno o non consentito).", "e_blocked": "Questo sito blocca la lettura automatica. Fai invece uno screenshot della ricetta e importalo come foto.", "e_login": "Questa pagina richiede l’accesso e non posso leggerla. Fai uno screenshot della ricetta e importalo come foto.", "e_notfound": "Pagina non trovata: controlla il link.", "e_timeout": "Il sito risponde troppo lentamente. Riprova più tardi.", "e_unreachable": "Impossibile aprire questo sito al momento.", "e_norecipe": "Nessuna ricetta riconosciuta. Per una foto, la ricetta deve essere scritta nell’immagine: una semplice foto del piatto non basta.", "e_toobig": "L’immagine o la pagina è troppo grande.", "e_badimage": "Impossibile leggere questa immagine (formati: JPG, PNG, WebP).", "e_nokey": "L’importazione non è ancora collegata: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy.", "e_upstream": "Il servizio di analisi non è disponibile. Riprova tra un attimo.", "e_noapi": "L’importazione funziona solo sul sito Vercel, non nell’anteprima di claude.ai.", "e_network": "Impossibile connettersi. Controlla la rete."}, "pt": {"imT": "Importar uma receita", "imHomeS": "A partir de uma foto ou de um link", "imHint": "Escolha uma foto (página de livro, receita manuscrita, captura de ecrã…) ou cole um link. Verifica a receita reconhecida antes de a usar.", "imPh": "📷 Foto", "imCam": "Tirar uma foto", "imGal": "Escolher da galeria", "imLk": "🔗 Link da internet", "imUrl": "Cole o link da receita", "imGo": "Importar", "imWait": "A ler a receita…", "imUse": "Usar esta receita", "imCancel": "Cancelar", "imCheck": "Verifique se a receita foi bem reconhecida (quantidades, passos, tempos). Ainda nada foi alterado nem guardado.", "pServ": "Porções", "pTime": "Tempo", "pTemp": "Temperatura", "hIng": "Ingredientes", "hSteps": "Preparação", "hNotes": "Notas", "srcL": "Fonte", "imUntitled": "Receita importada", "imMsgP": "Importei esta receita a partir de uma foto.", "imMsgL": "Importei esta receita de {x}.", "srcP": "Importada de uma foto", "e_badurl": "Este link não é válido.", "e_private": "Este link não está acessível (endereço interno ou não permitido).", "e_blocked": "Este site bloqueia a leitura automática. Faça uma captura de ecrã da receita e importe-a como foto.", "e_login": "Esta página exige início de sessão e não a consigo ler. Faça uma captura de ecrã da receita e importe-a como foto.", "e_notfound": "Página não encontrada: verifique o link.", "e_timeout": "O site demora demasiado a responder. Tente mais tarde.", "e_unreachable": "Não é possível abrir este site neste momento.", "e_norecipe": "Nenhuma receita reconhecida. Numa foto, a receita tem de estar escrita na imagem: uma simples foto do prato não chega.", "e_toobig": "A imagem ou a página é demasiado grande.", "e_badimage": "Não foi possível ler esta imagem (formatos: JPG, PNG, WebP).", "e_nokey": "A importação ainda não está ligada: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar.", "e_upstream": "O serviço de análise está indisponível. Tente novamente daqui a pouco.", "e_noapi": "A importação só funciona no site da Vercel, não na pré-visualização do claude.ai.", "e_network": "Sem ligação. Verifique a rede."}};
+Object.keys(I18F).forEach(k=>Object.assign(I18[k],I18F[k]));
+let pendingMeta=null,imp=null,impTok=0;
+function impText(){const t=T();
+  $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#dImp').textContent=t.imT;$('#impT').textContent=t.imT;
+  $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
+  $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
+function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
+function openImp(){resetImp();show('imp')}
+async function apiPost(path,data){
+  const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
+    return fetch(path,{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify(data)})};
+  let r;try{r=await call()}catch(x){throw {code:'network'}}
+  if(r.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(x){}try{r=await call()}catch(x){throw {code:'network'}}}}
+  let j=null;try{j=await r.json()}catch(x){}
+  if(r.ok&&j&&j.recipe)return j;
+  if(r.status===404&&!(j&&j.error))throw {code:'noapi'};
+  if(r.status===413)throw {code:'toobig'};
+  throw {code:(j&&j.error)||'upstream'};
+}
+function impMsg(code){
+  const t=T(),pv=typeof claude!=='undefined';
+  if(pv&&(code==='network'||code==='noapi'))return t.e_noapi;
+  return t['e_'+code]||t.err;
+}
+function impStatus(txt,err){const o=$('#impOut');o.innerHTML='';const d=document.createElement('div');d.className='imstat'+(err?' err':'');d.textContent=txt;o.appendChild(d);o.scrollIntoView&&o.scrollIntoView({block:'nearest'})}
+function impBusy(b){['#impGo','#impCamB','#impGalB'].forEach(s=>{$(s).disabled=b})}
+// Réduit la photo avant l'envoi (limite Vercel ~4,5 Mo) et corrige l'orientation.
+async function prepareImage(file){
+  if(file.type&&!/^image\//.test(file.type))throw {code:'badimage'};
+  let bmp;
+  try{bmp=await createImageBitmap(file,{imageOrientation:'from-image'})}
+  catch(x){bmp=await new Promise((ok,ko)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);ok(im)};im.onerror=()=>{URL.revokeObjectURL(u);ko({code:'badimage'})};im.src=u})}
+  const w0=bmp.width||bmp.naturalWidth,h0=bmp.height||bmp.naturalHeight;
+  if(!w0||!h0)throw {code:'badimage'};
+  const draw=(max,q)=>{const s=Math.min(1,max/Math.max(w0,h0)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(w0*s));c.height=Math.max(1,Math.round(h0*s));
+    const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(bmp,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};
+  let img='';for(const m of [1800,1400,1100,800]){img=draw(m,.85);if(img.length<=3200000)break}
+  if(img.length>3200000)throw {code:'toobig'};
+  return {image:img,thumb:draw(360,.55)};
+}
+async function importPhoto(file){
+  if(!file)return;const tok=++impTok;impBusy(true);imp=null;impStatus(T().imWait);
+  try{
+    const pr=await prepareImage(file);
+    const j=await apiPost('/api/import-photo',{image:pr.image});
+    if(tok!==impTok)return;
+    showPreview({recipe:j.recipe,src:'photo',thumb:pr.thumb});
+  }catch(e){if(tok===impTok)impStatus(impMsg(e&&e.code),true)}
+  finally{if(tok===impTok)impBusy(false)}
+}
+async function importLink(){
+  let u=$('#impUrl').value.trim();if(!u)return;
+  if(!/^https?:\/\//i.test(u))u='https://'+u;
+  try{const x=new URL(u);if(!/^https?:$/.test(x.protocol)||!x.hostname.includes('.'))throw 0;u=x.href}catch(e){impStatus(T().e_badurl,true);return}
+  const tok=++impTok;impBusy(true);imp=null;impStatus(T().imWait);
+  try{
+    const j=await apiPost('/api/import-link',{url:u,lang});
+    if(tok!==impTok)return;
+    showPreview({recipe:j.recipe,src:'link',url:u,host:j.host||new URL(u).hostname.replace(/^www\./,'')});
+  }catch(e){if(tok===impTok)impStatus(impMsg(e&&e.code),true)}
+  finally{if(tok===impTok)impBusy(false)}
+}
+function recipeToText(r,st){
+  const t=T(),L=['## '+(r.title||t.imUntitled)];
+  if(r.servings)L.push(t.pServ+' : '+r.servings);
+  if(r.time)L.push(t.pTime+' : '+r.time);
+  if(r.temperature)L.push(t.pTemp+' : '+r.temperature);
+  if(r.ingredients.length){L.push('','## '+t.hIng);r.ingredients.forEach(i=>L.push('- '+i))}
+  if(r.steps.length){L.push('','## '+t.hSteps);r.steps.forEach((s,i)=>L.push((i+1)+'. '+s.replace(/^\s*\d+[.)]\s*/,'')))}
+  if(r.notes)L.push('','## '+t.hNotes,r.notes);
+  if(st.src==='link'&&st.host)L.push('',t.srcL+' : '+st.host);
+  return L.join('\n');
+}
+function showPreview(st){
+  imp=st;const t=T(),o=$('#impOut');o.innerHTML='';
+  if(st.thumb){const im=document.createElement('img');im.className='imthumb';im.alt='';im.src=st.thumb;o.appendChild(im)}
+  const b=document.createElement('div');b.className='m a rtext';render(b,recipeToText(st.recipe,st));o.appendChild(b);
+  const c=document.createElement('p');c.className='imcheck';c.textContent=t.imCheck;o.appendChild(c);
+  const row=document.createElement('div');row.className='cact';
+  const ok=document.createElement('button');ok.className='cbtn go';ok.textContent='✓ '+t.imUse;ok.onclick=useImport;
+  const no=document.createElement('button');no.className='cbtn';no.textContent=t.imCancel;no.onclick=resetImp;
+  row.append(ok,no);o.appendChild(row);
+  o.scrollIntoView&&o.scrollIntoView({block:'start'});
+}
+function useImport(){
+  if(!imp)return;const t=T(),st=imp;
+  openChat(null);log.innerHTML='';
+  const msg=st.src==='link'?t.imMsgL.replace('{x}',st.host):t.imMsgP,text=recipeToText(st.recipe,st);
+  hist=[{role:'user',content:'[UI] '+msg},{role:'assistant',content:text}];
+  add('u',msg);add('a',text);
+  pendingMeta={src:st.src,srcUrl:st.url||'',srcHost:st.host||'',photo:st.thumb||''};
+  try{saveCurrent()}catch(e){}
+  pendingMeta=null;imp=null;drawQuick();
+}
+$('#impHome').onclick=openImp;$('#impChat').onclick=openImp;$('#impback').onclick=()=>show('home');
+$('#impCamB').onclick=()=>$('#fileCam').click();$('#impGalB').onclick=()=>$('#fileGal').click();
+['#fileCam','#fileGal'].forEach(s=>$(s).addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];e.target.value='';importPhoto(f)}));
+$('#impGo').onclick=importLink;
+$('#impUrl').addEventListener('keydown',e=>{if(e.key==='Enter')importLink()});
 $('#hgo').onclick=()=>{const v=$('#hq').value.trim();if(v){$('#hq').value='';start(v)}};
 $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
