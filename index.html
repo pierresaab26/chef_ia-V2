@@ -373,7 +373,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v19',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v20',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -646,6 +646,7 @@ function buildComments(parent,key){
 // ---------- Illustrations de plats (dessinées en code, pas des photos) ----------
 function dishKind(t){
   if(/kafta|kofta|kefta|batata|gratin|lasagn|moussaka|rôti|roast|tajine|tagine/i.test(t))return 'tray';
+  if(/boulette|falafel|meatball|croquette|nugget|kibbeh|kebbe|arancin|polpett|alb[oó]ndiga|frikadell|k[oö]fte|beignet|fritter/i.test(t))return 'balls';
   if(/cocktail|mojito|smoothie|boisson|drink|jus\b|juice|limonade|lemonade|thé\b|tea\b|café|coffee|sangria|spritz|milkshake|punch|getränk|bebida|bevanda/i.test(t))return 'glass';
   if(/soupe|soup|velouté|bouillon|ramen|curry|ragoût|stew|chili|dal\b|sopa|suppe|zuppa|risotto|porridge/i.test(t))return 'bowl';
   if(/gâteau|gateau|cake|tarte|tart\b|brownie|cookie|muffin|cupcake|dessert|crème|cream|mousse|tiramisu|pie\b|torta|kuchen|bolo|tarta|flan|crêpe|crepe|pancake/i.test(t))return 'cake';
@@ -675,6 +676,9 @@ function dishSvg(title){
   fries:'<ellipse cx="170" cy="184" rx="100" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/>'+
    [[110,-18],[128,-10],[146,-4],[164,0],[182,5],[200,11],[218,18],[137,-24],[156,-14],[176,-6],[196,2],[214,10],[150,-30],[172,-20],[194,-12]].map(([x,r],i)=>'<rect x="'+(x-5)+'" y="'+(70+(i%5)*6)+'" width="11" height="'+(62+(i%3)*8)+'" rx="4" fill="'+(i%2?'#f2c94c':'#f6d86a')+'" stroke="#d9a92b" stroke-width="2" transform="rotate('+r+' '+x+' 110)"/>').join('')+
    '<circle cx="232" cy="150" r="14" fill="#e2442f" stroke="#a82a1d" stroke-width="2"/><circle cx="232" cy="150" r="6" fill="#f0856f"/>',
+  balls:'<ellipse cx="170" cy="184" rx="100" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/>'+
+   [[128,92],[172,80],[212,100],[148,134],[196,140]].map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="21" fill="#b8782f" stroke="#8a561f" stroke-width="3"/><circle cx="'+(x-6)+'" cy="'+(y-6)+'" r="7" fill="#d9a05b" opacity=".8"/><circle cx="'+(x+7)+'" cy="'+(y+6)+'" r="3" fill="#8a561f" opacity=".6"/>').join('')+
+   '<circle cx="238" cy="150" r="20" fill="#fff" stroke="#dcd6ca" stroke-width="3"/><circle cx="238" cy="150" r="14" fill="#f4efe0"/><ellipse cx="108" cy="150" rx="12" ry="5" fill="#4b9a40" transform="rotate(-25 108 150)"/><ellipse cx="120" cy="160" rx="12" ry="5" fill="#3f8a3c" transform="rotate(15 120 160)"/><circle cx="152" cy="160" r="9" fill="#e2442f" stroke="#a82a1d" stroke-width="2"/>',
   plate:'<ellipse cx="170" cy="184" rx="100" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/>'+
    '<rect x="120" y="86" width="86" height="52" rx="22" fill="#9a5430" stroke="#6b3719" stroke-width="3"/><rect x="132" y="94" width="40" height="10" rx="5" fill="#bf7a4d"/>'+
    [[218,76],[232,98],[224,122]].map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="15" fill="#f1d58a" stroke="#d3ad55" stroke-width="2"/>').join('')+
@@ -684,6 +688,7 @@ function dishSvg(title){
 }
 function dishArt(title){const d=document.createElement('div');d.innerHTML=dishSvg(title);return d.firstChild}
 // Visuel du plat sous la première recette de la conversation (Wikipédia, ou miniature de la photo importée)
+function toBottom(){const f=()=>{log.scrollTop=log.scrollHeight};f();requestAnimationFrame(f);setTimeout(f,150)}
 function dishPic(b,text){
   if(!b||log.querySelector('.dphoto')||!looksLikeRecipe(text||''))return;
   const e=currentId?loadH().find(x=>x.id===currentId):null;if(!e)return;
@@ -694,7 +699,7 @@ function dishPic(b,text){
   box.classList.add('tap');box.setAttribute('role','button');box.tabIndex=0;box.setAttribute('aria-label',T().imgT);
   const cb=document.createElement('span');cb.className='camb';cb.textContent='📷';box.appendChild(cb);
   const id=currentId;box.onclick=()=>openImgSheet(id);box.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
-  log.scrollTop=log.scrollHeight;
+  toBottom();
 }
 function openChat(chef){
   hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;
@@ -706,7 +711,7 @@ function start(q){openChat(null);send(q,true)}
 async function send(text,auto){
   text=(text||inp.value).trim();if(!text||busy)return;
   inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text});
-  const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');busy=true;sendB.disabled=true;
+  const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
   try{
     const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
     const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:hist,persona,lang})});
