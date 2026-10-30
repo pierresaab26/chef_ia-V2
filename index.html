@@ -373,7 +373,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v20',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v21',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -708,21 +708,38 @@ function openChat(chef){
   show('chat');
 }
 function start(q){openChat(null);send(q,true)}
+/*CALL_START*/
+async function chatCall(h,out){
+  const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
+  const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h,persona,lang})});
+  let res=await call();
+  if(res.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(e){}res=await call()}}
+  if(!res.ok){
+    if(res.status===401){try{localStorage.removeItem('code')}catch(e){}throw {code:'code'}}
+    let ec='';try{ec=(await res.json()).error||''}catch(e){}
+    throw {code:res.status===429||ec==='rate'?'rate_limited':res.status===503?'nokey':['credit','badkey','model'].includes(ec)?ec:'err'};
+  }
+  return await res.json();
+}
+/*CALL_END*/
+function looksCut(j){
+  if(!j||!looksLikeRecipe(j.text||''))return false;
+  if(j.cut)return true;
+  const last=j.text.trimEnd().split('\n').pop().trim();
+  return /^\d+[.)]\s/.test(last)&&!/[.!?…)»"'\]:;*]$/.test(last);
+}
 async function send(text,auto){
   text=(text||inp.value).trim();if(!text||busy)return;
   inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
   try{
-    const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
-    const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:hist,persona,lang})});
-    let res=await call();
-    if(res.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(e){}res=await call()}}
-    if(!res.ok){
-      if(res.status===401){try{localStorage.removeItem('code')}catch(e){}throw {code:'code'}}
-      let ec='';try{ec=(await res.json()).error||''}catch(e){}
-      throw {code:res.status===429||ec==='rate'?'rate_limited':res.status===503?'nokey':['credit','badkey','model'].includes(ec)?ec:'err'};
+    let j=await chatCall(hist,out);
+    for(let n=0;n<2&&looksCut(j);n++){ // réponse coupée : on demande la fin et on recolle
+      renderMsg(out,j.text);toBottom();
+      const L=j.text.trimEnd().split('\n'),last=L.pop().trim();
+      const k=await chatCall(hist.concat([{role:'assistant',content:j.text},{role:'user',content:'[UI] Ta réponse précédente a été coupée pendant cette ligne : « '+last+' ». Écris uniquement la suite : recommence par cette ligne complète (même numéro) et termine la recette. Pas d’introduction, ne répète pas ce qui précède.'}]));
+      j={text:L.join('\n')+'\n'+k.text.trim(),cut:k.cut};
     }
-    const j=await res.json();
     renderMsg(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
     try{dishPic(out,j.text)}catch(e){}
   }catch(e){

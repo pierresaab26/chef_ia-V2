@@ -48,7 +48,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: process.env.MODEL || "claude-haiku-5-5",
-        max_tokens: 2500,
+        max_tokens: 4000,
         system: BASE + (lang ? " Langue de l’interface : " + lang + "." : "") + (persona ? " " + persona : ""),
         messages,
       }),
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
     }
     const data = await r.json();
     const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
-    return res.status(200).json({ text });
+    return res.status(200).json({ text, cut: data.stop_reason === "max_tokens" });
   } catch (e) {
     return res.status(502).json({ error: "network" });
   }
