@@ -52,7 +52,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .empty{color:var(--mut);background:var(--card);border-radius:18px;padding:16px;font-size:14px}
 #toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw;text-align:center}
 #toast.on{opacity:1;transform:translateX(-50%)}
-.cphoto{height:210px;border-radius:22px;background-size:cover;background-position:center;display:grid;place-items:center;font-size:84px;overflow:hidden}
+.cphoto{height:clamp(210px,30vw,300px);border-radius:22px;background-size:cover;background-position:center;display:grid;place-items:center;font-size:84px;overflow:hidden}
 .credit{display:block;color:var(--mut);font-size:11px;text-align:right;margin:3px 6px 0;min-height:14px}
 .ctitle{font-size:22px;margin:6px 0 8px;line-height:1.2}
 .cchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
@@ -111,6 +111,7 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .chead{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--bd)}
 .chead .back{font-size:22px;padding:0 6px}
 .chead b{display:block;line-height:1.2}
+#cardT{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px}
 #log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
 .m{max-width:88%;padding:10px 14px;border-radius:18px;white-space:pre-wrap;word-wrap:break-word}
 .u{align-self:flex-end;background:var(--pink);color:#fff;border-bottom-right-radius:5px}
@@ -145,6 +146,23 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .imcheck{color:var(--mut);font-size:13px;margin:10px 2px}
 .dphoto{align-self:flex-start;max-width:88%;width:340px;margin:2px 0 6px}
 .dphoto img{display:block;width:100%;max-height:260px;object-fit:cover;border-radius:18px}
+
+.rbody{display:block;max-width:100%}
+.cbtn.go{flex:1 0 100%;text-align:center}
+.rmeta{color:var(--mut);font-size:14px;margin:0 2px 12px}
+.rsec{background:var(--card);border-radius:22px;padding:16px 18px;margin:0 0 14px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.rsec h3{color:var(--pink);font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.rsec ul,.rsec ol{list-style:none;padding:0;margin:0}
+.ring li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ring li:last-child{border-bottom:0}
+.ring .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);flex:none;margin-top:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
+.ring li.done .ck{background:var(--pink)}
+.ring li.done .tx{text-decoration:line-through;opacity:.5}
+.rstep li{display:flex;gap:14px;align-items:flex-start;padding:11px 0;line-height:1.5}
+.rstep .num{width:30px;height:30px;border-radius:50%;background:var(--pink);color:#fff;font-weight:700;display:grid;place-items:center;flex:none;font-size:14px}
+.rp{margin:6px 0;line-height:1.5}
+.m.rich{background:none;box-shadow:none;padding:0;max-width:100%;width:100%;white-space:normal}
+.rtitle{font-size:20px;font-weight:700;color:var(--ink);margin:2px 4px 10px;line-height:1.25}
 </style>
 </head>
 <body>
@@ -292,7 +310,8 @@ function drawChefs(){const t=T();$('#chefs').innerHTML='';CHEFS.forEach((c,k)=>{
   const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent="Chef "+c.n;const d=document.createElement('span');d.textContent=t.cu[k];const e=document.createElement('em');e.textContent=t.disc;
   b.append(i,n,d,e);b.onclick=()=>openChat({...c,k,d:t.cu[k]});$('#chefs').appendChild(b)})}
 function render(el,t){el.innerHTML='';t.split('\n').forEach(l=>{const m=l.match(/^#{1,3}\s+(.*)/);if(m){const h=document.createElement('h3');h.textContent=m[1].replace(/\*\*/g,'');el.appendChild(h)}else el.appendChild(document.createTextNode(l.replace(/\*\*/g,'')+'\n'))})}
-function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else render(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
+function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');renderRecipe(el,t,recipeTitle(t)||'',true)}else{el.classList.remove('rich');render(el,t)}}
+function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x);q.appendChild(b)})}
 // ---------- Historique (stocké sur l'appareil, dans le navigateur) ----------
 // ---------- Stockage ----------
@@ -300,7 +319,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v10',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v14',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -439,13 +458,59 @@ async function shareRecipe(e){
 }
 let toastT=null;
 function toast(t){let d=$('#toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent=t;d.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>d.classList.remove('on'),2200)}
+// ---------- Mise en forme d'une recette (fiche et aperçu d'import) ----------
+function recipeSections(txt){
+  const secs=[{h:'',lines:[]}];let cur=secs[0];
+  txt.split('\n').forEach(raw=>{const l=raw.trim();if(!l)return;
+    const hm=l.match(/^#{1,3}\s+(.*)$/)||l.match(/^\*\*([^*]+)\*\*\s*:?$/);
+    let h=hm?hm[1]:null;
+    if(!h&&l.length<=40&&/[:：]$/.test(l)&&!/^[-•*\d]/.test(l))h=l;
+    if(h){cur={h:h.replace(/\*\*/g,'').replace(/[:：]\s*$/,'').trim(),lines:[]};secs.push(cur);return}
+    cur.lines.push(l.replace(/\*\*/g,''))});
+  return secs;
+}
+function secIcon(h){
+  if(/ingr|zutat|ingred|ingrediente/i.test(h))return '🧺';
+  if(/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc|préparation/i.test(h))return '👩‍🍳';
+  if(/chang|modif|geänd|cambi|mudan|cambia/i.test(h))return '✏️';
+  if(/note|astuce|conseil|tip|hinweis|consej|dica|consigli/i.test(h))return '💡';
+  return '';
+}
+function renderRecipe(el,txt,title,chat){
+  el.innerHTML='';
+  if(chat&&title){const t=document.createElement('div');t.className='rtitle';t.textContent=title;el.appendChild(t)}const nz=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+  const secs=recipeSections(txt);
+  secs.forEach((sec,i)=>{
+    const skipH=sec.h&&title&&nz(sec.h)===nz(title);
+    const bul=sec.lines.filter(l=>/^[-•*]\s+/.test(l)),num=sec.lines.filter(l=>/^\d+[.)]\s+/.test(l));
+    if(!sec.h||skipH){ // texte d'introduction (portions, temps…)
+      sec.lines.forEach(l=>{if(nz(l.replace(/[:：]\s*$/,''))===nz(title)||(!chat&&/^(portions?|servings?|personnes?|people|porzioni|persone|porções|porciones|portionen|personen)\s*[:：]?\s*\d/i.test(l)))return;const p=document.createElement('div');p.className=(bul.length||num.length)?'rp':'rmeta';p.textContent=l.replace(/^[-•*]\s+/,'');el.appendChild(p)});return}
+    const box=document.createElement('section');box.className='rsec';
+    const h=document.createElement('h3');const ic=secIcon(sec.h);h.textContent=(ic?ic+' ':'')+sec.h;box.appendChild(h);
+    let list=null,kind='';
+    const close=()=>{list=null;kind=''};
+    sec.lines.forEach(l=>{
+      const b=l.match(/^[-•*]\s+(.*)$/),n=l.match(/^(\d+)[.)]\s+(.*)$/);
+      if(b){
+        if(kind!=='b'){list=document.createElement('ul');list.className='ring';box.appendChild(list);kind='b'}
+        const li=document.createElement('li'),ck=document.createElement('span');ck.className='ck';const tx=document.createElement('span');tx.className='tx';tx.textContent=b[1];
+        li.append(ck,tx);li.onclick=()=>{const d=li.classList.toggle('done');ck.textContent=d?'✓':''};list.appendChild(li);
+      }else if(n){
+        if(kind!=='n'){list=document.createElement('ol');list.className='rstep';box.appendChild(list);kind='n'}
+        const li=document.createElement('li'),nm=document.createElement('span');nm.className='num';nm.textContent=n[1];const tx=document.createElement('span');tx.textContent=n[2];
+        li.append(nm,tx);list.appendChild(li);
+      }else{close();const p=document.createElement('p');p.className='rp';p.textContent=l;box.appendChild(p)}
+    });
+    el.appendChild(box);
+  });
+}
 function openCard(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
-  cardId=id;const t=T(),body=$('#cardbody');body.innerHTML='';$('#cardT').textContent=t.card;
+  cardId=id;const t=T(),body=$('#cardbody');body.innerHTML='';$('#cardT').textContent=e.title;$('#cardT').title=e.title;
   const ph=document.createElement('div');ph.className='cphoto';const [em,bg]=dishLook(e.title);ph.style.background=bg;
   const emo=document.createElement('span');emo.textContent=em;ph.appendChild(emo);body.appendChild(ph);
   const credit=document.createElement('small');credit.className='credit';body.appendChild(credit);
-  {const art=()=>{if(cardId!==id||!emo.isConnected)return;ph.style.background='none';emo.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.appendChild(a)};
+  {const art=()=>{if(cardId!==id||!emo.isConnected)return;ph.style.background='linear-gradient(to bottom,transparent 76.4%,rgba(255,255,255,.35) 76.4%),'+bg;emo.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.appendChild(a)};
   art();getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+u+'")';credit.textContent=/^data:/.test(u)?'':T().credit}})}
   const h=document.createElement('h1');h.className='ctitle';h.textContent=e.title;body.appendChild(h);
   const txt=recipeText(e);const chips=document.createElement('div');chips.className='cchips';
@@ -456,7 +521,7 @@ function openCard(id){
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
   const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
   act.append(fv,sh,ct);body.appendChild(act);
-  const rt=document.createElement('div');rt.className='m a rtext';render(rt,txt);body.appendChild(rt);
+  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title);body.appendChild(rt);
   buildComments(body,slug(e.title));
   show('card');body.scrollTop=0;
 }
@@ -504,11 +569,12 @@ function buildComments(parent,key){
 }
 // ---------- Illustrations de plats (dessinées en code, pas des photos) ----------
 function dishKind(t){
-  if(/kafta|kofta|kefta|batata|gratin|lasagn|moussaka|four\b|oven|ofen|horno|forno|rôti|roast|tajine|tagine/i.test(t))return 'tray';
+  if(/kafta|kofta|kefta|batata|gratin|lasagn|moussaka|rôti|roast|tajine|tagine/i.test(t))return 'tray';
   if(/cocktail|mojito|smoothie|boisson|drink|jus\b|juice|limonade|lemonade|thé\b|tea\b|café|coffee|sangria|spritz|milkshake|punch|getränk|bebida|bevanda/i.test(t))return 'glass';
   if(/soupe|soup|velouté|bouillon|ramen|curry|ragoût|stew|chili|dal\b|sopa|suppe|zuppa|risotto|porridge/i.test(t))return 'bowl';
   if(/gâteau|gateau|cake|tarte|tart\b|brownie|cookie|muffin|cupcake|dessert|crème|cream|mousse|tiramisu|pie\b|torta|kuchen|bolo|tarta|flan|crêpe|crepe|pancake/i.test(t))return 'cake';
   if(/pizza|focaccia|flammekueche/i.test(t))return 'pizza';
+  if(/frite|chips|fries|crisps|potato|patate|pomme[s]? de terre|kartoffel|papas|batata/i.test(t))return 'fries';
   return 'plate';
 }
 function dishSvg(title){
@@ -530,6 +596,9 @@ function dishSvg(title){
   pizza:'<ellipse cx="170" cy="182" rx="98" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="114" r="92" fill="#d9a05b"/><circle cx="170" cy="114" r="80" fill="#e04a2f"/><circle cx="170" cy="114" r="74" fill="#f6d36b"/>'+
    [[140,84],[196,92],[120,128],[172,126],[220,130],[158,160],[200,166]].map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="13" fill="#b3302a" stroke="#8a1f1b" stroke-width="2"/>').join('')+
    [[160,100],[132,108],[212,112],[188,148]].map(([x,y])=>'<ellipse cx="'+x+'" cy="'+y+'" rx="8" ry="5" fill="#3f8a3c" transform="rotate(30 '+x+' '+y+')"/>').join(''),
+  fries:'<ellipse cx="170" cy="184" rx="100" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/>'+
+   [[110,-18],[128,-10],[146,-4],[164,0],[182,5],[200,11],[218,18],[137,-24],[156,-14],[176,-6],[196,2],[214,10],[150,-30],[172,-20],[194,-12]].map(([x,r],i)=>'<rect x="'+(x-5)+'" y="'+(70+(i%5)*6)+'" width="11" height="'+(62+(i%3)*8)+'" rx="4" fill="'+(i%2?'#f2c94c':'#f6d86a')+'" stroke="#d9a92b" stroke-width="2" transform="rotate('+r+' '+x+' 110)"/>').join('')+
+   '<circle cx="232" cy="150" r="14" fill="#e2442f" stroke="#a82a1d" stroke-width="2"/><circle cx="232" cy="150" r="6" fill="#f0856f"/>',
   plate:'<ellipse cx="170" cy="184" rx="100" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/>'+
    '<rect x="120" y="86" width="86" height="52" rx="22" fill="#9a5430" stroke="#6b3719" stroke-width="3"/><rect x="132" y="94" width="40" height="10" rx="5" fill="#bf7a4d"/>'+
    [[218,76],[232,98],[224,122]].map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="15" fill="#f1d58a" stroke="#d3ad55" stroke-width="2"/>').join('')+
@@ -565,7 +634,7 @@ async function send(text,auto){
     if(res.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(e){}res=await call()}}
     if(!res.ok)throw {code:res.status===429?'rate_limited':res.status===503?'nokey':'err'};
     const j=await res.json();
-    render(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
+    renderMsg(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
     try{dishPic(out,j.text)}catch(e){}
   }catch(e){
     hist.pop();
@@ -651,7 +720,7 @@ function recipeToText(r,st){
 function showPreview(st){
   imp=st;const t=T(),o=$('#impOut');o.innerHTML='';
   if(st.thumb){const im=document.createElement('img');im.className='imthumb';im.alt='';im.src=st.thumb;o.appendChild(im)}
-  const b=document.createElement('div');b.className='m a rtext';render(b,recipeToText(st.recipe,st));o.appendChild(b);
+  const b=document.createElement('div');b.className='rbody rtext';renderRecipe(b,recipeToText(st.recipe,st),st.recipe.title||t.imUntitled);o.appendChild(b);
   const c=document.createElement('p');c.className='imcheck';c.textContent=t.imCheck;o.appendChild(c);
   const row=document.createElement('div');row.className='cact';
   const ok=document.createElement('button');ok.className='cbtn go';ok.textContent='✓ '+t.imUse;ok.onclick=useImport;
