@@ -33,6 +33,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "messages" });
   }
 
+  if (!process.env.ANTHROPIC_API_KEY) return res.status(503).json({ error: "nokey" });
+
   try {
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
