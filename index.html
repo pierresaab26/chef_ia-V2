@@ -144,8 +144,9 @@ nav .mid{width:54px;height:54px;border-radius:50%;background:var(--green);margin
 .imstat.err{border:1px solid var(--pink)}
 .imthumb{display:block;max-width:100%;max-height:200px;border-radius:16px;margin:0 auto 12px}
 .imcheck{color:var(--mut);font-size:13px;margin:10px 2px}
-.dphoto{align-self:flex-start;max-width:88%;width:340px;margin:2px 0 6px}
-.dphoto img{display:block;width:100%;max-height:260px;object-fit:cover;border-radius:18px}
+.dphoto{flex:none;align-self:stretch;position:relative;width:100%;height:clamp(190px,34vw,300px);margin:2px 0 6px;border-radius:18px;overflow:hidden}
+.dphoto>svg,.dphoto>div,.dphoto>img{display:block;width:100%;height:100%;border-radius:0}
+.dphoto img{object-fit:cover}
 
 .rbody{display:block;max-width:100%}
 .cbtn.go{flex:1 0 100%;text-align:center}
@@ -373,7 +374,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Évolution prévue : remplacer ces 2 fonctions par un adaptateur serveur (compte utilisateur),
 // en fusionnant les recettes locales et distantes grâce à id + updatedAt.
-const APP_VERSION='v21',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v22',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -646,6 +647,7 @@ function buildComments(parent,key){
 // ---------- Illustrations de plats (dessinées en code, pas des photos) ----------
 function dishKind(t){
   if(/kafta|kofta|kefta|batata|gratin|lasagn|moussaka|rôti|roast|tajine|tagine/i.test(t))return 'tray';
+  if(/houmous|hummus|baba|moutabal|tarator|tzatziki|guacamole|taboul[eé]|caviar d|trempette|\bdip\b|tapenade|rillette|pesto|salsa|sauce|chutney|confiture|compote/i.test(t))return 'dip';
   if(/boulette|falafel|meatball|croquette|nugget|kibbeh|kebbe|arancin|polpett|alb[oó]ndiga|frikadell|k[oö]fte|beignet|fritter/i.test(t))return 'balls';
   if(/cocktail|mojito|smoothie|boisson|drink|jus\b|juice|limonade|lemonade|thé\b|tea\b|café|coffee|sangria|spritz|milkshake|punch|getränk|bebida|bevanda/i.test(t))return 'glass';
   if(/soupe|soup|velouté|bouillon|ramen|curry|ragoût|stew|chili|dal\b|sopa|suppe|zuppa|risotto|porridge/i.test(t))return 'bowl';
@@ -679,12 +681,14 @@ function dishSvg(title){
   balls:'<ellipse cx="170" cy="184" rx="100" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/>'+
    [[128,92],[172,80],[212,100],[148,134],[196,140]].map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="21" fill="#b8782f" stroke="#8a561f" stroke-width="3"/><circle cx="'+(x-6)+'" cy="'+(y-6)+'" r="7" fill="#d9a05b" opacity=".8"/><circle cx="'+(x+7)+'" cy="'+(y+6)+'" r="3" fill="#8a561f" opacity=".6"/>').join('')+
    '<circle cx="238" cy="150" r="20" fill="#fff" stroke="#dcd6ca" stroke-width="3"/><circle cx="238" cy="150" r="14" fill="#f4efe0"/><ellipse cx="108" cy="150" rx="12" ry="5" fill="#4b9a40" transform="rotate(-25 108 150)"/><ellipse cx="120" cy="160" rx="12" ry="5" fill="#3f8a3c" transform="rotate(15 120 160)"/><circle cx="152" cy="160" r="9" fill="#e2442f" stroke="#a82a1d" stroke-width="2"/>',
+  dip:'<ellipse cx="170" cy="186" rx="112" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/><circle cx="170" cy="112" r="50" fill="#d9c7a0" stroke="#b8a47a" stroke-width="3"/><circle cx="170" cy="112" r="40" fill="#ecdcb8"/><path d="M140 108q15-14 30 0t30 0" stroke="#d4a43a" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/><circle cx="158" cy="124" r="4" fill="#7a1f2b"/><circle cx="170" cy="128" r="4" fill="#7a1f2b"/><circle cx="182" cy="124" r="4" fill="#7a1f2b"/><ellipse cx="170" cy="96" rx="9" ry="4" fill="#3f8a3c"/>'+
+   [[72,76,-20],[84,150,15],[262,84,25],[256,148,-15]].map(([x,y,r])=>'<path d="M-22 14L0 -18L22 14Z" fill="#e8c98a" stroke="#c79a52" stroke-width="3" stroke-linejoin="round" transform="translate('+x+' '+y+') rotate('+r+')"/>').join(''),
   plate:'<ellipse cx="170" cy="184" rx="100" ry="9" fill="#000" opacity=".1"/><circle cx="170" cy="112" r="96" fill="#f7f5f0" stroke="#dcd6ca" stroke-width="3"/><circle cx="170" cy="112" r="74" fill="none" stroke="#e8e3d8" stroke-width="2"/>'+
    '<rect x="120" y="86" width="86" height="52" rx="22" fill="#9a5430" stroke="#6b3719" stroke-width="3"/><rect x="132" y="94" width="40" height="10" rx="5" fill="#bf7a4d"/>'+
    [[218,76],[232,98],[224,122]].map(([x,y])=>'<circle cx="'+x+'" cy="'+y+'" r="15" fill="#f1d58a" stroke="#d3ad55" stroke-width="2"/>').join('')+
    [[106,150],[128,158],[152,154]].map(([x,y])=>'<ellipse cx="'+x+'" cy="'+y+'" rx="14" ry="7" fill="#4b9a40" transform="rotate(-20 '+x+' '+y+')"/>').join('')+
    '<circle cx="186" cy="150" r="9" fill="#e2442f"/><circle cx="102" cy="104" r="8" fill="#e2442f"/>'};
-  return '<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+(title||'').replace(/[<>&"]/g,'')+'"><rect width="340" height="220" fill="'+bg+'"/><rect y="168" width="340" height="52" fill="#fff" opacity=".35"/>'+P[k]+'</svg>';
+  return '<svg viewBox="0 0 340 220" preserveAspectRatio="xMidYMid meet" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+(title||'').replace(/[<>&"]/g,'')+'"><rect x="-4000" y="-4000" width="8340" height="8220" fill="'+bg+'"/><rect x="-4000" y="168" width="8340" height="4000" fill="#fff" opacity=".35"/>'+P[k]+'</svg>';
 }
 function dishArt(title){const d=document.createElement('div');d.innerHTML=dishSvg(title);return d.firstChild}
 // Visuel du plat sous la première recette de la conversation (Wikipédia, ou miniature de la photo importée)
@@ -694,8 +698,8 @@ function dishPic(b,text){
   const e=currentId?loadH().find(x=>x.id===currentId):null;if(!e)return;
   const box=document.createElement('div');box.className='dphoto';b.after(box);
   const mine=e.img||(typeof e.photo==='string'&&/^data:/.test(e.photo)?e.photo:'');
-  if(mine){const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=mine;im.onerror=()=>{im.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;border-radius:18px';box.insertBefore(a,box.firstChild)};box.appendChild(im)} // image choisie, ou miniature de la photo importée
-  else{const a=dishArt(e.title);a.style.cssText='display:block;width:100%;border-radius:18px';box.appendChild(a)}
+  if(mine){const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=mine;im.onerror=()=>{im.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';box.insertBefore(a,box.firstChild)};box.appendChild(im)} // image choisie, ou miniature de la photo importée
+  else{const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';box.appendChild(a)}
   box.classList.add('tap');box.setAttribute('role','button');box.tabIndex=0;box.setAttribute('aria-label',T().imgT);
   const cb=document.createElement('span');cb.className='camb';cb.textContent='📷';box.appendChild(cb);
   const id=currentId;box.onclick=()=>openImgSheet(id);box.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
