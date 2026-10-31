@@ -62,10 +62,12 @@ Files starting with `_` in `api/` are helpers, not routes.
 - Replacing an ingredient (↔ button or "not available" circle) creates a **new, separate recipe**; the original and its favorite stay untouched.
 - New recipes always include a « Utensils » section (3–8 items) between ingredients and steps, in the user's language. Imported recipes get none unless asked (no invented content). The card shows utensils as plain chips (nothing to tick or replace); detection is `UT_RE` in `index.html`.
 - Cut-off answers are detected and completed automatically.
+- A free-text change in the chat (e.g. « no lactose ») updates the same saved recipe; only ↔ / « not available » creates a separate recipe.
+- The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
-## 5. Done (up to v35)
+## 5. Done (up to v36)
 
-Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English; v35: utensils section in recipes.
+Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English; v35: utensils section in recipes; v36: action bar (favorite, share, card, rating) under the latest recipe in the chat (`chatActions()`).
 
 ## 6. Current status and decisions
 

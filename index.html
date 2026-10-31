@@ -61,6 +61,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .rate{display:flex;align-items:center;gap:8px;flex:1 0 100%;margin:2px 4px 12px;flex-wrap:wrap}
 .cact .rate{margin:2px 4px 0}
+.chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 14px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
 .stars button{background:none;border:0;padding:2px 3px;font-size:26px;line-height:1;color:#cfd0dc;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -403,7 +404,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v35',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v36',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -473,7 +474,7 @@ function branchWith(src,ings){ // new separate recipe saved in the history: the 
   if(busy)return;
   hist=[];log.innerHTML='';
   chefNow=src.k>=0&&CHEFS[src.k]?{...CHEFS[src.k],k:src.k}:null;persona=chefNow?chefNow.p:"";currentId=null;branchFrom={title:src.title,k:src.k,lang:src.lang};
-  refreshChat();drawQuick();show('chat');
+  refreshChat();drawQuick();show('chat');try{chatActions()}catch(x){}
   send(T().swapMsg.replace('{i}',ings.join(' ; ')),false,T().swapCtx+'\n'+src.text);
 }
 function openBranch(id,ings){const e=loadH().find(x=>x.id===id);if(e)branchWith({text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings)}
@@ -522,7 +523,19 @@ function drawFavs(){
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recipe';
 function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
-function syncCardBtn(){$('#tocard').style.display=currentId?'':'none'}
+function syncCardBtn(){$('#tocard').style.display=currentId?'':'none';try{chatActions()}catch(x){}}
+// Action bar under the latest recipe in the chat (favorite, share, card, rating), same actions as on the recipe card.
+function chatActions(){
+  log.querySelectorAll('.chact').forEach(x=>x.remove());
+  if(!currentId)return;const e=loadH().find(x=>x.id===currentId);if(!e)return;
+  const msgs=[...log.querySelectorAll('.m.a.rich')];const last=msgs[msgs.length-1];if(!last)return;
+  const t=T(),bar=document.createElement('div');bar.className='chact';
+  const fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(e.fav?' on':'');fv.textContent=(e.fav?'❤️ ':'🤍 ')+t.fav;
+  fv.onclick=()=>{const f=toggleFav(currentId);fv.textContent=(f?'❤️ ':'🤍 ')+t.fav;fv.classList.toggle('on',!!f)};
+  const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>{const z=loadH().find(x=>x.id===currentId);if(z)shareRecipe(z)};
+  const cd=document.createElement('button');cd.type='button';cd.className='cbtn';cd.textContent='📋 '+t.card;cd.onclick=()=>{if(currentId)openCard(currentId)};
+  bar.append(fv,sh,cd,rateBox(currentId));last.after(bar);
+}
 function recipeText(e){const m=[...e.messages].reverse().find(x=>x.role==='assistant'&&looksLikeRecipe(x.content))||[...e.messages].reverse().find(x=>x.role==='assistant');return m?m.content:''}
 function plain(t){return t.replace(/^#{1,3}\s+/gm,'').replace(/\*\*/g,'')}
 function infoChips(txt){
