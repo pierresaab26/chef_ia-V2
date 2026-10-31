@@ -81,3 +81,28 @@ Chat with chefs; import from photo and link; edit a recipe with the chef; histor
   - Measurement: Vercel Web Analytics (cookieless) + a few anonymous internal counters; Sentry (free, browser errors, EU region, no session replay). No Grafana. No ad pixels until paid ads (they need a consent banner).
   - Monetization (later, after validation): freemium with a daily quota + Premium (~2.99 €/month or ~24.99 €/year), Stripe on the web, installable web app to avoid store fees. Needs accounts first.
 - Feature ideas backlog: shopping list, cooking mode (one step at a time + timers), portion slider, home screen install, import from an Instagram/TikTok caption, fridge photo, accounts and multi-device sync, hands-free voice, weekly menu, rating analysis to tune the chef.
+
+## 7. Graphic charter (kept for later — do NOT change it without the owner's go)
+
+Decision (2026-10-31): the owner did not like the current background but asked to **keep the current charter as it is for now** and to come back to it later. Nothing in the colors below was changed.
+
+**Current charter** (all in the CSS `:root` of `index.html`, light mode first; the dark mode has its own values and is applied with the system setting or `data-theme`):
+
+| Token | Light | Dark | Used for |
+|---|---|---|---|
+| `--bg1` → `--bg2` | `#eceaff` → `#cdd6f4` (lavender → blue-grey, `linear-gradient(160deg, …) fixed` on `body`) | `#1f1b33` → `#12101d` | page background; `--bg1` is also the fill of idea cards and utensil chips |
+| `--card` | `#fff` | `#272339` | bubbles, recipe cards, chips, buttons |
+| `--ink` / `--mut` | `#16121a` / `#7b7684` | `#f4f1fa` / `#a29cb3` | text / secondary text |
+| `--pink` | `#e5195f` | same | brand color: titles, user bubbles, selected states, ↑ button |
+| `--green` | `#84cc16` | same | primary action buttons (Send, Generate, Adapt) |
+| `--bd` | `rgba(0,0,0,.07)` | `rgba(255,255,255,.09)` | thin borders |
+
+Shape and type: system font stack, 15 px / 1.5; pill buttons and chips (`999px`); cards `22px` radius with a soft shadow (`0 2px 12px rgba(0,0,0,.06)`); chat bubbles `18px`; app column `520px` max (`760px` from 768 px wide); emoji as icons.
+
+**Background alternatives proposed (light mode, not applied)** — only `--bg1` / `--bg2` change, everything else stays:
+- A · Crème: `--bg1:#fffaf2; --bg2:#f7e7cf` (warm, bakery feel — the assistant's recommendation)
+- B · Sauge: `--bg1:#f1f7ee; --bg2:#d8e8d2` (fresh herbs)
+- C · Pêche: `--bg1:#fff3ea; --bg2:#ffd9c4` (warm, more marked)
+- D · Gris perle: `--bg1:#f8f8f7; --bg2:#e6e6e4` (neutral, the safest)
+
+To apply one later: change the two light values in `:root` (and, if wanted, the dark ones in the two dark blocks), bump `APP_VERSION`, check idea cards and utensil chips (they use `--bg1`), then test on phone and tablet.
