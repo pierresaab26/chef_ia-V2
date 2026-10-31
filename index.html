@@ -57,6 +57,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .ctitle{font-size:22px;margin:6px 0 8px;line-height:1.2}
 .cchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .cchips span{background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mut)}
+.hs i{font-style:normal}.tb .ls{display:none}@media (max-width:480px){.hs .hl{display:none}.tb .lf{display:none}.tb .ls{display:inline}.cchips span{padding:4px 9px;font-size:11.5px}.cchips{gap:5px}}@media (max-width:380px){.tb .ls{display:none}} /* very small phones: icon + value only (🔪 15 min), always on one line */.hs i.off{opacity:.22;filter:grayscale(1)}.cchips+.cchips{margin-top:-4px}.m .cchips{margin:2px 0 8px}.m .cchips span{background:var(--bg1)}
 .cact{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .rate{display:flex;align-items:center;gap:8px;flex:1 0 100%;margin:2px 4px 12px;flex-wrap:wrap}
@@ -483,7 +484,17 @@ fr:{
   qMax:"3 recettes maximum à la fois",
   idMany:"{n} recettes enregistrées dans l’historique",
   hideB1:"👁️ Masquer cette recette",
-  showB1:"👁️ Afficher : {t}"
+  showB1:"👁️ Afficher : {t}",
+  hsT:"Score santé",
+  hs1:"Pas trop healthy",
+  hs2:"Ça va",
+  hs3:"Healthy",
+  prepL:"Préparation",
+  restL:"Repos",
+  cookL:"Cuisson",
+  prepS:"Prépa",
+  restS:"Repos",
+  cookS:"Cuisson"
 },
 en:{
   ok:"OK",
@@ -629,7 +640,17 @@ en:{
   qMax:"3 recipes at most at a time",
   idMany:"{n} recipes saved in the history",
   hideB1:"👁️ Hide this recipe",
-  showB1:"👁️ Show: {t}"
+  showB1:"👁️ Show: {t}",
+  hsT:"Health score",
+  hs1:"Not very healthy",
+  hs2:"OK",
+  hs3:"Healthy",
+  prepL:"Prep",
+  restL:"Rest",
+  cookL:"Cook",
+  prepS:"Prep",
+  restS:"Rest",
+  cookS:"Cook"
 },
 es:{
   ok:"Aceptar",
@@ -775,7 +796,17 @@ es:{
   qMax:"Máximo 3 recetas a la vez",
   idMany:"{n} recetas guardadas en el historial",
   hideB1:"👁️ Ocultar esta receta",
-  showB1:"👁️ Mostrar: {t}"
+  showB1:"👁️ Mostrar: {t}",
+  hsT:"Puntuación de salud",
+  hs1:"Poco saludable",
+  hs2:"Aceptable",
+  hs3:"Saludable",
+  prepL:"Preparación",
+  restL:"Reposo",
+  cookL:"Cocción",
+  prepS:"Prep.",
+  restS:"Reposo",
+  cookS:"Cocción"
 },
 de:{
   ok:"OK",
@@ -921,7 +952,17 @@ de:{
   qMax:"Höchstens 3 Rezepte auf einmal",
   idMany:"{n} Rezepte im Verlauf gespeichert",
   hideB1:"👁️ Dieses Rezept ausblenden",
-  showB1:"👁️ Anzeigen: {t}"
+  showB1:"👁️ Anzeigen: {t}",
+  hsT:"Gesundheitsscore",
+  hs1:"Weniger gesund",
+  hs2:"Geht so",
+  hs3:"Gesund",
+  prepL:"Vorbereitung",
+  restL:"Ruhezeit",
+  cookL:"Garzeit",
+  prepS:"Vorb.",
+  restS:"Ruhe",
+  cookS:"Garen"
 },
 it:{
   ok:"OK",
@@ -1067,7 +1108,17 @@ it:{
   qMax:"Al massimo 3 ricette alla volta",
   idMany:"{n} ricette salvate nella cronologia",
   hideB1:"👁️ Nascondi questa ricetta",
-  showB1:"👁️ Mostra: {t}"
+  showB1:"👁️ Mostra: {t}",
+  hsT:"Punteggio salute",
+  hs1:"Poco salutare",
+  hs2:"Così così",
+  hs3:"Salutare",
+  prepL:"Preparazione",
+  restL:"Riposo",
+  cookL:"Cottura",
+  prepS:"Prep.",
+  restS:"Riposo",
+  cookS:"Cottura"
 },
 pt:{
   ok:"OK",
@@ -1213,7 +1264,17 @@ pt:{
   qMax:"No máximo 3 receitas de cada vez",
   idMany:"{n} receitas guardadas no histórico",
   hideB1:"👁️ Ocultar esta receita",
-  showB1:"👁️ Mostrar: {t}"
+  showB1:"👁️ Mostrar: {t}",
+  hsT:"Pontuação de saúde",
+  hs1:"Pouco saudável",
+  hs2:"Razoável",
+  hs3:"Saudável",
+  prepL:"Preparação",
+  restL:"Repouso",
+  cookL:"Cozedura",
+  prepS:"Prep.",
+  restS:"Repouso",
+  cookS:"Cocção"
 }
 };
 const RMETA=[["🍕",1,"30 min","#fde4d8"],["🥞",2,"20 min","#fdf1c9"],["🎂",0+1+0,"50 min","#f6dbe8"],["🍛",4,"35 min","#dcefc9"],["🍝",3,"15 min","#fde4d8"],["🍳",2,"10 min","#fdf1c9"],["🧁",0+1,"40 min","#f6dbe8"],["🥗",4,"25 min","#dcefc9"]];
@@ -1416,7 +1477,7 @@ function openIdeas(e){
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v51',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v53',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1582,6 +1643,33 @@ function chatActions(){
 }
 function recipeText(e){const m=[...e.messages].reverse().find(x=>x.role==='assistant'&&looksLikeRecipe(x.content))||[...e.messages].reverse().find(x=>x.role==='assistant');return m?m.content:''}
 function plain(t){return t.replace(/^#{1,3}\s+/gm,'').replace(/\*\*/g,'')}
+// Health score: the chef writes one line « Health: N/3 » (« Santé : N/3 »…) in every new recipe. 1 leaf = not very healthy, 2 = OK, 3 = healthy.
+// Recipes without that line (imports, older recipes) simply show no score: nothing is invented.
+const HS_LINE=/^[ \t]*(?:[-•*][ \t]*)?\**[ \t]*(?:sant[ée]|health|salud|gesundheit|salute|sa[úu]de)[^:：\n]{0,25}[:：][ \t]*\**[ \t]*([123])[ \t]*(?:\/[ \t]*3)?[^\n]*\n?/im;
+function healthOf(txt){const m=String(txt||'').match(HS_LINE);return m?+m[1]:0}
+// Time lines written by the chef (« Prep: 15 min », « Rest: 30 min », « Cook: 25 min », in the user's language).
+const TIME_WORDS={prep:'pr[ée]paration|prep(?:aration)?(?: time)?|preparaci[óo]n|vorbereitung(?:szeit)?|preparazione|prepara[çc][ãa]o',
+  rest:'repos|rest(?:ing)?(?: time)?|reposo|descanso|ruhezeit|ruhen|riposo|repouso',
+  cook:'cuisson|cook(?:ing)?(?: time)?|cocci[óo]n|cottura|garzeit|kochzeit|backzeit|cozedura|cozimento'};
+const timeLine=k=>new RegExp('^[ \\t]*(?:[-•*][ \\t]*)?\\**[ \\t]*(?:'+TIME_WORDS[k]+')[^:：\\n]{0,20}[:：][ \\t]*\\**[ \\t]*([^\\n]+?)[ \\t]*\\**[ \\t]*$\\n?','im');
+// Splits the recipe header lines (health, prep, rest, cook) from the text. `fresh` = the recipe uses the new header format.
+function headInfo(txt){
+  let t=String(txt||'');const o={hs:0,prep:'',rest:'',cook:''};
+  const h=t.match(HS_LINE);if(h){o.hs=+h[1];t=t.replace(HS_LINE,'')}
+  for(const k of ['prep','rest','cook']){const re=timeLine(k),m=t.match(re);if(m){o[k]=m[1].replace(/\*+/g,'').trim();t=t.replace(re,'')}}
+  o.fresh=!!(o.hs||o.prep||o.rest||o.cook);o.txt=t;return o;
+}
+const bub=txt=>{const s=document.createElement('span');s.textContent=txt;return s};
+// Same bubbles in the chat and on the recipe card: row 1 = (date) servings + health, row 2 = prep / rest / cook.
+function timeBubbles(hd){const t=T(),o=[];
+  const mk=(ic,lf,ls,v)=>{const w=document.createElement('span');w.className='tb';
+    [['',ic+' '],['lf',lf+' '],['ls',ls+' '],['',v]].forEach(([c,x])=>{const n=document.createElement('span');if(c)n.className=c;n.textContent=x;n.style.cssText='background:none;padding:0;font-size:inherit;color:inherit';w.appendChild(n)});return w};
+  if(hd.prep)o.push(mk('🔪',t.prepL,t.prepS,hd.prep));if(hd.rest)o.push(mk('⏳',t.restL,t.restS,hd.rest));if(hd.cook)o.push(mk('🔥',t.cookL,t.cookS,hd.cook));return o}
+function healthEl(n,tag){ // ● leaves (filled = score, faded = missing) + the label
+  const t=T(),w=document.createElement(tag||'span');w.className='hs';w.title=t.hsT+' : '+n+'/3';w.setAttribute('aria-label',t.hsT+' : '+n+'/3');
+  for(let i=1;i<=3;i++){const l=document.createElement('i');l.textContent='🌿';if(i>n)l.className='off';w.appendChild(l)}
+  const lb=document.createElement('span');lb.className='hl';lb.textContent=' '+t['hs'+n];lb.style.cssText='background:none;padding:0;font-size:inherit;color:inherit';w.appendChild(lb);return w;
+}
 function infoChips(txt){
   const out=[];const p=txt.split('\n').find(l=>l.length<70&&/(portions?|personnes?|servings?|people|porci|persona|portionen|personen|porzioni|persone|porç|pessoa)/i.test(l)&&/\d/.test(l));
   if(p)out.push('🍽️ '+plain(p).replace(/^[-•*\s]+/,'').slice(0,40));
@@ -1649,13 +1737,18 @@ function secIcon(h){
 }
 function renderRecipe(el,txt,title,chat,swap){
   el.classList.remove('typing');el.removeAttribute('aria-label');el.innerHTML='';
+  const hd=headInfo(txt);txt=hd.txt; // health / prep / rest / cook lines are shown as bubbles, not as text lines
+  const pvTxt=(infoChips(txt).find(x=>x.startsWith('🍽️'))||'');
   if(chat&&title){const t=document.createElement('div');t.className='rtitle';t.textContent=title;el.appendChild(t)}const nz=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
   const secs=recipeSections(txt);
   secs.forEach((sec,i)=>{
     const skipH=sec.h&&title&&nz(sec.h)===nz(title);
     const bul=sec.lines.filter(l=>/^[-•*]\s+/.test(l)),num=sec.lines.filter(l=>/^\d+[.)]\s+/.test(l));
     if(!sec.h||skipH){ // texte d'introduction (portions, temps…)
-      sec.lines.forEach(l=>{if(nz(l.replace(/[:：]\s*$/,''))===nz(title)||(!chat&&(/^(portions?|servings?|personnes?|people|porzioni|persone|porções|porciones|portionen|personen)\s*[:：]?\s*\d/i.test(l)||/^\d+\s*(portions?|personnes?|servings?|people|porzioni|persone|porções|porciones|portionen|personen)\b/i.test(l))))return;const p=document.createElement('div');p.className=(bul.length||num.length)?'rp':'rmeta';p.textContent=l.replace(/^[-•*]\s+/,'');el.appendChild(p)});return}
+      sec.lines.forEach(l=>{if(nz(l.replace(/[:：]\s*$/,''))===nz(title)||((!chat||hd.fresh)&&(/^(portions?|servings?|personnes?|people|porzioni|persone|porções|porciones|portionen|personen)\s*[:：]?\s*\d/i.test(l)||/^\d+\s*(portions?|personnes?|servings?|people|porzioni|persone|porções|porciones|portionen|personen)\b/i.test(l))))return;const p=document.createElement('div');p.className=(bul.length||num.length)?'rp':'rmeta';p.textContent=l.replace(/^[-•*]\s+/,'');el.appendChild(p)});if(i===0&&chat&&hd.fresh){ // bubbles: servings + health, then the times
+        const r1=document.createElement('div');r1.className='cchips';if(pvTxt)r1.appendChild(bub(pvTxt));if(hd.hs)r1.appendChild(healthEl(hd.hs));if(r1.children.length)el.appendChild(r1);
+        const tb=timeBubbles(hd);if(tb.length){const r2=document.createElement('div');r2.className='cchips';tb.forEach(x=>r2.appendChild(x));el.appendChild(r2)}}
+      return}
     const box=document.createElement('section');box.className='rsec';
     const h=document.createElement('h3');const ic=secIcon(sec.h);h.textContent=(ic?ic+' ':'')+sec.h;box.appendChild(h);
     let list=null,kind='';
@@ -1727,8 +1820,14 @@ function openCard(id){
   art();getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+encodeURI(u).replace(/"/g,'%22').replace(/\)/g,'%29')+'")';ph.appendChild(cam);credit.textContent=/^data:/.test(u)?'':T().credit}})}
   ph.appendChild(cam);
   const h=document.createElement('h1');h.className='ctitle';h.textContent=e.title;body.appendChild(h);
-  const txt=recipeText(e);const chips=document.createElement('div');chips.className='cchips';
-  [fmtDate(e.date),e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:'',...infoChips(txt)].filter(Boolean).forEach(c=>{const s=document.createElement('span');s.textContent=c;chips.appendChild(s)});body.appendChild(chips);
+  const txt=recipeText(e),hd=headInfo(txt),info=infoChips(hd.txt);
+  const chips=document.createElement('div');chips.className='cchips'; // row 1: date, source, servings, health score
+  [fmtDate(e.date),e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:'',info.find(x=>x.startsWith('🍽️'))].filter(Boolean).forEach(c=>chips.appendChild(bub(c)));
+  if(hd.hs)chips.appendChild(healthEl(hd.hs));
+  body.appendChild(chips);
+  const row2=document.createElement('div');row2.className='cchips'; // row 2: preparation / rest / cooking (older recipes: the single total time)
+  (hd.prep||hd.rest||hd.cook?timeBubbles(hd):info.filter(x=>x.startsWith('⏱')).map(bub)).forEach(x=>row2.appendChild(x));
+  if(row2.children.length)body.appendChild(row2);
   const act=document.createElement('div');act.className='cact';
   const fv=document.createElement('button');fv.className='cbtn'+(e.fav?' on':'');fv.textContent=e.fav?'❤️':'🤍';fv.setAttribute('aria-label',t.fav);
   fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
