@@ -65,9 +65,9 @@ Files starting with `_` in `api/` are helpers, not routes.
 - A free-text change in the chat (e.g. « no lactose ») updates the same saved recipe; only ↔ / « not available » creates a separate recipe.
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
-## 5. Done (up to v36)
+## 5. Done (up to v37)
 
-Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English; v35: utensils section in recipes; v36: action bar (favorite, share, card, rating) under the latest recipe in the chat (`chatActions()`).
+Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English; v35: utensils section in recipes; v36: action bar (favorite, share, card, rating) under the latest recipe in the chat (`chatActions()`); v37: one single action bar (no duplicate), comments under the latest recipe in the chat, quick options as 4 columns (`drawQuick()`: Servings 2/6/8, Without gluten/lactose, Vegetarian/Vegan, Faster), fix: a conversation is now saved from the first reply that is a recipe (a leading question or refusal no longer blocks saving).
 
 ## 6. Current status and decisions
 
