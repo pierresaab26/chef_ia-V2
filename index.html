@@ -131,9 +131,11 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .a h3{margin:.7em 0 .2em;font-size:15px;color:var(--pink)}
 .a h3:first-child{margin-top:0}
 .m.fmt{white-space:normal;line-height:1.5}
+.advl{display:flex;flex-direction:column;gap:8px;margin:.5em 0 .8em}.adv{background:var(--bg1);border-left:4px solid var(--pink);border-radius:12px;padding:10px 12px}.adv b{display:block;color:var(--pink);font-size:14.5px;margin-bottom:2px}.adv p{margin:0;line-height:1.4}
 .fmt p{margin:0 0 .6em}.fmt p:last-child,.fmt .rl:last-child{margin-bottom:0}
 .fmt .rl{margin:.2em 0 .7em;padding-left:1.3em}.fmt .rl li{margin:.25em 0;padding-left:.2em}.fmt ul.rl li::marker{color:var(--pink)}
 #quick,.qgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 14px;align-items:start}#quick{padding:10px 14px 10px;margin:0 auto;width:100%;box-sizing:border-box}#quick:empty{display:none}
+.qcol .chip.on{background:var(--pink);color:#fff;border-color:var(--pink)}.qgo{grid-column:1/-1;margin-top:2px;padding:10px 14px;border:0;border-radius:999px;background:var(--green);color:#10200a;font:inherit;font-weight:700;font-size:14px;cursor:pointer}.qgo[hidden]{display:none}
 .qcol{display:flex;flex-direction:column;gap:5px;min-width:0}.qh{font-size:12px;color:var(--mut);font-weight:600;padding:0 2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qcol .chip{width:100%;padding:6px 8px;font-size:12.5px;white-space:normal;text-align:center;line-height:1.2}
 @media (max-width:380px){#quick,.qgrid{gap:6px}#quick{padding:10px 10px}.qcol .chip{padding:6px 4px;font-size:12px}}
 @media (min-width:600px){.qcol .chip{font-size:13.5px;padding:7px 10px}}
@@ -180,7 +182,8 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .ring li.miss .tx{text-decoration:line-through;opacity:.55}.ring li.miss .ck{background:var(--pink)}
 .mt{display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--pink);text-decoration:none!important;vertical-align:middle}
 .swgo{display:block;width:100%;margin-top:10px;padding:12px 16px;border:0;border-radius:14px;background:var(--pink);color:#fff;font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
-.swgo[hidden],.mt[hidden]{display:none}
+.swbar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.swbar .swgo,.swbar .swno{flex:1 1 140px;margin:0}.swno{display:block;padding:12px 16px;border:2px solid var(--pink);border-radius:14px;background:var(--card);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
+.swbar[hidden],.mt[hidden]{display:none}
 .swp{flex:none;align-self:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--pink);font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}
 .swh{color:var(--mut);font-size:13px;margin:0 4px 10px}
 .ring .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);flex:none;margin-top:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
@@ -369,7 +372,13 @@ fr:{
   variant:"variante",
   swapCtx:"Recette d’origine :",
   missT:"pas dispo",
-  swapGo:"Nouvelle recette sans : {i}",
+  swNo:"🚫 Sans : {i}",
+  swRep:"↔ Remplacer : {i}",
+  noMsg:"Je n’en veux pas : {i}. Redonne-moi la recette complète sans cet ingrédient et sans le remplacer, en ajustant les quantités et les étapes.",
+  qProp:"✨ Proposer une recette",
+  qAdapt:"✨ Adapter la recette",
+  qPropMsg:"Propose-moi une recette : {f}.",
+  qAdaptMsg:"Adapte cette recette : {f}.",
   rateT:"Votre note",
   rateH:"1 = très mauvaise · 5 = excellente",
   rateOk:"Note enregistrée : {n}/5",
@@ -498,7 +507,13 @@ en:{
   variant:"variation",
   swapCtx:"Original recipe:",
   missT:"missing",
-  swapGo:"New recipe without: {i}",
+  swNo:"🚫 Without: {i}",
+  swRep:"↔ Replace: {i}",
+  noMsg:"I don’t want: {i}. Give me the complete recipe again without this ingredient and without replacing it, adjusting quantities and steps.",
+  qProp:"✨ Suggest a recipe",
+  qAdapt:"✨ Adapt the recipe",
+  qPropMsg:"Suggest a recipe: {f}.",
+  qAdaptMsg:"Adapt this recipe: {f}.",
   rateT:"Your rating",
   rateH:"1 = terrible · 5 = the best",
   rateOk:"Rating saved: {n}/5",
@@ -627,7 +642,13 @@ es:{
   variant:"variante",
   swapCtx:"Receta original:",
   missT:"no tengo",
-  swapGo:"Receta nueva sin: {i}",
+  swNo:"🚫 Sin: {i}",
+  swRep:"↔ Sustituir: {i}",
+  noMsg:"No quiero: {i}. Dame de nuevo la receta completa sin este ingrediente y sin sustituirlo, ajustando cantidades y pasos.",
+  qProp:"✨ Proponer una receta",
+  qAdapt:"✨ Adaptar la receta",
+  qPropMsg:"Propónme una receta: {f}.",
+  qAdaptMsg:"Adapta esta receta: {f}.",
   rateT:"Tu nota",
   rateH:"1 = muy mala · 5 = la mejor",
   rateOk:"Nota guardada: {n}/5",
@@ -756,7 +777,13 @@ de:{
   variant:"Variante",
   swapCtx:"Originalrezept:",
   missT:"fehlt",
-  swapGo:"Neues Rezept ohne: {i}",
+  swNo:"🚫 Ohne: {i}",
+  swRep:"↔ Ersetzen: {i}",
+  noMsg:"Ich möchte nicht: {i}. Gib mir das vollständige Rezept ohne diese Zutat und ohne Ersatz, mit angepassten Mengen und Schritten.",
+  qProp:"✨ Rezept vorschlagen",
+  qAdapt:"✨ Rezept anpassen",
+  qPropMsg:"Schlag mir ein Rezept vor: {f}.",
+  qAdaptMsg:"Passe dieses Rezept an: {f}.",
   rateT:"Deine Bewertung",
   rateH:"1 = furchtbar · 5 = die beste",
   rateOk:"Bewertung gespeichert: {n}/5",
@@ -885,7 +912,13 @@ it:{
   variant:"variante",
   swapCtx:"Ricetta originale:",
   missT:"manca",
-  swapGo:"Nuova ricetta senza: {i}",
+  swNo:"🚫 Senza: {i}",
+  swRep:"↔ Sostituisci: {i}",
+  noMsg:"Non voglio: {i}. Ridammi la ricetta completa senza questo ingrediente e senza sostituirlo, adattando quantità e passaggi.",
+  qProp:"✨ Proponi una ricetta",
+  qAdapt:"✨ Adatta la ricetta",
+  qPropMsg:"Proponimi una ricetta: {f}.",
+  qAdaptMsg:"Adatta questa ricetta: {f}.",
   rateT:"Il tuo voto",
   rateH:"1 = pessima · 5 = la migliore",
   rateOk:"Voto salvato: {n}/5",
@@ -1014,7 +1047,13 @@ pt:{
   variant:"variante",
   swapCtx:"Receita original:",
   missT:"em falta",
-  swapGo:"Nova receita sem: {i}",
+  swNo:"🚫 Sem: {i}",
+  swRep:"↔ Substituir: {i}",
+  noMsg:"Não quero: {i}. Dê-me de novo a receita completa sem este ingrediente e sem o substituir, ajustando quantidades e passos.",
+  qProp:"✨ Propor uma receita",
+  qAdapt:"✨ Adaptar a receita",
+  qPropMsg:"Proponha-me uma receita: {f}.",
+  qAdaptMsg:"Adapte esta receita: {f}.",
   rateT:"A sua nota",
   rateH:"1 = péssima · 5 = a melhor",
   rateOk:"Nota guardada: {n}/5",
@@ -1175,6 +1214,9 @@ function render(el,t){
     if(!l){list=null;kind='';return}
     const h=l.match(/^#{1,3}\s+(.*)/),b=l.match(/^[-•*]\s+(.*)/),n=l.match(/^\d+[.)]\s+(.*)/);
     if(h){list=null;kind='';const e=document.createElement('h3');inl(e,h[1]);el.appendChild(e);return}
+    const lab=b&&b[1].match(/^\*{0,2}([^:*]{1,40}?)\*{0,2}\s*[:：]\s*(.+)$/); // « - Label: text » → option card
+    if(lab){if(kind!=='adv'){list=document.createElement('div');list.className='advl';el.appendChild(list);kind='adv'}
+      const c=document.createElement('div');c.className='adv';const h4=document.createElement('b');h4.textContent=lab[1].trim();const p=document.createElement('p');inl(p,lab[2]);c.append(h4,p);list.appendChild(c);return}
     if(b||n){const k=b?'ul':'ol';if(kind!==k){list=document.createElement(k);list.className='rl';el.appendChild(list);kind=k}
       const li=document.createElement('li');inl(li,(b||n)[1]);list.appendChild(li);return}
     list=null;kind='';const p=document.createElement('p');inl(p,l);el.appendChild(p)});
@@ -1188,18 +1230,31 @@ function welcomeEl(){
   d.append(h,p,w);return d;
 }
 function showWelcome(){log.appendChild(welcomeEl())}
-function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,ings=>branchWith({text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings))}else{el.classList.remove('rich');render(el,t)}}
+function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,(ings,m)=>branchWith({text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings,m))}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
-// Quick options (servings, without gluten/lactose, diet, faster): 4 columns of chips. Used under the chat and on the recipe card.
-function quickCols(q,pick){
+// Quick options = filters (servings, without gluten/lactose, diet, time), then ONE button sends a single request with all of them.
+// With a recipe on screen the button adapts it, otherwise it asks the chef for a new recipe. Filters reset after sending.
+// One choice per column, except « Without » (several). `go(text,adapt)` sends the request.
+let qf={};
+function quickCols(q,go,adaptMode){
   const t=T();q.innerHTML='';
-  const col=(label,opts,shorts)=>{ // one column per group; the chip shows a short label and sends the full request
+  const groups=[[t.qS,t.qSo,t.qSs,0],[t.qD1,t.qD1o,t.qD1s,1],[t.qD2,t.qD2o,t.qD2s,0],['⏱️ '+t.pTime,t.q.split('|')[3],t.q.split('|')[3],0]];
+  const btn=document.createElement('button');btn.type='button';btn.className='qgo';
+  const adapt=()=>adaptMode!==undefined?adaptMode:!!currentId;
+  const sel=()=>Object.values(qf).flat();
+  const paint=()=>{q.querySelectorAll('.qcol .chip').forEach(c=>c.classList.toggle('on',sel().includes(c.title)));const n=sel().length;btn.hidden=!n;btn.textContent=adapt()?t.qAdapt:t.qProp;try{updTop()}catch(x){}};
+  groups.forEach(([label,opts,shorts,multi],gi)=>{
     const c=document.createElement('div');c.className='qcol';const h=document.createElement('span');h.className='qh';h.textContent=label;c.appendChild(h);
-    opts.forEach((o,k)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=shorts[k]||o;b.title=o;b.onclick=()=>pick(o);c.appendChild(b)});q.appendChild(c)};
-  const fast=t.q.split('|')[3];
-  col(t.qS,t.qSo.split('|'),t.qSs.split('|'));col(t.qD1,t.qD1o.split('|'),t.qD1s.split('|'));col(t.qD2,t.qD2o.split('|'),t.qD2s.split('|'));col('⏱️ '+t.pTime,[fast],[fast]);
+    const O=opts.split('|'),S=shorts.split('|');
+    O.forEach((o,k)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=S[k]||o;b.title=o;
+      b.onclick=()=>{const cur=qf[gi]||[];qf[gi]=cur.includes(o)?cur.filter(x=>x!==o):multi?cur.concat(o):[o];if(!qf[gi].length)delete qf[gi];
+        document.querySelectorAll('#quick,.qgrid').forEach(z=>z._paint&&z._paint())};
+      c.appendChild(b)});q.appendChild(c)});
+  btn.onclick=()=>{const f=sel();if(!f.length)return;const a=adapt();qf={};document.querySelectorAll('#quick,.qgrid').forEach(z=>z._paint&&z._paint());
+    go((a?t.qAdaptMsg:t.qPropMsg).replace('{f}',f.map(x=>x.charAt(0).toLowerCase()+x.slice(1)).join(', ')),a)};
+  q.appendChild(btn);q._paint=paint;paint();
 }
-function drawQuick(){quickCols($('#quick'),send);try{updTop()}catch(x){}}
+function drawQuick(){quickCols($('#quick'),txt=>send(txt));try{updTop()}catch(x){}}
 
 // ---------- History (stored on the device, in the browser) ----------
 // ---------- Stockage ----------
@@ -1207,7 +1262,7 @@ function drawQuick(){quickCols($('#quick'),send);try{updTop()}catch(x){}}
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v43',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v44',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1281,14 +1336,14 @@ function drawHistory(){
   shown.forEach(e=>l.appendChild(rowFor(e,true,true)));
 }
 const shown=c=>c.replace(/\n\n§§[\s\S]*$/,'').replace(/^\[UI\] /,'');
-function branchWith(src,ings){ // new separate recipe saved in the history: the original recipe (and its favorite) stays untouched
+function branchWith(src,ings,mode){ // new separate recipe saved in the history: the original recipe (and its favorite) stays untouched
   if(busy)return;
   hist=[];log.innerHTML='';
   chefNow=src.k>=0&&CHEFS[src.k]?{...CHEFS[src.k],k:src.k}:null;persona=chefNow?chefNow.p:"";currentId=null;branchFrom={title:src.title,k:src.k,lang:src.lang};
   refreshChat();drawQuick();show('chat');try{chatActions()}catch(x){}
-  send(T().swapMsg.replace('{i}',ings.join(' ; ')),false,T().swapCtx+'\n'+src.text);
+  send((mode==='no'?T().noMsg:T().swapMsg).replace('{i}',ings.join(' ; ')),false,T().swapCtx+'\n'+src.text);
 }
-function openBranch(id,ings){const e=loadH().find(x=>x.id===id);if(e)branchWith({text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings)}
+function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
   hist=e.messages.map(m=>({role:m.role,content:m.content}));log.innerHTML='';
@@ -1320,7 +1375,7 @@ function drawFavs(){
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recipe';
 function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
-function syncCardBtn(){$('#tocard').style.display=currentId?'':'none';try{chatActions()}catch(x){}syncFavUI()}
+function syncCardBtn(){try{const q=$('#quick');q._paint&&q._paint()}catch(x){}$('#tocard').style.display=currentId?'':'none';try{chatActions()}catch(x){}syncFavUI()}
 // Keeps every favorite heart of the open chat (header + action bar) in line with the saved recipe.
 function syncFavUI(){
   const h=$('#tofav');if(!h)return;const e=currentId?loadH().find(x=>x.id===currentId):null;
@@ -1423,7 +1478,7 @@ function renderRecipe(el,txt,title,chat,swap){
     let list=null,kind='';
     const close=()=>{list=null;kind=''};
     const utS=UT_RE.test(sec.h);
-    const ingS=/ingr|zutat|ingred/i.test(sec.h),stS=!ingS&&/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);let cnt=0;const missing=new Set();let bar=null;const updBar=()=>{if(!bar)return;bar.hidden=!missing.size;bar.textContent='↔ '+T().swapGo.replace('{i}',[...missing].join(' ; '))};
+    const ingS=/ingr|zutat|ingred/i.test(sec.h),stS=!ingS&&/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);let cnt=0;const missing=new Set();let bar=null;const updBar=()=>{if(!bar)return;bar.hidden=!missing.size;const x=[...missing].join(' ; ');bar.children[0].textContent=T().swNo.replace('{i}',x);bar.children[1].textContent=T().swRep.replace('{i}',x)};
     sec.lines.forEach(l=>{
       if(utS){ // utensils: plain chips, nothing to tick or replace
         if(kind!=='u'){list=document.createElement('ul');list.className='rut';box.appendChild(list);kind='u'}
@@ -1450,7 +1505,10 @@ function renderRecipe(el,txt,title,chat,swap){
       const tg=()=>{const o=box.classList.toggle('open');h.setAttribute('aria-expanded',String(o))};
       h.onclick=tg;h.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tg()}};
     }
-    if(swap&&ingS){bar=document.createElement('button');bar.type='button';bar.className='swgo';bar.hidden=true;bar.onclick=()=>swap([...missing]);box.appendChild(bar)}
+    if(swap&&ingS){ // crossed-out ingredients: make the recipe without them, or replace them
+      bar=document.createElement('div');bar.className='swbar';bar.hidden=true;
+      [['no','swno'],['replace','swgo']].forEach(([m,c])=>{const x=document.createElement('button');x.type='button';x.className=c;x.onclick=()=>swap([...missing],m);bar.appendChild(x)});
+      box.appendChild(bar)}
     el.appendChild(box);
   });
 }
@@ -1494,9 +1552,9 @@ function openCard(id){
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
   const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
   act.append(fv,sh,ct);body.appendChild(act);body.appendChild(rateBox(id));
-  const qg=document.createElement('div');qg.className='qgrid';quickCols(qg,o=>{openSaved(id);send(o)});body.appendChild(qg);
+  const qg=document.createElement('div');qg.className='qgrid';quickCols(qg,txt=>{openSaved(id);send(txt)},true);body.appendChild(qg);
   const sh2=document.createElement('p');sh2.className='swh';sh2.textContent='↔ '+t.swapH;body.appendChild(sh2);
-  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title,false,ings=>openBranch(id,ings));body.appendChild(rt);
+  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title,false,(ings,m)=>openBranch(id,ings,m));body.appendChild(rt);
   buildComments(body,slug(e.title));
   show('card');body.scrollTop=0;
 }
@@ -1813,16 +1871,17 @@ function topScroller(){return $('#chat').classList.contains('on')?log:$('#card')
 function updTop(){
   const b=$('#totop'),sc=topScroller();if(!b)return;
   if(!sc||sc.scrollTop<400){b.classList.remove('on');return}
-  const r=sc.getBoundingClientRect(),c4=sc===log?document.querySelector('#quick .qcol:last-child'):null;
+  const r=sc.getBoundingClientRect(),c4=sc===log?[...document.querySelectorAll('#quick .qcol')].pop():null;
   if(c4){ // chat: sits in the empty space under « Faster », so it never covers the content
-    const q=$('#quick').getBoundingClientRect(),c=c4.getBoundingClientRect();
-    b.style.left=Math.round(c.left+c.width/2-22)+'px';b.style.top=Math.round(q.bottom-10-44)+'px';
+    const c=c4.getBoundingClientRect(),low=Math.max(...[...$('#quick').querySelectorAll('.qcol')].map(x=>x.getBoundingClientRect().bottom));
+    b.style.left=Math.round(c.left+c.width/2-22)+'px';b.style.top=Math.round(low-44)+'px'; // bottom of the tallest column, under « Faster »
   }else{b.style.left=(r.right-62)+'px';b.style.top=(r.bottom-62)+'px'}
   b.classList.add('on');
 }
 {const b=document.createElement('button');b.id='totop';b.type='button';b.textContent='↑';b.setAttribute('aria-label','Top');
   b.onclick=()=>{const sc=topScroller();if(sc)sc.scrollTo({top:0,behavior:'smooth'})};document.body.appendChild(b);
-  [log,$('#cardbody')].forEach(x=>x.addEventListener('scroll',updTop,{passive:true}));addEventListener('resize',updTop)}
+  [log,$('#cardbody')].forEach(x=>x.addEventListener('scroll',updTop,{passive:true}));addEventListener('resize',updTop);
+  if(window.ResizeObserver){const ro=new ResizeObserver(()=>updTop());[log,$('#quick'),$('#bar')].forEach(x=>ro.observe(x))}} // follow layout changes (new reply, filters button)
 $('#tofav').onclick=()=>{if(currentId){const f=toggleFav(currentId);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
