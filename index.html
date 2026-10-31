@@ -64,6 +64,8 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 #totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:var(--pink);color:#fff;font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25);padding:0}#totop.on{display:grid}
 .qgrid{padding:0;margin:0 0 14px}
 .dlgw{position:fixed;inset:0;z-index:60;background:rgba(10,8,20,.45);display:grid;place-items:center;padding:20px}.dlg{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.3)}.dlg p{margin:0 0 14px;line-height:1.4}.dlg input{width:100%;box-sizing:border-box;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg1);color:var(--ink);margin:0 0 14px}.dlgb{display:flex;gap:8px;justify-content:flex-end}.dlgb .cbtn{border:1px solid var(--bd)}.dlgb .dlgok{background:var(--green);color:#10200a;border-color:transparent}
+.flash{animation:flash 1.5s ease}@keyframes flash{0%,60%{box-shadow:0 0 0 3px var(--pink)}100%{box-shadow:0 0 0 3px transparent}}
+.hid{display:none!important}.chrow{align-self:flex-start;max-width:100%;margin:0 0 4px}.chhide{margin:0;max-width:100%;text-align:left;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
 .rl{font-size:13px;color:var(--mut)}
@@ -131,11 +133,11 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .a h3{margin:.7em 0 .2em;font-size:15px;color:var(--pink)}
 .a h3:first-child{margin-top:0}
 .m.fmt{white-space:normal;line-height:1.5}
-.advl{display:flex;flex-direction:column;gap:8px;margin:.5em 0 .8em}.adv{background:var(--bg1);border-left:4px solid var(--pink);border-radius:12px;padding:10px 12px}.adv b{display:block;color:var(--pink);font-size:14.5px;margin-bottom:2px}.adv p{margin:0;line-height:1.4}
+.advl{margin:.5em 0 .8em}.adv{position:relative;display:block;background:var(--bg1);border-left:4px solid var(--pink);border-radius:12px;padding:10px 12px;margin:0 0 8px}.advl .adv:last-child{margin-bottom:0}.adv b{display:block;color:var(--pink);font-size:14.5px;margin-bottom:2px}.adv p{margin:0;line-height:1.4}.adv .ck{display:none;position:absolute;left:12px;top:11px;width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);box-sizing:border-box;text-align:center;color:#fff;font-size:13px;line-height:18px}.adv.live{cursor:pointer;padding-left:44px}.adv.live .ck{display:block}.adv.sel{background:rgba(229,25,95,.1);outline:2px solid var(--pink)}.adv.sel .ck{background:var(--pink)}.adv.sel .ck::before{content:'✓'}.adv.gen b::after{content:' ✓ ';color:#2e9e3a}
 .fmt p{margin:0 0 .6em}.fmt p:last-child,.fmt .rl:last-child{margin-bottom:0}
 .fmt .rl{margin:.2em 0 .7em;padding-left:1.3em}.fmt .rl li{margin:.25em 0;padding-left:.2em}.fmt ul.rl li::marker{color:var(--pink)}
 #quick,.qgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 14px;align-items:start}#quick{padding:10px 14px 10px;margin:0 auto;width:100%;box-sizing:border-box}#quick:empty{display:none}
-.qcol .chip.on{background:var(--pink);color:#fff;border-color:var(--pink)}.qgo{grid-column:1/-1;margin-top:2px;padding:10px 14px;border:0;border-radius:999px;background:var(--green);color:#10200a;font:inherit;font-weight:700;font-size:14px;cursor:pointer}.qgo[hidden]{display:none}
+.qcol .chip.on{background:var(--pink);color:#fff;border-color:var(--pink)}.qgo{margin-top:2px;padding:10px 14px;border:0;border-radius:999px;background:var(--green);color:#10200a;font:inherit;font-weight:700;font-size:14px;cursor:pointer}.qgo[hidden]{display:none}.qacts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}.qacts .qgo{flex:1 1 150px;margin-top:2px}.qacts .qgo[hidden]{display:none}.qacts .qmore{background:var(--card);color:var(--ink);border:1px solid var(--bd)}
 .qcol{display:flex;flex-direction:column;gap:5px;min-width:0}.qh{font-size:12px;color:var(--mut);font-weight:600;padding:0 2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qcol .chip{width:100%;padding:6px 8px;font-size:12.5px;white-space:normal;text-align:center;line-height:1.2}
 @media (max-width:380px){#quick,.qgrid{gap:6px}#quick{padding:10px 10px}.qcol .chip{padding:6px 4px;font-size:12px}}
 @media (min-width:600px){.qcol .chip{font-size:13.5px;padding:7px 10px}}
@@ -375,9 +377,9 @@ fr:{
   swNo:"🚫 Sans : {i}",
   swRep:"↔ Remplacer : {i}",
   noMsg:"Je n’en veux pas : {i}. Redonne-moi la recette complète sans cet ingrédient et sans le remplacer, en ajustant les quantités et les étapes.",
-  qProp:"✨ Proposer une recette",
+  qProp:"✨ Proposer des idées",
   qAdapt:"✨ Adapter la recette",
-  qPropMsg:"Propose-moi une recette : {f}.",
+  qPropMsg:"Propose-moi 4 idées de recettes : {f}.",
   qAdaptMsg:"Adapte cette recette : {f}.",
   rateT:"Votre note",
   rateH:"1 = très mauvaise · 5 = excellente",
@@ -412,7 +414,7 @@ fr:{
   nokey:"Le chef n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.",
   catT:"Que voulez-vous créer ?",
   cats:"🍲 Plats du quotidien|🍰 Desserts et pâtisseries|🍹 Cocktails|🥤 Boissons|🍕 Cuisine du monde|🥗 Végétarien et régimes|🍞 Boulangerie et pains|🧂 Sauces et accompagnements|🍬 Chocolats et glaces|🥑 Ingrédients et techniques|🍽️ Menus et idées de repas",
-  catAsk:"Aide-moi dans la catégorie « {x} » : propose-moi une idée ou une recette pour commencer.",
+  catAsk:"Aide-moi dans la catégorie « {x} » : propose-moi 4 idées de recettes pour commencer.",
   qS:"👥 Pers.",
   qSo:"Pour 2 personnes|Pour 6 personnes|Pour 8 personnes",
   qD1:"🚫 Sans",
@@ -466,7 +468,18 @@ fr:{
   imgReset:"Revenir au dessin",
   imgOk:"Image enregistrée",
   imgBad:"Impossible de charger cette image. Vérifiez le lien.",
-  imgFull:"Mémoire de l’appareil pleine : image non enregistrée."
+  imgFull:"Mémoire de l’appareil pleine : image non enregistrée.",
+  idGen:"Donne-moi la recette complète de « {x} »",
+  idMore:"Propose-moi 4 autres idées de recettes, différentes de celles déjà proposées",
+  idLike:", dans l’esprit de : {x}",
+  idGo1:"✨ Générer la recette",
+  idGoN:"✨ Générer les {n} recettes",
+  idMoreB:"🔄 Autres idées",
+  ideasBack:"↩ Idées proposées",
+  qMax:"3 recettes maximum à la fois",
+  idMany:"{n} recettes enregistrées dans l’historique",
+  hideB1:"👁️ Masquer cette recette",
+  showB1:"👁️ Afficher : {t}"
 },
 en:{
   ok:"OK",
@@ -510,9 +523,9 @@ en:{
   swNo:"🚫 Without: {i}",
   swRep:"↔ Replace: {i}",
   noMsg:"I don’t want: {i}. Give me the complete recipe again without this ingredient and without replacing it, adjusting quantities and steps.",
-  qProp:"✨ Suggest a recipe",
+  qProp:"✨ Suggest ideas",
   qAdapt:"✨ Adapt the recipe",
-  qPropMsg:"Suggest a recipe: {f}.",
+  qPropMsg:"Suggest 4 recipe ideas: {f}.",
   qAdaptMsg:"Adapt this recipe: {f}.",
   rateT:"Your rating",
   rateH:"1 = terrible · 5 = the best",
@@ -547,7 +560,7 @@ en:{
   nokey:"The chef isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy.",
   catT:"What do you want to create?",
   cats:"🍲 Everyday dishes|🍰 Desserts and pastries|🍹 Cocktails|🥤 Drinks|🍕 World cuisine|🥗 Vegetarian and diets|🍞 Bakery and breads|🧂 Sauces and sides|🍬 Chocolate and ice cream|🥑 Ingredients and techniques|🍽️ Menus and meal ideas",
-  catAsk:"Help me in the category “{x}”: suggest an idea or a recipe to get started.",
+  catAsk:"Help me in the category “{x}”: suggest 4 recipe ideas to get started.",
   qS:"👥 People",
   qSo:"For 2 people|For 6 people|For 8 people",
   qD1:"🚫 No",
@@ -601,7 +614,18 @@ en:{
   imgReset:"Back to the drawing",
   imgOk:"Image saved",
   imgBad:"Couldn’t load this image. Check the link.",
-  imgFull:"Device storage is full: image not saved."
+  imgFull:"Device storage is full: image not saved.",
+  idGen:"Give me the complete recipe for “{x}”",
+  idMore:"Suggest 4 other recipe ideas, different from the ones already given",
+  idLike:", in the spirit of: {x}",
+  idGo1:"✨ Generate the recipe",
+  idGoN:"✨ Generate the {n} recipes",
+  idMoreB:"🔄 Other ideas",
+  ideasBack:"↩ Suggested ideas",
+  qMax:"3 recipes at most at a time",
+  idMany:"{n} recipes saved in the history",
+  hideB1:"👁️ Hide this recipe",
+  showB1:"👁️ Show: {t}"
 },
 es:{
   ok:"Aceptar",
@@ -645,9 +669,9 @@ es:{
   swNo:"🚫 Sin: {i}",
   swRep:"↔ Sustituir: {i}",
   noMsg:"No quiero: {i}. Dame de nuevo la receta completa sin este ingrediente y sin sustituirlo, ajustando cantidades y pasos.",
-  qProp:"✨ Proponer una receta",
+  qProp:"✨ Proponer ideas",
   qAdapt:"✨ Adaptar la receta",
-  qPropMsg:"Propónme una receta: {f}.",
+  qPropMsg:"Propón 4 ideas de recetas: {f}.",
   qAdaptMsg:"Adapta esta receta: {f}.",
   rateT:"Tu nota",
   rateH:"1 = muy mala · 5 = la mejor",
@@ -682,7 +706,7 @@ es:{
   nokey:"El chef aún no está conectado: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar.",
   catT:"¿Qué quieres crear?",
   cats:"🍲 Platos del día a día|🍰 Postres y pastelería|🍹 Cócteles|🥤 Bebidas|🍕 Cocina del mundo|🥗 Vegetariano y dietas|🍞 Panadería y panes|🧂 Salsas y guarniciones|🍬 Chocolates y helados|🥑 Ingredientes y técnicas|🍽️ Menús e ideas de comidas",
-  catAsk:"Ayúdame en la categoría «{x}»: propón una idea o una receta para empezar.",
+  catAsk:"Ayúdame en la categoría «{x}»: propón 4 ideas de recetas para empezar.",
   qS:"👥 Pers.",
   qSo:"Para 2 personas|Para 6 personas|Para 8 personas",
   qD1:"🚫 Sin",
@@ -736,7 +760,18 @@ es:{
   imgReset:"Volver al dibujo",
   imgOk:"Imagen guardada",
   imgBad:"No se pudo cargar esta imagen. Revisa el enlace.",
-  imgFull:"Memoria del dispositivo llena: imagen no guardada."
+  imgFull:"Memoria del dispositivo llena: imagen no guardada.",
+  idGen:"Dame la receta completa de «{x}»",
+  idMore:"Propón 4 ideas de recetas más, distintas de las ya propuestas",
+  idLike:", en el espíritu de: {x}",
+  idGo1:"✨ Generar la receta",
+  idGoN:"✨ Generar las {n} recetas",
+  idMoreB:"🔄 Otras ideas",
+  ideasBack:"↩ Ideas propuestas",
+  qMax:"Máximo 3 recetas a la vez",
+  idMany:"{n} recetas guardadas en el historial",
+  hideB1:"👁️ Ocultar esta receta",
+  showB1:"👁️ Mostrar: {t}"
 },
 de:{
   ok:"OK",
@@ -780,9 +815,9 @@ de:{
   swNo:"🚫 Ohne: {i}",
   swRep:"↔ Ersetzen: {i}",
   noMsg:"Ich möchte nicht: {i}. Gib mir das vollständige Rezept ohne diese Zutat und ohne Ersatz, mit angepassten Mengen und Schritten.",
-  qProp:"✨ Rezept vorschlagen",
+  qProp:"✨ Ideen vorschlagen",
   qAdapt:"✨ Rezept anpassen",
-  qPropMsg:"Schlag mir ein Rezept vor: {f}.",
+  qPropMsg:"Schlag mir 4 Rezeptideen vor: {f}.",
   qAdaptMsg:"Passe dieses Rezept an: {f}.",
   rateT:"Deine Bewertung",
   rateH:"1 = furchtbar · 5 = die beste",
@@ -817,7 +852,7 @@ de:{
   nokey:"Der Koch ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen.",
   catT:"Was möchtest du kreieren?",
   cats:"🍲 Alltagsgerichte|🍰 Desserts und Gebäck|🍹 Cocktails|🥤 Getränke|🍕 Weltküche|🥗 Vegetarisch und Diäten|🍞 Bäckerei und Brot|🧂 Saucen und Beilagen|🍬 Schokolade und Eis|🥑 Zutaten und Techniken|🍽️ Menüs und Essensideen",
-  catAsk:"Hilf mir in der Kategorie „{x}“: Schlage mir eine Idee oder ein Rezept zum Start vor.",
+  catAsk:"Hilf mir in der Kategorie „{x}“: Schlage mir zum Start 4 Rezeptideen vor.",
   qS:"👥 Pers.",
   qSo:"Für 2 Personen|Für 6 Personen|Für 8 Personen",
   qD1:"🚫 Ohne",
@@ -871,7 +906,18 @@ de:{
   imgReset:"Zurück zur Zeichnung",
   imgOk:"Bild gespeichert",
   imgBad:"Dieses Bild konnte nicht geladen werden. Prüfe den Link.",
-  imgFull:"Gerätespeicher voll: Bild nicht gespeichert."
+  imgFull:"Gerätespeicher voll: Bild nicht gespeichert.",
+  idGen:"Gib mir das vollständige Rezept für „{x}“",
+  idMore:"Schlag mir 4 weitere Rezeptideen vor, die sich von den bisherigen unterscheiden",
+  idLike:", im Sinne von: {x}",
+  idGo1:"✨ Rezept erstellen",
+  idGoN:"✨ Die {n} Rezepte erstellen",
+  idMoreB:"🔄 Andere Ideen",
+  ideasBack:"↩ Vorgeschlagene Ideen",
+  qMax:"Höchstens 3 Rezepte auf einmal",
+  idMany:"{n} Rezepte im Verlauf gespeichert",
+  hideB1:"👁️ Dieses Rezept ausblenden",
+  showB1:"👁️ Anzeigen: {t}"
 },
 it:{
   ok:"OK",
@@ -915,9 +961,9 @@ it:{
   swNo:"🚫 Senza: {i}",
   swRep:"↔ Sostituisci: {i}",
   noMsg:"Non voglio: {i}. Ridammi la ricetta completa senza questo ingrediente e senza sostituirlo, adattando quantità e passaggi.",
-  qProp:"✨ Proponi una ricetta",
+  qProp:"✨ Proponi idee",
   qAdapt:"✨ Adatta la ricetta",
-  qPropMsg:"Proponimi una ricetta: {f}.",
+  qPropMsg:"Proponimi 4 idee di ricette: {f}.",
   qAdaptMsg:"Adatta questa ricetta: {f}.",
   rateT:"Il tuo voto",
   rateH:"1 = pessima · 5 = la migliore",
@@ -952,7 +998,7 @@ it:{
   nokey:"Lo chef non è ancora collegato: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy.",
   catT:"Cosa vuoi creare?",
   cats:"🍲 Piatti di tutti i giorni|🍰 Dolci e pasticceria|🍹 Cocktail|🥤 Bevande|🍕 Cucina del mondo|🥗 Vegetariano e diete|🍞 Panetteria e pane|🧂 Salse e contorni|🍬 Cioccolato e gelati|🥑 Ingredienti e tecniche|🍽️ Menu e idee per i pasti",
-  catAsk:"Aiutami nella categoria «{x}»: proponimi un’idea o una ricetta per iniziare.",
+  catAsk:"Aiutami nella categoria «{x}»: proponimi 4 idee di ricette per iniziare.",
   qS:"👥 Pers.",
   qSo:"Per 2 persone|Per 6 persone|Per 8 persone",
   qD1:"🚫 Senza",
@@ -1006,7 +1052,18 @@ it:{
   imgReset:"Torna al disegno",
   imgOk:"Immagine salvata",
   imgBad:"Impossibile caricare questa immagine. Controlla il link.",
-  imgFull:"Memoria del dispositivo piena: immagine non salvata."
+  imgFull:"Memoria del dispositivo piena: immagine non salvata.",
+  idGen:"Dammi la ricetta completa di «{x}»",
+  idMore:"Proponimi altre 4 idee di ricette, diverse da quelle già proposte",
+  idLike:", nello spirito di: {x}",
+  idGo1:"✨ Genera la ricetta",
+  idGoN:"✨ Genera le {n} ricette",
+  idMoreB:"🔄 Altre idee",
+  ideasBack:"↩ Idee proposte",
+  qMax:"Al massimo 3 ricette alla volta",
+  idMany:"{n} ricette salvate nella cronologia",
+  hideB1:"👁️ Nascondi questa ricetta",
+  showB1:"👁️ Mostra: {t}"
 },
 pt:{
   ok:"OK",
@@ -1050,9 +1107,9 @@ pt:{
   swNo:"🚫 Sem: {i}",
   swRep:"↔ Substituir: {i}",
   noMsg:"Não quero: {i}. Dê-me de novo a receita completa sem este ingrediente e sem o substituir, ajustando quantidades e passos.",
-  qProp:"✨ Propor uma receita",
+  qProp:"✨ Propor ideias",
   qAdapt:"✨ Adaptar a receita",
-  qPropMsg:"Proponha-me uma receita: {f}.",
+  qPropMsg:"Proponha-me 4 ideias de receitas: {f}.",
   qAdaptMsg:"Adapte esta receita: {f}.",
   rateT:"A sua nota",
   rateH:"1 = péssima · 5 = a melhor",
@@ -1087,7 +1144,7 @@ pt:{
   nokey:"O chef ainda não está ligado: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar.",
   catT:"O que quer criar?",
   cats:"🍲 Pratos do dia a dia|🍰 Sobremesas e pastelaria|🍹 Cocktails|🥤 Bebidas|🍕 Cozinha do mundo|🥗 Vegetariano e dietas|🍞 Padaria e pães|🧂 Molhos e acompanhamentos|🍬 Chocolates e gelados|🥑 Ingredientes e técnicas|🍽️ Menus e ideias de refeições",
-  catAsk:"Ajude-me na categoria «{x}»: proponha uma ideia ou uma receita para começar.",
+  catAsk:"Ajude-me na categoria «{x}»: proponha 4 ideias de receitas para começar.",
   qS:"👥 Pess.",
   qSo:"Para 2 pessoas|Para 6 pessoas|Para 8 pessoas",
   qD1:"🚫 Sem",
@@ -1141,7 +1198,18 @@ pt:{
   imgReset:"Voltar ao desenho",
   imgOk:"Imagem guardada",
   imgBad:"Não foi possível carregar esta imagem. Verifique o link.",
-  imgFull:"Memória do dispositivo cheia: imagem não guardada."
+  imgFull:"Memória do dispositivo cheia: imagem não guardada.",
+  idGen:"Dê-me a receita completa de «{x}»",
+  idMore:"Proponha-me mais 4 ideias de receitas, diferentes das já propostas",
+  idLike:", no espírito de: {x}",
+  idGo1:"✨ Gerar a receita",
+  idGoN:"✨ Gerar as {n} receitas",
+  idMoreB:"🔄 Outras ideias",
+  ideasBack:"↩ Ideias propostas",
+  qMax:"No máximo 3 receitas de cada vez",
+  idMany:"{n} receitas guardadas no histórico",
+  hideB1:"👁️ Ocultar esta receita",
+  showB1:"👁️ Mostrar: {t}"
 }
 };
 const RMETA=[["🍕",1,"30 min","#fde4d8"],["🥞",2,"20 min","#fdf1c9"],["🎂",0+1+0,"50 min","#f6dbe8"],["🍛",4,"35 min","#dcefc9"],["🍝",3,"15 min","#fde4d8"],["🍳",2,"10 min","#fdf1c9"],["🧁",0+1,"40 min","#f6dbe8"],["🥗",4,"25 min","#dcefc9"]];
@@ -1216,10 +1284,18 @@ function render(el,t){
     if(h){list=null;kind='';const e=document.createElement('h3');inl(e,h[1]);el.appendChild(e);return}
     const lab=b&&b[1].match(/^\*{0,2}([^:*]{1,40}?)\*{0,2}\s*[:：]\s*(.+)$/); // « - Label: text » → option card
     if(lab){if(kind!=='adv'){list=document.createElement('div');list.className='advl';el.appendChild(list);kind='adv'}
-      const c=document.createElement('div');c.className='adv';const h4=document.createElement('b');h4.textContent=lab[1].trim();const p=document.createElement('p');inl(p,lab[2]);c.append(h4,p);list.appendChild(c);return}
+      const c=document.createElement('div');c.className='adv';c.dataset.label=lab[1].trim();c.dataset.desc=lab[2].replace(/\*\*/g,'');
+      const ck=document.createElement('span');ck.className='ck';const h4=document.createElement('b');h4.textContent=lab[1].trim();const p=document.createElement('p');inl(p,lab[2]);c.append(ck,h4,p);
+      // ideas / options of ANY list in the thread can be ticked (3 max in total): they feed « Generate the recipe(s) »
+      const tg=()=>{const on=c.classList.contains('sel');
+        if(!on&&log.querySelectorAll('.adv.sel').length>=3){toast(T().qMax);return}
+        c.classList.toggle('sel',!on);c.setAttribute('aria-checked',String(!on));repaintQuick()};
+      c.setAttribute('role','checkbox');c.setAttribute('aria-checked','false');c.tabIndex=0;c.onclick=tg;c.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tg()}};
+      list.appendChild(c);return}
     if(b||n){const k=b?'ul':'ol';if(kind!==k){list=document.createElement(k);list.className='rl';el.appendChild(list);kind=k}
       const li=document.createElement('li');inl(li,(b||n)[1]);list.appendChild(li);return}
     list=null;kind='';const p=document.createElement('p');inl(p,l);el.appendChild(p)});
+  if(el.querySelectorAll('.adv').length>=2)el.dataset.ideas='1';else delete el.dataset.ideas;
 }
 function welcomeEl(){
   const t=T(),d=document.createElement('div');d.className='welcome';
@@ -1232,29 +1308,91 @@ function welcomeEl(){
 function showWelcome(){log.appendChild(welcomeEl())}
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,(ings,m)=>branchWith({text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings,m))}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
-// Quick options = filters (servings, without gluten/lactose, diet, time), then ONE button sends a single request with all of them.
-// With a recipe on screen the button adapts it, otherwise it asks the chef for a new recipe. Filters reset after sending.
-// One choice per column, except « Without » (several). `go(text,adapt)` sends the request.
+// Quick options = filters (servings, without gluten/lactose, diet, time), applied to ONE request sent with a green button.
+// What the button does depends on the screen:
+//  - the last chef message is a list of ideas/options → tick the ones you want, then « Generate the recipe(s) » (3 max) or « Other ideas »;
+//  - a recipe is on screen (or on the recipe card) → « Adapt the recipe »;
+//  - nothing yet → « Suggest ideas ».
+// One choice per column, except « Without » (several). Filters reset after sending.
 let qf={};
+function ideaPicks(){ // every ideas list of the thread (they all stay usable) + the ticked ideas, in thread order
+  const els=[...log.querySelectorAll('.m.a[data-ideas]')];if(!els.length)return null;
+  const lastA=[...log.querySelectorAll('.m.a')].pop();
+  return {els,onList:els[els.length-1]===lastA,picks:[...log.querySelectorAll('.m.a[data-ideas] .adv.sel')].map(c=>({label:c.dataset.label,desc:c.dataset.desc,card:c,msg:c.closest('.m')}))};
+}
+function repaintQuick(){document.querySelectorAll('#quick,.qgrid').forEach(z=>z._paint&&z._paint())}
 function quickCols(q,go,adaptMode){
   const t=T();q.innerHTML='';
   const groups=[[t.qS,t.qSo,t.qSs,0],[t.qD1,t.qD1o,t.qD1s,1],[t.qD2,t.qD2o,t.qD2s,0],['⏱️ '+t.pTime,t.q.split('|')[3],t.q.split('|')[3],0]];
-  const btn=document.createElement('button');btn.type='button';btn.className='qgo';
-  const adapt=()=>adaptMode!==undefined?adaptMode:!!currentId;
-  const sel=()=>Object.values(qf).flat();
-  const paint=()=>{q.querySelectorAll('.qcol .chip').forEach(c=>c.classList.toggle('on',sel().includes(c.title)));const n=sel().length;btn.hidden=!n;btn.textContent=adapt()?t.qAdapt:t.qProp;try{updTop()}catch(x){}};
+  const acts=document.createElement('div');acts.className='qacts';
+  const bMain=document.createElement('button'),bMore=document.createElement('button');
+  bMain.type=bMore.type='button';bMain.className='qgo';bMore.className='qgo qmore';acts.append(bMain,bMore);
+  const sel=()=>Object.values(qf).flat(),low=x=>x.charAt(0).toLowerCase()+x.slice(1);
+  const state=()=>{const I=adaptMode===true?null:ideaPicks(),ideasMode=!!I&&(I.onList||I.picks.length>0);return {I,mode:ideasMode?'ideas':(adaptMode===true||currentId)?'adapt':'prop'}};
+  const paint=()=>{
+    q.querySelectorAll('.qcol .chip').forEach(c=>c.classList.toggle('on',sel().includes(c.title)));
+    const {I,mode}=state(),n=sel().length;
+    if(q.id==='quick')log.querySelectorAll('.m.a[data-ideas] .adv').forEach(c=>c.classList.add('live')); // every list stays selectable
+    bMore.hidden=mode!=='ideas';bMore.textContent=t.idMoreB;
+    if(mode==='ideas'){const k=I.picks.length;bMain.hidden=!k;bMain.textContent=k>1?t.idGoN.replace('{n}',k):t.idGo1}
+    else{bMain.hidden=!n;bMain.textContent=mode==='adapt'?t.qAdapt:t.qProp}
+    try{updTop()}catch(x){}};
   groups.forEach(([label,opts,shorts,multi],gi)=>{
     const c=document.createElement('div');c.className='qcol';const h=document.createElement('span');h.className='qh';h.textContent=label;c.appendChild(h);
     const O=opts.split('|'),S=shorts.split('|');
     O.forEach((o,k)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=S[k]||o;b.title=o;
-      b.onclick=()=>{const cur=qf[gi]||[];qf[gi]=cur.includes(o)?cur.filter(x=>x!==o):multi?cur.concat(o):[o];if(!qf[gi].length)delete qf[gi];
-        document.querySelectorAll('#quick,.qgrid').forEach(z=>z._paint&&z._paint())};
+      b.onclick=()=>{const cur=qf[gi]||[];qf[gi]=cur.includes(o)?cur.filter(x=>x!==o):multi?cur.concat(o):[o];if(!qf[gi].length)delete qf[gi];repaintQuick()};
       c.appendChild(b)});q.appendChild(c)});
-  btn.onclick=()=>{const f=sel();if(!f.length)return;const a=adapt();qf={};document.querySelectorAll('#quick,.qgrid').forEach(z=>z._paint&&z._paint());
-    go((a?t.qAdaptMsg:t.qPropMsg).replace('{f}',f.map(x=>x.charAt(0).toLowerCase()+x.slice(1)).join(', ')),a)};
-  q.appendChild(btn);q._paint=paint;paint();
+  const done=()=>{qf={};repaintQuick()};
+  bMain.onclick=()=>{const f=sel().map(low),{I,mode}=state();
+    if(mode==='ideas'){if(!I.picks.length)return;done();genRecipes(I.picks,f);return}
+    if(!f.length)return;done();go((mode==='adapt'?t.qAdaptMsg:t.qPropMsg).replace('{f}',f.join(', ')),mode==='adapt')};
+  bMore.onclick=()=>{const f=sel().map(low),{I}=state();if(!I)return;
+    const like=I.picks.length?t.idLike.replace('{x}',I.picks.map(p=>p.label).join(' ; ')):'';
+    I.picks.forEach(p=>{p.card.classList.remove('sel');p.card.setAttribute('aria-checked','false')}); // used as inspiration
+    done();go(t.idMore+like+(f.length?' : '+f.join(', '):'')+'.',false)};
+  q.appendChild(acts);q._paint=paint;paint();
 }
 function drawQuick(){quickCols($('#quick'),txt=>send(txt));try{updTop()}catch(x){}}
+// « Generate the recipe(s) »: the ideas lists STAY in the thread (and stay usable: ideas already generated get a ✓), each ticked idea gets its recipe right below it (one chef request per idea),
+// and each recipe is saved as its own recipe (own favorite, rating, comments) with a link back to the ideas.
+async function genRecipes(picks,f){
+  const I=ideaPicks();if(busy||!I||!picks.length)return;
+  const t=T(),els=[...log.querySelectorAll('.m')],idx=els.indexOf(picks[0].msg);if(idx<0||!hist[idx]||hist[idx].role!=='assistant')return;
+  const at=idx+1,ask=idx>0?shown(hist[idx-1].content):'',fl=f.length?' : '+f.join(', '):'';
+  busy=true;sendB.disabled=true;
+  const ids=[];let err=null;
+  for(let i=0;i<picks.length;i++){
+    const p=picks[i],msg=t.idGen.replace('{x}',p.label+(p.desc?' — '+p.desc.slice(0,120).replace(/[\s.!]+$/,''):''))+fl+'.';
+    hist.push({role:'user',content:msg});add('u',msg);
+    const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();
+    try{
+      const j=await completeReply(hist,out);
+      if(!looksLikeRecipe(j.text))throw {code:'err'};
+      renderMsg(out,j.text);
+      const rid=Date.now().toString(36)+i;
+      hist.push({role:'assistant',content:j.text,rid});
+      const e={id:rid,title:recipeTitle(j.text)||p.label,date:new Date().toISOString(),updatedAt:Date.now(),k:chefNow?chefNow.k:-1,fav:false,lang,
+        messages:hist.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content}),ideas:{at,pick:p.label}};
+      const a=loadH();a.unshift(e);saveH(a);ids.push(rid);currentId=rid;
+      p.card.classList.remove('sel');p.card.setAttribute('aria-checked','false');p.card.classList.add('gen'); // ticked idea → generated
+      toBottom();
+    }catch(x){err=x;hist.pop();out.remove();const u=log.querySelectorAll('.m.u');u[u.length-1]&&u[u.length-1].remove();break}
+  }
+  busy=false;sendB.disabled=false;
+  if(ids.length){drawHistory();drawFavs();drawQuick();syncCardBtn();syncFavUI();if(ids.length>1)toast(t.idMany.replace('{n}',ids.length));if(err)toast(errText(err))}
+  else{const o=add('a','');render(o,errText(err))}
+  log.scrollTop=log.scrollHeight;
+}
+// Back to the list of ideas a recipe was generated from: the thread is NOT changed (generated recipes stay), we just scroll to the list,
+// which is still usable. If another thread is on screen, the recipe's own thread is opened first.
+function openIdeas(e){
+  if(!e||!e.ideas||!e.ideas.at)return;
+  const i=e.ideas.at-1,same=!!(hist[i]&&e.messages[i]&&hist[i].content===e.messages[i].content);
+  if(!same)openSaved(e.id);else if(curView!=='chat'){show('chat');try{syncCardBtn()}catch(x){}}
+  const el=log.querySelectorAll('.m')[i];if(!el)return;
+  setTimeout(()=>{el.scrollIntoView({block:'start',behavior:'smooth'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600)},60);
+}
 
 // ---------- History (stored on the device, in the browser) ----------
 // ---------- Stockage ----------
@@ -1262,7 +1400,7 @@ function drawQuick(){quickCols($('#quick'),txt=>send(txt));try{updTop()}catch(x)
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v44',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v48',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1307,7 +1445,8 @@ function saveCurrent(){
     if(pendingMeta){Object.keys(pendingMeta).forEach(k=>{if(pendingMeta[k])e[k]=pendingMeta[k]})}
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
-  e.messages=hist.map(m=>({role:m.role,content:m.content}));e.updatedAt=Date.now();
+  hist.forEach(m=>{if(m.role==='assistant'&&!m.rid&&looksLikeRecipe(m.content))m.rid=currentId}); // recipe message → saved recipe
+  e.messages=hist.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content});e.updatedAt=Date.now();
   a.unshift(e);saveH(a);drawHistory();syncCardBtn();
 }
 function rowFor(e,del,heart){
@@ -1346,11 +1485,12 @@ function branchWith(src,ings,mode){ // new separate recipe saved in the history:
 function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
-  hist=e.messages.map(m=>({role:m.role,content:m.content}));log.innerHTML='';
+  hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined)}));log.innerHTML='';hiddenIdx=new Set();
   chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;persona=chefNow?chefNow.p:"";currentId=id;branchFrom=null;
   hist.forEach(m=>add(m.role==='user'?'u':'a',shown(m.content)));
   refreshChat();drawQuick();show('chat');
-  try{const i=hist.findIndex(m=>m.role==='assistant'&&looksLikeRecipe(m.content));if(i>=0)dishPic(log.children[i],hist[i].content)}catch(x){}
+  try{let i=-1;hist.forEach((m,k)=>{if(m.rid===id)i=k});if(i<0)i=hist.findIndex(m=>m.role==='assistant'&&looksLikeRecipe(m.content));if(i>=0)dishPic(log.children[i],hist[i].content)}catch(x){} // picture under this recipe
+  try{chatActions()}catch(x){}
 }
 // ---------- Fiches recette : photo, favoris, partage, commentaires ----------
 let cardId=null,hfav=false;
@@ -1381,21 +1521,48 @@ function syncFavUI(){
   const h=$('#tofav');if(!h)return;const e=currentId?loadH().find(x=>x.id===currentId):null;
   h.style.display=e?'':'none';if(!e)return;
   h.textContent=e.fav?'❤️':'🤍';h.setAttribute('aria-label',T().fav);h.title=T().fav;h.classList.toggle('on',!!e.fav);
-  const b=log.querySelector('.chact .cbtn');if(b){b.textContent=(e.fav?'❤️ ':'🤍 ')+T().fav;b.classList.toggle('on',!!e.fav)}
+  log.querySelectorAll('.chact').forEach(bar=>{const z=loadH().find(x=>x.id===bar.dataset.rid),b=bar.querySelector('.cbtn');if(z&&b){b.textContent=(z.fav?'❤️ ':'🤍 ')+T().fav;b.classList.toggle('on',!!z.fav)}});
 }
-// Action bar under the latest recipe in the chat (favorite, share, card, rating), same actions as on the recipe card.
+// Action bar (favorite, share, card, ideas, rating) under each saved recipe of the thread (its latest version), comments under the newest one,
+// and the « hide previous recipes » button above the newest recipe as soon as the thread holds 2 recipes or more.
+let hiddenIdx=new Set(); // thread positions of the recipes currently hidden
 function chatActions(){
-  log.querySelectorAll('.chact,.chcom').forEach(x=>x.remove());
-  if(!currentId)return;const e=loadH().find(x=>x.id===currentId);if(!e)return;
-  const msgs=[...log.querySelectorAll('.m.a.rich')];const last=msgs[msgs.length-1];if(!last)return;
-  const t=T(),bar=document.createElement('div');bar.className='chact';
-  const fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(e.fav?' on':'');fv.textContent=(e.fav?'❤️ ':'🤍 ')+t.fav;
-  fv.onclick=()=>{const f=toggleFav(currentId);fv.textContent=(f?'❤️ ':'🤍 ')+t.fav;fv.classList.toggle('on',!!f)};
-  const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>{const z=loadH().find(x=>x.id===currentId);if(z)shareRecipe(z)};
-  const cd=document.createElement('button');cd.type='button';cd.className='cbtn';cd.textContent='📋 '+t.card;cd.onclick=()=>{if(currentId)openCard(currentId)};
-  bar.append(fv,sh,cd,rateBox(currentId));
-  const nx=last.nextElementSibling;(nx&&nx.classList.contains('dphoto')?nx:last).after(bar); // under the dish picture when it sits right below the recipe
-  const cw=document.createElement('div');cw.className='chcom';bar.after(cw);buildComments(cw,slug(e.title)); // same shared comments as on the recipe card
+  log.querySelectorAll('.chact,.chcom,.chrow').forEach(x=>x.remove());
+  log.querySelectorAll('.hid').forEach(x=>x.classList.remove('hid'));
+  const els=[...log.querySelectorAll('.m')],t=T();
+  const recIdx=[];hist.forEach((m,i)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&els[i])recIdx.push(i)});
+  if(!recIdx.length)return;
+  const lastIdx=recIdx[recIdx.length-1];
+  const lastOf={};hist.forEach((m,i)=>{if(m.rid&&els[i]&&m.role==='assistant')lastOf[m.rid]=i});
+  const bars={};
+  if(currentId||Object.keys(lastOf).length)Object.keys(lastOf).sort((a,b)=>lastOf[a]-lastOf[b]).forEach(rid=>{
+    const e=loadH().find(x=>x.id===rid);if(!e)return;const el=els[lastOf[rid]];
+    const bar=document.createElement('div');bar.className='chact';bar.dataset.rid=rid;
+    const fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(e.fav?' on':'');fv.textContent=(e.fav?'❤️ ':'🤍 ')+t.fav;
+    fv.onclick=()=>{toggleFav(rid)};
+    const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>{const z=loadH().find(x=>x.id===rid);if(z)shareRecipe(z)};
+    const cd=document.createElement('button');cd.type='button';cd.className='cbtn';cd.textContent='📋 '+t.card;cd.onclick=()=>openCard(rid);
+    bar.append(fv,sh,cd);
+    if(e.ideas){const ib=document.createElement('button');ib.type='button';ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===rid));bar.appendChild(ib)}
+    bar.append(rateBox(rid));
+    const nx=el.nextElementSibling;(nx&&nx.classList.contains('dphoto')?nx:el).after(bar); // under the dish picture when it sits right below the recipe
+    bars[rid]=bar;
+    if(lastOf[rid]===lastIdx&&rid===currentId){const cw=document.createElement('div');cw.className='chcom';bar.after(cw);buildComments(cw,slug(e.title))} // same shared comments as on the recipe card
+  });
+  if(recIdx.length>1){ // 2 recipes or more: a hide / show button under EACH recipe
+    const apply=()=>{recIdx.forEach(i=>{const el=els[i],hid=hiddenIdx.has(i),nx=el.nextElementSibling,ph=nx&&nx.classList.contains('dphoto')?nx:null;
+        el.classList.toggle('hid',hid);if(ph)ph.classList.toggle('hid',hid);
+        const rid=hist[i].rid,bar=rid&&bars[rid]&&lastOf[rid]===i?bars[rid]:null;
+        if(bar){bar.classList.toggle('hid',hid);const cm=bar.nextElementSibling;if(cm&&cm.classList.contains('chcom'))cm.classList.toggle('hid',hid)}
+        const hb=log.querySelector('.chhide[data-i="'+i+'"]');if(hb)hb.textContent=hid?t.showB1.replace('{t}',recipeTitle(hist[i].content)||''):t.hideB1});
+      try{updTop()}catch(x){}};
+    recIdx.forEach(i=>{const el=els[i],nx=el.nextElementSibling,anchor=nx&&nx.classList.contains('dphoto')?nx:el;
+      const row=document.createElement('div');row.className='chrow';
+      const hb=document.createElement('button');hb.type='button';hb.className='chhide';hb.dataset.i=i;
+      hb.onclick=()=>{hiddenIdx.has(i)?hiddenIdx.delete(i):hiddenIdx.add(i);apply()};
+      row.appendChild(hb);anchor.after(row)});
+    apply();
+  }
 }
 function recipeText(e){const m=[...e.messages].reverse().find(x=>x.role==='assistant'&&looksLikeRecipe(x.content))||[...e.messages].reverse().find(x=>x.role==='assistant');return m?m.content:''}
 function plain(t){return t.replace(/^#{1,3}\s+/gm,'').replace(/\*\*/g,'')}
@@ -1551,7 +1718,8 @@ function openCard(id){
   fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
   const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
-  act.append(fv,sh,ct);body.appendChild(act);body.appendChild(rateBox(id));
+  act.append(fv,sh,ct);if(e.ideas){const ib=document.createElement('button');ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===id));act.appendChild(ib)}
+  body.appendChild(act);body.appendChild(rateBox(id));
   const qg=document.createElement('div');qg.className='qgrid';quickCols(qg,txt=>{openSaved(id);send(txt)},true);body.appendChild(qg);
   const sh2=document.createElement('p');sh2.className='swh';sh2.textContent='↔ '+t.swapH;body.appendChild(sh2);
   const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title,false,(ings,m)=>openBranch(id,ings,m));body.appendChild(rt);
@@ -1664,7 +1832,7 @@ function dishPic(b,text){
   toBottom();
 }
 function openChat(chef){
-  hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;
+  hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
   persona=chef?chef.p:"";$('#cname').textContent=chef?"Chef "+chef.n:"Chef IA";$('#cdesc').textContent=chef?chef.d:T().cd;
   showWelcome();
   show('chat');
@@ -1673,7 +1841,7 @@ function start(q){openChat(null);send(q,true)}
 /*CALL_START*/
 async function chatCall(h,out){
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
-  const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h,persona,lang})});
+  const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h.map(m=>({role:m.role,content:m.content})),persona,lang})});
   let res=await call();
   if(res.status===401){const c=await askCode();if(c)res=await call()}
   if(!res.ok){
@@ -1690,23 +1858,29 @@ function looksCut(j){
   const last=j.text.trimEnd().split('\n').pop().trim();
   return /^\d+[.)]\s/.test(last)&&!/[.!?…)»"'\]:;*]$/.test(last);
 }
+// Gets a full reply: asks again for the end when the answer was cut off, and stitches it back.
+async function completeReply(h,out){
+  let j=await chatCall(h,out);
+  for(let n=0;n<2&&looksCut(j);n++){
+    if(out){renderMsg(out,j.text);toBottom()}
+    const L=j.text.trimEnd().split('\n'),last=L.pop().trim();
+    const k=await chatCall(h.concat([{role:'assistant',content:j.text},{role:'user',content:'[UI] Your previous reply was cut off during this line: « '+last+' ». Write only the rest: start again from that complete line (same number) and finish the recipe. No introduction, do not repeat what comes before.'}]));
+    j={text:L.join('\n')+'\n'+k.text.trim(),cut:k.cut};
+  }
+  return j;
+}
+const errText=e=>e&&e.code==='rate_limited'?T().e429:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err;
 async function send(text,auto,ctx){
   text=(text||inp.value).trim();if(!text||busy)return;
   inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
   try{
-    let j=await chatCall(hist,out);
-    for(let n=0;n<2&&looksCut(j);n++){ // cut-off reply: ask for the end and stitch it back
-      renderMsg(out,j.text);toBottom();
-      const L=j.text.trimEnd().split('\n'),last=L.pop().trim();
-      const k=await chatCall(hist.concat([{role:'assistant',content:j.text},{role:'user',content:'[UI] Your previous reply was cut off during this line: « '+last+' ». Write only the rest: start again from that complete line (same number) and finish the recipe. No introduction, do not repeat what comes before.'}]));
-      j={text:L.join('\n')+'\n'+k.text.trim(),cut:k.cut};
-    }
+    const j=await completeReply(hist,out);
     renderMsg(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
     try{dishPic(out,j.text)}catch(e){}
   }catch(e){
     hist.pop();
-    render(out,e&&e.code==='rate_limited'?T().e429:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err);
+    render(out,errText(e));
   }finally{busy=false;sendB.disabled=false;log.scrollTop=log.scrollHeight}
 }
 
