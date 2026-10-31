@@ -167,6 +167,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .rsec ul,.rsec ol{list-style:none;padding:0;margin:0}
 .ring li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ring li:last-child{border-bottom:0}
+.rsec ul.rut{display:flex;flex-wrap:wrap;gap:8px}.rut li{background:var(--bg1);border:1px solid var(--bd);border-radius:14px;padding:7px 12px;font-size:14px;line-height:1.35}
 .ring .tx{flex:1;min-width:0}
 .ring li.miss .tx{text-decoration:line-through;opacity:.55}.ring li.miss .ck{background:var(--pink)}
 .mt{display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--pink);text-decoration:none!important;vertical-align:middle}
@@ -402,7 +403,7 @@ function drawQuick(){const q=$('#quick');q.innerHTML='';T().q.split('|').forEach
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v34',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v35',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -555,6 +556,7 @@ async function shareRecipe(e){
 let toastT=null;
 function toast(t){let d=$('#toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent=t;d.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>d.classList.remove('on'),2200)}
 // ---------- Recipe formatting (card and import preview) ----------
+const UT_RE=/ustensil|utensil|equip|équip|gerät|attrezz/i; // utensils section heading (fr/en/es/de/it/pt)
 function recipeSections(txt){
   const secs=[{h:'',lines:[]}];let cur=secs[0];
   txt.split('\n').forEach(raw=>{const l=raw.trim();if(!l)return;
@@ -581,6 +583,7 @@ function recipeSections(txt){
   return secs;
 }
 function secIcon(h){
+  if(UT_RE.test(h))return '🔪';
   if(/ingr|zutat|ingred|ingrediente/i.test(h))return '🧺';
   if(/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc|préparation/i.test(h))return '👩‍🍳';
   if(/chang|modif|geänd|cambi|mudan|cambia/i.test(h))return '✏️';
@@ -600,8 +603,12 @@ function renderRecipe(el,txt,title,chat,swap){
     const h=document.createElement('h3');const ic=secIcon(sec.h);h.textContent=(ic?ic+' ':'')+sec.h;box.appendChild(h);
     let list=null,kind='';
     const close=()=>{list=null;kind=''};
+    const utS=UT_RE.test(sec.h);
     const ingS=/ingr|zutat|ingred/i.test(sec.h),stS=!ingS&&/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);let cnt=0;const missing=new Set();let bar=null;const updBar=()=>{if(!bar)return;bar.hidden=!missing.size;bar.textContent='↔ '+T().swapGo.replace('{i}',[...missing].join(' ; '))};
     sec.lines.forEach(l=>{
+      if(utS){ // utensils: plain chips, nothing to tick or replace
+        if(kind!=='u'){list=document.createElement('ul');list.className='rut';box.appendChild(list);kind='u'}
+        const li=document.createElement('li');li.textContent=l.replace(/^[-•*]\s+/,'');list.appendChild(li);return}
       let b=l.match(/^[-•*]\s+(.*)$/),n=l.match(/^(\d+)[.)]\s+(.*)$/);
       if(!b&&!n){if(ingS&&l.length<=160)b=[l,l];else if(stS&&l.length>12)n=[l,String(cnt+1),l]} // lines with no dash or number: catch them
       if(n)cnt=parseInt(n[1],10)||cnt+1;

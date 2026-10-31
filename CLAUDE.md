@@ -60,11 +60,12 @@ Files starting with `_` in `api/` are helpers, not routes.
 - Food and drink only; politely refuses anything else.
 - One language per answer (the user's interface language).
 - Replacing an ingredient (↔ button or "not available" circle) creates a **new, separate recipe**; the original and its favorite stay untouched.
+- New recipes always include a « Utensils » section (3–8 items) between ingredients and steps, in the user's language. Imported recipes get none unless asked (no invented content). The card shows utensils as plain chips (nothing to tick or replace); detection is `UT_RE` in `index.html`.
 - Cut-off answers are detected and completed automatically.
 
-## 5. Done (up to v34)
+## 5. Done (up to v35)
 
-Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English.
+Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English; v35: utensils section in recipes.
 
 ## 6. Current status and decisions
 

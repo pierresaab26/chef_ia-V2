@@ -37,7 +37,7 @@ With Claude Haiku 5.5 ($0.10 / $0.50 per million input / output tokens), one rec
 - Chat with the chef (food and drink only), plus three chef personas.
 - Import from a photo or a public web page. Only what is actually written in the source is extracted; nothing is invented.
 - Replace a missing ingredient: tap the circle to cross it out, then start a new recipe without it. The original recipe and its favorite stay untouched.
-- Recipe card, history, favorites, sharing, comments, 1–5 star ratings.
+- Recipe card with a **Utensils** section (useful equipment, with sizes or settings when they matter), history, favorites, sharing, comments, 1–5 star ratings. Imported recipes keep only what the source says, so they get no utensils section unless the user asks the chef for one.
 - Dish illustrations are drawn in code (they are not photos); tap one to set your own photo or an image link.
 - Cut-off answers are detected and completed automatically.
 
