@@ -65,7 +65,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .qgrid{padding:0;margin:0 0 14px}
 .dlgw{position:fixed;inset:0;z-index:60;background:rgba(10,8,20,.45);display:grid;place-items:center;padding:20px}.dlg{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.3)}.dlg p{margin:0 0 14px;line-height:1.4}.dlg input{width:100%;box-sizing:border-box;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg1);color:var(--ink);margin:0 0 14px}.dlgb{display:flex;gap:8px;justify-content:flex-end}.dlgb .cbtn{border:1px solid var(--bd)}.dlgb .dlgok{background:var(--green);color:#10200a;border-color:transparent}
 .flash{animation:flash 1.5s ease}@keyframes flash{0%,60%{box-shadow:0 0 0 3px var(--pink)}100%{box-shadow:0 0 0 3px transparent}}
-.hid{display:none!important}.chrow{align-self:flex-start;max-width:100%;margin:0 0 4px}.chhide{margin:0;max-width:100%;text-align:left;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
+.hid{display:none!important}.chrow{align-self:stretch;margin:0 0 6px}.chhide{display:block;width:100%;margin:0;text-align:center;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
 .rl{font-size:13px;color:var(--mut)}
@@ -1364,8 +1364,9 @@ async function genRecipes(picks,f){
   const ids=[];let err=null;
   for(let i=0;i<picks.length;i++){
     const p=picks[i],msg=t.idGen.replace('{x}',p.label+(p.desc?' — '+p.desc.slice(0,120).replace(/[\s.!]+$/,''):''))+fl+'.';
+    const keep=log.scrollTop; // 2nd, 3rd… recipe: do not move the view away from the first one
     hist.push({role:'user',content:msg});add('u',msg);
-    const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();
+    const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');if(i===0)toBottom();else log.scrollTop=keep;
     try{
       const j=await completeReply(hist,out);
       if(!looksLikeRecipe(j.text))throw {code:'err'};
@@ -1376,13 +1377,12 @@ async function genRecipes(picks,f){
         messages:hist.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content}),ideas:{at,pick:p.label}};
       const a=loadH();a.unshift(e);saveH(a);ids.push(rid);currentId=rid;
       p.card.classList.remove('sel');p.card.setAttribute('aria-checked','false');p.card.classList.add('gen'); // ticked idea → generated
-      toBottom();
+      if(i===0)showStart(out); // stay at the start of the first recipe
     }catch(x){err=x;hist.pop();out.remove();const u=log.querySelectorAll('.m.u');u[u.length-1]&&u[u.length-1].remove();break}
   }
   busy=false;sendB.disabled=false;
   if(ids.length){drawHistory();drawFavs();drawQuick();syncCardBtn();syncFavUI();if(ids.length>1)toast(t.idMany.replace('{n}',ids.length));if(err)toast(errText(err))}
-  else{const o=add('a','');render(o,errText(err))}
-  log.scrollTop=log.scrollHeight;
+  else{const o=add('a','');render(o,errText(err));log.scrollTop=log.scrollHeight}
 }
 // Back to the list of ideas a recipe was generated from: the thread is NOT changed (generated recipes stay), we just scroll to the list,
 // which is still usable. If another thread is on screen, the recipe's own thread is opened first.
@@ -1400,7 +1400,7 @@ function openIdeas(e){
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v48',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v49',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1817,7 +1817,13 @@ function dishSvg(title){
 function dishArt(title){const d=document.createElement('div');d.innerHTML=dishSvg(title);return d.firstChild}
 // Dish visual under the first recipe of the conversation: the user's own image, the imported photo, or the code-drawn illustration.
 // (The Wikipedia photo search, getPhoto(), is only used on the recipe card.)
-function toBottom(){const f=()=>{log.scrollTop=log.scrollHeight};f();requestAnimationFrame(f);setTimeout(f,150)}
+let stickEl=null; // while set, nothing scrolls to the bottom: the start of a new recipe stays in view
+function toBottom(){const f=()=>{if(!stickEl)log.scrollTop=log.scrollHeight};f();requestAnimationFrame(f);setTimeout(f,150)}
+// Keeps the START of a new recipe at the top of the view (instead of jumping to the end of it).
+function showStart(el){
+  stickEl=el;const go=()=>{const lr=log.getBoundingClientRect(),r=el.getBoundingClientRect();log.scrollTop+=r.top-lr.top-8};
+  go();requestAnimationFrame(go);setTimeout(()=>{go();stickEl=null},260);
+}
 function dishPic(b,text){
   if(!b||log.querySelector('.dphoto')||!looksLikeRecipe(text||''))return;
   const e=currentId?loadH().find(x=>x.id===currentId):null;if(!e)return;
@@ -1878,10 +1884,11 @@ async function send(text,auto,ctx){
     const j=await completeReply(hist,out);
     renderMsg(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}
     try{dishPic(out,j.text)}catch(e){}
+    if(looksLikeRecipe(j.text))showStart(out);
   }catch(e){
     hist.pop();
     render(out,errText(e));
-  }finally{busy=false;sendB.disabled=false;log.scrollTop=log.scrollHeight}
+  }finally{busy=false;sendB.disabled=false;if(!stickEl)log.scrollTop=log.scrollHeight}
 }
 
 // ---------- Import a recipe (photo or link) ----------
