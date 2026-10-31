@@ -61,8 +61,10 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .rate{display:flex;align-items:center;gap:8px;flex:1 0 100%;margin:2px 4px 12px;flex-wrap:wrap}
 .cact .rate{margin:2px 4px 0}
-.chcom{align-self:stretch;margin:-6px 2px 10px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
-.chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 14px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
+#totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:var(--pink);color:#fff;font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25);padding:0}#totop.on{display:grid}
+.qgrid{padding:0;margin:0 0 14px}
+.chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
+.chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
 .stars button{background:none;border:0;padding:2px 3px;font-size:26px;line-height:1;color:#cfd0dc;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -130,9 +132,11 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .m.fmt{white-space:normal;line-height:1.5}
 .fmt p{margin:0 0 .6em}.fmt p:last-child,.fmt .rl:last-child{margin-bottom:0}
 .fmt .rl{margin:.2em 0 .7em;padding-left:1.3em}.fmt .rl li{margin:.25em 0;padding-left:.2em}.fmt ul.rl li::marker{color:var(--pink)}
-#quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 14px;align-items:start}#quick:empty{display:none}
-#quick .qcol{display:flex;flex-direction:column;gap:5px;min-width:0}#quick .qh{font-size:12px;color:var(--mut);font-weight:600;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#quick .qcol .chip{width:100%;padding:6px 8px;font-size:12.5px;white-space:normal;text-align:center;line-height:1.2}@media (max-width:380px){#quick{gap:6px;padding:6px 10px}#quick .qcol .chip{padding:6px 4px;font-size:12px}}@media (min-width:600px){#quick{max-width:640px}#quick .qcol .chip{font-size:13.5px;padding:7px 10px}}
-#bar{display:flex;gap:8px;padding:8px 14px 12px}
+#quick,.qgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 14px;align-items:start}#quick{padding:10px 14px 10px;margin:0 auto;width:100%;box-sizing:border-box}#quick:empty{display:none}
+.qcol{display:flex;flex-direction:column;gap:5px;min-width:0}.qh{font-size:12px;color:var(--mut);font-weight:600;padding:0 2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qcol .chip{width:100%;padding:6px 8px;font-size:12.5px;white-space:normal;text-align:center;line-height:1.2}
+@media (max-width:380px){#quick,.qgrid{gap:6px}#quick{padding:10px 10px}.qcol .chip{padding:6px 4px;font-size:12px}}
+@media (min-width:600px){.qcol .chip{font-size:13.5px;padding:7px 10px}}
+#bar{display:flex;gap:8px;padding:4px 14px 14px}
 #inp{flex:1;font:inherit;padding:11px 16px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
 #send{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:0 18px}
 #send:disabled{opacity:.5}
@@ -166,6 +170,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .rmeta{color:var(--mut);font-size:14px;margin:0 2px 12px}
 .rsec{background:var(--card);border-radius:22px;padding:16px 18px;margin:0 0 14px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .rsec h3{color:var(--pink);font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.rsec.fold h3{cursor:pointer;margin:0;-webkit-tap-highlight-color:transparent}.rsec.fold.open h3{margin-bottom:8px}.rsec.fold h3 .arr{margin-left:auto;font-size:16px;transition:transform .2s;transform:rotate(-90deg)}.rsec.fold.open h3 .arr{transform:none}.rsec.fold .rut{display:none}.rsec.fold.open .rut{display:flex}
 .rsec ul,.rsec ol{list-style:none;padding:0;margin:0}
 .ring li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ring li:last-child{border-bottom:0}
@@ -287,7 +292,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
   </section>
 
   <section class="view" id="chat">
-    <div class="chead chathd"><button class="menubtn rb" aria-label="Menu" aria-expanded="false">☰</button><button class="back rb" id="back" aria-label="Home">🏠</button><div class="avw"><svg class="mascot" style="width:42px;height:42px"><use href="#mascot"/></svg></div><div class="chtx"><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div><button class="back rb" id="tocard" aria-label="Card" style="display:none">📖</button></div>
+    <div class="chead chathd"><button class="menubtn rb" aria-label="Menu" aria-expanded="false">☰</button><button class="back rb" id="back" aria-label="Home">🏠</button><div class="avw"><svg class="mascot" style="width:42px;height:42px"><use href="#mascot"/></svg></div><div class="chtx"><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div><button class="back rb" id="tofav" aria-label="Favorite" style="display:none">🤍</button><button class="back rb" id="tocard" aria-label="Card" style="display:none">📖</button></div>
     <div id="log"></div>
     <div id="quick"></div>
     <div id="bar"><button id="home2" aria-label="Home">🏠</button><input id="inp" autocomplete="off"><button id="impChat" aria-label="Import">📎</button><button id="mic" aria-label="Speak">🎤</button><button id="send"></button></div>
@@ -348,7 +353,7 @@ if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=
 const T=()=>I18[lang];
 
 let curView='home';
-function show(id){curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer()}
+function show(id){curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}}
 function markDrawer(){document.querySelectorAll('.ditem').forEach(b=>b.classList.toggle('on',b.dataset.go===curView))}
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
@@ -398,21 +403,24 @@ const I18I={"fr": {"e_credit": "Crédit insuffisant sur votre compte Anthropic :
 Object.keys(I18I).forEach(k=>Object.assign(I18[k],I18I[k]));
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,ings=>branchWith({text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings))}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
-function drawQuick(){
-  const q=$('#quick'),t=T();q.innerHTML='';
+// Quick options (servings, without gluten/lactose, diet, faster): 4 columns of chips. Used under the chat and on the recipe card.
+function quickCols(q,pick){
+  const t=T();q.innerHTML='';
   const col=(label,opts,shorts)=>{ // one column per group; the chip shows a short label and sends the full request
     const c=document.createElement('div');c.className='qcol';const h=document.createElement('span');h.className='qh';h.textContent=label;c.appendChild(h);
-    opts.forEach((o,k)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=shorts[k]||o;b.title=o;b.onclick=()=>send(o);c.appendChild(b)});q.appendChild(c)};
+    opts.forEach((o,k)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=shorts[k]||o;b.title=o;b.onclick=()=>pick(o);c.appendChild(b)});q.appendChild(c)};
   const fast=t.q.split('|')[3];
-  col(t.qS,t.qSo.split('|'),t.qSs.split('|'));col(t.qD1,t.qD1o.split('|'),t.qD1s.split('|'));col(t.qD2,t.qD2o.split('|'),t.qD2s.split('|'));col('⚡',[fast],[fast]);
+  col(t.qS,t.qSo.split('|'),t.qSs.split('|'));col(t.qD1,t.qD1o.split('|'),t.qD1s.split('|'));col(t.qD2,t.qD2o.split('|'),t.qD2s.split('|'));col('⏱️ '+t.pTime,[fast],[fast]);
 }
+function drawQuick(){quickCols($('#quick'),send);try{updTop()}catch(x){}}
+
 // ---------- History (stored on the device, in the browser) ----------
 // ---------- Stockage ----------
 // Everything goes through loadH() / saveH(): the single access point to recipes.
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v37',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v42',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 function readStore(){
@@ -509,7 +517,7 @@ const I18D={fr:{search:"Rechercher une recette…",noresult:"Aucune recette trou
 Object.keys(I18D).forEach(k=>Object.assign(I18[k],I18D[k]));
 const I18E={"fr": {"catT": "Que voulez-vous créer ?", "cats": "🍲 Plats du quotidien|🍰 Desserts et pâtisseries|🍹 Cocktails|🥤 Boissons|🍕 Cuisine du monde|🥗 Végétarien et régimes|🍞 Boulangerie et pains|🧂 Sauces et accompagnements|🍬 Chocolats et glaces|🥑 Ingrédients et techniques|🍽️ Menus et idées de repas", "catAsk": "Aide-moi dans la catégorie « {x} » : propose-moi une idée ou une recette pour commencer.", "w": "Je suis Chef IA, ton assistant dédié à tout ce qui se mange et se boit ! Demande-moi une recette, plat, dessert ou boisson, puis adapte-la : « je n’ai pas de persil, j’ai du Cajun », « redonne-la pour 2 »…"}, "en": {"catT": "What do you want to create?", "cats": "🍲 Everyday dishes|🍰 Desserts and pastries|🍹 Cocktails|🥤 Drinks|🍕 World cuisine|🥗 Vegetarian and diets|🍞 Bakery and breads|🧂 Sauces and sides|🍬 Chocolate and ice cream|🥑 Ingredients and techniques|🍽️ Menus and meal ideas", "catAsk": "Help me in the category “{x}”: suggest an idea or a recipe to get started.", "w": "I’m Chef IA, your assistant for everything you eat and drink! Ask for a dish, dessert or drink recipe, then adapt it: “I have no parsley, I have Cajun spice”, “give it to me again for 2”…"}, "es": {"catT": "¿Qué quieres crear?", "cats": "🍲 Platos del día a día|🍰 Postres y pastelería|🍹 Cócteles|🥤 Bebidas|🍕 Cocina del mundo|🥗 Vegetariano y dietas|🍞 Panadería y panes|🧂 Salsas y guarniciones|🍬 Chocolates y helados|🥑 Ingredientes y técnicas|🍽️ Menús e ideas de comidas", "catAsk": "Ayúdame en la categoría «{x}»: propón una idea o una receta para empezar.", "w": "¡Soy Chef IA, tu asistente para todo lo que se come y se bebe! Pídeme una receta de plato, postre o bebida y luego adáptala: «no tengo perejil, tengo Cajun», «dámela otra vez para 2»…"}, "de": {"catT": "Was möchtest du kreieren?", "cats": "🍲 Alltagsgerichte|🍰 Desserts und Gebäck|🍹 Cocktails|🥤 Getränke|🍕 Weltküche|🥗 Vegetarisch und Diäten|🍞 Bäckerei und Brot|🧂 Saucen und Beilagen|🍬 Schokolade und Eis|🥑 Zutaten und Techniken|🍽️ Menüs und Essensideen", "catAsk": "Hilf mir in der Kategorie „{x}“: Schlage mir eine Idee oder ein Rezept zum Start vor.", "w": "Ich bin Chef IA, dein Assistent für alles, was man isst und trinkt! Frag nach einem Rezept für Gericht, Dessert oder Getränk und passe es dann an: „Ich habe keine Petersilie, aber Cajun“, „gib es mir nochmal für 2“…"}, "it": {"catT": "Cosa vuoi creare?", "cats": "🍲 Piatti di tutti i giorni|🍰 Dolci e pasticceria|🍹 Cocktail|🥤 Bevande|🍕 Cucina del mondo|🥗 Vegetariano e diete|🍞 Panetteria e pane|🧂 Salse e contorni|🍬 Cioccolato e gelati|🥑 Ingredienti e tecniche|🍽️ Menu e idee per i pasti", "catAsk": "Aiutami nella categoria «{x}»: proponimi un’idea o una ricetta per iniziare.", "w": "Sono Chef IA, il tuo assistente per tutto ciò che si mangia e si beve! Chiedi la ricetta di un piatto, un dolce o una bevanda, poi adattala: «non ho il prezzemolo, ho il Cajun», «dammela di nuovo per 2»…"}, "pt": {"catT": "O que quer criar?", "cats": "🍲 Pratos do dia a dia|🍰 Sobremesas e pastelaria|🍹 Cocktails|🥤 Bebidas|🍕 Cozinha do mundo|🥗 Vegetariano e dietas|🍞 Padaria e pães|🧂 Molhos e acompanhamentos|🍬 Chocolates e gelados|🥑 Ingredientes e técnicas|🍽️ Menus e ideias de refeições", "catAsk": "Ajude-me na categoria «{x}»: proponha uma ideia ou uma receita para começar.", "w": "Sou o Chef IA, o seu assistente para tudo o que se come e se bebe! Peça uma receita de prato, sobremesa ou bebida e depois adapte-a: «não tenho salsa, tenho Cajun», «dê-me de novo para 2»…"}};
 Object.keys(I18E).forEach(k=>Object.assign(I18[k],I18E[k]));
-const I18Q={"fr": {"qS": "👥 Portions", "qSo": "Pour 2 personnes|Pour 6 personnes|Pour 8 personnes", "qD1": "🚫 Sans", "qD1o": "Sans gluten|Sans lactose", "qD2": "🥦 Régime", "qD2o": "Version végétarienne|Version végane", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Gluten|Lactose", "qD2s": "Végétarien|Végan"}, "en": {"qS": "👥 Servings", "qSo": "For 2 people|For 6 people|For 8 people", "qD1": "🚫 Free from", "qD1o": "Gluten-free|Lactose-free", "qD2": "🥦 Diet", "qD2o": "Vegetarian version|Vegan version", "qSs": "2 people|6 people|8 people", "qD1s": "Gluten|Lactose", "qD2s": "Vegetarian|Vegan"}, "es": {"qS": "👥 Porciones", "qSo": "Para 2 personas|Para 6 personas|Para 8 personas", "qD1": "🚫 Sin", "qD1o": "Sin gluten|Sin lactosa", "qD2": "🥦 Dieta", "qD2o": "Versión vegetariana|Versión vegana", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Gluten|Lactosa", "qD2s": "Vegetariano|Vegano"}, "de": {"qS": "👥 Portionen", "qSo": "Für 2 Personen|Für 6 Personen|Für 8 Personen", "qD1": "🚫 Ohne", "qD1o": "Glutenfrei|Laktosefrei", "qD2": "🥦 Ernährung", "qD2o": "Vegetarische Version|Vegane Version", "qSs": "2 Pers.|6 Pers.|8 Pers.", "qD1s": "Gluten|Laktose", "qD2s": "Veggie|Vegan"}, "it": {"qS": "👥 Porzioni", "qSo": "Per 2 persone|Per 6 persone|Per 8 persone", "qD1": "🚫 Senza", "qD1o": "Senza glutine|Senza lattosio", "qD2": "🥦 Dieta", "qD2o": "Versione vegetariana|Versione vegana", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Glutine|Lattosio", "qD2s": "Vegetariano|Vegano"}, "pt": {"qS": "👥 Porções", "qSo": "Para 2 pessoas|Para 6 pessoas|Para 8 pessoas", "qD1": "🚫 Sem", "qD1o": "Sem glúten|Sem lactose", "qD2": "🥦 Dieta", "qD2o": "Versão vegetariana|Versão vegana", "qSs": "2 pess.|6 pess.|8 pess.", "qD1s": "Glúten|Lactose", "qD2s": "Vegetariano|Vegano"}};
+const I18Q={"fr": {"qS": "👥 Pers.", "qSo": "Pour 2 personnes|Pour 6 personnes|Pour 8 personnes", "qD1": "🚫 Sans", "qD1o": "Sans gluten|Sans lactose", "qD2": "🥦 Régime", "qD2o": "Version végétarienne|Version végane", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Gluten|Lactose", "qD2s": "Végétarien|Végan"}, "en": {"qS": "👥 People", "qSo": "For 2 people|For 6 people|For 8 people", "qD1": "🚫 No", "qD1o": "Gluten-free|Lactose-free", "qD2": "🥦 Diet", "qD2o": "Vegetarian version|Vegan version", "qSs": "2 people|6 people|8 people", "qD1s": "Gluten|Lactose", "qD2s": "Vegetarian|Vegan"}, "es": {"qS": "👥 Pers.", "qSo": "Para 2 personas|Para 6 personas|Para 8 personas", "qD1": "🚫 Sin", "qD1o": "Sin gluten|Sin lactosa", "qD2": "🥦 Dieta", "qD2o": "Versión vegetariana|Versión vegana", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Gluten|Lactosa", "qD2s": "Veggie|Vegano"}, "de": {"qS": "👥 Pers.", "qSo": "Für 2 Personen|Für 6 Personen|Für 8 Personen", "qD1": "🚫 Ohne", "qD1o": "Glutenfrei|Laktosefrei", "qD2": "🥦 Diät", "qD2o": "Vegetarische Version|Vegane Version", "qSs": "2 Pers.|6 Pers.|8 Pers.", "qD1s": "Gluten|Laktose", "qD2s": "Veggie|Vegan"}, "it": {"qS": "👥 Pers.", "qSo": "Per 2 persone|Per 6 persone|Per 8 persone", "qD1": "🚫 Senza", "qD1o": "Senza glutine|Senza lattosio", "qD2": "🥦 Dieta", "qD2o": "Versione vegetariana|Versione vegana", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Glutine|Lattosio", "qD2s": "Veggie|Vegano"}, "pt": {"qS": "👥 Pess.", "qSo": "Para 2 pessoas|Para 6 pessoas|Para 8 pessoas", "qD1": "🚫 Sem", "qD1o": "Sem glúten|Sem lactose", "qD2": "🥦 Dieta", "qD2o": "Versão vegetariana|Versão vegana", "qSs": "2 pess.|6 pess.|8 pess.", "qD1s": "Glúten|Lactose", "qD2s": "Veggie|Vegano"}};
 Object.keys(I18Q).forEach(k=>Object.assign(I18[k],I18Q[k]));
 let cardId=null,hfav=false;
 // ---------- Side menu ----------
@@ -533,7 +541,14 @@ function drawFavs(){
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recipe';
 function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
-function syncCardBtn(){$('#tocard').style.display=currentId?'':'none';try{chatActions()}catch(x){}}
+function syncCardBtn(){$('#tocard').style.display=currentId?'':'none';try{chatActions()}catch(x){}syncFavUI()}
+// Keeps every favorite heart of the open chat (header + action bar) in line with the saved recipe.
+function syncFavUI(){
+  const h=$('#tofav');if(!h)return;const e=currentId?loadH().find(x=>x.id===currentId):null;
+  h.style.display=e?'':'none';if(!e)return;
+  h.textContent=e.fav?'❤️':'🤍';h.setAttribute('aria-label',T().fav);h.title=T().fav;h.classList.toggle('on',!!e.fav);
+  const b=log.querySelector('.chact .cbtn');if(b){b.textContent=(e.fav?'❤️ ':'🤍 ')+T().fav;b.classList.toggle('on',!!e.fav)}
+}
 // Action bar under the latest recipe in the chat (favorite, share, card, rating), same actions as on the recipe card.
 function chatActions(){
   log.querySelectorAll('.chact,.chcom').forEach(x=>x.remove());
@@ -569,7 +584,7 @@ async function getPhoto(e){
   }catch(x){return null}
   updEntry(e.id,z=>{z.photo=url});return url;
 }
-function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();drawFavs();return e&&e.fav}
+function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();drawFavs();try{syncFavUI()}catch(x){}return e&&e.fav}
 async function shareRecipe(e){
   const body=e.title+'\n\n'+plain(recipeText(e))+(/^https?:/.test(location.href)?'\n\n'+location.origin:'');
   if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
@@ -650,6 +665,12 @@ function renderRecipe(el,txt,title,chat,swap){
         li.append(nm,tx);list.appendChild(li);
       }else{close();const p=document.createElement('p');p.className='rp';p.textContent=l;box.appendChild(p)}
     });
+    if(utS){ // utensils section: title always visible, the list opens on tap
+      box.classList.add('fold');h.setAttribute('role','button');h.tabIndex=0;h.setAttribute('aria-expanded','false');
+      const ar=document.createElement('span');ar.className='arr';ar.textContent='▾';ar.setAttribute('aria-hidden','true');h.appendChild(ar);
+      const tg=()=>{const o=box.classList.toggle('open');h.setAttribute('aria-expanded',String(o))};
+      h.onclick=tg;h.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tg()}};
+    }
     if(swap&&ingS){bar=document.createElement('button');bar.type='button';bar.className='swgo';bar.hidden=true;bar.onclick=()=>swap([...missing]);box.appendChild(bar)}
     el.appendChild(box);
   });
@@ -694,6 +715,7 @@ function openCard(id){
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
   const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
   act.append(fv,sh,ct);body.appendChild(act);body.appendChild(rateBox(id));
+  const qg=document.createElement('div');qg.className='qgrid';quickCols(qg,o=>{openSaved(id);send(o)});body.appendChild(qg);
   const sh2=document.createElement('p');sh2.className='swh';sh2.textContent='↔ '+t.swapH;body.appendChild(sh2);
   const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title,false,ings=>openBranch(id,ings));body.appendChild(rt);
   buildComments(body,slug(e.title));
@@ -1010,6 +1032,22 @@ document.querySelectorAll('.ditem').forEach(b=>b.onclick=()=>goTo(b.dataset.go))
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classList.contains('on'))closeDrawer()});
 $('#cardback').onclick=()=>show('home');
 $('#tocard').onclick=()=>{if(currentId)openCard(currentId)};
+// « Back to top » button: shown in the chat and on the recipe card once the reader has scrolled down.
+function topScroller(){return $('#chat').classList.contains('on')?log:$('#card').classList.contains('on')?$('#cardbody'):null}
+function updTop(){
+  const b=$('#totop'),sc=topScroller();if(!b)return;
+  if(!sc||sc.scrollTop<400){b.classList.remove('on');return}
+  const r=sc.getBoundingClientRect(),c4=sc===log?document.querySelector('#quick .qcol:last-child'):null;
+  if(c4){ // chat: sits in the empty space under « Faster », so it never covers the content
+    const q=$('#quick').getBoundingClientRect(),c=c4.getBoundingClientRect();
+    b.style.left=Math.round(c.left+c.width/2-22)+'px';b.style.top=Math.round(q.bottom-10-44)+'px';
+  }else{b.style.left=(r.right-62)+'px';b.style.top=(r.bottom-62)+'px'}
+  b.classList.add('on');
+}
+{const b=document.createElement('button');b.id='totop';b.type='button';b.textContent='↑';b.setAttribute('aria-label','Top');
+  b.onclick=()=>{const sc=topScroller();if(sc)sc.scrollTo({top:0,behavior:'smooth'})};document.body.appendChild(b);
+  [log,$('#cardbody')].forEach(x=>x.addEventListener('scroll',updTop,{passive:true}));addEventListener('resize',updTop)}
+$('#tofav').onclick=()=>{if(currentId){const f=toggleFav(currentId);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
