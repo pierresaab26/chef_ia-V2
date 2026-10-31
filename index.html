@@ -63,6 +63,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .cact .rate{margin:2px 4px 0}
 #totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:var(--pink);color:#fff;font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25);padding:0}#totop.on{display:grid}
 .qgrid{padding:0;margin:0 0 14px}
+.dlgw{position:fixed;inset:0;z-index:60;background:rgba(10,8,20,.45);display:grid;place-items:center;padding:20px}.dlg{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.3)}.dlg p{margin:0 0 14px;line-height:1.4}.dlg input{width:100%;box-sizing:border-box;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg1);color:var(--ink);margin:0 0 14px}.dlgb{display:flex;gap:8px;justify-content:flex-end}.dlgb .cbtn{border:1px solid var(--bd)}.dlgb .dlgok{background:var(--green);color:#10200a;border-color:transparent}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
 .rl{font-size:13px;color:var(--mut)}
@@ -89,7 +90,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .cpub{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:0 18px}
 .cpub:disabled{opacity:.5}
 #hfilter{display:flex;gap:8px;padding:10px 18px 0}
-.hheart{padding:0 4px;font-size:14px}
+
 @media (min-width:768px){#app{max-width:760px}.grid{grid-template-columns:repeat(4,1fr)}.cphoto{height:300px}}
 #scrim{position:fixed;inset:0;background:rgba(10,8,20,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
 #scrim.on{opacity:1;pointer-events:auto}
@@ -183,8 +184,6 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .swp{flex:none;align-self:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--pink);font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}
 .swh{color:var(--mut);font-size:13px;margin:0 4px 10px}
 .ring .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);flex:none;margin-top:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
-.ring li.done .ck{background:var(--pink)}
-.ring li.done .tx{text-decoration:line-through;opacity:.5}
 .rstep li{display:flex;gap:14px;align-items:flex-start;padding:11px 0;line-height:1.5}
 .rstep .num{width:30px;height:30px;border-radius:50%;background:var(--pink);color:#fff;font-weight:700;display:grid;place-items:center;flex:none;font-size:14px}
 .rp{margin:6px 0;line-height:1.5}
@@ -328,13 +327,784 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 </div>
 
 <script>
+// ---------- Interface texts: ONE block per language, same keys in every language ----------
+// e_* keys are import/API error messages, read as t['e_'+code].
 const I18={
-fr:{n:"Français",hist:"Historique des recettes",more:"Voir plus",empty:"Vos recettes apparaîtront ici dès que vous en aurez demandé une.",del:"Supprimer",delq:"Supprimer cette recette de l’historique ?",hi:"Bonjour !",sub:"Votre chef de poche, propulsé par l’IA",ask:"Que voulez-vous cuisiner ?",today:"Recette du jour",themes:"Thèmes",chefs:"Chefs IA",hero:"Rosbif",hm:"Français · dîner · 45 min",disc:"Discuter ›",cd:"Chef étoilé · cuisine du monde",w:"Que voulons-nous cuisiner ? Demandez une recette, puis adaptez-la : « je n’ai pas de persil, j’ai du Cajun », « redonne-la pour 2 »…",ph:"Ex. : je n’ai pas de persil, j’ai du Cajun",e429:"Trop de demandes, réessayez dans un instant.",err:"Une erreur est survenue, réessayez.",code:"Code d’accès :",send:"Envoyer",req:"Donne-moi une recette de ",sur:"Surprends-moi avec une recette facile pour ce soir",cu:["Cuisine italienne","Cuisine japonaise","Cuisine française"],th:"Tout|Anniversaire|Petit-déj|Dîner|Végé",rc:"Pizza Margherita|Pancakes moelleux|Gâteau au chocolat|Curry de légumes|Pâtes carbonara|Œufs brouillés|Cupcakes|Buddha bowl",q:"Pour 2 personnes|Pour 6 personnes|Sans gluten|Plus rapide|Version végétarienne",sr:"fr-FR"},
-en:{n:"English",hist:"Recipe history",more:"See more",empty:"Your recipes will show up here once you ask for one.",del:"Delete",delq:"Delete this recipe from your history?",hi:"Hello!",sub:"Your pocket chef, powered by AI",ask:"What do you want to cook?",today:"Recipe of the day",themes:"Themes",chefs:"AI Chefs",hero:"Roast beef",hm:"French · dinner · 45 min",disc:"Chat ›",cd:"Michelin-starred chef · world cuisine",w:"What shall we cook? Ask for a recipe, then adapt it: “I have no parsley, I have Cajun spice”, “give it to me again for 2”…",ph:"E.g. replace the olive oil with butter",e429:"Too many requests, please try again in a moment.",err:"Something went wrong, please try again.",code:"Access code:",send:"Send",req:"Give me a recipe for ",sur:"Surprise me with an easy recipe for tonight",cu:["Italian cuisine","Japanese cuisine","French cuisine"],th:"All|Birthday|Breakfast|Dinner|Veggie",rc:"Margherita pizza|Fluffy pancakes|Chocolate cake|Vegetable curry|Pasta carbonara|Scrambled eggs|Cupcakes|Buddha bowl",q:"For 2 people|For 6 people|Gluten-free|Faster|Vegetarian version",sr:"en-US"},
-es:{n:"Español",hist:"Historial de recetas",more:"Ver más",empty:"Tus recetas aparecerán aquí cuando pidas una.",del:"Eliminar",delq:"¿Eliminar esta receta del historial?",hi:"¡Hola!",sub:"Tu chef de bolsillo, con IA",ask:"¿Qué quieres cocinar?",today:"Receta del día",themes:"Temas",chefs:"Chefs IA",hero:"Rosbif",hm:"Francés · cena · 45 min",disc:"Hablar ›",cd:"Chef con estrella · cocina del mundo",w:"¿Qué cocinamos? Pide una receta y luego adáptala: «no tengo perejil, tengo Cajun», «dámela otra vez para 2»…",ph:"Ej.: cambia el aceite de oliva por mantequilla",e429:"Demasiadas solicitudes, inténtalo de nuevo en un momento.",err:"Ha ocurrido un error, inténtalo de nuevo.",code:"Código de acceso:",send:"Enviar",req:"Dame una receta de ",sur:"Sorpréndeme con una receta fácil para esta noche",cu:["Cocina italiana","Cocina japonesa","Cocina francesa"],th:"Todo|Cumpleaños|Desayuno|Cena|Veg",rc:"Pizza Margarita|Tortitas esponjosas|Tarta de chocolate|Curry de verduras|Pasta carbonara|Huevos revueltos|Cupcakes|Buddha bowl",q:"Para 2 personas|Para 6 personas|Sin gluten|Más rápido|Versión vegetariana",sr:"es-ES"},
-de:{n:"Deutsch",hist:"Rezeptverlauf",more:"Mehr anzeigen",empty:"Deine Rezepte erscheinen hier, sobald du eines angefragt hast.",del:"Löschen",delq:"Dieses Rezept aus dem Verlauf löschen?",hi:"Hallo!",sub:"Dein Taschenkoch mit KI",ask:"Was möchtest du kochen?",today:"Rezept des Tages",themes:"Themen",chefs:"KI-Köche",hero:"Roastbeef",hm:"Französisch · Abendessen · 45 Min.",disc:"Chatten ›",cd:"Sternekoch · Weltküche",w:"Was kochen wir? Frag nach einem Rezept und passe es dann an: „Ich habe keine Petersilie, aber Cajun“, „gib es mir nochmal für 2“…",ph:"z. B. ersetze das Olivenöl durch Butter",e429:"Zu viele Anfragen, bitte gleich nochmal versuchen.",err:"Es ist ein Fehler aufgetreten, bitte erneut versuchen.",code:"Zugangscode:",send:"Senden",req:"Gib mir ein Rezept für ",sur:"Überrasche mich mit einem einfachen Rezept für heute Abend",cu:["Italienische Küche","Japanische Küche","Französische Küche"],th:"Alle|Geburtstag|Frühstück|Abendessen|Vegi",rc:"Pizza Margherita|Fluffige Pfannkuchen|Schokoladenkuchen|Gemüsecurry|Pasta Carbonara|Rührei|Cupcakes|Buddha Bowl",q:"Für 2 Personen|Für 6 Personen|Glutenfrei|Schneller|Vegetarische Version",sr:"de-DE"},
-it:{n:"Italiano",hist:"Cronologia ricette",more:"Vedi altro",empty:"Le tue ricette appariranno qui dopo la prima richiesta.",del:"Elimina",delq:"Eliminare questa ricetta dalla cronologia?",hi:"Ciao!",sub:"Il tuo chef tascabile, con l’IA",ask:"Cosa vuoi cucinare?",today:"Ricetta del giorno",themes:"Temi",chefs:"Chef IA",hero:"Roast beef",hm:"Francese · cena · 45 min",disc:"Parla ›",cd:"Chef stellato · cucina del mondo",w:"Cosa cuciniamo? Chiedi una ricetta, poi adattala: «non ho il prezzemolo, ho il Cajun», «dammela di nuovo per 2»…",ph:"Es.: sostituisci l’olio d’oliva con il burro",e429:"Troppe richieste, riprova tra poco.",err:"Si è verificato un errore, riprova.",code:"Codice di accesso:",send:"Invia",req:"Dammi una ricetta per ",sur:"Sorprendimi con una ricetta facile per stasera",cu:["Cucina italiana","Cucina giapponese","Cucina francese"],th:"Tutto|Compleanno|Colazione|Cena|Veg",rc:"Pizza Margherita|Pancake soffici|Torta al cioccolato|Curry di verdure|Pasta alla carbonara|Uova strapazzate|Cupcake|Buddha bowl",q:"Per 2 persone|Per 6 persone|Senza glutine|Più veloce|Versione vegetariana",sr:"it-IT"},
-pt:{n:"Português",hist:"Histórico de receitas",more:"Ver mais",empty:"As suas receitas aparecerão aqui assim que pedir uma.",del:"Eliminar",delq:"Eliminar esta receita do histórico?",hi:"Olá!",sub:"O seu chef de bolso, com IA",ask:"O que quer cozinhar?",today:"Receita do dia",themes:"Temas",chefs:"Chefs IA",hero:"Rosbife",hm:"Francês · jantar · 45 min",disc:"Conversar ›",cd:"Chef estrelado · cozinha do mundo",w:"O que vamos cozinhar? Peça uma receita e depois adapte-a: «não tenho salsa, tenho Cajun», «dê-me de novo para 2»…",ph:"Ex.: troque o azeite por manteiga",e429:"Muitos pedidos, tente novamente daqui a pouco.",err:"Ocorreu um erro, tente novamente.",code:"Código de acesso:",send:"Enviar",req:"Dê-me uma receita de ",sur:"Surpreenda-me com uma receita fácil para esta noite",cu:["Cozinha italiana","Cozinha japonesa","Cozinha francesa"],th:"Tudo|Aniversário|Café da manhã|Jantar|Veg",rc:"Pizza Margherita|Panquecas fofas|Bolo de chocolate|Curry de legumes|Massa carbonara|Ovos mexidos|Cupcakes|Buddha bowl",q:"Para 2 pessoas|Para 6 pessoas|Sem glúten|Mais rápido|Versão vegetariana",sr:"pt-BR"}};
+fr:{
+  ok:"Valider",
+  n:"Français",
+  hist:"Historique des recettes",
+  more:"Voir plus",
+  empty:"Vos recettes apparaîtront ici dès que vous en aurez demandé une.",
+  del:"Supprimer",
+  delq:"Supprimer cette recette de l’historique ?",
+  hi:"Bonjour !",
+  sub:"Votre chef de poche, propulsé par l’IA",
+  ask:"Que voulez-vous cuisiner ?",
+  themes:"Thèmes",
+  chefs:"Chefs IA",
+  disc:"Discuter ›",
+  cd:"Chef étoilé · cuisine du monde",
+  ph:"Ex. : je n’ai pas de persil, j’ai du Cajun",
+  e429:"Trop de demandes, réessayez dans un instant.",
+  err:"Une erreur est survenue, réessayez.",
+  code:"Code d’accès :",
+  send:"Envoyer",
+  req:"Donne-moi une recette de ",
+  cu:["Cuisine italienne","Cuisine japonaise","Cuisine française"],
+  th:"Tout|Anniversaire|Petit-déj|Dîner|Végé",
+  rc:"Pizza Margherita|Pancakes moelleux|Gâteau au chocolat|Curry de légumes|Pâtes carbonara|Œufs brouillés|Cupcakes|Buddha bowl",
+  q:"Pour 2 personnes|Pour 6 personnes|Sans gluten|Plus rapide|Version végétarienne",
+  sr:"fr-FR",
+  wT:"Que voulons-nous cuisiner ?",
+  wS:"Recettes, desserts, cocktails… Demandez, puis adaptez : « sans persil, avec du Cajun », « pour 2 personnes ».",
+  wEx:"🍲 Un plat pour ce soir|🍰 Un dessert rapide|🍹 Un cocktail sans alcool|🥗 Une idée de menu",
+  e_credit:"Crédit insuffisant sur votre compte Anthropic : ajoutez du crédit sur console.anthropic.com (Billing).",
+  e_badkey:"Clé API refusée : vérifiez ANTHROPIC_API_KEY dans Vercel, puis redéployez.",
+  e_model:"Modèle introuvable : vérifiez la variable MODEL (ou supprimez-la) dans Vercel.",
+  e_code:"Code d’accès incorrect. Réessayez.",
+  swapT:"Remplacer cet ingrédient",
+  swapH:"Touchez le cercle d’un ingrédient que vous n’avez pas : il est barré. Puis lancez une nouvelle recette, ou touchez ↔. Votre favori reste intact.",
+  swapMsg:"Je n’ai pas : {i}. Crée-moi une nouvelle recette complète avec un autre ingrédient à la place, en ajustant les quantités et les étapes.",
+  variant:"variante",
+  swapCtx:"Recette d’origine :",
+  missT:"pas dispo",
+  swapGo:"Nouvelle recette sans : {i}",
+  rateT:"Votre note",
+  rateH:"1 = très mauvaise · 5 = excellente",
+  rateOk:"Note enregistrée : {n}/5",
+  card:"Fiche",
+  fav:"Favori",
+  favs:"Favoris",
+  all:"Toutes",
+  nofav:"Aucun favori pour l’instant. Touchez ❤️ sur une recette.",
+  share:"Partager",
+  copied:"Recette copiée dans le presse-papiers",
+  cont:"Continuer avec le chef",
+  com:"Commentaires",
+  nocom:"Aucun commentaire pour l’instant. Soyez le premier !",
+  pub:"Publier",
+  nm:"Votre prénom",
+  wr:"Écrire un commentaire…",
+  cdel:"Supprimer",
+  cdq:"Supprimer ce commentaire ?",
+  cOff:"Les commentaires ne sont pas activés sur ce site.",
+  cErr:"Impossible de charger les commentaires.",
+  cRate:"Trop de commentaires, réessayez dans une minute.",
+  credit:"Photo : Wikipédia",
+  anon:"Anonyme",
+  now:"à l’instant",
+  home:"Accueil",
+  menu:"Menu",
+  close:"Fermer",
+  favT:"Mes recettes favorites",
+  search:"Rechercher une recette…",
+  noresult:"Aucune recette trouvée.",
+  nokey:"Le chef n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.",
+  catT:"Que voulez-vous créer ?",
+  cats:"🍲 Plats du quotidien|🍰 Desserts et pâtisseries|🍹 Cocktails|🥤 Boissons|🍕 Cuisine du monde|🥗 Végétarien et régimes|🍞 Boulangerie et pains|🧂 Sauces et accompagnements|🍬 Chocolats et glaces|🥑 Ingrédients et techniques|🍽️ Menus et idées de repas",
+  catAsk:"Aide-moi dans la catégorie « {x} » : propose-moi une idée ou une recette pour commencer.",
+  qS:"👥 Pers.",
+  qSo:"Pour 2 personnes|Pour 6 personnes|Pour 8 personnes",
+  qD1:"🚫 Sans",
+  qD1o:"Sans gluten|Sans lactose",
+  qD2:"🥦 Régime",
+  qD2o:"Version végétarienne|Version végane",
+  qSs:"2 pers.|6 pers.|8 pers.",
+  qD1s:"Gluten|Lactose",
+  qD2s:"Végétarien|Végan",
+  imT:"Importer une recette",
+  imHomeS:"Depuis une photo ou un lien internet",
+  imHint:"Choisissez une photo (page de livre, recette manuscrite, capture d’écran…) ou collez un lien. Vous vérifiez la recette reconnue avant de l’utiliser.",
+  imPh:"📷 Photo",
+  imCam:"Prendre une photo",
+  imGal:"Choisir dans la galerie",
+  imLk:"🔗 Lien internet",
+  imUrl:"Collez le lien de la recette",
+  imGo:"Importer",
+  imWait:"Lecture de la recette en cours…",
+  imUse:"Utiliser cette recette",
+  imCancel:"Annuler",
+  imCheck:"Vérifiez que la recette est bien reconnue (quantités, étapes, temps). Rien n’a encore été modifié ni enregistré.",
+  pServ:"Portions",
+  pTime:"Temps",
+  pTemp:"Température",
+  hIng:"Ingrédients",
+  hSteps:"Préparation",
+  hNotes:"Notes",
+  srcL:"Source",
+  imUntitled:"Recette importée",
+  imMsgP:"J’ai importé cette recette depuis une photo.",
+  imMsgL:"J’ai importé cette recette depuis {x}.",
+  srcP:"Importée d’une photo",
+  e_badurl:"Ce lien n’est pas valide.",
+  e_private:"Ce lien n’est pas accessible (adresse interne ou non autorisée).",
+  e_blocked:"Ce site refuse la lecture automatique. Faites plutôt une capture d’écran de la recette et importez-la en photo.",
+  e_login:"Cette page demande une connexion : je ne peux pas la lire. Faites une capture d’écran de la recette et importez-la en photo.",
+  e_notfound:"Page introuvable : vérifiez le lien.",
+  e_timeout:"Le site met trop de temps à répondre. Réessayez plus tard.",
+  e_unreachable:"Impossible d’ouvrir ce site pour le moment.",
+  e_norecipe:"Aucune recette n’a été reconnue. Pour une photo, la recette doit être écrite sur l’image : une simple photo de plat ne suffit pas.",
+  e_toobig:"L’image ou la page est trop volumineuse.",
+  e_badimage:"Cette image n’a pas pu être lue (formats : JPG, PNG, WebP).",
+  e_nokey:"L’import n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.",
+  e_upstream:"Le service d’analyse est indisponible. Réessayez dans un instant.",
+  e_noapi:"L’import ne fonctionne que sur le site Vercel, pas dans l’aperçu claude.ai.",
+  e_network:"Connexion impossible. Vérifiez votre réseau.",
+  imgT:"Image du plat",
+  imgUrl:"Collez le lien d’une image",
+  imgUse:"Utiliser",
+  imgReset:"Revenir au dessin",
+  imgOk:"Image enregistrée",
+  imgBad:"Impossible de charger cette image. Vérifiez le lien.",
+  imgFull:"Mémoire de l’appareil pleine : image non enregistrée."
+},
+en:{
+  ok:"OK",
+  n:"English",
+  hist:"Recipe history",
+  more:"See more",
+  empty:"Your recipes will show up here once you ask for one.",
+  del:"Delete",
+  delq:"Delete this recipe from your history?",
+  hi:"Hello!",
+  sub:"Your pocket chef, powered by AI",
+  ask:"What do you want to cook?",
+  themes:"Themes",
+  chefs:"AI Chefs",
+  disc:"Chat ›",
+  cd:"Michelin-starred chef · world cuisine",
+  ph:"E.g. replace the olive oil with butter",
+  e429:"Too many requests, please try again in a moment.",
+  err:"Something went wrong, please try again.",
+  code:"Access code:",
+  send:"Send",
+  req:"Give me a recipe for ",
+  cu:["Italian cuisine","Japanese cuisine","French cuisine"],
+  th:"All|Birthday|Breakfast|Dinner|Veggie",
+  rc:"Margherita pizza|Fluffy pancakes|Chocolate cake|Vegetable curry|Pasta carbonara|Scrambled eggs|Cupcakes|Buddha bowl",
+  q:"For 2 people|For 6 people|Gluten-free|Faster|Vegetarian version",
+  sr:"en-US",
+  wT:"What shall we cook?",
+  wS:"Recipes, desserts, cocktails… Ask, then adapt: “no parsley, with Cajun spice”, “for 2 people”.",
+  wEx:"🍲 A dish for tonight|🍰 A quick dessert|🍹 A non-alcoholic cocktail|🥗 A menu idea",
+  e_credit:"Not enough credit on your Anthropic account: add credit at console.anthropic.com (Billing).",
+  e_badkey:"API key rejected: check ANTHROPIC_API_KEY in Vercel, then redeploy.",
+  e_model:"Model not found: check the MODEL variable (or remove it) in Vercel.",
+  e_code:"Wrong access code. Try again.",
+  swapT:"Replace this ingredient",
+  swapH:"Tap the circle of an ingredient you don’t have: it gets crossed out. Then start a new recipe, or tap ↔. Your favorite stays untouched.",
+  swapMsg:"I don’t have: {i}. Create a new complete recipe using another ingredient instead, adjusting quantities and steps.",
+  variant:"variation",
+  swapCtx:"Original recipe:",
+  missT:"missing",
+  swapGo:"New recipe without: {i}",
+  rateT:"Your rating",
+  rateH:"1 = terrible · 5 = the best",
+  rateOk:"Rating saved: {n}/5",
+  card:"Card",
+  fav:"Favorite",
+  favs:"Favorites",
+  all:"All",
+  nofav:"No favorites yet. Tap ❤️ on a recipe.",
+  share:"Share",
+  copied:"Recipe copied to clipboard",
+  cont:"Continue with the chef",
+  com:"Comments",
+  nocom:"No comments yet. Be the first!",
+  pub:"Post",
+  nm:"Your first name",
+  wr:"Write a comment…",
+  cdel:"Delete",
+  cdq:"Delete this comment?",
+  cOff:"Comments are not enabled on this site.",
+  cErr:"Could not load comments.",
+  cRate:"Too many comments, try again in a minute.",
+  credit:"Photo: Wikipedia",
+  anon:"Anonymous",
+  now:"just now",
+  home:"Home",
+  menu:"Menu",
+  close:"Close",
+  favT:"My favorite recipes",
+  search:"Search a recipe…",
+  noresult:"No recipe found.",
+  nokey:"The chef isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy.",
+  catT:"What do you want to create?",
+  cats:"🍲 Everyday dishes|🍰 Desserts and pastries|🍹 Cocktails|🥤 Drinks|🍕 World cuisine|🥗 Vegetarian and diets|🍞 Bakery and breads|🧂 Sauces and sides|🍬 Chocolate and ice cream|🥑 Ingredients and techniques|🍽️ Menus and meal ideas",
+  catAsk:"Help me in the category “{x}”: suggest an idea or a recipe to get started.",
+  qS:"👥 People",
+  qSo:"For 2 people|For 6 people|For 8 people",
+  qD1:"🚫 No",
+  qD1o:"Gluten-free|Lactose-free",
+  qD2:"🥦 Diet",
+  qD2o:"Vegetarian version|Vegan version",
+  qSs:"2 people|6 people|8 people",
+  qD1s:"Gluten|Lactose",
+  qD2s:"Vegetarian|Vegan",
+  imT:"Import a recipe",
+  imHomeS:"From a photo or a web link",
+  imHint:"Pick a photo (cookbook page, handwritten recipe, screenshot…) or paste a link. You check the recognized recipe before using it.",
+  imPh:"📷 Photo",
+  imCam:"Take a photo",
+  imGal:"Choose from gallery",
+  imLk:"🔗 Web link",
+  imUrl:"Paste the recipe link",
+  imGo:"Import",
+  imWait:"Reading the recipe…",
+  imUse:"Use this recipe",
+  imCancel:"Cancel",
+  imCheck:"Check that the recipe was recognized correctly (amounts, steps, times). Nothing has been changed or saved yet.",
+  pServ:"Servings",
+  pTime:"Time",
+  pTemp:"Temperature",
+  hIng:"Ingredients",
+  hSteps:"Method",
+  hNotes:"Notes",
+  srcL:"Source",
+  imUntitled:"Imported recipe",
+  imMsgP:"I imported this recipe from a photo.",
+  imMsgL:"I imported this recipe from {x}.",
+  srcP:"Imported from a photo",
+  e_badurl:"This link is not valid.",
+  e_private:"This link can’t be reached (internal or disallowed address).",
+  e_blocked:"This site blocks automatic reading. Take a screenshot of the recipe and import it as a photo instead.",
+  e_login:"This page requires a login, so I can’t read it. Take a screenshot of the recipe and import it as a photo.",
+  e_notfound:"Page not found: check the link.",
+  e_timeout:"The site is taking too long to respond. Try again later.",
+  e_unreachable:"Can’t open this site right now.",
+  e_norecipe:"No recipe was recognized. For a photo, the recipe must be written in the image: a plain photo of a dish isn’t enough.",
+  e_toobig:"The image or page is too large.",
+  e_badimage:"This image couldn’t be read (formats: JPG, PNG, WebP).",
+  e_nokey:"Import isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy.",
+  e_upstream:"The analysis service is unavailable. Try again in a moment.",
+  e_noapi:"Import only works on the Vercel site, not in the claude.ai preview.",
+  e_network:"Can’t connect. Check your network.",
+  imgT:"Dish image",
+  imgUrl:"Paste an image link",
+  imgUse:"Use",
+  imgReset:"Back to the drawing",
+  imgOk:"Image saved",
+  imgBad:"Couldn’t load this image. Check the link.",
+  imgFull:"Device storage is full: image not saved."
+},
+es:{
+  ok:"Aceptar",
+  n:"Español",
+  hist:"Historial de recetas",
+  more:"Ver más",
+  empty:"Tus recetas aparecerán aquí cuando pidas una.",
+  del:"Eliminar",
+  delq:"¿Eliminar esta receta del historial?",
+  hi:"¡Hola!",
+  sub:"Tu chef de bolsillo, con IA",
+  ask:"¿Qué quieres cocinar?",
+  themes:"Temas",
+  chefs:"Chefs IA",
+  disc:"Hablar ›",
+  cd:"Chef con estrella · cocina del mundo",
+  ph:"Ej.: cambia el aceite de oliva por mantequilla",
+  e429:"Demasiadas solicitudes, inténtalo de nuevo en un momento.",
+  err:"Ha ocurrido un error, inténtalo de nuevo.",
+  code:"Código de acceso:",
+  send:"Enviar",
+  req:"Dame una receta de ",
+  cu:["Cocina italiana","Cocina japonesa","Cocina francesa"],
+  th:"Todo|Cumpleaños|Desayuno|Cena|Veg",
+  rc:"Pizza Margarita|Tortitas esponjosas|Tarta de chocolate|Curry de verduras|Pasta carbonara|Huevos revueltos|Cupcakes|Buddha bowl",
+  q:"Para 2 personas|Para 6 personas|Sin gluten|Más rápido|Versión vegetariana",
+  sr:"es-ES",
+  wT:"¿Qué cocinamos?",
+  wS:"Recetas, postres, cócteles… Pide y luego adapta: «sin perejil, con Cajun», «para 2 personas».",
+  wEx:"🍲 Un plato para esta noche|🍰 Un postre rápido|🍹 Un cóctel sin alcohol|🥗 Una idea de menú",
+  e_credit:"Crédito insuficiente en tu cuenta de Anthropic: añade crédito en console.anthropic.com (Billing).",
+  e_badkey:"Clave API rechazada: revisa ANTHROPIC_API_KEY en Vercel y vuelve a desplegar.",
+  e_model:"Modelo no encontrado: revisa la variable MODEL (o elimínala) en Vercel.",
+  e_code:"Código de acceso incorrecto. Inténtalo de nuevo.",
+  swapT:"Sustituir este ingrediente",
+  swapH:"Toca el círculo de un ingrediente que no tengas: se tacha. Luego crea una receta nueva, o toca ↔. Tu favorito no cambia.",
+  swapMsg:"No tengo: {i}. Crea una receta nueva y completa con otro ingrediente en su lugar, ajustando cantidades y pasos.",
+  variant:"variante",
+  swapCtx:"Receta original:",
+  missT:"no tengo",
+  swapGo:"Receta nueva sin: {i}",
+  rateT:"Tu nota",
+  rateH:"1 = muy mala · 5 = la mejor",
+  rateOk:"Nota guardada: {n}/5",
+  card:"Ficha",
+  fav:"Favorito",
+  favs:"Favoritos",
+  all:"Todas",
+  nofav:"Aún no hay favoritos. Toca ❤️ en una receta.",
+  share:"Compartir",
+  copied:"Receta copiada al portapapeles",
+  cont:"Seguir con el chef",
+  com:"Comentarios",
+  nocom:"Aún no hay comentarios. ¡Sé el primero!",
+  pub:"Publicar",
+  nm:"Tu nombre",
+  wr:"Escribe un comentario…",
+  cdel:"Eliminar",
+  cdq:"¿Eliminar este comentario?",
+  cOff:"Los comentarios no están activados en este sitio.",
+  cErr:"No se pudieron cargar los comentarios.",
+  cRate:"Demasiados comentarios, inténtalo en un minuto.",
+  credit:"Foto: Wikipedia",
+  anon:"Anónimo",
+  now:"ahora mismo",
+  home:"Inicio",
+  menu:"Menú",
+  close:"Cerrar",
+  favT:"Mis recetas favoritas",
+  search:"Buscar una receta…",
+  noresult:"No se encontró ninguna receta.",
+  nokey:"El chef aún no está conectado: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar.",
+  catT:"¿Qué quieres crear?",
+  cats:"🍲 Platos del día a día|🍰 Postres y pastelería|🍹 Cócteles|🥤 Bebidas|🍕 Cocina del mundo|🥗 Vegetariano y dietas|🍞 Panadería y panes|🧂 Salsas y guarniciones|🍬 Chocolates y helados|🥑 Ingredientes y técnicas|🍽️ Menús e ideas de comidas",
+  catAsk:"Ayúdame en la categoría «{x}»: propón una idea o una receta para empezar.",
+  qS:"👥 Pers.",
+  qSo:"Para 2 personas|Para 6 personas|Para 8 personas",
+  qD1:"🚫 Sin",
+  qD1o:"Sin gluten|Sin lactosa",
+  qD2:"🥦 Dieta",
+  qD2o:"Versión vegetariana|Versión vegana",
+  qSs:"2 pers.|6 pers.|8 pers.",
+  qD1s:"Gluten|Lactosa",
+  qD2s:"Veggie|Vegano",
+  imT:"Importar una receta",
+  imHomeS:"Desde una foto o un enlace web",
+  imHint:"Elige una foto (página de libro, receta manuscrita, captura de pantalla…) o pega un enlace. Revisas la receta reconocida antes de usarla.",
+  imPh:"📷 Foto",
+  imCam:"Hacer una foto",
+  imGal:"Elegir de la galería",
+  imLk:"🔗 Enlace web",
+  imUrl:"Pega el enlace de la receta",
+  imGo:"Importar",
+  imWait:"Leyendo la receta…",
+  imUse:"Usar esta receta",
+  imCancel:"Cancelar",
+  imCheck:"Comprueba que la receta se reconoció bien (cantidades, pasos, tiempos). Todavía no se ha modificado ni guardado nada.",
+  pServ:"Porciones",
+  pTime:"Tiempo",
+  pTemp:"Temperatura",
+  hIng:"Ingredientes",
+  hSteps:"Preparación",
+  hNotes:"Notas",
+  srcL:"Fuente",
+  imUntitled:"Receta importada",
+  imMsgP:"He importado esta receta desde una foto.",
+  imMsgL:"He importado esta receta desde {x}.",
+  srcP:"Importada de una foto",
+  e_badurl:"Este enlace no es válido.",
+  e_private:"No se puede acceder a este enlace (dirección interna o no permitida).",
+  e_blocked:"Este sitio bloquea la lectura automática. Haz una captura de pantalla de la receta e impórtala como foto.",
+  e_login:"Esta página requiere iniciar sesión y no puedo leerla. Haz una captura de la receta e impórtala como foto.",
+  e_notfound:"Página no encontrada: revisa el enlace.",
+  e_timeout:"El sitio tarda demasiado en responder. Inténtalo más tarde.",
+  e_unreachable:"No se puede abrir este sitio ahora.",
+  e_norecipe:"No se reconoció ninguna receta. En una foto, la receta debe estar escrita en la imagen: una simple foto del plato no basta.",
+  e_toobig:"La imagen o la página es demasiado grande.",
+  e_badimage:"No se pudo leer esta imagen (formatos: JPG, PNG, WebP).",
+  e_nokey:"La importación aún no está conectada: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar.",
+  e_upstream:"El servicio de análisis no está disponible. Inténtalo en un momento.",
+  e_noapi:"La importación solo funciona en el sitio de Vercel, no en la vista previa de claude.ai.",
+  e_network:"No se puede conectar. Revisa tu red.",
+  imgT:"Imagen del plato",
+  imgUrl:"Pega el enlace de una imagen",
+  imgUse:"Usar",
+  imgReset:"Volver al dibujo",
+  imgOk:"Imagen guardada",
+  imgBad:"No se pudo cargar esta imagen. Revisa el enlace.",
+  imgFull:"Memoria del dispositivo llena: imagen no guardada."
+},
+de:{
+  ok:"OK",
+  n:"Deutsch",
+  hist:"Rezeptverlauf",
+  more:"Mehr anzeigen",
+  empty:"Deine Rezepte erscheinen hier, sobald du eines angefragt hast.",
+  del:"Löschen",
+  delq:"Dieses Rezept aus dem Verlauf löschen?",
+  hi:"Hallo!",
+  sub:"Dein Taschenkoch mit KI",
+  ask:"Was möchtest du kochen?",
+  themes:"Themen",
+  chefs:"KI-Köche",
+  disc:"Chatten ›",
+  cd:"Sternekoch · Weltküche",
+  ph:"z. B. ersetze das Olivenöl durch Butter",
+  e429:"Zu viele Anfragen, bitte gleich nochmal versuchen.",
+  err:"Es ist ein Fehler aufgetreten, bitte erneut versuchen.",
+  code:"Zugangscode:",
+  send:"Senden",
+  req:"Gib mir ein Rezept für ",
+  cu:["Italienische Küche","Japanische Küche","Französische Küche"],
+  th:"Alle|Geburtstag|Frühstück|Abendessen|Vegi",
+  rc:"Pizza Margherita|Fluffige Pfannkuchen|Schokoladenkuchen|Gemüsecurry|Pasta Carbonara|Rührei|Cupcakes|Buddha Bowl",
+  q:"Für 2 Personen|Für 6 Personen|Glutenfrei|Schneller|Vegetarische Version",
+  sr:"de-DE",
+  wT:"Was kochen wir?",
+  wS:"Rezepte, Desserts, Cocktails… Frag nach und passe an: „ohne Petersilie, mit Cajun“, „für 2 Personen“.",
+  wEx:"🍲 Ein Gericht für heute Abend|🍰 Ein schnelles Dessert|🍹 Ein alkoholfreier Cocktail|🥗 Eine Menüidee",
+  e_credit:"Nicht genug Guthaben bei Anthropic: Guthaben auf console.anthropic.com (Billing) aufladen.",
+  e_badkey:"API-Schlüssel abgelehnt: ANTHROPIC_API_KEY in Vercel prüfen und neu deployen.",
+  e_model:"Modell nicht gefunden: Variable MODEL in Vercel prüfen (oder entfernen).",
+  e_code:"Falscher Zugangscode. Versuche es erneut.",
+  swapT:"Zutat ersetzen",
+  swapH:"Tippe auf den Kreis einer Zutat, die du nicht hast: Sie wird durchgestrichen. Dann neues Rezept starten oder ↔ tippen. Dein Favorit bleibt unverändert.",
+  swapMsg:"Ich habe nicht: {i}. Erstelle ein neues vollständiges Rezept mit einer anderen Zutat statt dieser, mit angepassten Mengen und Schritten.",
+  variant:"Variante",
+  swapCtx:"Originalrezept:",
+  missT:"fehlt",
+  swapGo:"Neues Rezept ohne: {i}",
+  rateT:"Deine Bewertung",
+  rateH:"1 = furchtbar · 5 = die beste",
+  rateOk:"Bewertung gespeichert: {n}/5",
+  card:"Karte",
+  fav:"Favorit",
+  favs:"Favoriten",
+  all:"Alle",
+  nofav:"Noch keine Favoriten. Tippe auf ❤️ bei einem Rezept.",
+  share:"Teilen",
+  copied:"Rezept in die Zwischenablage kopiert",
+  cont:"Mit dem Koch weitermachen",
+  com:"Kommentare",
+  nocom:"Noch keine Kommentare. Sei der Erste!",
+  pub:"Posten",
+  nm:"Dein Vorname",
+  wr:"Kommentar schreiben…",
+  cdel:"Löschen",
+  cdq:"Diesen Kommentar löschen?",
+  cOff:"Kommentare sind auf dieser Seite nicht aktiviert.",
+  cErr:"Kommentare konnten nicht geladen werden.",
+  cRate:"Zu viele Kommentare, versuche es in einer Minute erneut.",
+  credit:"Foto: Wikipedia",
+  anon:"Anonym",
+  now:"gerade eben",
+  home:"Start",
+  menu:"Menü",
+  close:"Schließen",
+  favT:"Meine Lieblingsrezepte",
+  search:"Rezept suchen…",
+  noresult:"Kein Rezept gefunden.",
+  nokey:"Der Koch ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen.",
+  catT:"Was möchtest du kreieren?",
+  cats:"🍲 Alltagsgerichte|🍰 Desserts und Gebäck|🍹 Cocktails|🥤 Getränke|🍕 Weltküche|🥗 Vegetarisch und Diäten|🍞 Bäckerei und Brot|🧂 Saucen und Beilagen|🍬 Schokolade und Eis|🥑 Zutaten und Techniken|🍽️ Menüs und Essensideen",
+  catAsk:"Hilf mir in der Kategorie „{x}“: Schlage mir eine Idee oder ein Rezept zum Start vor.",
+  qS:"👥 Pers.",
+  qSo:"Für 2 Personen|Für 6 Personen|Für 8 Personen",
+  qD1:"🚫 Ohne",
+  qD1o:"Glutenfrei|Laktosefrei",
+  qD2:"🥦 Diät",
+  qD2o:"Vegetarische Version|Vegane Version",
+  qSs:"2 Pers.|6 Pers.|8 Pers.",
+  qD1s:"Gluten|Laktose",
+  qD2s:"Veggie|Vegan",
+  imT:"Rezept importieren",
+  imHomeS:"Aus einem Foto oder einem Weblink",
+  imHint:"Wähle ein Foto (Kochbuchseite, handgeschriebenes Rezept, Screenshot…) oder füge einen Link ein. Du prüfst das erkannte Rezept, bevor du es verwendest.",
+  imPh:"📷 Foto",
+  imCam:"Foto aufnehmen",
+  imGal:"Aus der Galerie wählen",
+  imLk:"🔗 Weblink",
+  imUrl:"Rezept-Link einfügen",
+  imGo:"Importieren",
+  imWait:"Rezept wird gelesen…",
+  imUse:"Dieses Rezept verwenden",
+  imCancel:"Abbrechen",
+  imCheck:"Prüfe, ob das Rezept richtig erkannt wurde (Mengen, Schritte, Zeiten). Noch wurde nichts geändert oder gespeichert.",
+  pServ:"Portionen",
+  pTime:"Zeit",
+  pTemp:"Temperatur",
+  hIng:"Zutaten",
+  hSteps:"Zubereitung",
+  hNotes:"Notizen",
+  srcL:"Quelle",
+  imUntitled:"Importiertes Rezept",
+  imMsgP:"Ich habe dieses Rezept aus einem Foto importiert.",
+  imMsgL:"Ich habe dieses Rezept von {x} importiert.",
+  srcP:"Aus einem Foto importiert",
+  e_badurl:"Dieser Link ist ungültig.",
+  e_private:"Dieser Link ist nicht erreichbar (interne oder nicht erlaubte Adresse).",
+  e_blocked:"Diese Seite blockiert das automatische Lesen. Mache stattdessen einen Screenshot des Rezepts und importiere ihn als Foto.",
+  e_login:"Diese Seite erfordert eine Anmeldung, ich kann sie nicht lesen. Mache einen Screenshot des Rezepts und importiere ihn als Foto.",
+  e_notfound:"Seite nicht gefunden: prüfe den Link.",
+  e_timeout:"Die Seite antwortet zu langsam. Versuche es später erneut.",
+  e_unreachable:"Diese Seite kann gerade nicht geöffnet werden.",
+  e_norecipe:"Kein Rezept erkannt. Bei einem Foto muss das Rezept im Bild geschrieben stehen: ein bloßes Foto eines Gerichts reicht nicht.",
+  e_toobig:"Das Bild oder die Seite ist zu groß.",
+  e_badimage:"Dieses Bild konnte nicht gelesen werden (Formate: JPG, PNG, WebP).",
+  e_nokey:"Der Import ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen.",
+  e_upstream:"Der Analysedienst ist nicht verfügbar. Versuche es gleich noch einmal.",
+  e_noapi:"Der Import funktioniert nur auf der Vercel-Seite, nicht in der claude.ai-Vorschau.",
+  e_network:"Keine Verbindung. Prüfe dein Netzwerk.",
+  imgT:"Bild des Gerichts",
+  imgUrl:"Bildlink einfügen",
+  imgUse:"Verwenden",
+  imgReset:"Zurück zur Zeichnung",
+  imgOk:"Bild gespeichert",
+  imgBad:"Dieses Bild konnte nicht geladen werden. Prüfe den Link.",
+  imgFull:"Gerätespeicher voll: Bild nicht gespeichert."
+},
+it:{
+  ok:"OK",
+  n:"Italiano",
+  hist:"Cronologia ricette",
+  more:"Vedi altro",
+  empty:"Le tue ricette appariranno qui dopo la prima richiesta.",
+  del:"Elimina",
+  delq:"Eliminare questa ricetta dalla cronologia?",
+  hi:"Ciao!",
+  sub:"Il tuo chef tascabile, con l’IA",
+  ask:"Cosa vuoi cucinare?",
+  themes:"Temi",
+  chefs:"Chef IA",
+  disc:"Parla ›",
+  cd:"Chef stellato · cucina del mondo",
+  ph:"Es.: sostituisci l’olio d’oliva con il burro",
+  e429:"Troppe richieste, riprova tra poco.",
+  err:"Si è verificato un errore, riprova.",
+  code:"Codice di accesso:",
+  send:"Invia",
+  req:"Dammi una ricetta per ",
+  cu:["Cucina italiana","Cucina giapponese","Cucina francese"],
+  th:"Tutto|Compleanno|Colazione|Cena|Veg",
+  rc:"Pizza Margherita|Pancake soffici|Torta al cioccolato|Curry di verdure|Pasta alla carbonara|Uova strapazzate|Cupcake|Buddha bowl",
+  q:"Per 2 persone|Per 6 persone|Senza glutine|Più veloce|Versione vegetariana",
+  sr:"it-IT",
+  wT:"Cosa cuciniamo?",
+  wS:"Ricette, dolci, cocktail… Chiedi e poi adatta: «senza prezzemolo, con Cajun», «per 2 persone».",
+  wEx:"🍲 Un piatto per stasera|🍰 Un dolce veloce|🍹 Un cocktail analcolico|🥗 Un’idea di menu",
+  e_credit:"Credito insufficiente sul tuo account Anthropic: aggiungi credito su console.anthropic.com (Billing).",
+  e_badkey:"Chiave API rifiutata: controlla ANTHROPIC_API_KEY su Vercel e rifai il deploy.",
+  e_model:"Modello non trovato: controlla la variabile MODEL (o rimuovila) su Vercel.",
+  e_code:"Codice di accesso errato. Riprova.",
+  swapT:"Sostituisci questo ingrediente",
+  swapH:"Tocca il cerchio di un ingrediente che non hai: viene barrato. Poi avvia una nuova ricetta, o tocca ↔. Il tuo preferito resta intatto.",
+  swapMsg:"Non ho: {i}. Crea una nuova ricetta completa con un altro ingrediente al suo posto, adattando quantità e passaggi.",
+  variant:"variante",
+  swapCtx:"Ricetta originale:",
+  missT:"manca",
+  swapGo:"Nuova ricetta senza: {i}",
+  rateT:"Il tuo voto",
+  rateH:"1 = pessima · 5 = la migliore",
+  rateOk:"Voto salvato: {n}/5",
+  card:"Scheda",
+  fav:"Preferito",
+  favs:"Preferiti",
+  all:"Tutte",
+  nofav:"Ancora nessun preferito. Tocca ❤️ su una ricetta.",
+  share:"Condividi",
+  copied:"Ricetta copiata negli appunti",
+  cont:"Continua con lo chef",
+  com:"Commenti",
+  nocom:"Ancora nessun commento. Sii il primo!",
+  pub:"Pubblica",
+  nm:"Il tuo nome",
+  wr:"Scrivi un commento…",
+  cdel:"Elimina",
+  cdq:"Eliminare questo commento?",
+  cOff:"I commenti non sono attivi su questo sito.",
+  cErr:"Impossibile caricare i commenti.",
+  cRate:"Troppi commenti, riprova tra un minuto.",
+  credit:"Foto: Wikipedia",
+  anon:"Anonimo",
+  now:"adesso",
+  home:"Home",
+  menu:"Menu",
+  close:"Chiudi",
+  favT:"Le mie ricette preferite",
+  search:"Cerca una ricetta…",
+  noresult:"Nessuna ricetta trovata.",
+  nokey:"Lo chef non è ancora collegato: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy.",
+  catT:"Cosa vuoi creare?",
+  cats:"🍲 Piatti di tutti i giorni|🍰 Dolci e pasticceria|🍹 Cocktail|🥤 Bevande|🍕 Cucina del mondo|🥗 Vegetariano e diete|🍞 Panetteria e pane|🧂 Salse e contorni|🍬 Cioccolato e gelati|🥑 Ingredienti e tecniche|🍽️ Menu e idee per i pasti",
+  catAsk:"Aiutami nella categoria «{x}»: proponimi un’idea o una ricetta per iniziare.",
+  qS:"👥 Pers.",
+  qSo:"Per 2 persone|Per 6 persone|Per 8 persone",
+  qD1:"🚫 Senza",
+  qD1o:"Senza glutine|Senza lattosio",
+  qD2:"🥦 Dieta",
+  qD2o:"Versione vegetariana|Versione vegana",
+  qSs:"2 pers.|6 pers.|8 pers.",
+  qD1s:"Glutine|Lattosio",
+  qD2s:"Veggie|Vegano",
+  imT:"Importa una ricetta",
+  imHomeS:"Da una foto o da un link web",
+  imHint:"Scegli una foto (pagina di libro, ricetta scritta a mano, screenshot…) o incolla un link. Controlli la ricetta riconosciuta prima di usarla.",
+  imPh:"📷 Foto",
+  imCam:"Scatta una foto",
+  imGal:"Scegli dalla galleria",
+  imLk:"🔗 Link web",
+  imUrl:"Incolla il link della ricetta",
+  imGo:"Importa",
+  imWait:"Lettura della ricetta in corso…",
+  imUse:"Usa questa ricetta",
+  imCancel:"Annulla",
+  imCheck:"Controlla che la ricetta sia stata riconosciuta bene (quantità, passaggi, tempi). Per ora nulla è stato modificato o salvato.",
+  pServ:"Porzioni",
+  pTime:"Tempo",
+  pTemp:"Temperatura",
+  hIng:"Ingredienti",
+  hSteps:"Preparazione",
+  hNotes:"Note",
+  srcL:"Fonte",
+  imUntitled:"Ricetta importata",
+  imMsgP:"Ho importato questa ricetta da una foto.",
+  imMsgL:"Ho importato questa ricetta da {x}.",
+  srcP:"Importata da una foto",
+  e_badurl:"Questo link non è valido.",
+  e_private:"Questo link non è raggiungibile (indirizzo interno o non consentito).",
+  e_blocked:"Questo sito blocca la lettura automatica. Fai invece uno screenshot della ricetta e importalo come foto.",
+  e_login:"Questa pagina richiede l’accesso e non posso leggerla. Fai uno screenshot della ricetta e importalo come foto.",
+  e_notfound:"Pagina non trovata: controlla il link.",
+  e_timeout:"Il sito risponde troppo lentamente. Riprova più tardi.",
+  e_unreachable:"Impossibile aprire questo sito al momento.",
+  e_norecipe:"Nessuna ricetta riconosciuta. Per una foto, la ricetta deve essere scritta nell’immagine: una semplice foto del piatto non basta.",
+  e_toobig:"L’immagine o la pagina è troppo grande.",
+  e_badimage:"Impossibile leggere questa immagine (formati: JPG, PNG, WebP).",
+  e_nokey:"L’importazione non è ancora collegata: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy.",
+  e_upstream:"Il servizio di analisi non è disponibile. Riprova tra un attimo.",
+  e_noapi:"L’importazione funziona solo sul sito Vercel, non nell’anteprima di claude.ai.",
+  e_network:"Impossibile connettersi. Controlla la rete.",
+  imgT:"Immagine del piatto",
+  imgUrl:"Incolla il link di un’immagine",
+  imgUse:"Usa",
+  imgReset:"Torna al disegno",
+  imgOk:"Immagine salvata",
+  imgBad:"Impossibile caricare questa immagine. Controlla il link.",
+  imgFull:"Memoria del dispositivo piena: immagine non salvata."
+},
+pt:{
+  ok:"OK",
+  n:"Português",
+  hist:"Histórico de receitas",
+  more:"Ver mais",
+  empty:"As suas receitas aparecerão aqui assim que pedir uma.",
+  del:"Eliminar",
+  delq:"Eliminar esta receita do histórico?",
+  hi:"Olá!",
+  sub:"O seu chef de bolso, com IA",
+  ask:"O que quer cozinhar?",
+  themes:"Temas",
+  chefs:"Chefs IA",
+  disc:"Conversar ›",
+  cd:"Chef estrelado · cozinha do mundo",
+  ph:"Ex.: troque o azeite por manteiga",
+  e429:"Muitos pedidos, tente novamente daqui a pouco.",
+  err:"Ocorreu um erro, tente novamente.",
+  code:"Código de acesso:",
+  send:"Enviar",
+  req:"Dê-me uma receita de ",
+  cu:["Cozinha italiana","Cozinha japonesa","Cozinha francesa"],
+  th:"Tudo|Aniversário|Café da manhã|Jantar|Veg",
+  rc:"Pizza Margherita|Panquecas fofas|Bolo de chocolate|Curry de legumes|Massa carbonara|Ovos mexidos|Cupcakes|Buddha bowl",
+  q:"Para 2 pessoas|Para 6 pessoas|Sem glúten|Mais rápido|Versão vegetariana",
+  sr:"pt-BR",
+  wT:"O que vamos cozinhar?",
+  wS:"Receitas, sobremesas, cocktails… Peça e depois adapte: «sem salsa, com Cajun», «para 2 pessoas».",
+  wEx:"🍲 Um prato para esta noite|🍰 Uma sobremesa rápida|🍹 Um cocktail sem álcool|🥗 Uma ideia de menu",
+  e_credit:"Crédito insuficiente na sua conta Anthropic: adicione crédito em console.anthropic.com (Billing).",
+  e_badkey:"Chave API rejeitada: verifique ANTHROPIC_API_KEY na Vercel e volte a publicar.",
+  e_model:"Modelo não encontrado: verifique a variável MODEL (ou remova-a) na Vercel.",
+  e_code:"Código de acesso incorreto. Tente novamente.",
+  swapT:"Substituir este ingrediente",
+  swapH:"Toque no círculo de um ingrediente que não tem: fica riscado. Depois inicie uma nova receita, ou toque em ↔. O seu favorito fica intacto.",
+  swapMsg:"Não tenho: {i}. Crie uma nova receita completa com outro ingrediente no lugar, ajustando quantidades e passos.",
+  variant:"variante",
+  swapCtx:"Receita original:",
+  missT:"em falta",
+  swapGo:"Nova receita sem: {i}",
+  rateT:"A sua nota",
+  rateH:"1 = péssima · 5 = a melhor",
+  rateOk:"Nota guardada: {n}/5",
+  card:"Ficha",
+  fav:"Favorito",
+  favs:"Favoritos",
+  all:"Todas",
+  nofav:"Ainda sem favoritos. Toque em ❤️ numa receita.",
+  share:"Partilhar",
+  copied:"Receita copiada para a área de transferência",
+  cont:"Continuar com o chef",
+  com:"Comentários",
+  nocom:"Ainda sem comentários. Seja o primeiro!",
+  pub:"Publicar",
+  nm:"O seu nome",
+  wr:"Escreva um comentário…",
+  cdel:"Eliminar",
+  cdq:"Eliminar este comentário?",
+  cOff:"Os comentários não estão ativados neste site.",
+  cErr:"Não foi possível carregar os comentários.",
+  cRate:"Demasiados comentários, tente novamente num minuto.",
+  credit:"Foto: Wikipedia",
+  anon:"Anónimo",
+  now:"agora mesmo",
+  home:"Início",
+  menu:"Menu",
+  close:"Fechar",
+  favT:"As minhas receitas favoritas",
+  search:"Pesquisar uma receita…",
+  noresult:"Nenhuma receita encontrada.",
+  nokey:"O chef ainda não está ligado: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar.",
+  catT:"O que quer criar?",
+  cats:"🍲 Pratos do dia a dia|🍰 Sobremesas e pastelaria|🍹 Cocktails|🥤 Bebidas|🍕 Cozinha do mundo|🥗 Vegetariano e dietas|🍞 Padaria e pães|🧂 Molhos e acompanhamentos|🍬 Chocolates e gelados|🥑 Ingredientes e técnicas|🍽️ Menus e ideias de refeições",
+  catAsk:"Ajude-me na categoria «{x}»: proponha uma ideia ou uma receita para começar.",
+  qS:"👥 Pess.",
+  qSo:"Para 2 pessoas|Para 6 pessoas|Para 8 pessoas",
+  qD1:"🚫 Sem",
+  qD1o:"Sem glúten|Sem lactose",
+  qD2:"🥦 Dieta",
+  qD2o:"Versão vegetariana|Versão vegana",
+  qSs:"2 pess.|6 pess.|8 pess.",
+  qD1s:"Glúten|Lactose",
+  qD2s:"Veggie|Vegano",
+  imT:"Importar uma receita",
+  imHomeS:"A partir de uma foto ou de um link",
+  imHint:"Escolha uma foto (página de livro, receita manuscrita, captura de ecrã…) ou cole um link. Verifica a receita reconhecida antes de a usar.",
+  imPh:"📷 Foto",
+  imCam:"Tirar uma foto",
+  imGal:"Escolher da galeria",
+  imLk:"🔗 Link da internet",
+  imUrl:"Cole o link da receita",
+  imGo:"Importar",
+  imWait:"A ler a receita…",
+  imUse:"Usar esta receita",
+  imCancel:"Cancelar",
+  imCheck:"Verifique se a receita foi bem reconhecida (quantidades, passos, tempos). Ainda nada foi alterado nem guardado.",
+  pServ:"Porções",
+  pTime:"Tempo",
+  pTemp:"Temperatura",
+  hIng:"Ingredientes",
+  hSteps:"Preparação",
+  hNotes:"Notas",
+  srcL:"Fonte",
+  imUntitled:"Receita importada",
+  imMsgP:"Importei esta receita a partir de uma foto.",
+  imMsgL:"Importei esta receita de {x}.",
+  srcP:"Importada de uma foto",
+  e_badurl:"Este link não é válido.",
+  e_private:"Este link não está acessível (endereço interno ou não permitido).",
+  e_blocked:"Este site bloqueia a leitura automática. Faça uma captura de ecrã da receita e importe-a como foto.",
+  e_login:"Esta página exige início de sessão e não a consigo ler. Faça uma captura de ecrã da receita e importe-a como foto.",
+  e_notfound:"Página não encontrada: verifique o link.",
+  e_timeout:"O site demora demasiado a responder. Tente mais tarde.",
+  e_unreachable:"Não é possível abrir este site neste momento.",
+  e_norecipe:"Nenhuma receita reconhecida. Numa foto, a receita tem de estar escrita na imagem: uma simples foto do prato não chega.",
+  e_toobig:"A imagem ou a página é demasiado grande.",
+  e_badimage:"Não foi possível ler esta imagem (formatos: JPG, PNG, WebP).",
+  e_nokey:"A importação ainda não está ligada: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar.",
+  e_upstream:"O serviço de análise está indisponível. Tente novamente daqui a pouco.",
+  e_noapi:"A importação só funciona no site da Vercel, não na pré-visualização do claude.ai.",
+  e_network:"Sem ligação. Verifique a rede.",
+  imgT:"Imagem do prato",
+  imgUrl:"Cole o link de uma imagem",
+  imgUse:"Usar",
+  imgReset:"Voltar ao desenho",
+  imgOk:"Imagem guardada",
+  imgBad:"Não foi possível carregar esta imagem. Verifique o link.",
+  imgFull:"Memória do dispositivo cheia: imagem não guardada."
+}
+};
 const RMETA=[["🍕",1,"30 min","#fde4d8"],["🥞",2,"20 min","#fdf1c9"],["🎂",0+1+0,"50 min","#f6dbe8"],["🍛",4,"35 min","#dcefc9"],["🍝",3,"15 min","#fde4d8"],["🍳",2,"10 min","#fdf1c9"],["🧁",0+1,"40 min","#f6dbe8"],["🥗",4,"25 min","#dcefc9"]];
 // categories: 1 birthday, 2 breakfast, 3 dinner, 4 veggie (index into th, 0 = All)
 RMETA[0][1]=3;RMETA[1][1]=2;RMETA[2][1]=1;RMETA[3][1]=4;RMETA[4][1]=3;RMETA[5][1]=2;RMETA[6][1]=1;RMETA[7][1]=4;
@@ -351,6 +1121,27 @@ let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null,
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
+// In-app dialog (replaces the browser's prompt() and confirm(), which look out of place on phones and are blocked in some views).
+// ask({text, input, okLabel}) resolves to the typed text (input), true (confirm) or null (cancelled).
+function ask({text,input=false,okLabel}){
+  return new Promise(done=>{
+    const w=document.createElement('div');w.className='dlgw';
+    const d=document.createElement('div');d.className='dlg';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
+    const p=document.createElement('p');p.textContent=text;d.appendChild(p);
+    let f=null;if(input){f=document.createElement('input');f.type='text';f.autocomplete='off';f.setAttribute('autocapitalize','off');f.spellcheck=false;d.appendChild(f)}
+    const row=document.createElement('div');row.className='dlgb';
+    const no=document.createElement('button');no.type='button';no.className='cbtn';no.textContent=T().imCancel;
+    const yes=document.createElement('button');yes.type='button';yes.className='cbtn dlgok';yes.textContent=okLabel||T().ok;
+    row.append(no,yes);d.appendChild(row);w.appendChild(d);document.body.appendChild(w);
+    const end=v=>{w.remove();document.removeEventListener('keydown',key);done(v)};
+    const key=ev=>{if(ev.key==='Escape')end(null);else if(ev.key==='Enter'){ev.preventDefault();yes.click()}};
+    no.onclick=()=>end(null);yes.onclick=()=>end(input?(f.value.trim()||null):true);w.onclick=ev=>{if(ev.target===w)end(null)};
+    document.addEventListener('keydown',key);setTimeout(()=>(f||yes).focus(),30);
+  });
+}
+// Asks for the access code once, even when several requests get a 401 at the same time.
+let codeAsk=null;
+function askCode(){if(!codeAsk)codeAsk=ask({text:T().code,input:true}).then(c=>{codeAsk=null;if(c){try{localStorage.setItem('code',c)}catch(x){}}return c});return codeAsk}
 
 let curView='home';
 function show(id){curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}}
@@ -388,8 +1179,6 @@ function render(el,t){
       const li=document.createElement('li');inl(li,(b||n)[1]);list.appendChild(li);return}
     list=null;kind='';const p=document.createElement('p');inl(p,l);el.appendChild(p)});
 }
-const I18H={"fr": {"wT": "Que voulons-nous cuisiner ?", "wS": "Recettes, desserts, cocktails… Demandez, puis adaptez : « sans persil, avec du Cajun », « pour 2 personnes ».", "wEx": "🍲 Un plat pour ce soir|🍰 Un dessert rapide|🍹 Un cocktail sans alcool|🥗 Une idée de menu"}, "en": {"wT": "What shall we cook?", "wS": "Recipes, desserts, cocktails… Ask, then adapt: “no parsley, with Cajun spice”, “for 2 people”.", "wEx": "🍲 A dish for tonight|🍰 A quick dessert|🍹 A non-alcoholic cocktail|🥗 A menu idea"}, "es": {"wT": "¿Qué cocinamos?", "wS": "Recetas, postres, cócteles… Pide y luego adapta: «sin perejil, con Cajun», «para 2 personas».", "wEx": "🍲 Un plato para esta noche|🍰 Un postre rápido|🍹 Un cóctel sin alcohol|🥗 Una idea de menú"}, "de": {"wT": "Was kochen wir?", "wS": "Rezepte, Desserts, Cocktails… Frag nach und passe an: „ohne Petersilie, mit Cajun“, „für 2 Personen“.", "wEx": "🍲 Ein Gericht für heute Abend|🍰 Ein schnelles Dessert|🍹 Ein alkoholfreier Cocktail|🥗 Eine Menüidee"}, "it": {"wT": "Cosa cuciniamo?", "wS": "Ricette, dolci, cocktail… Chiedi e poi adatta: «senza prezzemolo, con Cajun», «per 2 persone».", "wEx": "🍲 Un piatto per stasera|🍰 Un dolce veloce|🍹 Un cocktail analcolico|🥗 Un’idea di menu"}, "pt": {"wT": "O que vamos cozinhar?", "wS": "Receitas, sobremesas, cocktails… Peça e depois adapte: «sem salsa, com Cajun», «para 2 pessoas».", "wEx": "🍲 Um prato para esta noite|🍰 Uma sobremesa rápida|🍹 Um cocktail sem álcool|🥗 Uma ideia de menu"}};
-Object.keys(I18H).forEach(k=>Object.assign(I18[k],I18H[k]));
 function welcomeEl(){
   const t=T(),d=document.createElement('div');d.className='welcome';
   d.innerHTML='<svg class="mascot wm"><use href="#mascot"/></svg>';
@@ -399,8 +1188,6 @@ function welcomeEl(){
   d.append(h,p,w);return d;
 }
 function showWelcome(){log.appendChild(welcomeEl())}
-const I18I={"fr": {"e_credit": "Crédit insuffisant sur votre compte Anthropic : ajoutez du crédit sur console.anthropic.com (Billing).", "e_badkey": "Clé API refusée : vérifiez ANTHROPIC_API_KEY dans Vercel, puis redéployez.", "e_model": "Modèle introuvable : vérifiez la variable MODEL (ou supprimez-la) dans Vercel.", "e_code": "Code d’accès incorrect. Réessayez."}, "en": {"e_credit": "Not enough credit on your Anthropic account: add credit at console.anthropic.com (Billing).", "e_badkey": "API key rejected: check ANTHROPIC_API_KEY in Vercel, then redeploy.", "e_model": "Model not found: check the MODEL variable (or remove it) in Vercel.", "e_code": "Wrong access code. Try again."}, "es": {"e_credit": "Crédito insuficiente en tu cuenta de Anthropic: añade crédito en console.anthropic.com (Billing).", "e_badkey": "Clave API rechazada: revisa ANTHROPIC_API_KEY en Vercel y vuelve a desplegar.", "e_model": "Modelo no encontrado: revisa la variable MODEL (o elimínala) en Vercel.", "e_code": "Código de acceso incorrecto. Inténtalo de nuevo."}, "de": {"e_credit": "Nicht genug Guthaben bei Anthropic: Guthaben auf console.anthropic.com (Billing) aufladen.", "e_badkey": "API-Schlüssel abgelehnt: ANTHROPIC_API_KEY in Vercel prüfen und neu deployen.", "e_model": "Modell nicht gefunden: Variable MODEL in Vercel prüfen (oder entfernen).", "e_code": "Falscher Zugangscode. Versuche es erneut."}, "it": {"e_credit": "Credito insufficiente sul tuo account Anthropic: aggiungi credito su console.anthropic.com (Billing).", "e_badkey": "Chiave API rifiutata: controlla ANTHROPIC_API_KEY su Vercel e rifai il deploy.", "e_model": "Modello non trovato: controlla la variabile MODEL (o rimuovila) su Vercel.", "e_code": "Codice di accesso errato. Riprova."}, "pt": {"e_credit": "Crédito insuficiente na sua conta Anthropic: adicione crédito em console.anthropic.com (Billing).", "e_badkey": "Chave API rejeitada: verifique ANTHROPIC_API_KEY na Vercel e volte a publicar.", "e_model": "Modelo não encontrado: verifique a variável MODEL (ou remova-a) na Vercel.", "e_code": "Código de acesso incorreto. Tente novamente."}};
-Object.keys(I18I).forEach(k=>Object.assign(I18[k],I18I[k]));
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,ings=>branchWith({text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings))}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 // Quick options (servings, without gluten/lactose, diet, faster): 4 columns of chips. Used under the chat and on the recipe card.
@@ -420,10 +1207,19 @@ function drawQuick(){quickCols($('#quick'),send);try{updTop()}catch(x){}}
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v42',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v43',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
+// In-memory copy of the store: the phone storage is read and decoded once, then only written.
+// Every change goes through saveH(); if a write fails (storage full) the copy is dropped and re-read from storage,
+// so the screen never shows something that was not saved. Another tab writing the store also drops it.
+let storeCache=null;
+addEventListener('storage',ev=>{if(ev.key===STORE_KEY||ev.key===OLD_KEY||ev.key===null)storeCache=null});
 function readStore(){
+  if(storeCache)return storeCache;
+  return storeCache=readStoreRaw();
+}
+function readStoreRaw(){
   try{
     const raw=localStorage.getItem(STORE_KEY);
     if(raw){const o=JSON.parse(raw);if(o&&Array.isArray(o.recipes))return o}
@@ -435,7 +1231,8 @@ function readStore(){
 function loadH(){return readStore().recipes}
 function saveH(a){
   let n=0;const out=a.filter(x=>x.fav||(n++<MAX_RECENT)); // favorites are never removed automatically
-  try{localStorage.setItem(STORE_KEY,JSON.stringify({v:STORE_V,updatedAt:Date.now(),device:deviceId(),recipes:out}));return true}catch(e){return false}
+  const st={v:STORE_V,updatedAt:Date.now(),device:deviceId(),recipes:out};
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(st));storeCache=st;return true}catch(e){storeCache=null;return false}
 }
 const LOOK=[[/pizza/i,"🍕"],[/cupcake|muffin/i,"🧁"],[/pancake|crêpe|crepe|panqueca|tortita|pfannkuchen/i,"🥞"],[/cake|gâteau|gateau|torta|kuchen|bolo|tarta|chocolat|chocolate|tiramisu/i,"🎂"],[/curry|tikka/i,"🍛"],[/ramen|soup|soupe|potage|pho|gazpacho|tom yum/i,"🍜"],[/pasta|pâtes|pates|carbonara|spaghetti|lasagn|gnocchi|nouille|noodle|massa|nudel/i,"🍝"],[/sushi|saumon|salmon|teriyaki/i,"🍣"],[/burger/i,"🍔"],[/salad|salade|buddha|insalata|ensalada|salat/i,"🥗"],[/steak|rosbif|roast|beef|bœuf|boeuf|bourguignon|goulash/i,"🥩"],[/œuf|oeuf|egg|omelette|huevo|ovo|uova|shakshuka|rührei/i,"🍳"],[/poulet|chicken|pollo|hähnchen|frango|coq/i,"🍗"],[/poisson|fish|pescado|fisch|pesce|peixe/i,"🐟"],[/taco|enchilada|burrito/i,"🌮"],[/riz|rice|risotto|paella|reis|arroz|riso/i,"🍚"],[/pain|bread|brot|pane|pão/i,"🍞"],[/tarte|tart|pie|quiche/i,"🥧"],[/cookie|biscuit|galleta|keks/i,"🍪"]];
 const BGS=["#fde4d8","#fdf1c9","#f6dbe8","#dcefc9","#dbe6fb","#e6dcf7"];
@@ -469,7 +1266,7 @@ function rowFor(e,del,heart){
   x.append(b,d);o.append(p,x);o.onclick=()=>openCard(e.id);r.appendChild(o);
   if(heart){const h=document.createElement('button');h.className='hdel';h.textContent=e.fav?'❤️':'🤍';h.setAttribute('aria-label',T().fav);h.onclick=()=>toggleFav(e.id);r.appendChild(h)}
   if(del){const k=document.createElement('button');k.className='hdel';k.textContent='✕';k.setAttribute('aria-label',T().del);
-    k.onclick=()=>{if(confirm(T().delq)){saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs()}};r.appendChild(k)}
+    k.onclick=async()=>{if(await ask({text:T().delq,okLabel:T().del})){saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs()}};r.appendChild(k)}
   return r;
 }
 function drawHistory(){
@@ -483,8 +1280,6 @@ function drawHistory(){
   if(!shown.length){const p=document.createElement('div');p.className='empty';p.textContent=q?T().noresult:(hfav?T().nofav:T().empty);l.appendChild(p)}
   shown.forEach(e=>l.appendChild(rowFor(e,true,true)));
 }
-const I18J={"fr": {"swapT": "Remplacer cet ingrédient", "swapH": "Touchez le cercle d’un ingrédient que vous n’avez pas : il est barré. Puis lancez une nouvelle recette, ou touchez ↔. Votre favori reste intact.", "swapMsg": "Je n’ai pas : {i}. Crée-moi une nouvelle recette complète avec un autre ingrédient à la place, en ajustant les quantités et les étapes.", "variant": "variante", "swapCtx": "Recette d’origine :", "missT": "pas dispo", "swapGo": "Nouvelle recette sans : {i}", "rateT": "Votre note", "rateH": "1 = très mauvaise · 5 = excellente", "rateOk": "Note enregistrée : {n}/5"}, "en": {"swapT": "Replace this ingredient", "swapH": "Tap the circle of an ingredient you don’t have: it gets crossed out. Then start a new recipe, or tap ↔. Your favorite stays untouched.", "swapMsg": "I don’t have: {i}. Create a new complete recipe using another ingredient instead, adjusting quantities and steps.", "variant": "variation", "swapCtx": "Original recipe:", "missT": "missing", "swapGo": "New recipe without: {i}", "rateT": "Your rating", "rateH": "1 = terrible · 5 = the best", "rateOk": "Rating saved: {n}/5"}, "es": {"swapT": "Sustituir este ingrediente", "swapH": "Toca el círculo de un ingrediente que no tengas: se tacha. Luego crea una receta nueva, o toca ↔. Tu favorito no cambia.", "swapMsg": "No tengo: {i}. Crea una receta nueva y completa con otro ingrediente en su lugar, ajustando cantidades y pasos.", "variant": "variante", "swapCtx": "Receta original:", "missT": "no tengo", "swapGo": "Receta nueva sin: {i}", "rateT": "Tu nota", "rateH": "1 = muy mala · 5 = la mejor", "rateOk": "Nota guardada: {n}/5"}, "de": {"swapT": "Zutat ersetzen", "swapH": "Tippe auf den Kreis einer Zutat, die du nicht hast: Sie wird durchgestrichen. Dann neues Rezept starten oder ↔ tippen. Dein Favorit bleibt unverändert.", "swapMsg": "Ich habe nicht: {i}. Erstelle ein neues vollständiges Rezept mit einer anderen Zutat statt dieser, mit angepassten Mengen und Schritten.", "variant": "Variante", "swapCtx": "Originalrezept:", "missT": "fehlt", "swapGo": "Neues Rezept ohne: {i}", "rateT": "Deine Bewertung", "rateH": "1 = furchtbar · 5 = die beste", "rateOk": "Bewertung gespeichert: {n}/5"}, "it": {"swapT": "Sostituisci questo ingrediente", "swapH": "Tocca il cerchio di un ingrediente che non hai: viene barrato. Poi avvia una nuova ricetta, o tocca ↔. Il tuo preferito resta intatto.", "swapMsg": "Non ho: {i}. Crea una nuova ricetta completa con un altro ingrediente al suo posto, adattando quantità e passaggi.", "variant": "variante", "swapCtx": "Ricetta originale:", "missT": "manca", "swapGo": "Nuova ricetta senza: {i}", "rateT": "Il tuo voto", "rateH": "1 = pessima · 5 = la migliore", "rateOk": "Voto salvato: {n}/5"}, "pt": {"swapT": "Substituir este ingrediente", "swapH": "Toque no círculo de um ingrediente que não tem: fica riscado. Depois inicie uma nova receita, ou toque em ↔. O seu favorito fica intacto.", "swapMsg": "Não tenho: {i}. Crie uma nova receita completa com outro ingrediente no lugar, ajustando quantidades e passos.", "variant": "variante", "swapCtx": "Receita original:", "missT": "em falta", "swapGo": "Nova receita sem: {i}", "rateT": "A sua nota", "rateH": "1 = péssima · 5 = a melhor", "rateOk": "Nota guardada: {n}/5"}};
-Object.keys(I18J).forEach(k=>Object.assign(I18[k],I18J[k]));
 const shown=c=>c.replace(/\n\n§§[\s\S]*$/,'').replace(/^\[UI\] /,'');
 function branchWith(src,ings){ // new separate recipe saved in the history: the original recipe (and its favorite) stays untouched
   if(busy)return;
@@ -503,22 +1298,6 @@ function openSaved(id){
   try{const i=hist.findIndex(m=>m.role==='assistant'&&looksLikeRecipe(m.content));if(i>=0)dishPic(log.children[i],hist[i].content)}catch(x){}
 }
 // ---------- Fiches recette : photo, favoris, partage, commentaires ----------
-const I18B={
-fr:{card:"Fiche",fav:"Favori",favs:"Favoris",all:"Toutes",nofav:"Aucun favori pour l’instant. Touchez ❤️ sur une recette.",share:"Partager",copied:"Recette copiée dans le presse-papiers",cont:"Continuer avec le chef",com:"Commentaires",nocom:"Aucun commentaire pour l’instant. Soyez le premier !",pub:"Publier",nm:"Votre prénom",wr:"Écrire un commentaire…",cdel:"Supprimer",cdq:"Supprimer ce commentaire ?",cOff:"Les commentaires ne sont pas activés sur ce site.",cErr:"Impossible de charger les commentaires.",cRate:"Trop de commentaires, réessayez dans une minute.",credit:"Photo : Wikipédia",anon:"Anonyme",now:"à l’instant"},
-en:{card:"Card",fav:"Favorite",favs:"Favorites",all:"All",nofav:"No favorites yet. Tap ❤️ on a recipe.",share:"Share",copied:"Recipe copied to clipboard",cont:"Continue with the chef",com:"Comments",nocom:"No comments yet. Be the first!",pub:"Post",nm:"Your first name",wr:"Write a comment…",cdel:"Delete",cdq:"Delete this comment?",cOff:"Comments are not enabled on this site.",cErr:"Could not load comments.",cRate:"Too many comments, try again in a minute.",credit:"Photo: Wikipedia",anon:"Anonymous",now:"just now"},
-es:{card:"Ficha",fav:"Favorito",favs:"Favoritos",all:"Todas",nofav:"Aún no hay favoritos. Toca ❤️ en una receta.",share:"Compartir",copied:"Receta copiada al portapapeles",cont:"Seguir con el chef",com:"Comentarios",nocom:"Aún no hay comentarios. ¡Sé el primero!",pub:"Publicar",nm:"Tu nombre",wr:"Escribe un comentario…",cdel:"Eliminar",cdq:"¿Eliminar este comentario?",cOff:"Los comentarios no están activados en este sitio.",cErr:"No se pudieron cargar los comentarios.",cRate:"Demasiados comentarios, inténtalo en un minuto.",credit:"Foto: Wikipedia",anon:"Anónimo",now:"ahora mismo"},
-de:{card:"Karte",fav:"Favorit",favs:"Favoriten",all:"Alle",nofav:"Noch keine Favoriten. Tippe auf ❤️ bei einem Rezept.",share:"Teilen",copied:"Rezept in die Zwischenablage kopiert",cont:"Mit dem Koch weitermachen",com:"Kommentare",nocom:"Noch keine Kommentare. Sei der Erste!",pub:"Posten",nm:"Dein Vorname",wr:"Kommentar schreiben…",cdel:"Löschen",cdq:"Diesen Kommentar löschen?",cOff:"Kommentare sind auf dieser Seite nicht aktiviert.",cErr:"Kommentare konnten nicht geladen werden.",cRate:"Zu viele Kommentare, versuche es in einer Minute erneut.",credit:"Foto: Wikipedia",anon:"Anonym",now:"gerade eben"},
-it:{card:"Scheda",fav:"Preferito",favs:"Preferiti",all:"Tutte",nofav:"Ancora nessun preferito. Tocca ❤️ su una ricetta.",share:"Condividi",copied:"Ricetta copiata negli appunti",cont:"Continua con lo chef",com:"Commenti",nocom:"Ancora nessun commento. Sii il primo!",pub:"Pubblica",nm:"Il tuo nome",wr:"Scrivi un commento…",cdel:"Elimina",cdq:"Eliminare questo commento?",cOff:"I commenti non sono attivi su questo sito.",cErr:"Impossibile caricare i commenti.",cRate:"Troppi commenti, riprova tra un minuto.",credit:"Foto: Wikipedia",anon:"Anonimo",now:"adesso"},
-pt:{card:"Ficha",fav:"Favorito",favs:"Favoritos",all:"Todas",nofav:"Ainda sem favoritos. Toque em ❤️ numa receita.",share:"Partilhar",copied:"Receita copiada para a área de transferência",cont:"Continuar com o chef",com:"Comentários",nocom:"Ainda sem comentários. Seja o primeiro!",pub:"Publicar",nm:"O seu nome",wr:"Escreva um comentário…",cdel:"Eliminar",cdq:"Eliminar este comentário?",cOff:"Os comentários não estão ativados neste site.",cErr:"Não foi possível carregar os comentários.",cRate:"Demasiados comentários, tente novamente num minuto.",credit:"Foto: Wikipedia",anon:"Anónimo",now:"agora mesmo"}};
-Object.keys(I18B).forEach(k=>Object.assign(I18[k],I18B[k]));
-const I18C={fr:{home:"Accueil",menu:"Menu",close:"Fermer",favT:"Mes recettes favorites"},en:{home:"Home",menu:"Menu",close:"Close",favT:"My favorite recipes"},es:{home:"Inicio",menu:"Menú",close:"Cerrar",favT:"Mis recetas favoritas"},de:{home:"Start",menu:"Menü",close:"Schließen",favT:"Meine Lieblingsrezepte"},it:{home:"Home",menu:"Menu",close:"Chiudi",favT:"Le mie ricette preferite"},pt:{home:"Início",menu:"Menu",close:"Fechar",favT:"As minhas receitas favoritas"}};
-Object.keys(I18C).forEach(k=>Object.assign(I18[k],I18C[k]));
-const I18D={fr:{search:"Rechercher une recette…",noresult:"Aucune recette trouvée.",nokey:"Le chef n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez."},en:{search:"Search a recipe…",noresult:"No recipe found.",nokey:"The chef isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy."},es:{search:"Buscar una receta…",noresult:"No se encontró ninguna receta.",nokey:"El chef aún no está conectado: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar."},de:{search:"Rezept suchen…",noresult:"Kein Rezept gefunden.",nokey:"Der Koch ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen."},it:{search:"Cerca una ricetta…",noresult:"Nessuna ricetta trovata.",nokey:"Lo chef non è ancora collegato: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy."},pt:{search:"Pesquisar uma receita…",noresult:"Nenhuma receita encontrada.",nokey:"O chef ainda não está ligado: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar."}};
-Object.keys(I18D).forEach(k=>Object.assign(I18[k],I18D[k]));
-const I18E={"fr": {"catT": "Que voulez-vous créer ?", "cats": "🍲 Plats du quotidien|🍰 Desserts et pâtisseries|🍹 Cocktails|🥤 Boissons|🍕 Cuisine du monde|🥗 Végétarien et régimes|🍞 Boulangerie et pains|🧂 Sauces et accompagnements|🍬 Chocolats et glaces|🥑 Ingrédients et techniques|🍽️ Menus et idées de repas", "catAsk": "Aide-moi dans la catégorie « {x} » : propose-moi une idée ou une recette pour commencer.", "w": "Je suis Chef IA, ton assistant dédié à tout ce qui se mange et se boit ! Demande-moi une recette, plat, dessert ou boisson, puis adapte-la : « je n’ai pas de persil, j’ai du Cajun », « redonne-la pour 2 »…"}, "en": {"catT": "What do you want to create?", "cats": "🍲 Everyday dishes|🍰 Desserts and pastries|🍹 Cocktails|🥤 Drinks|🍕 World cuisine|🥗 Vegetarian and diets|🍞 Bakery and breads|🧂 Sauces and sides|🍬 Chocolate and ice cream|🥑 Ingredients and techniques|🍽️ Menus and meal ideas", "catAsk": "Help me in the category “{x}”: suggest an idea or a recipe to get started.", "w": "I’m Chef IA, your assistant for everything you eat and drink! Ask for a dish, dessert or drink recipe, then adapt it: “I have no parsley, I have Cajun spice”, “give it to me again for 2”…"}, "es": {"catT": "¿Qué quieres crear?", "cats": "🍲 Platos del día a día|🍰 Postres y pastelería|🍹 Cócteles|🥤 Bebidas|🍕 Cocina del mundo|🥗 Vegetariano y dietas|🍞 Panadería y panes|🧂 Salsas y guarniciones|🍬 Chocolates y helados|🥑 Ingredientes y técnicas|🍽️ Menús e ideas de comidas", "catAsk": "Ayúdame en la categoría «{x}»: propón una idea o una receta para empezar.", "w": "¡Soy Chef IA, tu asistente para todo lo que se come y se bebe! Pídeme una receta de plato, postre o bebida y luego adáptala: «no tengo perejil, tengo Cajun», «dámela otra vez para 2»…"}, "de": {"catT": "Was möchtest du kreieren?", "cats": "🍲 Alltagsgerichte|🍰 Desserts und Gebäck|🍹 Cocktails|🥤 Getränke|🍕 Weltküche|🥗 Vegetarisch und Diäten|🍞 Bäckerei und Brot|🧂 Saucen und Beilagen|🍬 Schokolade und Eis|🥑 Zutaten und Techniken|🍽️ Menüs und Essensideen", "catAsk": "Hilf mir in der Kategorie „{x}“: Schlage mir eine Idee oder ein Rezept zum Start vor.", "w": "Ich bin Chef IA, dein Assistent für alles, was man isst und trinkt! Frag nach einem Rezept für Gericht, Dessert oder Getränk und passe es dann an: „Ich habe keine Petersilie, aber Cajun“, „gib es mir nochmal für 2“…"}, "it": {"catT": "Cosa vuoi creare?", "cats": "🍲 Piatti di tutti i giorni|🍰 Dolci e pasticceria|🍹 Cocktail|🥤 Bevande|🍕 Cucina del mondo|🥗 Vegetariano e diete|🍞 Panetteria e pane|🧂 Salse e contorni|🍬 Cioccolato e gelati|🥑 Ingredienti e tecniche|🍽️ Menu e idee per i pasti", "catAsk": "Aiutami nella categoria «{x}»: proponimi un’idea o una ricetta per iniziare.", "w": "Sono Chef IA, il tuo assistente per tutto ciò che si mangia e si beve! Chiedi la ricetta di un piatto, un dolce o una bevanda, poi adattala: «non ho il prezzemolo, ho il Cajun», «dammela di nuovo per 2»…"}, "pt": {"catT": "O que quer criar?", "cats": "🍲 Pratos do dia a dia|🍰 Sobremesas e pastelaria|🍹 Cocktails|🥤 Bebidas|🍕 Cozinha do mundo|🥗 Vegetariano e dietas|🍞 Padaria e pães|🧂 Molhos e acompanhamentos|🍬 Chocolates e gelados|🥑 Ingredientes e técnicas|🍽️ Menus e ideias de refeições", "catAsk": "Ajude-me na categoria «{x}»: proponha uma ideia ou uma receita para começar.", "w": "Sou o Chef IA, o seu assistente para tudo o que se come e se bebe! Peça uma receita de prato, sobremesa ou bebida e depois adapte-a: «não tenho salsa, tenho Cajun», «dê-me de novo para 2»…"}};
-Object.keys(I18E).forEach(k=>Object.assign(I18[k],I18E[k]));
-const I18Q={"fr": {"qS": "👥 Pers.", "qSo": "Pour 2 personnes|Pour 6 personnes|Pour 8 personnes", "qD1": "🚫 Sans", "qD1o": "Sans gluten|Sans lactose", "qD2": "🥦 Régime", "qD2o": "Version végétarienne|Version végane", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Gluten|Lactose", "qD2s": "Végétarien|Végan"}, "en": {"qS": "👥 People", "qSo": "For 2 people|For 6 people|For 8 people", "qD1": "🚫 No", "qD1o": "Gluten-free|Lactose-free", "qD2": "🥦 Diet", "qD2o": "Vegetarian version|Vegan version", "qSs": "2 people|6 people|8 people", "qD1s": "Gluten|Lactose", "qD2s": "Vegetarian|Vegan"}, "es": {"qS": "👥 Pers.", "qSo": "Para 2 personas|Para 6 personas|Para 8 personas", "qD1": "🚫 Sin", "qD1o": "Sin gluten|Sin lactosa", "qD2": "🥦 Dieta", "qD2o": "Versión vegetariana|Versión vegana", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Gluten|Lactosa", "qD2s": "Veggie|Vegano"}, "de": {"qS": "👥 Pers.", "qSo": "Für 2 Personen|Für 6 Personen|Für 8 Personen", "qD1": "🚫 Ohne", "qD1o": "Glutenfrei|Laktosefrei", "qD2": "🥦 Diät", "qD2o": "Vegetarische Version|Vegane Version", "qSs": "2 Pers.|6 Pers.|8 Pers.", "qD1s": "Gluten|Laktose", "qD2s": "Veggie|Vegan"}, "it": {"qS": "👥 Pers.", "qSo": "Per 2 persone|Per 6 persone|Per 8 persone", "qD1": "🚫 Senza", "qD1o": "Senza glutine|Senza lattosio", "qD2": "🥦 Dieta", "qD2o": "Versione vegetariana|Versione vegana", "qSs": "2 pers.|6 pers.|8 pers.", "qD1s": "Glutine|Lattosio", "qD2s": "Veggie|Vegano"}, "pt": {"qS": "👥 Pess.", "qSo": "Para 2 pessoas|Para 6 pessoas|Para 8 pessoas", "qD1": "🚫 Sem", "qD1o": "Sem glúten|Sem lactose", "qD2": "🥦 Dieta", "qD2o": "Versão vegetariana|Versão vegana", "qSs": "2 pess.|6 pess.|8 pess.", "qD1s": "Glúten|Lactose", "qD2s": "Veggie|Vegano"}};
-Object.keys(I18Q).forEach(k=>Object.assign(I18[k],I18Q[k]));
 let cardId=null,hfav=false;
 // ---------- Side menu ----------
 function drawCats(){const t=T(),box=$('#cats');box.innerHTML='';$('#catT').textContent=t.catT;
@@ -727,7 +1506,7 @@ async function capi(method,qs,data,path){
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
     return fetch((path||'/api/comments')+qs,{method,headers:{'Content-Type':'application/json','x-code':c,'x-owner':OWN},body:data?JSON.stringify(data):undefined})};
   let r=await call();
-  if(r.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(x){}r=await call()}}
+  if(r.status===401){const c=await askCode();if(c)r=await call()}
   return r;
 }
 function ago(ts){const s=Math.round((ts-Date.now())/1000),a=Math.abs(s);if(a<60)return T().now;
@@ -750,7 +1529,7 @@ function buildComments(parent,key){
       const w=document.createElement('div');w.className='cw';
       const b=document.createElement('div');b.className='cbub';const n=document.createElement('b');n.textContent=c.name;const p=document.createElement('p');p.textContent=c.text;b.append(n,p);
       const m=document.createElement('div');m.className='cmeta';const s=document.createElement('span');s.textContent=ago(c.ts);m.appendChild(s);
-      if(c.mine){const x=document.createElement('button');x.textContent=t.cdel;x.onclick=async()=>{if(!confirm(t.cdq))return;try{const r=await capi('DELETE','?key='+key+'&id='+encodeURIComponent(c.id));if(r.ok)load()}catch(e){}};m.appendChild(x)}
+      if(c.mine){const x=document.createElement('button');x.textContent=t.cdel;x.onclick=async()=>{if(!await ask({text:t.cdq,okLabel:t.cdel}))return;try{const r=await capi('DELETE','?key='+key+'&id='+encodeURIComponent(c.id));if(r.ok)load()}catch(e){}};m.appendChild(x)}
       w.append(b,m);d.append(av,w);list.appendChild(d)})};
   const load=async()=>{try{const r=await capi('GET','?key='+key);
       if(r.status===501||r.status===404){form.style.display='none';msg.textContent=t.cOff;return}
@@ -810,7 +1589,8 @@ function dishSvg(title){
   return '<svg viewBox="0 0 340 220" preserveAspectRatio="xMidYMid meet" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+(title||'').replace(/[<>&"]/g,'')+'"><rect x="-4000" y="-4000" width="8340" height="8220" fill="'+bg+'"/><rect x="-4000" y="168" width="8340" height="4000" fill="#fff" opacity=".35"/>'+P[k]+'</svg>';
 }
 function dishArt(title){const d=document.createElement('div');d.innerHTML=dishSvg(title);return d.firstChild}
-// Dish visual under the first recipe of the conversation (Wikipedia, or thumbnail of the imported photo)
+// Dish visual under the first recipe of the conversation: the user's own image, the imported photo, or the code-drawn illustration.
+// (The Wikipedia photo search, getPhoto(), is only used on the recipe card.)
 function toBottom(){const f=()=>{log.scrollTop=log.scrollHeight};f();requestAnimationFrame(f);setTimeout(f,150)}
 function dishPic(b,text){
   if(!b||log.querySelector('.dphoto')||!looksLikeRecipe(text||''))return;
@@ -837,7 +1617,7 @@ async function chatCall(h,out){
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
   const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h,persona,lang})});
   let res=await call();
-  if(res.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(e){}res=await call()}}
+  if(res.status===401){const c=await askCode();if(c)res=await call()}
   if(!res.ok){
     if(res.status===401){try{localStorage.removeItem('code')}catch(e){}throw {code:'code'}}
     let ec='';try{ec=(await res.json()).error||''}catch(e){}
@@ -873,8 +1653,6 @@ async function send(text,auto,ctx){
 }
 
 // ---------- Import a recipe (photo or link) ----------
-const I18F={"fr": {"imT": "Importer une recette", "imHomeS": "Depuis une photo ou un lien internet", "imHint": "Choisissez une photo (page de livre, recette manuscrite, capture d’écran…) ou collez un lien. Vous vérifiez la recette reconnue avant de l’utiliser.", "imPh": "📷 Photo", "imCam": "Prendre une photo", "imGal": "Choisir dans la galerie", "imLk": "🔗 Lien internet", "imUrl": "Collez le lien de la recette", "imGo": "Importer", "imWait": "Lecture de la recette en cours…", "imUse": "Utiliser cette recette", "imCancel": "Annuler", "imCheck": "Vérifiez que la recette est bien reconnue (quantités, étapes, temps). Rien n’a encore été modifié ni enregistré.", "pServ": "Portions", "pTime": "Temps", "pTemp": "Température", "hIng": "Ingrédients", "hSteps": "Préparation", "hNotes": "Notes", "srcL": "Source", "imUntitled": "Recette importée", "imMsgP": "J’ai importé cette recette depuis une photo.", "imMsgL": "J’ai importé cette recette depuis {x}.", "srcP": "Importée d’une photo", "e_badurl": "Ce lien n’est pas valide.", "e_private": "Ce lien n’est pas accessible (adresse interne ou non autorisée).", "e_blocked": "Ce site refuse la lecture automatique. Faites plutôt une capture d’écran de la recette et importez-la en photo.", "e_login": "Cette page demande une connexion : je ne peux pas la lire. Faites une capture d’écran de la recette et importez-la en photo.", "e_notfound": "Page introuvable : vérifiez le lien.", "e_timeout": "Le site met trop de temps à répondre. Réessayez plus tard.", "e_unreachable": "Impossible d’ouvrir ce site pour le moment.", "e_norecipe": "Aucune recette n’a été reconnue. Pour une photo, la recette doit être écrite sur l’image : une simple photo de plat ne suffit pas.", "e_toobig": "L’image ou la page est trop volumineuse.", "e_badimage": "Cette image n’a pas pu être lue (formats : JPG, PNG, WebP).", "e_nokey": "L’import n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.", "e_upstream": "Le service d’analyse est indisponible. Réessayez dans un instant.", "e_noapi": "L’import ne fonctionne que sur le site Vercel, pas dans l’aperçu claude.ai.", "e_network": "Connexion impossible. Vérifiez votre réseau."}, "en": {"imT": "Import a recipe", "imHomeS": "From a photo or a web link", "imHint": "Pick a photo (cookbook page, handwritten recipe, screenshot…) or paste a link. You check the recognized recipe before using it.", "imPh": "📷 Photo", "imCam": "Take a photo", "imGal": "Choose from gallery", "imLk": "🔗 Web link", "imUrl": "Paste the recipe link", "imGo": "Import", "imWait": "Reading the recipe…", "imUse": "Use this recipe", "imCancel": "Cancel", "imCheck": "Check that the recipe was recognized correctly (amounts, steps, times). Nothing has been changed or saved yet.", "pServ": "Servings", "pTime": "Time", "pTemp": "Temperature", "hIng": "Ingredients", "hSteps": "Method", "hNotes": "Notes", "srcL": "Source", "imUntitled": "Imported recipe", "imMsgP": "I imported this recipe from a photo.", "imMsgL": "I imported this recipe from {x}.", "srcP": "Imported from a photo", "e_badurl": "This link is not valid.", "e_private": "This link can’t be reached (internal or disallowed address).", "e_blocked": "This site blocks automatic reading. Take a screenshot of the recipe and import it as a photo instead.", "e_login": "This page requires a login, so I can’t read it. Take a screenshot of the recipe and import it as a photo.", "e_notfound": "Page not found: check the link.", "e_timeout": "The site is taking too long to respond. Try again later.", "e_unreachable": "Can’t open this site right now.", "e_norecipe": "No recipe was recognized. For a photo, the recipe must be written in the image: a plain photo of a dish isn’t enough.", "e_toobig": "The image or page is too large.", "e_badimage": "This image couldn’t be read (formats: JPG, PNG, WebP).", "e_nokey": "Import isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy.", "e_upstream": "The analysis service is unavailable. Try again in a moment.", "e_noapi": "Import only works on the Vercel site, not in the claude.ai preview.", "e_network": "Can’t connect. Check your network."}, "es": {"imT": "Importar una receta", "imHomeS": "Desde una foto o un enlace web", "imHint": "Elige una foto (página de libro, receta manuscrita, captura de pantalla…) o pega un enlace. Revisas la receta reconocida antes de usarla.", "imPh": "📷 Foto", "imCam": "Hacer una foto", "imGal": "Elegir de la galería", "imLk": "🔗 Enlace web", "imUrl": "Pega el enlace de la receta", "imGo": "Importar", "imWait": "Leyendo la receta…", "imUse": "Usar esta receta", "imCancel": "Cancelar", "imCheck": "Comprueba que la receta se reconoció bien (cantidades, pasos, tiempos). Todavía no se ha modificado ni guardado nada.", "pServ": "Porciones", "pTime": "Tiempo", "pTemp": "Temperatura", "hIng": "Ingredientes", "hSteps": "Preparación", "hNotes": "Notas", "srcL": "Fuente", "imUntitled": "Receta importada", "imMsgP": "He importado esta receta desde una foto.", "imMsgL": "He importado esta receta desde {x}.", "srcP": "Importada de una foto", "e_badurl": "Este enlace no es válido.", "e_private": "No se puede acceder a este enlace (dirección interna o no permitida).", "e_blocked": "Este sitio bloquea la lectura automática. Haz una captura de pantalla de la receta e impórtala como foto.", "e_login": "Esta página requiere iniciar sesión y no puedo leerla. Haz una captura de la receta e impórtala como foto.", "e_notfound": "Página no encontrada: revisa el enlace.", "e_timeout": "El sitio tarda demasiado en responder. Inténtalo más tarde.", "e_unreachable": "No se puede abrir este sitio ahora.", "e_norecipe": "No se reconoció ninguna receta. En una foto, la receta debe estar escrita en la imagen: una simple foto del plato no basta.", "e_toobig": "La imagen o la página es demasiado grande.", "e_badimage": "No se pudo leer esta imagen (formatos: JPG, PNG, WebP).", "e_nokey": "La importación aún no está conectada: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar.", "e_upstream": "El servicio de análisis no está disponible. Inténtalo en un momento.", "e_noapi": "La importación solo funciona en el sitio de Vercel, no en la vista previa de claude.ai.", "e_network": "No se puede conectar. Revisa tu red."}, "de": {"imT": "Rezept importieren", "imHomeS": "Aus einem Foto oder einem Weblink", "imHint": "Wähle ein Foto (Kochbuchseite, handgeschriebenes Rezept, Screenshot…) oder füge einen Link ein. Du prüfst das erkannte Rezept, bevor du es verwendest.", "imPh": "📷 Foto", "imCam": "Foto aufnehmen", "imGal": "Aus der Galerie wählen", "imLk": "🔗 Weblink", "imUrl": "Rezept-Link einfügen", "imGo": "Importieren", "imWait": "Rezept wird gelesen…", "imUse": "Dieses Rezept verwenden", "imCancel": "Abbrechen", "imCheck": "Prüfe, ob das Rezept richtig erkannt wurde (Mengen, Schritte, Zeiten). Noch wurde nichts geändert oder gespeichert.", "pServ": "Portionen", "pTime": "Zeit", "pTemp": "Temperatur", "hIng": "Zutaten", "hSteps": "Zubereitung", "hNotes": "Notizen", "srcL": "Quelle", "imUntitled": "Importiertes Rezept", "imMsgP": "Ich habe dieses Rezept aus einem Foto importiert.", "imMsgL": "Ich habe dieses Rezept von {x} importiert.", "srcP": "Aus einem Foto importiert", "e_badurl": "Dieser Link ist ungültig.", "e_private": "Dieser Link ist nicht erreichbar (interne oder nicht erlaubte Adresse).", "e_blocked": "Diese Seite blockiert das automatische Lesen. Mache stattdessen einen Screenshot des Rezepts und importiere ihn als Foto.", "e_login": "Diese Seite erfordert eine Anmeldung, ich kann sie nicht lesen. Mache einen Screenshot des Rezepts und importiere ihn als Foto.", "e_notfound": "Seite nicht gefunden: prüfe den Link.", "e_timeout": "Die Seite antwortet zu langsam. Versuche es später erneut.", "e_unreachable": "Diese Seite kann gerade nicht geöffnet werden.", "e_norecipe": "Kein Rezept erkannt. Bei einem Foto muss das Rezept im Bild geschrieben stehen: ein bloßes Foto eines Gerichts reicht nicht.", "e_toobig": "Das Bild oder die Seite ist zu groß.", "e_badimage": "Dieses Bild konnte nicht gelesen werden (Formate: JPG, PNG, WebP).", "e_nokey": "Der Import ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen.", "e_upstream": "Der Analysedienst ist nicht verfügbar. Versuche es gleich noch einmal.", "e_noapi": "Der Import funktioniert nur auf der Vercel-Seite, nicht in der claude.ai-Vorschau.", "e_network": "Keine Verbindung. Prüfe dein Netzwerk."}, "it": {"imT": "Importa una ricetta", "imHomeS": "Da una foto o da un link web", "imHint": "Scegli una foto (pagina di libro, ricetta scritta a mano, screenshot…) o incolla un link. Controlli la ricetta riconosciuta prima di usarla.", "imPh": "📷 Foto", "imCam": "Scatta una foto", "imGal": "Scegli dalla galleria", "imLk": "🔗 Link web", "imUrl": "Incolla il link della ricetta", "imGo": "Importa", "imWait": "Lettura della ricetta in corso…", "imUse": "Usa questa ricetta", "imCancel": "Annulla", "imCheck": "Controlla che la ricetta sia stata riconosciuta bene (quantità, passaggi, tempi). Per ora nulla è stato modificato o salvato.", "pServ": "Porzioni", "pTime": "Tempo", "pTemp": "Temperatura", "hIng": "Ingredienti", "hSteps": "Preparazione", "hNotes": "Note", "srcL": "Fonte", "imUntitled": "Ricetta importata", "imMsgP": "Ho importato questa ricetta da una foto.", "imMsgL": "Ho importato questa ricetta da {x}.", "srcP": "Importata da una foto", "e_badurl": "Questo link non è valido.", "e_private": "Questo link non è raggiungibile (indirizzo interno o non consentito).", "e_blocked": "Questo sito blocca la lettura automatica. Fai invece uno screenshot della ricetta e importalo come foto.", "e_login": "Questa pagina richiede l’accesso e non posso leggerla. Fai uno screenshot della ricetta e importalo come foto.", "e_notfound": "Pagina non trovata: controlla il link.", "e_timeout": "Il sito risponde troppo lentamente. Riprova più tardi.", "e_unreachable": "Impossibile aprire questo sito al momento.", "e_norecipe": "Nessuna ricetta riconosciuta. Per una foto, la ricetta deve essere scritta nell’immagine: una semplice foto del piatto non basta.", "e_toobig": "L’immagine o la pagina è troppo grande.", "e_badimage": "Impossibile leggere questa immagine (formati: JPG, PNG, WebP).", "e_nokey": "L’importazione non è ancora collegata: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy.", "e_upstream": "Il servizio di analisi non è disponibile. Riprova tra un attimo.", "e_noapi": "L’importazione funziona solo sul sito Vercel, non nell’anteprima di claude.ai.", "e_network": "Impossibile connettersi. Controlla la rete."}, "pt": {"imT": "Importar uma receita", "imHomeS": "A partir de uma foto ou de um link", "imHint": "Escolha uma foto (página de livro, receita manuscrita, captura de ecrã…) ou cole um link. Verifica a receita reconhecida antes de a usar.", "imPh": "📷 Foto", "imCam": "Tirar uma foto", "imGal": "Escolher da galeria", "imLk": "🔗 Link da internet", "imUrl": "Cole o link da receita", "imGo": "Importar", "imWait": "A ler a receita…", "imUse": "Usar esta receita", "imCancel": "Cancelar", "imCheck": "Verifique se a receita foi bem reconhecida (quantidades, passos, tempos). Ainda nada foi alterado nem guardado.", "pServ": "Porções", "pTime": "Tempo", "pTemp": "Temperatura", "hIng": "Ingredientes", "hSteps": "Preparação", "hNotes": "Notas", "srcL": "Fonte", "imUntitled": "Receita importada", "imMsgP": "Importei esta receita a partir de uma foto.", "imMsgL": "Importei esta receita de {x}.", "srcP": "Importada de uma foto", "e_badurl": "Este link não é válido.", "e_private": "Este link não está acessível (endereço interno ou não permitido).", "e_blocked": "Este site bloqueia a leitura automática. Faça uma captura de ecrã da receita e importe-a como foto.", "e_login": "Esta página exige início de sessão e não a consigo ler. Faça uma captura de ecrã da receita e importe-a como foto.", "e_notfound": "Página não encontrada: verifique o link.", "e_timeout": "O site demora demasiado a responder. Tente mais tarde.", "e_unreachable": "Não é possível abrir este site neste momento.", "e_norecipe": "Nenhuma receita reconhecida. Numa foto, a receita tem de estar escrita na imagem: uma simples foto do prato não chega.", "e_toobig": "A imagem ou a página é demasiado grande.", "e_badimage": "Não foi possível ler esta imagem (formatos: JPG, PNG, WebP).", "e_nokey": "A importação ainda não está ligada: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar.", "e_upstream": "O serviço de análise está indisponível. Tente novamente daqui a pouco.", "e_noapi": "A importação só funciona no site da Vercel, não na pré-visualização do claude.ai.", "e_network": "Sem ligação. Verifique a rede."}};
-Object.keys(I18F).forEach(k=>Object.assign(I18[k],I18F[k]));
 let pendingMeta=null,imp=null,impTok=0;
 function impText(){const t=T();
   $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#dImp').textContent=t.imT;$('#impT').textContent=t.imT;
@@ -886,7 +1664,7 @@ async function apiPost(path,data){
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
     return fetch(path,{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify(data)})};
   let r;try{r=await call()}catch(x){throw {code:'network'}}
-  if(r.status===401){const c=prompt(T().code);if(c){try{localStorage.setItem('code',c)}catch(x){}try{r=await call()}catch(x){throw {code:'network'}}}}
+  if(r.status===401){const c=await askCode();if(c){try{r=await call()}catch(x){throw {code:'network'}}}}
   let j=null;try{j=await r.json()}catch(x){}
   if(r.ok&&j&&j.recipe)return j;
   if(r.status===404&&!(j&&j.error))throw {code:'noapi'};
@@ -975,8 +1753,6 @@ $('#impGo').onclick=importLink;
 $('#impUrl').addEventListener('keydown',e=>{if(e.key==='Enter')importLink()});
 
 // ---------- Change a recipe's image (photo, gallery or link) ----------
-const I18G={"fr": {"imgT": "Image du plat", "imgUrl": "Collez le lien d’une image", "imgUse": "Utiliser", "imgReset": "Revenir au dessin", "imgOk": "Image enregistrée", "imgBad": "Impossible de charger cette image. Vérifiez le lien.", "imgFull": "Mémoire de l’appareil pleine : image non enregistrée."}, "en": {"imgT": "Dish image", "imgUrl": "Paste an image link", "imgUse": "Use", "imgReset": "Back to the drawing", "imgOk": "Image saved", "imgBad": "Couldn’t load this image. Check the link.", "imgFull": "Device storage is full: image not saved."}, "es": {"imgT": "Imagen del plato", "imgUrl": "Pega el enlace de una imagen", "imgUse": "Usar", "imgReset": "Volver al dibujo", "imgOk": "Imagen guardada", "imgBad": "No se pudo cargar esta imagen. Revisa el enlace.", "imgFull": "Memoria del dispositivo llena: imagen no guardada."}, "de": {"imgT": "Bild des Gerichts", "imgUrl": "Bildlink einfügen", "imgUse": "Verwenden", "imgReset": "Zurück zur Zeichnung", "imgOk": "Bild gespeichert", "imgBad": "Dieses Bild konnte nicht geladen werden. Prüfe den Link.", "imgFull": "Gerätespeicher voll: Bild nicht gespeichert."}, "it": {"imgT": "Immagine del piatto", "imgUrl": "Incolla il link di un’immagine", "imgUse": "Usa", "imgReset": "Torna al disegno", "imgOk": "Immagine salvata", "imgBad": "Impossibile caricare questa immagine. Controlla il link.", "imgFull": "Memoria del dispositivo piena: immagine non salvata."}, "pt": {"imgT": "Imagem do prato", "imgUrl": "Cole o link de uma imagem", "imgUse": "Usar", "imgReset": "Voltar ao desenho", "imgOk": "Imagem guardada", "imgBad": "Não foi possível carregar esta imagem. Verifique o link.", "imgFull": "Memória do dispositivo cheia: imagem não guardada."}};
-Object.keys(I18G).forEach(k=>Object.assign(I18[k],I18G[k]));
 let imgTarget=null;
 function imgText(){const t=T();$('#imgTt').textContent=t.imgT;$('#imgCam').textContent='📷 '+t.imCam;$('#imgGal').textContent='🖼️ '+t.imGal;$('#imgUrl').placeholder=t.imgUrl;$('#imgGo').textContent=t.imgUse;$('#imgReset').textContent='↩︎ '+t.imgReset;$('#imgCancel').textContent=t.imCancel}
 function imgMsg(x){$('#imgMsg').textContent=x||''}

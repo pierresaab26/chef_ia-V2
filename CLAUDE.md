@@ -25,7 +25,7 @@ No framework, no build step. `package.json` only sets `"type": "module"`.
 | `api/import-link.js` | Recipe extraction from a public web page (structured data first, then the model). |
 | `api/comments.js` | Recipe comments in Redis. |
 | `api/ratings.js` | 1–5 star ratings in Redis, plus an analysis log. |
-| `api/_lib.js` | Shared helpers: `authOk` (checks `x-code` header against `APP_PASSWORD`), `fail` (error codes → HTTP status), `askClaude`, JSON parsing. |
+| `api/_lib.js` | Shared helpers used by every route: `authOk` (checks `x-code` against `APP_PASSWORD`), `fail` (error code → HTTP status), `callClaude` / `askClaude` (the only Anthropic call), `redis` / `hasRedis` (Upstash), `overLimit` (per-IP rate limit, never blocks if Redis is missing or fails), `clean`, JSON parsing. |
 | `api/_page.js` | Web page fetching for link import (SSRF protection, redirect/size/time limits). |
 | `vercel.json` | Functions: 60 s max duration. |
 
@@ -39,7 +39,7 @@ Files starting with `_` in `api/` are helpers, not routes.
 - `c:<recipe>` — comments list
 - `r:<recipe>` — ratings hash; `r:index` — set of rated recipes
 - `r:log` — rating log (title, stars, language, date), last 5,000 entries, for later analysis
-- `rl:<ip>:<minute>`, `rl:r:<ip>:<minute>` — rate limiting
+- `rl:<ip>:<minute>` (comments, 5/min), `rl:r:<ip>:<minute>` (ratings, 30/min), `rl:c:<ip>:<minute>` (chat, 20/min) — rate limiting
 
 ## 3. Working rules (from the owner)
 
@@ -65,9 +65,9 @@ Files starting with `_` in `api/` are helpers, not routes.
 - A free-text change in the chat (e.g. « no lactose ») updates the same saved recipe; only ↔ / « not available » creates a separate recipe.
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
-## 5. Done (up to v42)
+## 5. Done (up to v43)
 
-Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English; v35: utensils section in recipes; v36: action bar (favorite, share, card, rating) under the latest recipe in the chat (`chatActions()`); v37: one single action bar (no duplicate), comments under the latest recipe in the chat, quick options as 4 columns (`drawQuick()`: Servings 2/6/8, Without gluten/lactose, Vegetarian/Vegan, Faster), fix: a conversation is now saved from the first reply that is a recipe (a leading question or refusal no longer blocks saving). v38: favorite heart in the chat header (`#tofav`, `syncFavUI()`). v39: « back to top » button (`#totop`, `updTop()`) and the Utensils section folded by default (tap the title to open). v40: the quick options (`quickCols()`) are also on the recipe card (picking one reopens the chat on that recipe and sends the request); time column titled with ⏱️. v41–v42: centered column titles, even bottom spacing; the ↑ button sits in the empty space under « Faster » in the chat so it never covers content.
+Chat with chefs; import from photo and link; edit a recipe with the chef; history; favorites; sharing; comments; 1–5 star ratings (`r:log`); code-drawn dish illustrations + custom photo; ingredient replacement (↔ and "not available" circle); auto-resume of cut-off answers; single language per answer; Michelin-starred 5-star chef; aligned bottom bar; code/docs in English; v35: utensils section in recipes; v36: action bar (favorite, share, card, rating) under the latest recipe in the chat (`chatActions()`); v37: one single action bar (no duplicate), comments under the latest recipe in the chat, quick options as 4 columns (`drawQuick()`: Servings 2/6/8, Without gluten/lactose, Vegetarian/Vegan, Faster), fix: a conversation is now saved from the first reply that is a recipe (a leading question or refusal no longer blocks saving). v38: favorite heart in the chat header (`#tofav`, `syncFavUI()`). v39: « back to top » button (`#totop`, `updTop()`) and the Utensils section folded by default (tap the title to open). v40: the quick options (`quickCols()`) are also on the recipe card (picking one reopens the chat on that recipe and sends the request); time column titled with ⏱️. v41–v42: centered column titles, even bottom spacing; the ↑ button sits in the empty space under « Faster » in the chat so it never covers content. v43 (clean-up): chat rate limit 20/min per IP; `chat.js` uses `_lib.js` (one Claude call, one auth check, same error codes); Redis code shared in `_lib.js`; all interface texts in ONE `I18` block (one block per language, one key per line; add new keys to all 6 languages); unused texts/styles removed; in-app dialog `ask()` / `askCode()` replaces prompt()/confirm(); in-memory store cache (`storeCache`, dropped on failed write or on a change from another tab).
 
 ## 6. Current status and decisions
 

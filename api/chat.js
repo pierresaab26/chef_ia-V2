@@ -1,3 +1,5 @@
+import { authOk, fail, callClaude, overLimit } from "./_lib.js";
+
 // Chef instructions. Edit this text to adjust the scope or the tone.
 const BASE = [
   "You are Chef IA, a Michelin-starred chef dedicated exclusively to everything that is eaten and drunk. You are warm, precise and concise, and you speak with the authority of a top professional kitchen.",
@@ -10,13 +12,11 @@ const BASE = [
 ].join("\n\n");
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).json({ error: "method" });
+  if (req.method !== "POST") return fail(res, "method");
 
-  // Optional access code (APP_PASSWORD variable on Vercel)
-  const need = process.env.APP_PASSWORD;
-  if (need && req.headers["x-code"] !== need) {
-    return res.status(401).json({ error: "code" });
-  }
+  if (!authOk(req, res)) return;
+  // Protects the Anthropic credit: 20 chef messages per minute per IP address.
+  if (await overLimit(req, "rl:c:", 20)) return fail(res, "rate");
 
   const body = req.body || {};
   const lang = typeof body.lang === "string" ? body.lang.slice(0, 5) : "";
@@ -34,39 +34,18 @@ export default async function handler(req, res) {
   }
   while (messages.length && messages[0].role !== "user") messages.shift();
   if (!messages.length || messages[0].role !== "user" || messages[messages.length - 1].role !== "user") {
-    return res.status(400).json({ error: "messages" });
+    return fail(res, "messages");
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) return res.status(503).json({ error: "nokey" });
-
   try {
-    const r = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: process.env.MODEL || "claude-haiku-5-5",
-        max_tokens: 4000,
-        system: BASE + (lang ? " Interface language (fallback hint only; the language of the user's message takes priority): " + lang + "." : "") + (persona ? " " + persona : ""),
-        messages,
-      }),
+    const out = await callClaude({
+      model: process.env.MODEL || "claude-haiku-5-5",
+      max_tokens: 4000,
+      system: BASE + (lang ? " Interface language (fallback hint only; the language of the user's message takes priority): " + lang + "." : "") + (persona ? " " + persona : ""),
+      messages,
     });
-    if (!r.ok) {
-      let msg = "";
-      try { msg = String(((await r.json()).error || {}).message || ""); } catch {}
-      const code = r.status === 401 || r.status === 403 ? "badkey"
-        : /credit balance|billing|spend limit|usage limit/i.test(msg) ? "credit"
-        : r.status === 404 ? "model"
-        : r.status === 429 ? "rate" : "upstream";
-      return res.status(code === "rate" ? 429 : 502).json({ error: code });
-    }
-    const data = await r.json();
-    const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
-    return res.status(200).json({ text, cut: data.stop_reason === "max_tokens" });
+    return res.status(200).json(out);
   } catch (e) {
-    return res.status(502).json({ error: "network" });
+    return fail(res, e.code || "upstream");
   }
 }
