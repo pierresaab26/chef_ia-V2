@@ -42,6 +42,14 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chef span{color:var(--mut);font-size:12px}
 .chef em{display:block;margin-top:6px;color:var(--pink);font-style:normal;font-weight:700;font-size:12px}
 .more{color:var(--pink);font-weight:600;font-size:13px}
+.favgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media (min-width:600px){.favgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.favtile{display:flex;flex-direction:column;gap:4px;min-width:0;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer}
+.favtile .ftop{display:flex;align-items:center;justify-content:space-between}.favtile .ftop i{font-style:normal;font-size:30px;line-height:1.1}.favtile .ftop span{background:var(--bg1);color:var(--mut);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700}
+.favtile b{font-size:14px;line-height:1.25;margin-bottom:2px}
+.fprev{display:flex;align-items:center;gap:6px;min-width:0;font-size:12.5px;color:var(--mut)}.fprev u{text-decoration:none;flex:none;width:22px;height:22px;display:grid;place-items:center;background:var(--bg1);border-radius:8px;font-size:13px}.fprev span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.favtile em{font-style:normal;color:var(--pink);font-weight:700;font-size:12px;margin-top:2px}
+.fbackrow{display:inline-block;margin:0 0 6px;padding:8px 14px;border-radius:999px;background:var(--card);font-weight:600;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.fgrp{display:flex;align-items:center;justify-content:space-between;margin:18px 4px 8px;color:var(--pink);font-weight:700;font-size:15px}.fgrp:first-child{margin-top:4px}.fgrp b{background:var(--card);color:var(--mut);border-radius:999px;padding:1px 9px;font-size:12px}
 .hrow{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:18px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
 .hopen{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:10px;text-align:left}
 .hpic{width:64px;height:64px;border-radius:14px;display:grid;place-items:center;font-size:32px;flex:none}
@@ -117,8 +125,9 @@ input,textarea,select{font-size:16px!important}
 #verpill.pv{background:#5b5866}
 #verpill.pv i{background:#a29cb3;box-shadow:none}
 .dver{margin-top:auto;color:var(--mut);font-size:12px;padding:10px 14px}
-#hsearchbox{padding:12px 18px 0}
-#hsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
+#hsearchbox,#fsearchbox{padding:12px 18px 0}
+#homesearch{margin:10px 0 0}#homesearch input{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsres:empty{display:none}#hsres{margin-top:10px}
+#hsearch,#fsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
 .catwrap{display:flex;flex-wrap:wrap;gap:8px}
 .catwrap .chip{font-size:14px;padding:8px 14px}
 #chat.on~nav{display:none}
@@ -255,6 +264,8 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
       <div id="verpill"><i></i><span></span></div>
       <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
       <button class="impcard" id="impHome"><i>📥</i><div><b id="impHomeT"></b><span id="impHomeS"></span></div></button>
+      <div id="homesearch"><input id="hsq" type="search" autocomplete="off"></div>
+      <div id="hsres"></div>
       <h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
       <div id="hhome"></div>
       <h2 id="catT"></h2>
@@ -274,6 +285,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 
   <section class="view" id="favs">
     <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="fback" aria-label="Home">🏠</button><b id="fpT"></b></div>
+    <div id="fsearchbox"><input id="fsearch" type="search" autocomplete="off"></div>
     <div class="scroll" id="flist"></div>
   </section>
 
@@ -1328,7 +1340,7 @@ let codeAsk=null;
 function askCode(){if(!codeAsk)codeAsk=ask({text:T().code,input:true}).then(c=>{codeAsk=null;if(c){try{localStorage.setItem('code',c)}catch(x){}}return c});return codeAsk}
 
 let curView='home';
-function show(id){curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}}
+function show(id){curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}if(id==='home'){try{drawHomeSearch()}catch(x){}}}
 function markDrawer(){document.querySelectorAll('.ditem').forEach(b=>b.classList.toggle('on',b.dataset.go===curView))}
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
@@ -1477,7 +1489,7 @@ function openIdeas(e){
 // Format v2 : { v, updatedAt, device, recipes:[{id,title,date,updatedAt,lang,k,fav,photo,messages}] }
 // Planned: replace these 2 functions with a server adapter (user account),
 // merging local and remote recipes using id + updatedAt.
-const APP_VERSION='v53',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v58',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1578,17 +1590,75 @@ function drawCats(){const t=T(),box=$('#cats');box.innerHTML='';$('#catT').textC
 function drawerText(){const t=T();drawCats();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
-  $('#hsearch').placeholder=t.search;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;impText();$('#fpT').textContent=t.favT;
+  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.search;$('#hsq').placeholder=t.search;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;impText();$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
 function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','false'));if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
-function goTo(v){closeDrawer();if(v==='history')drawHistory();if(v==='favs')drawFavs();if(v==='imp')resetImp();show(v)}
+function goTo(v){closeDrawer();if(v==='history')drawHistory();if(v==='favs'){favCat=null;$('#fsearch').value='';drawFavs()}if(v==='imp')resetImp();show(v)}
+// ---------- Favorites grouped by category ----------
+// The category of a recipe is guessed from its title and ingredients (6 languages); an `e.cat` set on the entry would win.
+// Index = position in the interface texts `cats` (🍲 Everyday dishes, 🍰 Desserts…, 🍹 Cocktails, 🥤 Drinks, …, 🍞 Bakery, 🧂 Sauces and sides, 🍬 Chocolate and ice cream…).
+const FAV_ORDER=[0,1,8,6,7,2,3];
+function recipeCat(e){
+  if(Number.isInteger(e.cat)&&FAV_ORDER.includes(e.cat))return e.cat;
+  const nz=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[’']/g,' ').replace(/\s+/g,' ').trim();
+  const ti=nz(e.title),tx=nz(recipeText(e)),has=(re,t)=>re.test(t===undefined?ti:t);
+  const MAIN=/(pasta|pates|spaghetti|penne|linguine|tagliatelle|gnocchi|lasagn|nouille|noodle|risotto|salad|burger|sandwich|poulet|chicken|boeuf|beef|porc|pork|saumon|salmon|poisson|fish|soupe|soup|curry|pizza|tartine|bowl|wrap|omelette|oeuf|egg|haricot|bean|legume|veget)/;
+  const sweet=/\b(sucre|sugar|miel|honey|cassonade|vanille|vanilla|zucchero|azucar|zucker|acucar|chocolat|chocolate|caramel|sirop|syrup)\b/;
+  const spirits=/\b(rhum|rum|vodka|gin|tequila|whisky|whiskey|bourbon|cognac|triple sec|campari|vermouth|prosecco|champagne|cachaca|mezcal|pisco|amaretto|aperol)\b/;
+  const cooked=/(°|four\b|oven|poele|casserole|mijot|cuire|cuisson|saisir|rotir|bake|simmer|fry)/;
+  // 1. cocktails
+  if(has(/(cocktail|mocktail|mojito|spritz|margarita|sangria|punch|daiquiri|negroni|martini|gin tonic|gin fizz|caipirinha|pina colada|old fashioned|cosmopolitan|bellini|mimosa|moscow mule|paloma|manhattan|bloody mary|tequila sunrise|whisky sour)/))return 2;
+  if(has(spirits,tx)&&!cooked.test(tx)&&!has(MAIN,tx)&&!has(/(gateau|cake|tarte|mousse|tiramisu|glace|sorbet|sauce|confiture|baba)/))return 2;
+  // 2. drinks
+  if(has(/(smoothie|milkshake|milk shake|limonade|limonada|lemonade|citronnade|kombucha|tisane|infusion|latte|cappuccino|boisson|drink|batido|zumo|saft|succo|suco|bebida|getrank|bevanda|limonata|agua fresca|iced tea|matcha)/)||has(/^(jus|juice|cafe|the|chocolat chaud|hot chocolate|lait|eau|cafe|coffee|tea|te |chai|sirop|punch)\b/))return 3;
+  // 3. bakery and breads
+  if((has(/\b(pain|pains)\b/)&&!has(/pain (perdu|d epices|de viande|de poisson|de thon|de legumes)/))||has(/(baguette|brioche|focaccia|ciabatta|fougasse|naan|pita|chapati|bagel|croissant|viennoiserie|levain|sourdough|bread|\bpao\b|\bpane\b|\bbrot\b|pretzel|bretzel|grissini|panettone)/)&&!has(/(bread pudding|pudding)/))return 6;
+  // 4. desserts
+  const dessertSure=/(pain perdu|french toast|pain d epices|gingerbread|gateau|dessert|patisserie|mousse|creme brulee|creme caramel|creme anglaise|panna cotta|tiramisu|brownie|cookie|biscuit|sable\b|macaron|madeleine|eclair|profiterole|financier|muffin|cupcake|beignet|donut|doughnut|gaufre|waffle|pancake|pudding|riz au lait|mille feuille|millefeuille|paris brest|fondant|moelleux|coulant|charlotte|savarin|\bbaba\b|foret noire|galette des rois|pavlova|meringue|compote|salade de fruits|fruit salad|tatin|cheesecake|kuchen|torte\b|dolce|dolci|postre|nachtisch|sobremesa|churros|flan\b|clafoutis|crumble)/;
+  if(has(dessertSure)&&!has(/(tarte|quiche|crumble|clafoutis|flan)\b.*(poireau|fromage|lardon|oignon|tomate|courgette|epinard|saumon|jambon|champignon|chevre|legume)/))return 1;
+  if(has(/(tarte|tartelette|tarta|\btart\b|\bpie\b|\bcake\b|crepe|crepes|torta|tourte)/)&&!has(/(poireau|fromage|lardon|oignon|tomate|courgette|epinard|saumon|jambon|champignon|chevre|legume|sale|salee|savory|cheese)/)&&(has(sweet,tx)||has(/(fruit|pomme|poire|citron|fraise|framboise|myrtille|abricot|noix|amande|cerise|banane|rhubarbe|apple|lemon|berry)/)))return 1;
+  // 5. chocolate and ice cream
+  if(has(/(glace\b|glaces\b|sorbet|ice cream|gelato|granita|helado|sorvete|esquimau|popsicle|bonbon|truffes? au chocolat|truffes? chocolat|chocolate truffle|praline|ganache|fudge|nougat|confiserie|candy|caramels?\b|chocolat|chocolate|cioccolato|schokolade)/))return 8;
+  // 6. sauces, dips and sides
+  if(has(/^(sauce|pesto|vinaigrette|dressing|mayonnaise|mayo|aioli|houmous|hummus|guacamole|tzatziki|chutney|coulis|marinade|salsa|ketchup|bechamel|tapenade|puree|gratin|frites|accompagnement|garniture|dip|trempette|confiture|jam|gelee|assaisonnement|bouillon|fond de|beurre|creme)\b/)&&!has(MAIN))return 7;
+  return 0;
+}
+let favCat=null; // null = the category tiles, otherwise the open category (index in `cats`)
 function drawFavs(){
   const a=loadH().filter(e=>e.fav),l=$('#flist');l.innerHTML='';
-  $('#dFavN').textContent=a.length?a.length:'';
-  if(!a.length){const p=document.createElement('div');p.className='empty';p.textContent=T().nofav;l.appendChild(p);return}
-  a.forEach(e=>l.appendChild(rowFor(e,false,true)));
+  $('#dFavN').textContent=a.length?a.length:'';$('#fsearchbox').style.display=a.length?'':'none';
+  if(!a.length){favCat=null;const p=document.createElement('div');p.className='empty';p.textContent=T().nofav;l.appendChild(p);return}
+  const g={};a.forEach(e=>{const k=recipeCat(e);(g[k]=g[k]||[]).push(e)});
+  const names=T().cats.split('|');
+  const nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#fsearch').value.trim());
+  if(q){ // search: by title or by category name, across all favorites
+    const hit=a.filter(e=>nz(e.title).includes(q)||nz(names[recipeCat(e)]).includes(q));
+    if(!hit.length){const p=document.createElement('div');p.className='empty';p.textContent=T().noresult;l.appendChild(p);return}
+    hit.forEach(e=>l.appendChild(rowFor(e,false,true)));return;
+  }
+  if(favCat!==null&&!g[favCat])favCat=null; // the open category is empty now
+  if(favCat!==null){ // one category: back button + the full list
+    const bk=document.createElement('button');bk.type='button';bk.className='fbackrow';bk.textContent='← '+T().favs;bk.onclick=()=>{favCat=null;drawFavs();$('#flist').scrollTop=0};
+    const h=document.createElement('div');h.className='fgrp';const t=document.createElement('span');t.textContent=names[favCat];const n=document.createElement('b');n.textContent=g[favCat].length;h.append(t,n);
+    l.append(bk,h);g[favCat].forEach(e=>l.appendChild(rowFor(e,false,true)));l.scrollTop=0;return;
+  }
+  // category tiles, each with a preview of its first 3 recipes
+  const grid=document.createElement('div');grid.className='favgrid';
+  FAV_ORDER.filter(k=>g[k]).forEach(k=>{
+    const tile=document.createElement('button');tile.type='button';tile.className='favtile';tile.setAttribute('aria-label',names[k]+' ('+g[k].length+')');
+    const top=document.createElement('div');top.className='ftop';
+    const m=names[k].match(/^(\S+)\s+(.*)$/)||['',' ',names[k]];
+    const em=document.createElement('i');em.textContent=m[1];const n=document.createElement('span');n.textContent=g[k].length;top.append(em,n);
+    const nm=document.createElement('b');nm.textContent=m[2];
+    tile.append(top,nm);
+    g[k].slice(0,3).forEach(e=>{const r=document.createElement('div');r.className='fprev';const [d]=dishLook(e.title);const ic=document.createElement('u');ic.textContent=d;const tx=document.createElement('span');tx.textContent=e.title;r.append(ic,tx);tile.appendChild(r)});
+    if(g[k].length>3){const more=document.createElement('em');more.textContent='+'+(g[k].length-3);tile.appendChild(more)}
+    tile.onclick=()=>{favCat=k;drawFavs()};
+    grid.appendChild(tile);
+  });
+  l.appendChild(grid);
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recipe';
 function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
@@ -1689,7 +1759,7 @@ async function getPhoto(e){
   }catch(x){return null}
   updEntry(e.id,z=>{z.photo=url});return url;
 }
-function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();drawFavs();try{syncFavUI()}catch(x){}return e&&e.fav}
+function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}return e&&e.fav}
 async function shareRecipe(e){
   const body=e.title+'\n\n'+plain(recipeText(e))+(/^https?:/.test(location.href)?'\n\n'+location.origin:'');
   if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
@@ -2155,6 +2225,16 @@ $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
 $('#hback').onclick=()=>show('home');
 $('#hsearch').addEventListener('input',drawHistory);
+// Home search: looks through ALL saved recipes (title or category name) and lists them under the box.
+function drawHomeSearch(){
+  const l=$('#hsres');l.innerHTML='';const nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#hsq').value.trim());
+  if(!q)return;const names=T().cats.split('|');
+  const hit=loadH().filter(e=>nz(e.title).includes(q)||nz(names[recipeCat(e)]).includes(q));
+  if(!hit.length){const p=document.createElement('div');p.className='empty';p.textContent=T().noresult;l.appendChild(p);return}
+  hit.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).forEach(e=>l.appendChild(rowFor(e,false,true)));
+}
+$('#hsq').addEventListener('input',drawHomeSearch);
+$('#fsearch').addEventListener('input',()=>{favCat=null;drawFavs()});
 $('#fback').onclick=()=>show('home');
 document.querySelectorAll('.menubtn').forEach(b=>b.onclick=()=>$('#drawer').classList.contains('on')?closeDrawer():openDrawer());
 $('#dclose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;
