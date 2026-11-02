@@ -451,7 +451,6 @@ fr:{
   e_badkey:"Clé API refusée : vérifiez ANTHROPIC_API_KEY dans Vercel, puis redéployez.",
   e_model:"Modèle introuvable : vérifiez la variable MODEL (ou supprimez-la) dans Vercel.",
   e_code:"Code d’accès incorrect. Réessayez.",
-  swapH:"Touchez le cercle d’un ingrédient que vous n’avez pas : il est barré. Puis choisissez « Sans » ou « Remplacer » en bas. Votre favori reste intact.",
   swapMsg:"Je n’ai pas : {i}. Crée-moi une nouvelle recette complète avec un autre ingrédient à la place, en ajustant les quantités et les étapes.",
   variant:"variante",
   swapCtx:"Recette d’origine :",
@@ -655,7 +654,6 @@ en:{
   e_badkey:"API key rejected: check ANTHROPIC_API_KEY in Vercel, then redeploy.",
   e_model:"Model not found: check the MODEL variable (or remove it) in Vercel.",
   e_code:"Wrong access code. Try again.",
-  swapH:"Tap the circle of an ingredient you don’t have: it gets crossed out. Then choose “Without” or “Replace” below. Your favorite stays untouched.",
   swapMsg:"I don’t have: {i}. Create a new complete recipe using another ingredient instead, adjusting quantities and steps.",
   variant:"variation",
   swapCtx:"Original recipe:",
@@ -859,7 +857,6 @@ es:{
   e_badkey:"Clave API rechazada: revisa ANTHROPIC_API_KEY en Vercel y vuelve a desplegar.",
   e_model:"Modelo no encontrado: revisa la variable MODEL (o elimínala) en Vercel.",
   e_code:"Código de acceso incorrecto. Inténtalo de nuevo.",
-  swapH:"Toca el círculo de un ingrediente que no tengas: se tacha. Luego elige «Sin» o «Sustituir» abajo. Tu favorito no cambia.",
   swapMsg:"No tengo: {i}. Crea una receta nueva y completa con otro ingrediente en su lugar, ajustando cantidades y pasos.",
   variant:"variante",
   swapCtx:"Receta original:",
@@ -1063,7 +1060,6 @@ de:{
   e_badkey:"API-Schlüssel abgelehnt: ANTHROPIC_API_KEY in Vercel prüfen und neu deployen.",
   e_model:"Modell nicht gefunden: Variable MODEL in Vercel prüfen (oder entfernen).",
   e_code:"Falscher Zugangscode. Versuche es erneut.",
-  swapH:"Tippe auf den Kreis einer Zutat, die du nicht hast: Sie wird durchgestrichen. Dann unten „Ohne“ oder „Ersetzen“ wählen. Dein Favorit bleibt unverändert.",
   swapMsg:"Ich habe nicht: {i}. Erstelle ein neues vollständiges Rezept mit einer anderen Zutat statt dieser, mit angepassten Mengen und Schritten.",
   variant:"Variante",
   swapCtx:"Originalrezept:",
@@ -1267,7 +1263,6 @@ it:{
   e_badkey:"Chiave API rifiutata: controlla ANTHROPIC_API_KEY su Vercel e rifai il deploy.",
   e_model:"Modello non trovato: controlla la variabile MODEL (o rimuovila) su Vercel.",
   e_code:"Codice di accesso errato. Riprova.",
-  swapH:"Tocca il cerchio di un ingrediente che non hai: viene barrato. Poi scegli «Senza» o «Sostituisci» qui sotto. Il tuo preferito resta intatto.",
   swapMsg:"Non ho: {i}. Crea una nuova ricetta completa con un altro ingrediente al suo posto, adattando quantità e passaggi.",
   variant:"variante",
   swapCtx:"Ricetta originale:",
@@ -1471,7 +1466,6 @@ pt:{
   e_badkey:"Chave API rejeitada: verifique ANTHROPIC_API_KEY na Vercel e volte a publicar.",
   e_model:"Modelo não encontrado: verifique a variável MODEL (ou remova-a) na Vercel.",
   e_code:"Código de acesso incorreto. Tente novamente.",
-  swapH:"Toque no círculo de um ingrediente que não tem: fica riscado. Depois escolha «Sem» ou «Substituir» abaixo. O seu favorito fica intacto.",
   swapMsg:"Não tenho: {i}. Crie uma nova receita completa com outro ingrediente no lugar, ajustando quantidades e passos.",
   variant:"variante",
   swapCtx:"Receita original:",
@@ -1955,7 +1949,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v93',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v94',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -2317,7 +2311,7 @@ function headInfo(txt){
 const bub=txt=>{const s=document.createElement('span');s.textContent=txt;return s};
 // Same bubbles in the chat and on the recipe card: row 1 = (date) servings + health, row 2 = prep / rest / cook.
 function timeBubbles(hd){const t=T(),o=[];
-  const mk=(ic,lf,ls,v)=>{const w=document.createElement('span');w.className='tb';
+  const mk=(ic,lf,ls,v)=>{v=String(v).replace(/\s*\([^)]*\)/g,'').trim();const w=document.createElement('span');w.className='tb';
     [['',ic+' '],['lf',lf+' '],['ls',ls+' '],['',v]].forEach(([c,x])=>{const n=document.createElement('span');if(c)n.className=c;n.textContent=x;n.style.cssText='background:none;padding:0;font-size:inherit;color:inherit';w.appendChild(n)});return w};
   if(hd.prep)o.push(mk('🔪',t.prepL,t.prepS,hd.prep));if(hd.rest)o.push(mk('⏳',t.restL,t.restS,hd.rest));if(hd.cook)o.push(mk('🔥',t.cookL,t.cookS,hd.cook));return o}
 function healthEl(n,tag){ // ● leaves (filled = score, faded = missing) + the label
@@ -2462,7 +2456,8 @@ function rateBox(id){ // 1 to 5 stars: 1 = terrible, 5 = the best. Rating kept o
 function openCard(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
   if(e.qa){openQAEntry(e);return}
-  cardId=id;const t=T(),body=$('#cardbody');body.innerHTML='';$('#cardT').textContent=e.title;$('#cardT').title=e.title;
+  const curT=recipeTitle(recipeText(e))||e.title; // title of the version shown (e.g. « Brioche sans lactose »), not the first one
+  cardId=id;const t=T(),body=$('#cardbody');body.innerHTML='';$('#cardT').textContent=curT;$('#cardT').title=curT;
   const ph=document.createElement('div');ph.className='cphoto';const [em,bg]=dishLook(e.title);ph.style.background=bg;
   const emo=document.createElement('span');emo.textContent=em;ph.appendChild(emo);body.appendChild(ph);
   const credit=document.createElement('small');credit.className='credit';body.appendChild(credit);
@@ -2474,7 +2469,7 @@ function openCard(id){
   else{const art=()=>{if(cardId!==id||!emo.isConnected)return;ph.style.background='linear-gradient(to bottom,transparent 76.4%,rgba(255,255,255,.35) 76.4%),'+bg;emo.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.appendChild(a)};
   art();getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+encodeURI(u).replace(/"/g,'%22').replace(/\)/g,'%29')+'")';ph.appendChild(cam);credit.textContent=/^data:/.test(u)?'':T().credit}})}
   ph.appendChild(cam);
-  const h=document.createElement('h1');h.className='ctitle';h.textContent=e.title;body.appendChild(h);
+  const h=document.createElement('h1');h.className='ctitle';h.textContent=curT;body.appendChild(h);
   const txt=recipeText(e),hd=headInfo(txt),info=infoChips(hd.txt);
   const chips=document.createElement('div');chips.className='cchips'; // row 1: date, source, servings, health score
   [fmtDate(e.date),e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:'',info.find(x=>x.startsWith('🍽️'))].filter(Boolean).forEach(c=>chips.appendChild(bub(c)));
@@ -2493,9 +2488,7 @@ function openCard(id){
     rb.style.display=ri&&ri.kind==='cut'?'':'none';rb.onclick=ri&&ri.kind==='cut'?async()=>{if(await eraseToOriginal(ri))openCard(id)}:null}
   if(e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openCard(e.from);act.appendChild(og)}if(e.ideas){const ib=document.createElement('button');ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===id));act.appendChild(ib)}
   body.appendChild(act);body.appendChild(rateBox(id));
-  const qg=document.createElement('div');qg.className='qgrid';quickCols(qg,txt=>{openSaved(id);send(txt)},true);body.appendChild(qg);
-  const sh2=document.createElement('p');sh2.className='swh';sh2.textContent='↔ '+t.swapH;body.appendChild(sh2);
-  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,e.title,false,(ings,m)=>openBranch(id,ings,m));body.appendChild(rt);
+  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,curT,false,(ings,m)=>openBranch(id,ings,m));body.appendChild(rt);
   buildComments(body,slug(e.title));
   show('card');body.scrollTop=0;
 }
