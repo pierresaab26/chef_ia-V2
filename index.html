@@ -35,12 +35,22 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .rc .pic{height:84px;display:grid;place-items:center;font-size:44px}
 .rc div.t{padding:8px 12px 12px;font-weight:600;font-size:14px}
 .rc div.t span{display:block;color:var(--mut);font-weight:400;font-size:12px}
-.chefs{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
-.chef{flex:none;width:150px;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.chefs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}@media (min-width:768px){.chefs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.chef{background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05);border:2px solid transparent;min-width:0}
+.chef.on{border-color:var(--pink)}
 .chef i{font-style:normal;font-size:30px;display:block}
 .chef b{display:block;font-size:14px}
 .chef span{color:var(--mut);font-size:12px}
-.chef em{display:block;margin-top:6px;color:var(--pink);font-style:normal;font-weight:700;font-size:12px}
+.chpanel{grid-column:1/-1;background:var(--card);border-radius:20px;padding:12px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.chpanel .crs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}@media (min-width:768px){.chpanel .crs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.chpanel .crs button{background:var(--bg1);border:2px solid var(--pink);border-radius:999px;padding:10px 8px;font-weight:700;font-size:14px;color:var(--ink)}
+.chpanel .chdisc{display:block;margin:10px auto 0;color:var(--pink);font-weight:700;font-size:13px}
+.chfree{grid-column:1/-1;background:#1f1b33;color:#f4f1fa;border-radius:20px;padding:14px;border:1px solid rgba(255,255,255,.09)}
+.chfree b{display:block;font-size:15px}.chfree b em{font-style:normal;color:#ff6fa0}
+.chfree p{color:#c9c3d9;font-size:12.5px;margin:2px 0 10px}
+.chfree form{display:flex;gap:8px}
+.chfree input{flex:1;min-width:0;font-size:16px;border-radius:999px;border:0;padding:10px 14px;background:#fff;color:#16121a}
+.chfree button{flex:none;background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:10px 14px;font-size:14px}
 .more{color:var(--pink);font-weight:600;font-size:13px}
 .favgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media (min-width:600px){.favgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .favtile{display:flex;flex-direction:column;gap:4px;min-width:0;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer}
@@ -393,7 +403,15 @@ fr:{
   code:"Code d’accès :",
   send:"Envoyer",
   req:"Donne-moi une recette de ",
-  cu:["Cuisine italienne","Cuisine japonaise","Cuisine française"],
+  cu:["Cuisine italienne","Cuisine asiatique","Cuisine française","Monde et fusion"],
+  crs:"🥗 Entrées|🍲 Plats|🍰 Desserts|🍹 Boissons",
+  crsL:"entrées|plats|desserts|boissons",
+  crsMsg:"Propose-moi 4 idées de {c} ({k}).",
+  frN:"Chef libre",
+  frD:"Écris ce que tu veux, il te propose des idées.",
+  frPh:"Ex. : un plat au potiron",
+  frGo:"Idées",
+  frMsg:"Propose-moi 4 idées de recettes : {q}",
   th:"Tout|Anniversaire|Petit-déj|Dîner|Végé",
   rc:"Pizza Margherita|Pancakes moelleux|Gâteau au chocolat|Curry de légumes|Pâtes carbonara|Œufs brouillés|Cupcakes|Buddha bowl",
   q:"Pour 2 personnes|Pour 6 personnes|Sans gluten|Plus rapide|Version végétarienne",
@@ -572,7 +590,15 @@ en:{
   code:"Access code:",
   send:"Send",
   req:"Give me a recipe for ",
-  cu:["Italian cuisine","Japanese cuisine","French cuisine"],
+  cu:["Italian cuisine","Asian cuisine","French cuisine","World & fusion"],
+  crs:"🥗 Starters|🍲 Mains|🍰 Desserts|🍹 Drinks",
+  crsL:"starters|main courses|desserts|drinks",
+  crsMsg:"Suggest 4 ideas for {c} ({k}).",
+  frN:"Free chef",
+  frD:"Write what you want, it suggests ideas.",
+  frPh:"E.g. a comforting pumpkin dish",
+  frGo:"Ideas",
+  frMsg:"Suggest 4 recipe ideas: {q}",
   th:"All|Birthday|Breakfast|Dinner|Veggie",
   rc:"Margherita pizza|Fluffy pancakes|Chocolate cake|Vegetable curry|Pasta carbonara|Scrambled eggs|Cupcakes|Buddha bowl",
   q:"For 2 people|For 6 people|Gluten-free|Faster|Vegetarian version",
@@ -751,7 +777,15 @@ es:{
   code:"Código de acceso:",
   send:"Enviar",
   req:"Dame una receta de ",
-  cu:["Cocina italiana","Cocina japonesa","Cocina francesa"],
+  cu:["Cocina italiana","Cocina asiática","Cocina francesa","Mundo y fusión"],
+  crs:"🥗 Entrantes|🍲 Platos|🍰 Postres|🍹 Bebidas",
+  crsL:"entrantes|platos principales|postres|bebidas",
+  crsMsg:"Propón 4 ideas de {c} ({k}).",
+  frN:"Chef libre",
+  frD:"Escribe lo que quieras y te propone ideas.",
+  frPh:"Ej.: un plato reconfortante con calabaza",
+  frGo:"Ideas",
+  frMsg:"Propón 4 ideas de recetas: {q}",
   th:"Todo|Cumpleaños|Desayuno|Cena|Veg",
   rc:"Pizza Margarita|Tortitas esponjosas|Tarta de chocolate|Curry de verduras|Pasta carbonara|Huevos revueltos|Cupcakes|Buddha bowl",
   q:"Para 2 personas|Para 6 personas|Sin gluten|Más rápido|Versión vegetariana",
@@ -930,7 +964,15 @@ de:{
   code:"Zugangscode:",
   send:"Senden",
   req:"Gib mir ein Rezept für ",
-  cu:["Italienische Küche","Japanische Küche","Französische Küche"],
+  cu:["Italienische Küche","Asiatische Küche","Französische Küche","Welt & Fusion"],
+  crs:"🥗 Vorspeisen|🍲 Hauptgerichte|🍰 Desserts|🍹 Getränke",
+  crsL:"Vorspeisen|Hauptgerichte|Desserts|Getränke",
+  crsMsg:"Schlag mir 4 Ideen für {c} vor ({k}).",
+  frN:"Freier Koch",
+  frD:"Schreib, was du willst – er schlägt Ideen vor.",
+  frPh:"Z. B. ein wärmendes Kürbisgericht",
+  frGo:"Ideen",
+  frMsg:"Schlag mir 4 Rezeptideen vor: {q}",
   th:"Alle|Geburtstag|Frühstück|Abendessen|Vegi",
   rc:"Pizza Margherita|Fluffige Pfannkuchen|Schokoladenkuchen|Gemüsecurry|Pasta Carbonara|Rührei|Cupcakes|Buddha Bowl",
   q:"Für 2 Personen|Für 6 Personen|Glutenfrei|Schneller|Vegetarische Version",
@@ -1109,7 +1151,15 @@ it:{
   code:"Codice di accesso:",
   send:"Invia",
   req:"Dammi una ricetta per ",
-  cu:["Cucina italiana","Cucina giapponese","Cucina francese"],
+  cu:["Cucina italiana","Cucina asiatica","Cucina francese","Mondo e fusion"],
+  crs:"🥗 Antipasti|🍲 Piatti|🍰 Dolci|🍹 Bevande",
+  crsL:"antipasti|piatti principali|dolci|bevande",
+  crsMsg:"Proponimi 4 idee di {c} ({k}).",
+  frN:"Chef libero",
+  frD:"Scrivi quello che vuoi, ti propone idee.",
+  frPh:"Es.: un piatto confortante con la zucca",
+  frGo:"Idee",
+  frMsg:"Proponimi 4 idee di ricette: {q}",
   th:"Tutto|Compleanno|Colazione|Cena|Veg",
   rc:"Pizza Margherita|Pancake soffici|Torta al cioccolato|Curry di verdure|Pasta alla carbonara|Uova strapazzate|Cupcake|Buddha bowl",
   q:"Per 2 persone|Per 6 persone|Senza glutine|Più veloce|Versione vegetariana",
@@ -1288,7 +1338,15 @@ pt:{
   code:"Código de acesso:",
   send:"Enviar",
   req:"Dê-me uma receita de ",
-  cu:["Cozinha italiana","Cozinha japonesa","Cozinha francesa"],
+  cu:["Cozinha italiana","Cozinha asiática","Cozinha francesa","Mundo e fusão"],
+  crs:"🥗 Entradas|🍲 Pratos|🍰 Sobremesas|🍹 Bebidas",
+  crsL:"entradas|pratos principais|sobremesas|bebidas",
+  crsMsg:"Sugira-me 4 ideias de {c} ({k}).",
+  frN:"Chef livre",
+  frD:"Escreva o que quiser e ele sugere ideias.",
+  frPh:"Ex.: um prato reconfortante com abóbora",
+  frGo:"Ideias",
+  frMsg:"Sugira-me 4 ideias de receitas: {q}",
   th:"Tudo|Aniversário|Café da manhã|Jantar|Veg",
   rc:"Pizza Margherita|Panquecas fofas|Bolo de chocolate|Curry de legumes|Massa carbonara|Ovos mexidos|Cupcakes|Buddha bowl",
   q:"Para 2 pessoas|Para 6 pessoas|Sem glúten|Mais rápido|Versão vegetariana",
@@ -1452,8 +1510,10 @@ const RMETA=[["🍕",1,"30 min","#fde4d8"],["🥞",2,"20 min","#fdf1c9"],["🎂"
 RMETA[0][1]=3;RMETA[1][1]=2;RMETA[2][1]=1;RMETA[3][1]=4;RMETA[4][1]=3;RMETA[5][1]=2;RMETA[6][1]=1;RMETA[7][1]=4;
 const CHEFS=[
 {n:"Giulia",e:"🍝",p:"You are Giulia, a passionate Italian chef: you favour authentic Italian recipes."},
-{n:"Hiro",e:"🍣",p:"You are Hiro, a Japanese chef: you favour Japanese recipes and their precise techniques."},
-{n:"Marcel",e:"🥖",p:"You are Marcel, a French chef: you favour traditional French and bistro cooking."}];
+{n:"Hiro",e:"🍜",p:"You are Hiro, an Asian cuisine chef: you favour authentic recipes from all over Asia (Japan, China, Thailand, Vietnam, Korea, India…) and their precise techniques."},
+{n:"Marcel",e:"🥖",p:"You are Marcel, a French chef: you favour traditional French and bistro cooking."},
+{n:"Lina",e:"🌍",p:"You are Lina, a world and fusion cuisine chef: you favour dishes from every continent and creative, well-balanced fusions."}];
+const CHEF_ORDER=[0,2,1,3]; // home order: Italian, French, Asian, World & fusion (indices stay stable for saved recipes and the server)
 const DISHES=["lasagna","chicken tikka masala","pad thai","ratatouille","beef bourguignon","shakshuka","paella","ramen","tacos al pastor","falafel wraps","risotto","lemon tart","banana bread","butter chicken","bibimbap","moussaka","fish and chips","chili con carne","pierogi","tom yum soup","gnocchi","quiche lorraine","couscous with vegetables","sushi rolls","apple pie","Greek salad","cheeseburger","mushroom stroganoff","tiramisu","dal tadka","croque monsieur","enchiladas","pho","goulash","crêpes","hummus and pita","teriyaki salmon","coq au vin","pavlova","gazpacho"];
 let lastDish="";
 function randomDish(){let d;do{d=DISHES[Math.floor(Math.random()*DISHES.length)]}while(d===lastDish);lastDish=d;return d}
@@ -1508,7 +1568,7 @@ function applyUI(){
   drawGrid();drawChefs();refreshChat();drawHistory();drawFavs();drawerText();
 }
 function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML='';showWelcome()}
-  $('#cname').textContent=chefNow?"Chef "+chefNow.n:"Chef IA";$('#cdesc').textContent=chefNow?t.cu[chefNow.k]:t.cd;
+  $('#cname').textContent=chefName(chefNow);$('#cdesc').textContent=chefDesc(chefNow);
   qaUI();if(!qaMode&&$('#quick').children.length)drawQuick()}
 function drawGrid(){
   const t=T(),th=t.th.split('|'),rc=t.rc.split('|');
@@ -1519,9 +1579,28 @@ function drawGrid(){
     const d=document.createElement('div');d.className='t';d.textContent=rc[i];const s=document.createElement('span');s.textContent=th[m[1]]+" · "+m[2];d.appendChild(s);
     b.append(p,d);b.onclick=()=>start(t.req+rc[i]);$('#grid').appendChild(b)});
 }
-function drawChefs(){const t=T();$('#chefs').innerHTML='';CHEFS.forEach((c,k)=>{const b=document.createElement('button');b.className='chef';
-  const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent="Chef "+c.n;const d=document.createElement('span');d.textContent=t.cu[k];const e=document.createElement('em');e.textContent=t.disc;
-  b.append(i,n,d,e);b.onclick=()=>openChat({...c,k,d:t.cu[k]});$('#chefs').appendChild(b)})}
+// Home « Chefs »: 4 cuisine chefs (tap → Starters / Mains / Desserts / Drinks → 4 ideas from that chef) + the free chef (free text → 4 ideas).
+let chefOpen=-1;
+function chefName(c){return c&&c.free?T().frN:c?"Chef "+c.n:"Chef IA"}
+function chefDesc(c){const t=T();return c&&c.free?t.frD:c&&c.k>=0?t.cu[c.k]:t.cd}
+function drawChefs(){const t=T(),box=$('#chefs');box.innerHTML='';const crs=t.crs.split('|'),crsL=t.crsL.split('|');
+  CHEF_ORDER.forEach(k=>{const c=CHEFS[k];const b=document.createElement('button');b.type='button';b.className='chef'+(k===chefOpen?' on':'');b.setAttribute('aria-expanded',k===chefOpen?'true':'false');
+    const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent="Chef "+c.n;const d=document.createElement('span');d.textContent=t.cu[k];
+    b.append(i,n,d);b.onclick=()=>{chefOpen=chefOpen===k?-1:k;drawChefs()};box.appendChild(b);
+    // the panel opens right after the row that holds the tapped chef
+  });
+  if(chefOpen>=0){const k=chefOpen,c=CHEFS[k],pn=document.createElement('div');pn.className='chpanel';
+    const g=document.createElement('div');g.className='crs';
+    crs.forEach((lb,j)=>{const x=document.createElement('button');x.type='button';x.textContent=lb;
+      x.onclick=()=>{chefOpen=-1;drawChefs();openChat({...c,k,d:t.cu[k]});send(t.crsMsg.replace('{c}',crsL[j]).replace('{k}',t.cu[k]),true)};g.appendChild(x)});
+    const dc=document.createElement('button');dc.type='button';dc.className='chdisc';dc.textContent=t.disc;dc.onclick=()=>{chefOpen=-1;drawChefs();openChat({...c,k,d:t.cu[k]})};
+    pn.append(g,dc);const pos=CHEF_ORDER.indexOf(k),cols=innerWidth>=768?4:2,after=box.children[Math.min(CHEF_ORDER.length,(Math.floor(pos/cols)+1)*cols)-1];after.after(pn)}
+  const f=document.createElement('div');f.className='chfree';
+  const h=document.createElement('b');h.innerHTML='✨ <em></em>';h.querySelector('em').textContent=t.frN;const p=document.createElement('p');p.textContent=t.frD;
+  const fm=document.createElement('form');const q=document.createElement('input');q.type='text';q.maxLength=200;q.placeholder=t.frPh;q.setAttribute('aria-label',t.frN);q.enterKeyHint='go';
+  const go=document.createElement('button');go.type='submit';go.textContent=t.frGo;
+  fm.onsubmit=ev=>{ev.preventDefault();const v=q.value.trim();if(!v){q.focus();return}q.value='';q.blur();openChat({free:true,k:-1,n:'',e:'✨',p:''});send(t.frMsg.replace('{q}',v),true)};
+  fm.append(q,go);f.append(h,p,fm);box.appendChild(f)}
 function inl(p,t){t.split(/\*\*(.+?)\*\*/).forEach((x,i)=>{if(!x)return;if(i%2){const b=document.createElement('strong');b.textContent=x;p.appendChild(b)}else p.appendChild(document.createTextNode(x))})}
 function render(el,t){
   el.classList.remove('typing');el.classList.add('fmt');el.innerHTML='';let list=null,kind='';
@@ -1663,7 +1742,7 @@ function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.g
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
 applySeason();document.addEventListener('visibilitychange',()=>{if(!document.hidden)applySeason()});
-const APP_VERSION='v74',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v75',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -2288,7 +2367,7 @@ function dishPic(b,text){
 }
 function openChat(chef){
   qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
-  persona=chef?chef.p:"";$('#cname').textContent=chef?"Chef "+chef.n:"Chef IA";$('#cdesc').textContent=chef?chef.d:T().cd;
+  persona=chef?chef.p:"";$('#cname').textContent=chefName(chef);$('#cdesc').textContent=chefDesc(chef);
   showWelcome();qaUI();
   show('chat');
 }
