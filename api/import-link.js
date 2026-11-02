@@ -1,4 +1,4 @@
-import { authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES } from "./_lib.js";
+import { authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES, overLimit } from "./_lib.js";
 import { fetchPage, recipeFromJsonLd, pageText, looksBlocked, looksLogin } from "./_page.js";
 
 const SYSTEM =
@@ -7,6 +7,8 @@ const SYSTEM =
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
   if (!authOk(req, res)) return;
+  // Protects the server and the Anthropic credit: 10 link imports per minute per IP.
+  if (await overLimit(req, "rl:il:", 10)) return fail(res, "rate");
 
   const body = req.body || {};
   let target = String(body.url || "").trim();
@@ -34,7 +36,7 @@ export default async function handler(req, res) {
   const direct = recipeFromJsonLd(page.body);
   if (direct) return res.status(200).json({ recipe: direct, source: "structured", host });
 
-  // 2) Sinon, lecture du texte de la page par l'IA
+  // 2) Otherwise, the AI reads the text of the page
   const { title, text } = pageText(page.body);
   if (looksBlocked(page.body, text.length)) return fail(res, "blocked");
   if (looksLogin(page.url, page.body, text.length)) return fail(res, "login");

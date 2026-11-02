@@ -1,4 +1,4 @@
-import { authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES } from "./_lib.js";
+import { authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES, overLimit } from "./_lib.js";
 
 const SYSTEM =
   "You extract a food or drink recipe from an image: book page, handwritten recipe, screenshot, " +
@@ -8,6 +8,8 @@ const SYSTEM =
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
   if (!authOk(req, res)) return;
+  // Protects the Anthropic credit (vision calls are the most expensive): 6 photo imports per minute per IP.
+  if (await overLimit(req, "rl:ip:", 6)) return fail(res, "rate");
 
   const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(String((req.body || {}).image || ""));
   if (!m) return fail(res, "badimage");

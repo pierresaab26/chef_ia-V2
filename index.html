@@ -406,10 +406,10 @@ fr:{
   ask:"Que voulez-vous cuisiner ?",
   snT:"Menu de saison",
   snNow:"En ce moment",
-  snMsg:"Propose-moi 4 idées de {c} pour {o} : typiques de cette période et/ou avec les produits de saison.",
+  snMsg:"Propose-moi 4 idées {c} pour la période « {o} » : typiques de cette période et/ou avec les produits de saison.",
   snSugT:"Les idées du chef",
-  snSugF:"Propose-moi 4 idées de recettes traditionnelles pour {o}, en piochant dans les spécialités de plusieurs pays et avec les produits de saison. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
-  snSugS:"Propose-moi 4 idées de recettes pour {o} : des plats et boissons typiques de cette saison (ceux qu’on a envie de manger et de boire à cette période) et/ou qui mettent en avant ses produits de saison, en piochant dans les cuisines de plusieurs pays. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
+  snSugF:"Propose-moi 4 idées de recettes traditionnelles pour « {o} », en piochant dans les spécialités de plusieurs pays et avec les produits de saison. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
+  snSugS:"Propose-moi 4 idées de recettes pour la période « {o} » : des plats et boissons typiques de cette saison (ceux qu’on a envie de manger et de boire à cette période) et/ou qui mettent en avant ses produits de saison, en piochant dans les cuisines de plusieurs pays. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
   snNot:" Pas celles-ci : {x}.",
   snMore:"🔄 Autres idées",
   snByC:"Plus d’idées par catégorie",
@@ -429,8 +429,8 @@ fr:{
   req:"Donne-moi une recette de ",
   cu:["Cuisine italienne","Cuisine asiatique","Cuisine française","Monde et fusion"],
   crs:"🥗 Entrées|🍲 Plats|🍰 Desserts|🍹 Boissons",
-  crsL:"entrées|plats|desserts|boissons",
-  crsMsg:"Propose-moi 4 idées de {c} ({k}).",
+  crsL:"d’entrées|de plats|de desserts|de boissons",
+  crsMsg:"Propose-moi 4 idées {c} ({k}).",
   frN:"Chef libre",
   frD:"Écris ce que tu veux, il te propose des idées.",
   frPh:"Ex. : un plat au potiron",
@@ -445,7 +445,6 @@ fr:{
   e_badkey:"Clé API refusée : vérifiez ANTHROPIC_API_KEY dans Vercel, puis redéployez.",
   e_model:"Modèle introuvable : vérifiez la variable MODEL (ou supprimez-la) dans Vercel.",
   e_code:"Code d’accès incorrect. Réessayez.",
-  swapT:"Remplacer cet ingrédient",
   swapH:"Touchez le cercle d’un ingrédient que vous n’avez pas : il est barré. Puis choisissez « Sans » ou « Remplacer » en bas. Votre favori reste intact.",
   swapMsg:"Je n’ai pas : {i}. Crée-moi une nouvelle recette complète avec un autre ingrédient à la place, en ajustant les quantités et les étapes.",
   variant:"variante",
@@ -569,6 +568,7 @@ fr:{
   imgOk:"Image enregistrée",
   imgBad:"Impossible de charger cette image. Vérifiez le lien.",
   imgFull:"Mémoire de l’appareil pleine : image non enregistrée.",
+  stFull:"Mémoire de l’appareil pleine : recette non enregistrée. Supprime d’anciennes recettes de l’historique.",
   idGen:"Donne-moi la recette complète de « {x} »",
   idMore:"Propose-moi 4 autres idées de recettes, différentes de celles déjà proposées",
   idLike:", dans l’esprit de : {x}",
@@ -643,7 +643,6 @@ en:{
   e_badkey:"API key rejected: check ANTHROPIC_API_KEY in Vercel, then redeploy.",
   e_model:"Model not found: check the MODEL variable (or remove it) in Vercel.",
   e_code:"Wrong access code. Try again.",
-  swapT:"Replace this ingredient",
   swapH:"Tap the circle of an ingredient you don’t have: it gets crossed out. Then choose “Without” or “Replace” below. Your favorite stays untouched.",
   swapMsg:"I don’t have: {i}. Create a new complete recipe using another ingredient instead, adjusting quantities and steps.",
   variant:"variation",
@@ -767,6 +766,7 @@ en:{
   imgOk:"Image saved",
   imgBad:"Couldn’t load this image. Check the link.",
   imgFull:"Device storage is full: image not saved.",
+  stFull:"Device storage is full: recipe not saved. Delete old recipes from the history.",
   idGen:"Give me the complete recipe for “{x}”",
   idMore:"Suggest 4 other recipe ideas, different from the ones already given",
   idLike:", in the spirit of: {x}",
@@ -841,7 +841,6 @@ es:{
   e_badkey:"Clave API rechazada: revisa ANTHROPIC_API_KEY en Vercel y vuelve a desplegar.",
   e_model:"Modelo no encontrado: revisa la variable MODEL (o elimínala) en Vercel.",
   e_code:"Código de acceso incorrecto. Inténtalo de nuevo.",
-  swapT:"Sustituir este ingrediente",
   swapH:"Toca el círculo de un ingrediente que no tengas: se tacha. Luego elige «Sin» o «Sustituir» abajo. Tu favorito no cambia.",
   swapMsg:"No tengo: {i}. Crea una receta nueva y completa con otro ingrediente en su lugar, ajustando cantidades y pasos.",
   variant:"variante",
@@ -965,6 +964,7 @@ es:{
   imgOk:"Imagen guardada",
   imgBad:"No se pudo cargar esta imagen. Revisa el enlace.",
   imgFull:"Memoria del dispositivo llena: imagen no guardada.",
+  stFull:"Memoria del dispositivo llena: receta no guardada. Borra recetas antiguas del historial.",
   idGen:"Dame la receta completa de «{x}»",
   idMore:"Propón 4 ideas de recetas más, distintas de las ya propuestas",
   idLike:", en el espíritu de: {x}",
@@ -1039,7 +1039,6 @@ de:{
   e_badkey:"API-Schlüssel abgelehnt: ANTHROPIC_API_KEY in Vercel prüfen und neu deployen.",
   e_model:"Modell nicht gefunden: Variable MODEL in Vercel prüfen (oder entfernen).",
   e_code:"Falscher Zugangscode. Versuche es erneut.",
-  swapT:"Zutat ersetzen",
   swapH:"Tippe auf den Kreis einer Zutat, die du nicht hast: Sie wird durchgestrichen. Dann unten „Ohne“ oder „Ersetzen“ wählen. Dein Favorit bleibt unverändert.",
   swapMsg:"Ich habe nicht: {i}. Erstelle ein neues vollständiges Rezept mit einer anderen Zutat statt dieser, mit angepassten Mengen und Schritten.",
   variant:"Variante",
@@ -1163,6 +1162,7 @@ de:{
   imgOk:"Bild gespeichert",
   imgBad:"Dieses Bild konnte nicht geladen werden. Prüfe den Link.",
   imgFull:"Gerätespeicher voll: Bild nicht gespeichert.",
+  stFull:"Gerätespeicher voll: Rezept nicht gespeichert. Lösche alte Rezepte aus dem Verlauf.",
   idGen:"Gib mir das vollständige Rezept für „{x}“",
   idMore:"Schlag mir 4 weitere Rezeptideen vor, die sich von den bisherigen unterscheiden",
   idLike:", im Sinne von: {x}",
@@ -1237,7 +1237,6 @@ it:{
   e_badkey:"Chiave API rifiutata: controlla ANTHROPIC_API_KEY su Vercel e rifai il deploy.",
   e_model:"Modello non trovato: controlla la variabile MODEL (o rimuovila) su Vercel.",
   e_code:"Codice di accesso errato. Riprova.",
-  swapT:"Sostituisci questo ingrediente",
   swapH:"Tocca il cerchio di un ingrediente che non hai: viene barrato. Poi scegli «Senza» o «Sostituisci» qui sotto. Il tuo preferito resta intatto.",
   swapMsg:"Non ho: {i}. Crea una nuova ricetta completa con un altro ingrediente al suo posto, adattando quantità e passaggi.",
   variant:"variante",
@@ -1361,6 +1360,7 @@ it:{
   imgOk:"Immagine salvata",
   imgBad:"Impossibile caricare questa immagine. Controlla il link.",
   imgFull:"Memoria del dispositivo piena: immagine non salvata.",
+  stFull:"Memoria del dispositivo piena: ricetta non salvata. Elimina vecchie ricette dalla cronologia.",
   idGen:"Dammi la ricetta completa di «{x}»",
   idMore:"Proponimi altre 4 idee di ricette, diverse da quelle già proposte",
   idLike:", nello spirito di: {x}",
@@ -1435,7 +1435,6 @@ pt:{
   e_badkey:"Chave API rejeitada: verifique ANTHROPIC_API_KEY na Vercel e volte a publicar.",
   e_model:"Modelo não encontrado: verifique a variável MODEL (ou remova-a) na Vercel.",
   e_code:"Código de acesso incorreto. Tente novamente.",
-  swapT:"Substituir este ingrediente",
   swapH:"Toque no círculo de um ingrediente que não tem: fica riscado. Depois escolha «Sem» ou «Substituir» abaixo. O seu favorito fica intacto.",
   swapMsg:"Não tenho: {i}. Crie uma nova receita completa com outro ingrediente no lugar, ajustando quantidades e passos.",
   variant:"variante",
@@ -1559,6 +1558,7 @@ pt:{
   imgOk:"Imagem guardada",
   imgBad:"Não foi possível carregar esta imagem. Verifique o link.",
   imgFull:"Memória do dispositivo cheia: imagem não guardada.",
+  stFull:"Memória do dispositivo cheia: receita não guardada. Apaga receitas antigas do histórico.",
   idGen:"Dê-me a receita completa de «{x}»",
   idMore:"Proponha-me mais 4 ideias de receitas, diferentes das já propostas",
   idLike:", no espírito de: {x}",
@@ -1609,6 +1609,13 @@ let hist=[],busy=false,persona="",chefNow=null,lang="en",currentId=null,branchFr
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
+// Conversation token: bumped each time another conversation is put on screen. A chef reply that arrives later
+// for an older conversation is dropped (it must not land in the new thread), and `busy` is released right away.
+let convTok=0;
+// fetch with a time limit: a stalled network must never leave a screen waiting forever (the server itself stops at 60 s).
+function fetchT(url,opts,ms){const c=new AbortController(),tm=setTimeout(()=>c.abort(),ms||75000);
+  return fetch(url,{...(opts||{}),signal:c.signal}).finally(()=>clearTimeout(tm))}
+function newConv(){convTok++;busy=false;try{sendB.disabled=false}catch(e){}stickEl=null}
 // In-app dialog (replaces the browser's prompt() and confirm(), which look out of place on phones and are blocked in some views).
 // ask({text, input, okLabel}) resolves to the typed text (input), true (confirm) or null (cancelled).
 function ask({text,input=false,okLabel}){
@@ -1760,25 +1767,29 @@ async function genRecipes(picks,f){
   const t=T(),els=[...log.querySelectorAll('.m')],idx=els.indexOf(picks[0].msg);if(idx<0||!hist[idx]||hist[idx].role!=='assistant')return;
   const at=idx+1,ask=idx>0?shown(hist[idx-1].content):'',fl=f.length?' : '+f.join(', '):'';
   busy=true;sendB.disabled=true;
+  const H=hist,tok=convTok,K=chefNow?chefNow.k:-1;
   const ids=[];let err=null;
   for(let i=0;i<picks.length;i++){
+    if(tok!==convTok)break; // another conversation is on screen: stop (the recipes already finished are saved)
     const p=picks[i],msg=t.idGen.replace('{x}',p.label+(p.desc?' — '+p.desc.slice(0,120).replace(/[\s.!]+$/,''):''))+fl+'.';
     const keep=log.scrollTop; // 2nd, 3rd… recipe: do not move the view away from the first one
-    hist.push({role:'user',content:msg});add('u',msg);
+    H.push({role:'user',content:msg});add('u',msg);
     const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');if(i===0)toBottom();else log.scrollTop=keep;
     try{
-      const j=await completeReply(hist,out);
+      const j=await completeReply(H,out);
       if(!looksLikeRecipe(j.text))throw {code:'err'};
       renderMsg(out,j.text);
       const rid=Date.now().toString(36)+i;
-      hist.push({role:'assistant',content:j.text,rid});
-      const e={id:rid,title:recipeTitle(j.text)||p.label,date:new Date().toISOString(),updatedAt:Date.now(),k:chefNow?chefNow.k:-1,fav:false,lang,
-        messages:hist.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content}),ideas:{at,pick:p.label}};
-      const a=loadH();a.unshift(e);saveH(a);ids.push(rid);currentId=rid;
+      H.push({role:'assistant',content:j.text,rid});
+      const e={id:rid,title:recipeTitle(j.text)||p.label,date:new Date().toISOString(),updatedAt:Date.now(),k:K,fav:false,lang,
+        messages:H.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content}),ideas:{at,pick:p.label}};
+      const a=loadH();a.unshift(e);if(!saveH(a))toast(t.stFull);ids.push(rid);if(tok!==convTok)continue; // left the thread: saved, nothing more on screen
+      currentId=rid;
       p.card.classList.remove('sel');p.card.setAttribute('aria-checked','false');p.card.classList.add('gen'); // ticked idea → generated
       if(i===0)showStart(out); // stay at the start of the first recipe
-    }catch(x){err=x;hist.pop();out.remove();const u=log.querySelectorAll('.m.u');u[u.length-1]&&u[u.length-1].remove();break}
+    }catch(x){if(tok!==convTok){err=x;break}err=x;H.pop();out.remove();const u=log.querySelectorAll('.m.u');u[u.length-1]&&u[u.length-1].remove();break}
   }
+  if(tok!==convTok){if(ids.length){drawHistory();drawFavs()}return}
   busy=false;sendB.disabled=false;
   if(ids.length){drawHistory();drawFavs();drawQuick();syncCardBtn();syncFavUI();if(ids.length>1)toast(t.idMany.replace('{n}',ids.length));if(err)toast(errText(err))}
   else{const o=add('a','');render(o,errText(err));log.scrollTop=log.scrollHeight}
@@ -1807,7 +1818,7 @@ function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.g
   if(md>=901&&md<=920)return'rentree';if(md>=1015&&md<=1102)return'halloween';if(md>=1201&&md<=1226)return'noel';return''}
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
-applySeason();document.addEventListener('visibilitychange',()=>{if(!document.hidden){applySeason();applyAmb()}});
+applySeason();document.addEventListener('visibilitychange',()=>{if(document.hidden)return;applySeason();const was=document.documentElement.dataset.amb;applyAmb();if(was!==document.documentElement.dataset.amb)try{drawSeason()}catch(e){}}); // new day: background AND seasonal panel follow
 // ---------- Seasonal menu (replaces the old « Themes »): 4 seasons + 4 French holidays + 7 world festivals ----------
 // SN[i] = [key, kind ('s' season, 'f' French holiday, 'w' world festival), emoji, bg1, bg2, accent, dark?]. Names: t.snN (same order).
 const SN=[
@@ -1868,7 +1879,7 @@ function snSave(key,items){const all=snCache();all[key]={d:Date.now(),items};
 function snParse(txt){const out=[];String(txt||'').split('\n').forEach(l=>{const m=l.trim().match(/^[-•*]\s+\*{0,2}([^:*]{1,60}?)\*{0,2}\s*[:：]\s*(.+)$/);if(m&&out.length<4)out.push([m[1].trim(),m[2].replace(/\*\*/g,'').trim()])});return out}
 async function snAsk(o,avoid){const t=T();let msg=(o.season?t.snSugS:t.snSugF).replace('{o}',o.o);if(avoid&&avoid.length)msg+=t.snNot.replace('{x}',avoid.join(', '));
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
-  const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:[{role:'user',content:'[UI] '+msg}],lang})});
+  const res=await fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:[{role:'user',content:'[UI] '+msg}],lang})});
   if(res.status===401)throw {code:'code'};if(!res.ok)throw {code:'err'};
   const items=snParse((await res.json()).text);if(items.length<2)throw {code:'err'};return items}
 function snFill(sg,more,o){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];
@@ -1902,7 +1913,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v83',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v84',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1949,7 +1960,7 @@ function saveCurrent(){
   }else{a.splice(a.indexOf(e),1)}
   hist.forEach(m=>{if(m.role==='assistant'&&!m.rid&&looksLikeRecipe(m.content))m.rid=currentId}); // recipe message → saved recipe
   e.messages=hist.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content});e.updatedAt=Date.now();
-  a.unshift(e);saveH(a);drawHistory();syncCardBtn();
+  a.unshift(e);if(!saveH(a))toast(T().stFull);drawHistory();syncCardBtn();
 }
 function rowFor(e,del,heart){
   const [em,bg]=dishLook(e.title);
@@ -1978,8 +1989,7 @@ function drawHistory(){
 }
 const shown=c=>c.replace(/\n\n§§[\s\S]*$/,'').replace(/^\[UI\] /,'');
 function branchWith(src,ings,mode){ // new separate recipe saved in the history: the original recipe (and its favorite) stays untouched
-  if(busy)return;
-  hist=[];log.innerHTML='';
+  newConv();hist=[];log.innerHTML='';hiddenIdx=new Set();
   chefNow=src.k>=0&&CHEFS[src.k]?{...CHEFS[src.k],k:src.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=null;branchFrom={title:src.title,k:src.k,lang:src.lang};
   refreshChat();drawQuick();show('chat');try{chatActions()}catch(x){}
   send((mode==='no'?T().noMsg:T().swapMsg).replace('{i}',ings.join(' ; ')),false,T().swapCtx+'\n'+src.text);
@@ -1987,7 +1997,7 @@ function branchWith(src,ings,mode){ // new separate recipe saved in the history:
 function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
-  hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined)}));log.innerHTML='';hiddenIdx=new Set();
+  newConv();hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined)}));log.innerHTML='';hiddenIdx=new Set();
   chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=id;branchFrom=null;
   hist.forEach(m=>add(m.role==='user'?'u':'a',shown(m.content)));
   refreshChat();drawQuick();show('chat');
@@ -2413,7 +2423,7 @@ function openCard(id){
 const OWN=(()=>{try{let o=localStorage.getItem('owner');if(!o){o=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Math.random().toString(36).slice(2)+Date.now().toString(36));localStorage.setItem('owner',o)}return o}catch(x){return 'a'+Math.random().toString(36).slice(2)}})();
 async function capi(method,qs,data,path){
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
-    return fetch((path||'/api/comments')+qs,{method,headers:{'Content-Type':'application/json','x-code':c,'x-owner':OWN},body:data?JSON.stringify(data):undefined})};
+    return fetchT((path||'/api/comments')+qs,{method,headers:{'Content-Type':'application/json','x-code':c,'x-owner':OWN},body:data?JSON.stringify(data):undefined})};
   let r=await call();
   if(r.status===401){const c=await askCode();if(c)r=await call()}
   return r;
@@ -2526,7 +2536,7 @@ function dishPic(b,text){
   toBottom();
 }
 function openChat(chef){
-  qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
+  newConv();qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
   persona=chef?chef.p:"";$('#cname').textContent=chefName(chef);$('#cdesc').textContent=chefDesc(chef);
   showWelcome();qaUI();
   show('chat');
@@ -2536,7 +2546,7 @@ function start(q){openChat(null);send(q,true)}
 /*CALL_START*/
 async function chatCall(h,out){
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
-  const call=()=>fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h.map(m=>({role:m.role,content:m.content})),chef:chefNow&&chefNow.k>=0?chefNow.k:undefined,lang,mode:qaMode?'qa':undefined})});
+  const call=()=>fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h.map(m=>({role:m.role,content:m.content})),chef:chefNow&&chefNow.k>=0?chefNow.k:undefined,lang,mode:qaMode?'qa':undefined})});
   let res=await call();
   if(res.status===401){const c=await askCode();if(c)res=await call()}
   if(!res.ok){
@@ -2569,15 +2579,18 @@ async function send(text,auto,ctx){
   text=(text||inp.value).trim();if(!text||busy)return;
   inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
+  const tok=convTok;
   try{
     const j=await completeReply(hist,out);
+    if(tok!==convTok)return; // the user opened another conversation meanwhile
     renderMsg(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}if(qaMode)qaActions();
     try{dishPic(out,j.text)}catch(e){}
     if(looksLikeRecipe(j.text))showStart(out);
   }catch(e){
+    if(tok!==convTok)return;
     hist.pop();
     render(out,errText(e));
-  }finally{busy=false;sendB.disabled=false;if(!stickEl)log.scrollTop=log.scrollHeight}
+  }finally{if(tok===convTok){busy=false;sendB.disabled=false;if(!stickEl)log.scrollTop=log.scrollHeight}}
 }
 
 // ---------- Import a recipe (photo or link) ----------
@@ -2590,7 +2603,7 @@ function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').val
 function openImp(){resetImp();show('imp')}
 async function apiPost(path,data){
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
-    return fetch(path,{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify(data)})};
+    return fetchT(path,{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify(data)},90000)};
   let r;try{r=await call()}catch(x){throw {code:'network'}}
   if(r.status===401){const c=await askCode();if(c){try{r=await call()}catch(x){throw {code:'network'}}}}
   let j=null;try{j=await r.json()}catch(x){}
@@ -2602,6 +2615,7 @@ async function apiPost(path,data){
 function impMsg(code){
   const t=T(),pv=typeof claude!=='undefined';
   if(pv&&(code==='network'||code==='noapi'))return t.e_noapi;
+  if(code==='rate')return t.e429; // too many imports in one minute (server limit)
   return t['e_'+code]||t.err;
 }
 function impStatus(txt,err){const o=$('#impOut');o.innerHTML='';const d=document.createElement('div');d.className='imstat'+(err?' err':'');d.textContent=txt;o.appendChild(d);o.scrollIntoView&&o.scrollIntoView({block:'nearest'})}

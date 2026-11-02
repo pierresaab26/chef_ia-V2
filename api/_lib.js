@@ -30,9 +30,11 @@ export async function callClaude({ system, content, messages, model, max_tokens 
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({ model, max_tokens, system, messages: messages || [{ role: "user", content }] }),
+      signal: AbortSignal.timeout(55000), // stay under the 60 s function limit and answer with a clear error
     });
-  } catch {
-    throw Object.assign(new Error("upstream"), { code: "upstream" });
+  } catch (e) {
+    const code = e && (e.name === "TimeoutError" || e.name === "AbortError") ? "timeout" : "upstream";
+    throw Object.assign(new Error(code), { code });
   }
   if (!r.ok) {
     let msg = "";
@@ -59,6 +61,7 @@ export async function redis(cmds) {
     method: "POST",
     headers: { Authorization: "Bearer " + R_TOKEN, "content-type": "application/json" },
     body: JSON.stringify(cmds),
+    signal: AbortSignal.timeout(5000), // a slow Redis must not hold the request (rate limit and storage fail open / with an error)
   });
   if (!r.ok) throw new Error("redis");
   const out = await r.json();
@@ -112,7 +115,6 @@ export function normRecipe(o) {
     steps: list(o.steps, 60, 1500),
     notes: str(o.notes, 800),
   };
-  if (!r.title) r.title = r.ingredients.length ? "" : "";
   if (r.ingredients.length < 1 && r.steps.length < 2) return null;
   return r;
 }
