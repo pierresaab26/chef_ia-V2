@@ -581,7 +581,7 @@ fr:{
   idGo1:"✨ Générer la recette",
   idGoN:"✨ Générer les {n} recettes",
   idMoreB:"🔄 Autres idées",
-  ideasBack:"↩ Idées proposées",
+  ideasBack:"↩ Idées proposées précédemment",
   qMax:"3 recettes maximum à la fois",
   idMany:"{n} recettes enregistrées dans l’historique",
   hideB1:"👁️ Masquer cette recette",
@@ -781,7 +781,7 @@ en:{
   idGo1:"✨ Generate the recipe",
   idGoN:"✨ Generate the {n} recipes",
   idMoreB:"🔄 Other ideas",
-  ideasBack:"↩ Suggested ideas",
+  ideasBack:"↩ Previously suggested ideas",
   qMax:"3 recipes at most at a time",
   idMany:"{n} recipes saved in the history",
   hideB1:"👁️ Hide this recipe",
@@ -981,7 +981,7 @@ es:{
   idGo1:"✨ Generar la receta",
   idGoN:"✨ Generar las {n} recetas",
   idMoreB:"🔄 Otras ideas",
-  ideasBack:"↩ Ideas propuestas",
+  ideasBack:"↩ Ideas propuestas anteriormente",
   qMax:"Máximo 3 recetas a la vez",
   idMany:"{n} recetas guardadas en el historial",
   hideB1:"👁️ Ocultar esta receta",
@@ -1181,7 +1181,7 @@ de:{
   idGo1:"✨ Rezept erstellen",
   idGoN:"✨ Die {n} Rezepte erstellen",
   idMoreB:"🔄 Andere Ideen",
-  ideasBack:"↩ Vorgeschlagene Ideen",
+  ideasBack:"↩ Zuvor vorgeschlagene Ideen",
   qMax:"Höchstens 3 Rezepte auf einmal",
   idMany:"{n} Rezepte im Verlauf gespeichert",
   hideB1:"👁️ Dieses Rezept ausblenden",
@@ -1381,7 +1381,7 @@ it:{
   idGo1:"✨ Genera la ricetta",
   idGoN:"✨ Genera le {n} ricette",
   idMoreB:"🔄 Altre idee",
-  ideasBack:"↩ Idee proposte",
+  ideasBack:"↩ Idee proposte in precedenza",
   qMax:"Al massimo 3 ricette alla volta",
   idMany:"{n} ricette salvate nella cronologia",
   hideB1:"👁️ Nascondi questa ricetta",
@@ -1581,7 +1581,7 @@ pt:{
   idGo1:"✨ Gerar a receita",
   idGoN:"✨ Gerar as {n} receitas",
   idMoreB:"🔄 Outras ideias",
-  ideasBack:"↩ Ideias propostas",
+  ideasBack:"↩ Ideias propostas anteriormente",
   qMax:"No máximo 3 receitas de cada vez",
   idMany:"{n} receitas guardadas no histórico",
   hideB1:"👁️ Ocultar esta receita",
@@ -1929,7 +1929,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v88',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v89',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
