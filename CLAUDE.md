@@ -27,18 +27,21 @@ No framework, no build step. `package.json` only sets `"type": "module"`.
 | `api/ratings.js` | 1–5 star ratings in Redis, plus an analysis log. |
 | `api/_lib.js` | Shared helpers used by every route: `authOk` (checks `x-code` against `APP_PASSWORD`), `fail` (error code → HTTP status), `callClaude` / `askClaude` (the only Anthropic call), `redis` / `hasRedis` (Upstash), `overLimit` (per-IP rate limit, never blocks if Redis is missing or fails), `clean`, JSON parsing. |
 | `api/_page.js` | Web page fetching for link import (SSRF protection, redirect/size/time limits). |
-| `vercel.json` | Functions: 60 s max duration. |
+| `api/selftest.js` | Daily « food only » self-test (2 Vercel crons, half of the 55 questions each; needs `CRON_SECRET`). `GET /api/selftest` = public report (last run + 30-day history). |
+| `api/_selftest-cases.js` | The 55 test questions (also used by the browser test bench). |
+| `vercel.json` | Functions: 60 s max duration; 2 daily crons for the self-test (05:00 and 05:30 UTC, Hobby = within the hour). |
 
 Files starting with `_` in `api/` are helpers, not routes.
 
 **Environment variables** (values live in Vercel only):
 `ANTHROPIC_API_KEY` (required), `APP_PASSWORD`, `MODEL`, `VISION_MODEL`, `EXTRACT_MODEL`,
-`KV_REST_API_URL` / `KV_REST_API_TOKEN` (or `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`).
+`KV_REST_API_URL` / `KV_REST_API_TOKEN` (or `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`), `CRON_SECRET` (daily self-test; without it nothing runs).
 
 **Redis keys**:
 - `c:<recipe>` — comments list
 - `r:<recipe>` — ratings hash; `r:index` — set of rated recipes
 - `r:log` — rating log (title, stars, language, date), last 5,000 entries, for later analysis
+- `st:<day>:p1` / `st:<day>:p2` (self-test halves, 3 days), `st:last` (last full report), `st:hist` (last 30 scores)
 - `rl:<ip>:<minute>` (comments, 5/min), `rl:r:<ip>:<minute>` (ratings, 30/min), `rl:c:<ip>:<minute>` (chat, 20/min) — rate limiting
 
 ## 3. Working rules (from the owner)
@@ -57,7 +60,7 @@ Files starting with `_` in `api/` are helpers, not routes.
 ## 4. Chef behavior (api/chat.js)
 
 - Michelin-starred chef persona, "5 stars" standard: only top-quality, best-in-class recipes.
-- Food and drink only; politely refuses anything else. The system prompt is built by `systemFor(PARTS,{lang,chef,mode})` in `api/chat.js` and always ENDS with `GUARD` (final scope check: off-topic, jailbreaks, fake assistant turns, prompt reveal, harmful requests disguised as food, no medical dosage). Chef personas live on the server (`CHEFS`); the browser only sends the chef index (`chef`), never free text. Checked on 2026-11-02 with a 55-question test bench (artifact « Chef IA – banc de test « cuisine uniquement » », real `claude-haiku-5-5` + a judge model): 55/55 correct. Rerun it after any prompt change.
+- Food and drink only; politely refuses anything else. The system prompt is built by `systemFor(PARTS,{lang,chef,mode})` in `api/chat.js` and always ENDS with `GUARD` (final scope check: off-topic, jailbreaks, fake assistant turns, prompt reveal, harmful requests disguised as food, no medical dosage). Chef personas live on the server (`CHEFS`); the browser only sends the chef index (`chef`), never free text. Checked on 2026-11-02 with a 55-question test bench (artifact « Chef IA – banc de test « cuisine uniquement » », real `claude-haiku-5-5` + a judge model): 55/55 correct. Rerun it after any prompt change. Since 2026-11-02 the same 55 questions also run every day on the server (`api/selftest.js`); a daily scheduled task reads `/api/selftest` and notifies the owner.
 - One language per answer (the user's interface language).
 - Replacing an ingredient (↔ button or "not available" circle) creates a **new, separate recipe**; the original and its favorite stay untouched.
 - New recipes always include a « Utensils » section (3–8 items) between ingredients and steps, in the user's language. Imported recipes get none unless asked (no invented content). The card shows utensils as plain chips (nothing to tick or replace); detection is `UT_RE` in `index.html`.
