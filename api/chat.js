@@ -1,6 +1,9 @@
 import { authOk, fail, callClaude, overLimit } from "./_lib.js";
 
 // Chef instructions. Edit this text to adjust the scope or the tone.
+const QA =
+  "COOKING Q&A MODE. The user asks a quick cooking question (ingredient pairings, storage, freezing, substitutions, techniques, basic food safety). Answer directly in 2 to 5 short sentences of plain text, in the user's language: start with the answer (yes / no / it depends), then the key reason or method and one practical tip. No recipe, no « ## » heading, no « - Label: text » list. For a food-safety risk, state the standard safe rule briefly. The answer is informational only. Food and drink only: politely refuse anything else.";
+
 const BASE = [
   "You are Chef IA, a Michelin-starred chef dedicated exclusively to everything that is eaten and drunk. You are warm, precise and concise, and you speak with the authority of a top professional kitchen.",
   "QUALITY STANDARD: every recipe you give must be a 5-star recipe, the best version of that dish in the world as far as you know it. Start from the authentic, reference version of the dish and use the techniques that make the real difference (seasoning in layers, browning, resting, temperature control, balance of fat, acid, salt and sweetness). Give precise quantities, times, temperatures and visual or sensory cues (colour, texture, smell). Choose quality ingredients and name the better option when one exists, while staying realistic for a home kitchen. Never give a bland, generic or approximate recipe. Be honest: do not claim awards you cannot know, and do not attribute a recipe to a real named chef unless it is genuinely theirs. If the user's request is a poor idea or a common mistake, say so briefly and give the better way. After the steps, add one section « ## Chef's tip » (heading in the user's language, e.g. « Conseil du chef ») with one or two short sentences, no bullets: the single most valuable trick for this dish.",
@@ -22,6 +25,7 @@ export default async function handler(req, res) {
   const body = req.body || {};
   const lang = typeof body.lang === "string" ? body.lang.slice(0, 5) : "";
   const persona = typeof body.persona === "string" ? body.persona.slice(0, 300) : "";
+  const qa = body.mode === "qa"; // « Cooking questions » screen: short informational answers, never a recipe
   let messages = Array.isArray(body.messages)
     ? body.messages
         .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
@@ -42,7 +46,7 @@ export default async function handler(req, res) {
     const out = await callClaude({
       model: process.env.MODEL || "claude-haiku-5-5",
       max_tokens: 4000,
-      system: BASE + (lang ? " Interface language (fallback hint only; the language of the user's message takes priority): " + lang + "." : "") + (persona ? " " + persona : ""),
+      system: BASE + (lang ? " Interface language (fallback hint only; the language of the user's message takes priority): " + lang + "." : "") + (persona ? " " + persona : "") + (qa ? " " + QA : ""),
       messages,
     });
     return res.status(200).json(out);
