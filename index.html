@@ -582,6 +582,7 @@ fr:{
   idGoN:"✨ Générer les {n} recettes",
   idMoreB:"🔄 Autres idées",
   ideasBack:"↩ Idées proposées précédemment",
+  origB:"↩ Recette d’origine",
   qMax:"3 recettes maximum à la fois",
   idMany:"{n} recettes enregistrées dans l’historique",
   hideB1:"👁️ Masquer cette recette",
@@ -782,6 +783,7 @@ en:{
   idGoN:"✨ Generate the {n} recipes",
   idMoreB:"🔄 Other ideas",
   ideasBack:"↩ Previously suggested ideas",
+  origB:"↩ Original recipe",
   qMax:"3 recipes at most at a time",
   idMany:"{n} recipes saved in the history",
   hideB1:"👁️ Hide this recipe",
@@ -982,6 +984,7 @@ es:{
   idGoN:"✨ Generar las {n} recetas",
   idMoreB:"🔄 Otras ideas",
   ideasBack:"↩ Ideas propuestas anteriormente",
+  origB:"↩ Receta original",
   qMax:"Máximo 3 recetas a la vez",
   idMany:"{n} recetas guardadas en el historial",
   hideB1:"👁️ Ocultar esta receta",
@@ -1182,6 +1185,7 @@ de:{
   idGoN:"✨ Die {n} Rezepte erstellen",
   idMoreB:"🔄 Andere Ideen",
   ideasBack:"↩ Zuvor vorgeschlagene Ideen",
+  origB:"↩ Originalrezept",
   qMax:"Höchstens 3 Rezepte auf einmal",
   idMany:"{n} Rezepte im Verlauf gespeichert",
   hideB1:"👁️ Dieses Rezept ausblenden",
@@ -1382,6 +1386,7 @@ it:{
   idGoN:"✨ Genera le {n} ricette",
   idMoreB:"🔄 Altre idee",
   ideasBack:"↩ Idee proposte in precedenza",
+  origB:"↩ Ricetta originale",
   qMax:"Al massimo 3 ricette alla volta",
   idMany:"{n} ricette salvate nella cronologia",
   hideB1:"👁️ Nascondi questa ricetta",
@@ -1582,6 +1587,7 @@ pt:{
   idGoN:"✨ Gerar as {n} receitas",
   idMoreB:"🔄 Outras ideias",
   ideasBack:"↩ Ideias propostas anteriormente",
+  origB:"↩ Receita original",
   qMax:"No máximo 3 receitas de cada vez",
   idMany:"{n} receitas guardadas no histórico",
   hideB1:"👁️ Ocultar esta receita",
@@ -1728,7 +1734,7 @@ function qaWelcomeEl(){ // welcome of the « Cooking questions » screen: exampl
   d.append(h,p,w);return d}
 function qaUI(){const t=T();$('#chat').classList.toggle('qa',qaMode);$('#qanote').textContent=qaMode?t.qaNote:'';if(qaMode){$('#cname').textContent=t.qaT;$('#cdesc').textContent=t.qaD;$('#quick').innerHTML=''}}
 function showWelcome(){log.appendChild(qaMode?qaWelcomeEl():welcomeEl())}
-function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,(ings,m)=>branchWith({text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings,m))}else{el.classList.remove('rich');render(el,t)}}
+function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,(ings,m)=>{const src=hist.find(x=>x.role==='assistant'&&x.content===t);branchWith({id:(src&&src.rid)||currentId,text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings,m)})}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 // Quick options = filters (servings, without gluten/lactose, diet, time), applied to ONE request sent with a green button.
 // What the button does depends on the screen:
@@ -1929,7 +1935,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v89',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v90',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1970,7 +1976,7 @@ function saveCurrent(){
     if(!first||!looksLikeRecipe(first.content))return;
     const fl=first.content.split('\n').find(x=>x.trim())||'';let t=recipeTitle(first.content)||(fl.length<70&&!/^[-•*\d]/.test(fl.trim())?fl.trim().replace(/[:：]$/,''):hist[0].content.replace(/^\[UI\] /,'').slice(0,60));
     if(branchFrom&&t.toLowerCase()===branchFrom.title.toLowerCase())t+=' ('+T().variant+')';
-    e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1,fav:false,lang};branchFrom=null;
+    e={id:Date.now().toString(36),title:t,date:new Date().toISOString(),k:chefNow?chefNow.k:-1,fav:false,lang};if(branchFrom&&branchFrom.from)e.from=branchFrom.from;branchFrom=null; // variant: keeps the id of its original recipe
     if(pendingMeta){Object.keys(pendingMeta).forEach(k=>{if(pendingMeta[k])e[k]=pendingMeta[k]})}
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
@@ -2006,11 +2012,11 @@ function drawHistory(){
 const shown=c=>c.replace(/\n\n§§[\s\S]*$/,'').replace(/^\[UI\] /,'');
 function branchWith(src,ings,mode){ // new separate recipe saved in the history: the original recipe (and its favorite) stays untouched
   newConv();hist=[];log.innerHTML='';hiddenIdx=new Set();
-  chefNow=src.k>=0&&CHEFS[src.k]?{...CHEFS[src.k],k:src.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=null;branchFrom={title:src.title,k:src.k,lang:src.lang};
+  chefNow=src.k>=0&&CHEFS[src.k]?{...CHEFS[src.k],k:src.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=null;branchFrom={title:src.title,k:src.k,lang:src.lang,from:src.id||''};
   refreshChat();drawQuick();show('chat');try{chatActions()}catch(x){}
   send((mode==='no'?T().noMsg:T().swapMsg).replace('{i}',ings.join(' ; ')),false,T().swapCtx+'\n'+src.text);
 }
-function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
+function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({id,text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
   newConv();hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined)}));log.innerHTML='';hiddenIdx=new Set();
@@ -2178,6 +2184,7 @@ function chatActions(){
     fv.onclick=()=>{toggleFav(rid)};
     const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>{const z=loadH().find(x=>x.id===rid);if(z)shareRecipe(z)};
     bar.append(fv,sh);
+    if(e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.type='button';og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openSaved(e.from);bar.appendChild(og)} // variant → back to its original recipe
     if(olds[rid]){ // « Hide earlier versions »: only the newest version of this recipe stays in the chat (nothing is deleted)
       const ob=document.createElement('button');ob.type='button';ob.className='cbtn';const h=oldHidden.has(rid);
       ob.textContent=h?'👁️ '+t.oldS.replace('{n}',olds[rid].length):'✂️ '+t.oldH;
@@ -2437,7 +2444,7 @@ function openCard(id){
   fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
   const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
-  act.append(fv,sh,ct);if(e.ideas){const ib=document.createElement('button');ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===id));act.appendChild(ib)}
+  act.append(fv,sh,ct);if(e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openCard(e.from);act.appendChild(og)}if(e.ideas){const ib=document.createElement('button');ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===id));act.appendChild(ib)}
   body.appendChild(act);body.appendChild(rateBox(id));
   const qg=document.createElement('div');qg.className='qgrid';quickCols(qg,txt=>{openSaved(id);send(txt)},true);body.appendChild(qg);
   const sh2=document.createElement('p');sh2.className='swh';sh2.textContent='↔ '+t.swapH;body.appendChild(sh2);
