@@ -1447,7 +1447,7 @@ const log=$('#log'),inp=$('#inp'),sendB=$('#send');
     [120,320,600].forEach(d=>setTimeout(()=>{fit();try{t.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}},d))}); // once the keyboard is up
   addEventListener('focusout',()=>{setTimeout(()=>{if(!isField(document.activeElement)){root.classList.remove('kb');fit()}},60)});
 })();
-let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null,branchFrom=null,qaMode=false; // qaMode = « Cooking questions » screen
+let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null,branchFrom=null,qaMode=false,qaAutoCom=false; // qaMode = « Cooking questions » screen; qaAutoCom = open the comments under the next answer (shared link)
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
@@ -1639,7 +1639,7 @@ function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.g
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
 applySeason();document.addEventListener('visibilitychange',()=>{if(!document.hidden)applySeason()});
-const APP_VERSION='v67',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v68',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1918,10 +1918,11 @@ function qaActions(){
     const q=hist[i-1].content,a=loadH(),e=m.qid&&a.find(x=>x.id===m.qid),on=!!(e&&e.fav);
     const bar=document.createElement('div');bar.className='chact qabar';
     const fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(on?' on':'');fv.textContent=(on?'❤️ ':'🤍 ')+t.fav;fv.onclick=()=>qaFav(i);
-    const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe({title:q,messages:[{role:'user',content:q},{role:'assistant',content:m.content+'\n\n'+t.qaNote}]});
+    const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe({title:q,link:/^https?:/.test(location.href)?location.origin+'/?q='+encodeURIComponent(q.slice(0,200)):'',messages:[{role:'user',content:q},{role:'assistant',content:m.content+'\n\n'+t.qaNote}]}); // the link reopens this question, with its shared comments
     const cm=document.createElement('button');cm.type='button';cm.className='cbtn';cm.textContent='💬 '+t.qaCom;
     cm.onclick=()=>{let cw=bar.nextElementSibling;if(cw&&cw.classList.contains('chcom')){cw.remove();return}cw=document.createElement('div');cw.className='chcom';bar.after(cw);buildComments(cw,'q-'+slug(q))};
     bar.append(fv,sh,cm);els[i].after(bar);
+    if(qaAutoCom&&i===hist.length-1){qaAutoCom=false;cm.onclick()} // opened from a shared link: show the comments right away
   });
   try{updTop()}catch(x){}
 }
@@ -1988,7 +1989,7 @@ async function getPhoto(e){
 }
 function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}return e&&e.fav}
 async function shareRecipe(e){
-  const body=e.title+'\n\n'+plain(recipeText(e))+(/^https?:/.test(location.href)?'\n\n'+location.origin:'');
+  const body=e.title+'\n\n'+plain(recipeText(e))+(e.link?'\n\n'+e.link:/^https?:/.test(location.href)?'\n\n'+location.origin:'');
   if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
   let ok=false;
   try{await navigator.clipboard.writeText(body);ok=true}catch(x){}
@@ -2512,6 +2513,9 @@ sel.value=lang;sel.onchange=()=>{lang=sel.value;try{localStorage.setItem('lang',
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition,mic=$('#mic');
 if(!SR)mic.style.display='none';else{let rec=null;mic.onclick=()=>{if(rec){rec.stop();return}try{rec=new SR();rec.lang=T().sr;rec.interimResults=true;rec.onresult=e=>{inp.value=Array.from(e.results).map(r=>r[0].transcript).join('')};rec.onend=()=>{rec=null;mic.classList.remove('on');if(inp.value.trim())send()};rec.onerror=()=>{rec=null;mic.classList.remove('on')};mic.classList.add('on');rec.start()}catch(e){rec=null;mic.style.display='none'}}}
 applyUI();
+// Shared link « /?q=question »: opens the cooking-questions screen on that question (the chef answers again; the comments are the shared ones for that question).
+{let sq='';try{sq=(new URLSearchParams(location.search).get('q')||'').trim().slice(0,200)}catch(e){}
+  if(sq){try{history.replaceState(null,'',location.pathname)}catch(e){}openQA();qaAutoCom=true;send(sq)}}
 </script>
 </body>
 </html>
