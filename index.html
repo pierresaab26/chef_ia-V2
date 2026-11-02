@@ -413,7 +413,7 @@ fr:{
   missT:"pas dispo",
   swNo:"🚫 Sans : {i}",
   swRep:"↔ Remplacer : {i}",
-  noMsg:"Je n’en veux pas : {i}. Redonne-moi la recette complète sans cet ingrédient et sans le remplacer, en ajustant les quantités et les étapes.",
+  noMsg:"Je n’en veux pas : {i}. Redonne-moi la recette complète sans cet(s) ingrédient(s) et sans le(s) remplacer, en ajustant les quantités et les étapes.",
   qProp:"✨ Proposer des idées",
   qAdapt:"✨ Adapter la recette",
   qPropMsg:"Propose-moi 4 idées de recettes : {f}.",
@@ -448,7 +448,7 @@ fr:{
   favT:"Mes recettes favorites",
   search:"Rechercher une recette…",
   noresult:"Aucune recette trouvée.",
-  hsPh:"Trouver tes recettes",
+  hsPh:"Trouver mes recettes",
   resN:"résultats",
   res1:"résultat",
   nokey:"Le chef n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.",
@@ -1651,7 +1651,7 @@ function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.g
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
 applySeason();document.addEventListener('visibilitychange',()=>{if(!document.hidden)applySeason()});
-const APP_VERSION='v70',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v71',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
