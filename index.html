@@ -39,7 +39,6 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .snpanel .crs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}@media (min-width:768px){.snpanel .crs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .snpanel .crs button{background:rgba(255,255,255,.85);border:2px solid currentColor;border-radius:999px;padding:10px 8px;font-weight:700;font-size:14px;color:inherit}
 .snpanel.dk .crs button{background:rgba(255,255,255,.08)}
-#snamb{margin-top:10px}
 .snpanel .snst{font-size:13px;font-weight:700;margin:10px 0 8px;opacity:.85}
 .snpanel .snsug{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:8px}@media (min-width:768px){.snpanel .snsug{grid-template-columns:1fr 1fr}}
 .snpanel .snsug>button{text-align:left;background:rgba(255,255,255,.85);color:#16121a;border-radius:16px;padding:10px 12px;border-left:4px solid currentColor;font-size:13.5px;line-height:1.35}
@@ -407,7 +406,6 @@ fr:{
   ask:"Que voulez-vous cuisiner ?",
   snT:"Menu de saison",
   snNow:"En ce moment",
-  snAmb:"🎨 Fond d’écran de saison",
   snMsg:"Propose-moi 4 idées de {c} pour {o}, avec les produits de saison.",
   snSugT:"Les idées du chef",
   snSugF:"Propose-moi 4 idées de recettes traditionnelles pour {o}, en piochant dans les spécialités de plusieurs pays et avec les produits de saison. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
@@ -606,7 +604,6 @@ en:{
   ask:"What do you want to cook?",
   snT:"Seasonal menu",
   snNow:"Right now",
-  snAmb:"🎨 Seasonal background",
   snMsg:"Suggest 4 ideas for {c} for {o}, with seasonal produce.",
   snSugT:"Chef’s ideas",
   snSugF:"Suggest 4 traditional recipe ideas for {o}, drawing on the specialities of several countries and using seasonal produce. One starter, one main course, one dessert and one drink, in that order.",
@@ -805,7 +802,6 @@ es:{
   ask:"¿Qué quieres cocinar?",
   snT:"Menú de temporada",
   snNow:"Ahora",
-  snAmb:"🎨 Fondo de temporada",
   snMsg:"Propón 4 ideas de {c} para {o}, con productos de temporada.",
   snSugT:"Las ideas del chef",
   snSugF:"Propón 4 ideas de recetas tradicionales para {o}, tomando especialidades de varios países y con productos de temporada. Un entrante, un plato principal, un postre y una bebida, en ese orden.",
@@ -1004,7 +1000,6 @@ de:{
   ask:"Was möchtest du kochen?",
   snT:"Saisonmenü",
   snNow:"Gerade jetzt",
-  snAmb:"🎨 Saison-Hintergrund",
   snMsg:"Schlag mir 4 Ideen für {c} zu {o} vor, mit Saisonprodukten.",
   snSugT:"Die Ideen des Chefs",
   snSugF:"Schlag mir 4 traditionelle Rezeptideen für {o} vor, aus den Spezialitäten mehrerer Länder und mit Saisonprodukten. Eine Vorspeise, ein Hauptgericht, ein Dessert und ein Getränk, in dieser Reihenfolge.",
@@ -1203,7 +1198,6 @@ it:{
   ask:"Cosa vuoi cucinare?",
   snT:"Menu di stagione",
   snNow:"Adesso",
-  snAmb:"🎨 Sfondo di stagione",
   snMsg:"Proponimi 4 idee di {c} per {o}, con prodotti di stagione.",
   snSugT:"Le idee dello chef",
   snSugF:"Proponimi 4 idee di ricette tradizionali per {o}, prendendo specialità di diversi paesi e con prodotti di stagione. Un antipasto, un piatto principale, un dolce e una bevanda, in quest’ordine.",
@@ -1402,7 +1396,6 @@ pt:{
   ask:"O que quer cozinhar?",
   snT:"Menu da estação",
   snNow:"Agora",
-  snAmb:"🎨 Fundo da estação",
   snMsg:"Sugere 4 ideias de {c} para {o}, com produtos da estação.",
   snSugT:"As ideias do chef",
   snSugF:"Sugere 4 ideias de receitas tradicionais para {o}, com especialidades de vários países e produtos da estação. Uma entrada, um prato principal, uma sobremesa e uma bebida, por esta ordem.",
@@ -1863,8 +1856,7 @@ function snCurrent(d,c){d=d||new Date();c=c||snCountry();
       css+=sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+';--card:'+card+';--ink:'+ink+';--mut:'+mut+';--dark:#060403;--bd:rgba(255,255,255,.1)'+(x[0]==='halloween'?';--pink:#ff8a1f':'')+'}'}
     else css+='@media (prefers-color-scheme:light){'+sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+'}}'});
   st.textContent=css;document.head.appendChild(st)})();
-function ambOn(){try{return localStorage.getItem('ambOff')!=='1'}catch(e){return true}}
-function applyAmb(){const r=document.documentElement;if(ambOn())r.dataset.amb=snCurrent();else delete r.dataset.amb}
+function applyAmb(){document.documentElement.dataset.amb=snCurrent();try{localStorage.removeItem('ambOff')}catch(e){}} // always on since v81 (the on/off button was removed)
 applyAmb();
 // Seasonal menu: the chef's 4 ideas for the selected occasion and country, fetched automatically and cached on the device
 // (localStorage `snSug`, 3 days per language + country + occasion). Tapping an idea asks for its complete recipe.
@@ -1907,12 +1899,9 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const bc=document.createElement('p');bc.className='snst';bc.textContent=t.snByC;
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]});
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
-  // seasonal background on/off (device setting)
-  const ab=document.createElement('button');ab.type='button';ab.id='snamb';ab.className='chip'+(ambOn()?' on':'');ab.textContent=t.snAmb;ab.setAttribute('aria-pressed',ambOn()?'true':'false');
-  ab.onclick=()=>{try{localStorage.setItem('ambOff',ambOn()?'1':'0')}catch(e){}applyAmb();drawSeason()};box.appendChild(ab);
 }
 
-const APP_VERSION='v80',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v81',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
