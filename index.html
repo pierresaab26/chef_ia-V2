@@ -126,7 +126,7 @@ input,textarea,select{font-size:16px!important}
 #verpill.pv i{background:#a29cb3;box-shadow:none}
 .dver{margin-top:auto;color:var(--mut);font-size:12px;padding:10px 14px}
 #hsearchbox,#fsearchbox{padding:12px 18px 0}
-#homesearch{margin:10px 0 0}#homesearch input{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsres:empty{display:none}#hsres{margin-top:10px}
+#homesearch{margin:10px 0 0;position:relative}.hsico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}#homesearch input{width:100%;font:inherit;padding:10px 14px 10px 40px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsfav{position:absolute;right:7px;top:50%;transform:translateY(-50%);padding:5px 11px;font-size:13px}#homesearch input{padding-right:112px!important}.hscnt{font-size:13px;color:var(--mut);margin:2px 4px 8px}#hsres:empty{display:none}#hsres{margin-top:10px}
 #hsearch,#fsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
 .catwrap{display:flex;flex-wrap:wrap;gap:8px}
 .catwrap .chip{font-size:14px;padding:8px 14px}
@@ -274,10 +274,10 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
       <div id="verpill"><i></i><span></span></div>
       <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
       <button class="impcard" id="impHome"><i>📥</i><div><b id="impHomeT"></b><span id="impHomeS"></span></div></button>
-      <div id="homesearch"><input id="hsq" type="search" autocomplete="off"></div>
+      <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav"></button></div>
       <div id="hsres"></div>
-      <h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
-      <div id="hhome"></div>
+      <div id="hwrap"><h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
+      <div id="hhome"></div></div>
       <h2 id="catT"></h2>
       <div class="catwrap" id="cats"></div>
       <h2 id="thT"></h2>
@@ -438,6 +438,9 @@ fr:{
   favT:"Mes recettes favorites",
   search:"Rechercher une recette…",
   noresult:"Aucune recette trouvée.",
+  hsPh:"Trouver tes recettes",
+  resN:"résultats",
+  res1:"résultat",
   nokey:"Le chef n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.",
   catT:"Que voulez-vous créer ?",
   cats:"🍲 Plats du quotidien|🍰 Desserts et pâtisseries|🍹 Cocktails|🥤 Boissons|🍕 Cuisine du monde|🥗 Végétarien et régimes|🍞 Boulangerie et pains|🧂 Sauces et accompagnements|🍬 Chocolats et glaces|🥑 Ingrédients et techniques|🍽️ Menus et idées de repas",
@@ -594,6 +597,9 @@ en:{
   favT:"My favorite recipes",
   search:"Search a recipe…",
   noresult:"No recipe found.",
+  hsPh:"Find your recipes",
+  resN:"results",
+  res1:"result",
   nokey:"The chef isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy.",
   catT:"What do you want to create?",
   cats:"🍲 Everyday dishes|🍰 Desserts and pastries|🍹 Cocktails|🥤 Drinks|🍕 World cuisine|🥗 Vegetarian and diets|🍞 Bakery and breads|🧂 Sauces and sides|🍬 Chocolate and ice cream|🥑 Ingredients and techniques|🍽️ Menus and meal ideas",
@@ -750,6 +756,9 @@ es:{
   favT:"Mis recetas favoritas",
   search:"Buscar una receta…",
   noresult:"No se encontró ninguna receta.",
+  hsPh:"Encuentra tus recetas",
+  resN:"resultados",
+  res1:"resultado",
   nokey:"El chef aún no está conectado: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar.",
   catT:"¿Qué quieres crear?",
   cats:"🍲 Platos del día a día|🍰 Postres y pastelería|🍹 Cócteles|🥤 Bebidas|🍕 Cocina del mundo|🥗 Vegetariano y dietas|🍞 Panadería y panes|🧂 Salsas y guarniciones|🍬 Chocolates y helados|🥑 Ingredientes y técnicas|🍽️ Menús e ideas de comidas",
@@ -906,6 +915,9 @@ de:{
   favT:"Meine Lieblingsrezepte",
   search:"Rezept suchen…",
   noresult:"Kein Rezept gefunden.",
+  hsPh:"Finde deine Rezepte",
+  resN:"Ergebnisse",
+  res1:"Ergebnis",
   nokey:"Der Koch ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen.",
   catT:"Was möchtest du kreieren?",
   cats:"🍲 Alltagsgerichte|🍰 Desserts und Gebäck|🍹 Cocktails|🥤 Getränke|🍕 Weltküche|🥗 Vegetarisch und Diäten|🍞 Bäckerei und Brot|🧂 Saucen und Beilagen|🍬 Schokolade und Eis|🥑 Zutaten und Techniken|🍽️ Menüs und Essensideen",
@@ -1062,6 +1074,9 @@ it:{
   favT:"Le mie ricette preferite",
   search:"Cerca una ricetta…",
   noresult:"Nessuna ricetta trovata.",
+  hsPh:"Trova le tue ricette",
+  resN:"risultati",
+  res1:"risultato",
   nokey:"Lo chef non è ancora collegato: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy.",
   catT:"Cosa vuoi creare?",
   cats:"🍲 Piatti di tutti i giorni|🍰 Dolci e pasticceria|🍹 Cocktail|🥤 Bevande|🍕 Cucina del mondo|🥗 Vegetariano e diete|🍞 Panetteria e pane|🧂 Salse e contorni|🍬 Cioccolato e gelati|🥑 Ingredienti e tecniche|🍽️ Menu e idee per i pasti",
@@ -1218,6 +1233,9 @@ pt:{
   favT:"As minhas receitas favoritas",
   search:"Pesquisar uma receita…",
   noresult:"Nenhuma receita encontrada.",
+  hsPh:"Encontra as tuas receitas",
+  resN:"resultados",
+  res1:"resultado",
   nokey:"O chef ainda não está ligado: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar.",
   catT:"O que quer criar?",
   cats:"🍲 Pratos do dia a dia|🍰 Sobremesas e pastelaria|🍹 Cocktails|🥤 Bebidas|🍕 Cozinha do mundo|🥗 Vegetariano e dietas|🍞 Padaria e pães|🧂 Molhos e acompanhamentos|🍬 Chocolates e gelados|🥑 Ingredientes e técnicas|🍽️ Menus e ideias de refeições",
@@ -1508,7 +1526,7 @@ function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.g
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
 applySeason();document.addEventListener('visibilitychange',()=>{if(!document.hidden)applySeason()});
-const APP_VERSION='v61',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v64',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1609,7 +1627,7 @@ function drawCats(){const t=T(),box=$('#cats');box.innerHTML='';$('#catT').textC
 function drawerText(){const t=T();drawCats();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
-  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.search;$('#hsq').placeholder=t.search;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;impText();$('#fpT').textContent=t.favT;
+  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.search;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;impText();$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
@@ -1644,6 +1662,7 @@ function recipeCat(e){
   if(has(/^(sauce|pesto|vinaigrette|dressing|mayonnaise|mayo|aioli|houmous|hummus|guacamole|tzatziki|chutney|coulis|marinade|salsa|ketchup|bechamel|tapenade|puree|gratin|frites|accompagnement|garniture|dip|trempette|confiture|jam|gelee|assaisonnement|bouillon|fond de|beurre|creme)\b/)&&!has(MAIN))return 7;
   return 0;
 }
+let hsFav=false,hsCat=null; // home search: favorites-only toggle inside the box (hsCat stays null)
 let favCat=null; // null = the category tiles, otherwise the open category (index in `cats`)
 function drawFavs(){
   const a=loadH().filter(e=>e.fav),l=$('#flist');l.innerHTML='';
@@ -2244,15 +2263,22 @@ $('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
 $('#back').onclick=()=>show('home');
 $('#hback').onclick=()=>show('home');
 $('#hsearch').addEventListener('input',drawHistory);
-// Home search: looks through ALL saved recipes (title or category name) and lists them under the box.
+// Home search: ALL saved recipes, by text (title or category name) and/or the Favorites chip.
+// While a search or filter is active the results replace the history block.
 function drawHomeSearch(){
-  const l=$('#hsres');l.innerHTML='';const nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#hsq').value.trim());
-  if(!q)return;const names=T().cats.split('|');
-  const hit=loadH().filter(e=>nz(e.title).includes(q)||nz(names[recipeCat(e)]).includes(q));
-  if(!hit.length){const p=document.createElement('div');p.className='empty';p.textContent=T().noresult;l.appendChild(p);return}
-  hit.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).forEach(e=>l.appendChild(rowFor(e,false,true)));
+  const t=T(),a=loadH(),l=$('#hsres');l.innerHTML='';
+  $('#homesearch').style.display=a.length?'':'none';
+  if(!a.length){hsFav=false;hsCat=null;$('#hwrap').style.display='';return}
+  const nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#hsq').value.trim()),names=t.cats.split('|');
+  const fb=$('#hsfav');fb.textContent='❤️ '+t.favs;fb.classList.toggle('on',hsFav);fb.onclick=()=>{hsFav=!hsFav;drawHomeSearch()};
+  const active=!!q||hsFav||hsCat!==null;$('#hwrap').style.display=active?'none':'';
+  if(!active)return;
+  const hit=a.filter(e=>(!hsFav||e.fav)&&(hsCat===null||recipeCat(e)===hsCat)&&(!q||nz(e.title).includes(q)||nz(names[recipeCat(e)]).includes(q)));
+  if(!hit.length){const p=document.createElement('div');p.className='empty';p.textContent=t.noresult;l.appendChild(p);return}
+  const c=document.createElement('div');c.className='hscnt';c.textContent=hit.length+' '+(hit.length>1?t.resN:t.res1);l.appendChild(c);
+  hit.sort((x,y)=>(y.updatedAt||0)-(x.updatedAt||0)).forEach(e=>l.appendChild(rowFor(e,false,true)));
 }
-$('#hsq').addEventListener('input',drawHomeSearch);
+$('#hsq').addEventListener('input',drawHomeSearch);drawHomeSearch();
 $('#fsearch').addEventListener('input',()=>{favCat=null;drawFavs()});
 $('#fback').onclick=()=>show('home');
 document.querySelectorAll('.menubtn').forEach(b=>b.onclick=()=>$('#drawer').classList.contains('on')?closeDrawer():openDrawer());
