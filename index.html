@@ -470,6 +470,8 @@ fr:{
   qaEx:"🍊 Je peux mélanger orange et chocolat ?|🧅 Je peux congeler mon oignon ?|🥚 Combien de temps garder des œufs durs ?|🍚 Comment rattraper un riz trop cuit ?",
   qaNote:"ℹ️ Réponses données à titre informatif. Elles n’engagent pas la responsabilité du chef.",
   qaCom:"Commenter",
+  qaHideCom:"Masquer les commentaires",
+  qaShowCom:"Afficher les commentaires",
   cats:"🍲 Plats du quotidien|🍰 Desserts et pâtisseries|🍹 Cocktails|🥤 Boissons|🍕 Cuisine du monde|🥗 Végétarien et régimes|🍞 Boulangerie et pains|🧂 Sauces et accompagnements|🍬 Chocolats et glaces|🥑 Ingrédients et techniques|🍽️ Menus et idées de repas",
   qS:"👥 Pers.",
   qSo:"Pour 2 personnes|Pour 6 personnes|Pour 8 personnes",
@@ -645,6 +647,8 @@ en:{
   qaEx:"🍊 Can I mix orange and chocolate?|🧅 Can I freeze my onions?|🥚 How long do hard-boiled eggs keep?|🍚 How do I save overcooked rice?",
   qaNote:"ℹ️ Answers are for information only and do not engage the chef’s liability.",
   qaCom:"Comment",
+  qaHideCom:"Hide comments",
+  qaShowCom:"Show comments",
   cats:"🍲 Everyday dishes|🍰 Desserts and pastries|🍹 Cocktails|🥤 Drinks|🍕 World cuisine|🥗 Vegetarian and diets|🍞 Bakery and breads|🧂 Sauces and sides|🍬 Chocolate and ice cream|🥑 Ingredients and techniques|🍽️ Menus and meal ideas",
   qS:"👥 People",
   qSo:"For 2 people|For 6 people|For 8 people",
@@ -820,6 +824,8 @@ es:{
   qaEx:"🍊 ¿Puedo mezclar naranja y chocolate?|🧅 ¿Puedo congelar la cebolla?|🥚 ¿Cuánto duran los huevos duros?|🍚 ¿Cómo salvar un arroz pasado?",
   qaNote:"ℹ️ Las respuestas son meramente informativas y no comprometen la responsabilidad del chef.",
   qaCom:"Comentar",
+  qaHideCom:"Ocultar comentarios",
+  qaShowCom:"Mostrar comentarios",
   cats:"🍲 Platos del día a día|🍰 Postres y pastelería|🍹 Cócteles|🥤 Bebidas|🍕 Cocina del mundo|🥗 Vegetariano y dietas|🍞 Panadería y panes|🧂 Salsas y guarniciones|🍬 Chocolates y helados|🥑 Ingredientes y técnicas|🍽️ Menús e ideas de comidas",
   qS:"👥 Pers.",
   qSo:"Para 2 personas|Para 6 personas|Para 8 personas",
@@ -995,6 +1001,8 @@ de:{
   qaEx:"🍊 Kann ich Orange und Schokolade mischen?|🧅 Kann ich Zwiebeln einfrieren?|🥚 Wie lange halten hartgekochte Eier?|🍚 Wie rette ich zu weichen Reis?",
   qaNote:"ℹ️ Die Antworten dienen nur zur Information und begründen keine Haftung des Kochs.",
   qaCom:"Kommentieren",
+  qaHideCom:"Kommentare ausblenden",
+  qaShowCom:"Kommentare anzeigen",
   cats:"🍲 Alltagsgerichte|🍰 Desserts und Gebäck|🍹 Cocktails|🥤 Getränke|🍕 Weltküche|🥗 Vegetarisch und Diäten|🍞 Bäckerei und Brot|🧂 Saucen und Beilagen|🍬 Schokolade und Eis|🥑 Zutaten und Techniken|🍽️ Menüs und Essensideen",
   qS:"👥 Pers.",
   qSo:"Für 2 Personen|Für 6 Personen|Für 8 Personen",
@@ -1170,6 +1178,8 @@ it:{
   qaEx:"🍊 Posso abbinare arancia e cioccolato?|🧅 Posso congelare la cipolla?|🥚 Quanto durano le uova sode?|🍚 Come salvo un riso scotto?",
   qaNote:"ℹ️ Le risposte sono solo a scopo informativo e non impegnano la responsabilità dello chef.",
   qaCom:"Commenta",
+  qaHideCom:"Nascondi i commenti",
+  qaShowCom:"Mostra i commenti",
   cats:"🍲 Piatti di tutti i giorni|🍰 Dolci e pasticceria|🍹 Cocktail|🥤 Bevande|🍕 Cucina del mondo|🥗 Vegetariano e diete|🍞 Panetteria e pane|🧂 Salse e contorni|🍬 Cioccolato e gelati|🥑 Ingredienti e tecniche|🍽️ Menu e idee per i pasti",
   qS:"👥 Pers.",
   qSo:"Per 2 persone|Per 6 persone|Per 8 persone",
@@ -1345,6 +1355,8 @@ pt:{
   qaEx:"🍊 Posso misturar laranja e chocolate?|🧅 Posso congelar a cebola?|🥚 Quanto tempo duram ovos cozidos?|🍚 Como salvar um arroz papa?",
   qaNote:"ℹ️ As respostas são meramente informativas e não implicam a responsabilidade do chef.",
   qaCom:"Comentar",
+  qaHideCom:"Ocultar comentários",
+  qaShowCom:"Mostrar comentários",
   cats:"🍲 Pratos do dia a dia|🍰 Sobremesas e pastelaria|🍹 Cocktails|🥤 Bebidas|🍕 Cozinha do mundo|🥗 Vegetariano e dietas|🍞 Padaria e pães|🧂 Molhos e acompanhamentos|🍬 Chocolates e gelados|🥑 Ingredientes e técnicas|🍽️ Menus e ideias de refeições",
   qS:"👥 Pess.",
   qSo:"Para 2 pessoas|Para 6 pessoas|Para 8 pessoas",
@@ -1447,7 +1459,7 @@ const log=$('#log'),inp=$('#inp'),sendB=$('#send');
     [120,320,600].forEach(d=>setTimeout(()=>{fit();try{t.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}},d))}); // once the keyboard is up
   addEventListener('focusout',()=>{setTimeout(()=>{if(!isField(document.activeElement)){root.classList.remove('kb');fit()}},60)});
 })();
-let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null,branchFrom=null,qaMode=false,qaAutoCom=false; // qaMode = « Cooking questions » screen; qaAutoCom = open the comments under the next answer (shared link)
+let hist=[],busy=false,persona="",theme=0,chefNow=null,lang="en",currentId=null,branchFrom=null,qaMode=false,qaComs={},qaHide=new Set(); // qaMode = « Cooking questions » screen; qaComs / qaHide = comment blocks and hidden state per answer
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
@@ -1639,7 +1651,7 @@ function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.g
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
 applySeason();document.addEventListener('visibilitychange',()=>{if(!document.hidden)applySeason()});
-const APP_VERSION='v68',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v69',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -1911,8 +1923,9 @@ function chatActions(){
 // « Cooking questions »: under each answer, Favorite (saves the question + answer in Favorites, group « Cooking questions »; tapping again deletes it),
 // Share, and Comment (shared comments keyed by the question, same mechanism as the recipe comments).
 function qaActions(){
-  log.querySelectorAll('.chact,.chcom,.chrow').forEach(x=>x.remove());
   const els=[...log.querySelectorAll('.m')],t=T();
+  log.querySelectorAll('.chact,.chrow').forEach(x=>x.remove());
+  log.querySelectorAll('.chcom').forEach(x=>x.remove()); // detached only: the comment blocks are kept in qaComs and put back below (no reload, a half-typed comment survives)
   hist.forEach((m,i)=>{
     if(m.role!=='assistant'||!els[i]||!hist[i-1]||hist[i-1].role!=='user')return;
     const q=hist[i-1].content,a=loadH(),e=m.qid&&a.find(x=>x.id===m.qid),on=!!(e&&e.fav);
@@ -1920,9 +1933,15 @@ function qaActions(){
     const fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(on?' on':'');fv.textContent=(on?'❤️ ':'🤍 ')+t.fav;fv.onclick=()=>qaFav(i);
     const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe({title:q,link:/^https?:/.test(location.href)?location.origin+'/?q='+encodeURIComponent(q.slice(0,200)):'',messages:[{role:'user',content:q},{role:'assistant',content:m.content+'\n\n'+t.qaNote}]}); // the link reopens this question, with its shared comments
     const cm=document.createElement('button');cm.type='button';cm.className='cbtn';cm.textContent='💬 '+t.qaCom;
-    cm.onclick=()=>{let cw=bar.nextElementSibling;if(cw&&cw.classList.contains('chcom')){cw.remove();return}cw=document.createElement('div');cw.className='chcom';bar.after(cw);buildComments(cw,'q-'+slug(q))};
     bar.append(fv,sh,cm);els[i].after(bar);
-    if(qaAutoCom&&i===hist.length-1){qaAutoCom=false;cm.onclick()} // opened from a shared link: show the comments right away
+    // comments: shown right away under the answer (shared by question), with a full-width hide / show button
+    let c=qaComs[i];if(!c||c.q!==q){const cw=document.createElement('div');cw.className='chcom';c=qaComs[i]={q,cw,n:0,h:null};c.h=buildComments(cw,'q-'+slug(q),{poll:true,onCount:n=>{c.n=n;c.paint&&c.paint()}})}
+    bar.after(c.cw);
+    const row=document.createElement('div');row.className='chrow qarow';const hb=document.createElement('button');hb.type='button';hb.className='chhide';row.appendChild(hb);c.cw.after(row);
+    c.paint=()=>{const hid=qaHide.has(i);c.cw.classList.toggle('hid',hid);hb.textContent=(hid?t.qaShowCom:t.qaHideCom)+(c.n?' ('+c.n+')':'')};
+    hb.onclick=()=>{qaHide.has(i)?qaHide.delete(i):qaHide.add(i);c.paint()};
+    cm.onclick=()=>{qaHide.delete(i);c.paint();c.cw.scrollIntoView({block:'nearest',behavior:'smooth'});try{c.h.input.focus({preventScroll:true})}catch(x){}};
+    c.paint();
   });
   try{updTop()}catch(x){}
 }
@@ -2152,7 +2171,7 @@ async function capi(method,qs,data,path){
 function ago(ts){const s=Math.round((ts-Date.now())/1000),a=Math.abs(s);if(a<60)return T().now;
   const f=new Intl.RelativeTimeFormat(T().sr,{numeric:'auto'});
   if(a<3600)return f.format(Math.round(s/60),'minute');if(a<86400)return f.format(Math.round(s/3600),'hour');return f.format(Math.round(s/86400),'day')}
-function buildComments(parent,key){
+function buildComments(parent,key,opts){opts=opts||{};
   const t=T(),box=document.createElement('section');box.className='coms';
   const h=document.createElement('h2');h.textContent=t.com;box.appendChild(h);
   const list=document.createElement('div');list.className='clist';box.appendChild(list);
@@ -2173,7 +2192,7 @@ function buildComments(parent,key){
       w.append(b,m);d.append(av,w);list.appendChild(d)})};
   const load=async()=>{try{const r=await capi('GET','?key='+key);
       if(r.status===501||r.status===404){form.style.display='none';msg.textContent=t.cOff;return}
-      if(!r.ok)throw 0;draw((await r.json()).comments||[])}catch(e){msg.textContent=t.cErr}};
+      if(!r.ok)throw 0;const cs=(await r.json()).comments||[];draw(cs);if(opts.onCount)opts.onCount(cs.length)}catch(e){msg.textContent=t.cErr}};
   const post=async()=>{const text=tx.value.trim();if(!text||pb.disabled)return;pb.disabled=true;
     try{try{localStorage.setItem('uname',nm.value.trim())}catch(x){}
       const r=await capi('POST','',{key,text,name:nm.value.trim()||t.anon});
@@ -2181,6 +2200,11 @@ function buildComments(parent,key){
     }catch(e){toast(t.cErr)}finally{pb.disabled=false}};
   pb.onclick=post;tx.addEventListener('keydown',e=>{if(e.key==='Enter')post()});
   load();
+  if(opts.poll){ // keep the thread live: a reply from someone else shows up without reopening the screen
+    const tick=()=>{if(!box.isConnected){clearInterval(iv);document.removeEventListener('visibilitychange',vis);return}if(!document.hidden&&document.activeElement!==tx&&document.activeElement!==nm)load()};
+    const iv=setInterval(tick,20000),vis=()=>{if(!document.hidden)tick()};document.addEventListener('visibilitychange',vis);
+  }
+  return {reload:load,input:tx};
 }
 // ---------- Dish illustrations (drawn in code, not photos) ----------
 function dishKind(t){
@@ -2252,7 +2276,7 @@ function dishPic(b,text){
   toBottom();
 }
 function openChat(chef){
-  qaMode=false;hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
+  qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
   persona=chef?chef.p:"";$('#cname').textContent=chef?"Chef "+chef.n:"Chef IA";$('#cdesc').textContent=chef?chef.d:T().cd;
   showWelcome();qaUI();
   show('chat');
@@ -2515,7 +2539,7 @@ if(!SR)mic.style.display='none';else{let rec=null;mic.onclick=()=>{if(rec){rec.s
 applyUI();
 // Shared link « /?q=question »: opens the cooking-questions screen on that question (the chef answers again; the comments are the shared ones for that question).
 {let sq='';try{sq=(new URLSearchParams(location.search).get('q')||'').trim().slice(0,200)}catch(e){}
-  if(sq){try{history.replaceState(null,'',location.pathname)}catch(e){}openQA();qaAutoCom=true;send(sq)}}
+  if(sq){try{history.replaceState(null,'',location.pathname)}catch(e){}openQA();send(sq)}}
 </script>
 </body>
 </html>
