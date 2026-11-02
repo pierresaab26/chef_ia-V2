@@ -256,6 +256,10 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .chathd{gap:10px;padding:10px 14px;border-bottom:0;border-radius:0 0 22px 22px;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;z-index:2}
 .chathd .rb{width:38px;height:38px;border-radius:50%;background:var(--bd);display:grid;place-items:center;font-size:18px;padding:0;flex:none}
 .chathd .menubtn{font-size:20px}
+.chathd #tocard{width:auto;padding:0 12px;border-radius:999px;background:var(--green);color:#10200a;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:4px} /* « Au fourneau »: the recipe card, to cook from */
+.chathd .chtx{min-width:0}.chathd .chtx b,.chathd .chtx .sub{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:519px){.chathd.hascook .avw{display:none}} /* phones: room for « Au fourneau » */
+@media (max-width:359px){.chathd.hascook #back{display:none}} /* very small phones: the 🏠 of the input bar stays */
 .avw{position:relative;flex:none;margin-left:2px}
 .avw::after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:var(--green);border:2px solid var(--card)}
 .chtx{flex:1;min-width:0}
@@ -352,7 +356,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
   </section>
 
   <section class="view" id="chat">
-    <div class="chead chathd"><button class="menubtn rb" aria-label="Menu" aria-expanded="false">☰</button><button class="back rb" id="back" aria-label="Home">🏠</button><div class="avw"><svg class="mascot" style="width:42px;height:42px"><use href="#mascot"/></svg></div><div class="chtx"><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div><button class="back rb" id="tofav" aria-label="Favorite" style="display:none">🤍</button><button class="back rb" id="tocard" aria-label="Card" style="display:none">📖</button></div>
+    <div class="chead chathd"><button class="menubtn rb" aria-label="Menu" aria-expanded="false">☰</button><button class="back rb" id="back" aria-label="Home">🏠</button><div class="avw"><svg class="mascot" style="width:42px;height:42px"><use href="#mascot"/></svg></div><div class="chtx"><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div><button class="back rb" id="tofav" aria-label="Favorite" style="display:none">🤍</button><button class="back rb" id="tocard" style="display:none"></button></div>
     <div id="log"></div>
     <div id="qanote"></div>
     <div id="quick"></div>
@@ -462,6 +466,7 @@ fr:{
   rateOk:"Note enregistrée : {n}/5",
   oldH:"Je cache les anciennes versions",
   oldS:"Revoir les versions précédentes ({n})",
+  cookB:"Au fourneau",
   fav:"Favori",
   favs:"Favoris",
   all:"Toutes",
@@ -661,6 +666,7 @@ en:{
   rateOk:"Rating saved: {n}/5",
   oldH:"Keep only the latest version",
   oldS:"Show earlier versions ({n})",
+  cookB:"At the stove",
   fav:"Favorite",
   favs:"Favorites",
   all:"All",
@@ -860,6 +866,7 @@ es:{
   rateOk:"Nota guardada: {n}/5",
   oldH:"Dejar solo la última versión",
   oldS:"Ver versiones anteriores ({n})",
+  cookB:"A los fogones",
   fav:"Favorito",
   favs:"Favoritos",
   all:"Todas",
@@ -1059,6 +1066,7 @@ de:{
   rateOk:"Bewertung gespeichert: {n}/5",
   oldH:"Nur die neueste Version behalten",
   oldS:"Frühere Versionen anzeigen ({n})",
+  cookB:"Am Herd",
   fav:"Favorit",
   favs:"Favoriten",
   all:"Alle",
@@ -1258,6 +1266,7 @@ it:{
   rateOk:"Voto salvato: {n}/5",
   oldH:"Lascia solo l’ultima versione",
   oldS:"Mostra le versioni precedenti ({n})",
+  cookB:"Ai fornelli",
   fav:"Preferito",
   favs:"Preferiti",
   all:"Tutte",
@@ -1457,6 +1466,7 @@ pt:{
   rateOk:"Nota guardada: {n}/5",
   oldH:"Deixar só a última versão",
   oldS:"Ver versões anteriores ({n})",
+  cookB:"Ao fogão",
   fav:"Favorito",
   favs:"Favoritos",
   all:"Todas",
@@ -1651,7 +1661,7 @@ function applyUI(){
   const t=T();document.documentElement.lang=lang;
   $('#hi').textContent=t.hi;$('#sub').textContent=t.sub;$('#hq').placeholder=t.ask;
   $('#hT').textContent=t.hist;$('#hmore').textContent=t.more;$('#hpT').textContent=t.hist;$('#snT').textContent=t.snT;$('#chT').textContent=t.chefs;
-  inp.placeholder=t.ph;sendB.textContent=t.send;
+  inp.placeholder=t.ph;sendB.textContent=t.send;$('#tocard').textContent='🍳 '+t.cookB;$('#tocard').setAttribute('aria-label',t.cookB);
   drawSeason();drawChefs();refreshChat();drawHistory();drawFavs();drawerText();
 }
 function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML='';showWelcome()}
@@ -1919,7 +1929,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v86',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v87',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -2137,7 +2147,7 @@ function drawFavs(){
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recipe';
 function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
-function syncCardBtn(){try{const q=$('#quick');q._paint&&q._paint()}catch(x){}$('#tocard').style.display=currentId?'':'none';try{chatActions()}catch(x){}syncFavUI()}
+function syncCardBtn(){try{const q=$('#quick');q._paint&&q._paint()}catch(x){}$('#tocard').style.display=currentId?'':'none';$('.chathd').classList.toggle('hascook',!!currentId);try{chatActions()}catch(x){}syncFavUI()}
 // Keeps every favorite heart of the open chat (header + action bar) in line with the saved recipe.
 function syncFavUI(){
   const h=$('#tofav');if(!h)return;const e=currentId?loadH().find(x=>x.id===currentId):null;
