@@ -102,6 +102,7 @@ input,textarea,select{font-size:16px!important}
 .kb #quick,.kb #totop{display:none!important} /* keyboard open: give the room back to the conversation */
 .hid,.hidold{display:none!important}.chrow{align-self:stretch;margin:0 0 6px}.chhide{display:block;width:100%;margin:0;text-align:center;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
+.chact .cbtn.cook{background:var(--green);color:#10200a;border-color:var(--green);font-weight:700}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
@@ -256,9 +257,9 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .chathd{gap:10px;padding:10px 14px;border-bottom:0;border-radius:0 0 22px 22px;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;z-index:2}
 .chathd .rb{width:38px;height:38px;border-radius:50%;background:var(--bd);display:grid;place-items:center;font-size:18px;padding:0;flex:none}
 .chathd .menubtn{font-size:20px}
-.chathd #tocard{width:auto;padding:0 12px;border-radius:999px;background:var(--green);color:#10200a;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:4px} /* « Au fourneau »: the recipe card, to cook from */
+.chathd #toorig{width:auto;padding:0 12px;border-radius:999px;background:var(--card);color:var(--pink);border:2px solid var(--pink);font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:4px} /* « ↺ Original recipe »: erases the later changes */
 .chathd .chtx{min-width:0}.chathd .chtx b,.chathd .chtx .sub{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media (max-width:519px){.chathd.hascook .avw{display:none}} /* phones: room for « Au fourneau » */
+@media (max-width:519px){.chathd.hascook .avw{display:none}} /* phones: room for « Original recipe » */
 @media (max-width:359px){.chathd.hascook #back{display:none}} /* very small phones: the 🏠 of the input bar stays */
 .avw{position:relative;flex:none;margin-left:2px}
 .avw::after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:var(--green);border:2px solid var(--card)}
@@ -356,7 +357,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
   </section>
 
   <section class="view" id="chat">
-    <div class="chead chathd"><button class="menubtn rb" aria-label="Menu" aria-expanded="false">☰</button><button class="back rb" id="back" aria-label="Home">🏠</button><div class="avw"><svg class="mascot" style="width:42px;height:42px"><use href="#mascot"/></svg></div><div class="chtx"><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div><button class="back rb" id="tofav" aria-label="Favorite" style="display:none">🤍</button><button class="back rb" id="tocard" style="display:none"></button></div>
+    <div class="chead chathd"><button class="menubtn rb" aria-label="Menu" aria-expanded="false">☰</button><button class="back rb" id="back" aria-label="Home">🏠</button><div class="avw"><svg class="mascot" style="width:42px;height:42px"><use href="#mascot"/></svg></div><div class="chtx"><b id="cname">Chef IA</b><span class="sub" id="cdesc">Cuisine du monde</span></div><button class="back rb" id="tofav" aria-label="Favorite" style="display:none">🤍</button><button class="back rb" id="toorig" style="display:none"></button></div>
     <div id="log"></div>
     <div id="qanote"></div>
     <div id="quick"></div>
@@ -583,6 +584,9 @@ fr:{
   idMoreB:"🔄 Autres idées",
   ideasBack:"↩ Idées proposées précédemment",
   origB:"↩ Recette d’origine",
+  origR:"↺ Recette originale",
+  origQ:"Tout effacer et revenir à la recette originale ? Les modifications faites ensuite seront supprimées.",
+  origOk:"Tout effacer",
   qMax:"3 recettes maximum à la fois",
   idMany:"{n} recettes enregistrées dans l’historique",
   hideB1:"👁️ Masquer cette recette",
@@ -784,6 +788,9 @@ en:{
   idMoreB:"🔄 Other ideas",
   ideasBack:"↩ Previously suggested ideas",
   origB:"↩ Original recipe",
+  origR:"↺ Original recipe",
+  origQ:"Erase everything and go back to the original recipe? The changes made afterwards will be deleted.",
+  origOk:"Erase all",
   qMax:"3 recipes at most at a time",
   idMany:"{n} recipes saved in the history",
   hideB1:"👁️ Hide this recipe",
@@ -985,6 +992,9 @@ es:{
   idMoreB:"🔄 Otras ideas",
   ideasBack:"↩ Ideas propuestas anteriormente",
   origB:"↩ Receta original",
+  origR:"↺ Receta original",
+  origQ:"¿Borrar todo y volver a la receta original? Se eliminarán los cambios hechos después.",
+  origOk:"Borrar todo",
   qMax:"Máximo 3 recetas a la vez",
   idMany:"{n} recetas guardadas en el historial",
   hideB1:"👁️ Ocultar esta receta",
@@ -1186,6 +1196,9 @@ de:{
   idMoreB:"🔄 Andere Ideen",
   ideasBack:"↩ Zuvor vorgeschlagene Ideen",
   origB:"↩ Originalrezept",
+  origR:"↺ Originalrezept",
+  origQ:"Alles löschen und zum Originalrezept zurückkehren? Die danach gemachten Änderungen werden gelöscht.",
+  origOk:"Alles löschen",
   qMax:"Höchstens 3 Rezepte auf einmal",
   idMany:"{n} Rezepte im Verlauf gespeichert",
   hideB1:"👁️ Dieses Rezept ausblenden",
@@ -1387,6 +1400,9 @@ it:{
   idMoreB:"🔄 Altre idee",
   ideasBack:"↩ Idee proposte in precedenza",
   origB:"↩ Ricetta originale",
+  origR:"↺ Ricetta originale",
+  origQ:"Cancellare tutto e tornare alla ricetta originale? Le modifiche fatte dopo saranno eliminate.",
+  origOk:"Cancella tutto",
   qMax:"Al massimo 3 ricette alla volta",
   idMany:"{n} ricette salvate nella cronologia",
   hideB1:"👁️ Nascondi questa ricetta",
@@ -1588,6 +1604,9 @@ pt:{
   idMoreB:"🔄 Outras ideias",
   ideasBack:"↩ Ideias propostas anteriormente",
   origB:"↩ Receita original",
+  origR:"↺ Receita original",
+  origQ:"Apagar tudo e voltar à receita original? As alterações feitas depois serão eliminadas.",
+  origOk:"Apagar tudo",
   qMax:"No máximo 3 receitas de cada vez",
   idMany:"{n} receitas guardadas no histórico",
   hideB1:"👁️ Ocultar esta receita",
@@ -1667,7 +1686,7 @@ function applyUI(){
   const t=T();document.documentElement.lang=lang;
   $('#hi').textContent=t.hi;$('#sub').textContent=t.sub;$('#hq').placeholder=t.ask;
   $('#hT').textContent=t.hist;$('#hmore').textContent=t.more;$('#hpT').textContent=t.hist;$('#snT').textContent=t.snT;$('#chT').textContent=t.chefs;
-  inp.placeholder=t.ph;sendB.textContent=t.send;$('#tocard').textContent='🍳 '+t.cookB;$('#tocard').setAttribute('aria-label',t.cookB);
+  inp.placeholder=t.ph;sendB.textContent=t.send;$('#toorig').textContent=t.origR;
   drawSeason();drawChefs();refreshChat();drawHistory();drawFavs();drawerText();
 }
 function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML='';showWelcome()}
@@ -1935,7 +1954,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v90',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v91',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -2153,7 +2172,26 @@ function drawFavs(){
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recipe';
 function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
-function syncCardBtn(){try{const q=$('#quick');q._paint&&q._paint()}catch(x){}$('#tocard').style.display=currentId?'':'none';$('.chathd').classList.toggle('hascook',!!currentId);try{chatActions()}catch(x){}syncFavUI()}
+// « ↺ Original recipe » (chat header): erase everything that came after the original recipe.
+// - a variant (made with « Without » / « Replace », `e.from`): the variant is deleted and its original recipe is opened;
+// - otherwise: the conversation is cut right after the FIRST version of the current recipe (later changes are deleted).
+// Other recipes already saved on their own (generated from ideas, variants) stay in the history.
+function resetInfo(){
+  if(qaMode||!currentId)return null;const a=loadH(),e=a.find(x=>x.id===currentId);if(!e)return null;
+  if(e.from&&a.some(x=>x.id===e.from))return {kind:'from',e};
+  const first=hist.findIndex(m=>m.role==='assistant'&&m.rid===currentId&&looksLikeRecipe(m.content));
+  return first>=0&&first<hist.length-1?{kind:'cut',e,first}:null}
+async function resetToOriginal(){
+  const ri=resetInfo();if(!ri||busy)return;const t=T();
+  if(!await ask({text:t.origQ,okLabel:t.origOk}))return;
+  const a=loadH();
+  if(ri.kind==='from'){saveH(a.filter(x=>x.id!==ri.e.id));drawHistory();drawFavs();openSaved(ri.e.from);return}
+  const e=a.find(x=>x.id===ri.e.id);if(!e)return;
+  e.messages=hist.slice(0,ri.first+1).map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content});e.updatedAt=Date.now();
+  if(!saveH(a)){toast(t.stFull);return}
+  drawHistory();drawFavs();openSaved(e.id);
+}
+function syncCardBtn(){try{const q=$('#quick');q._paint&&q._paint()}catch(x){}{const ri=resetInfo();$('#toorig').style.display=ri?'':'none';$('.chathd').classList.toggle('hascook',!!ri)}try{chatActions()}catch(x){}syncFavUI()}
 // Keeps every favorite heart of the open chat (header + action bar) in line with the saved recipe.
 function syncFavUI(){
   const h=$('#tofav');if(!h)return;const e=currentId?loadH().find(x=>x.id===currentId):null;
@@ -2183,7 +2221,8 @@ function chatActions(){
     const fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(e.fav?' on':'');fv.textContent=(e.fav?'❤️ ':'🤍 ')+t.fav;
     fv.onclick=()=>{toggleFav(rid)};
     const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>{const z=loadH().find(x=>x.id===rid);if(z)shareRecipe(z)};
-    bar.append(fv,sh);
+    const ck=document.createElement('button');ck.type='button';ck.className='cbtn cook';ck.textContent='🍳 '+t.cookB;ck.onclick=()=>openCard(rid);
+    bar.append(fv,sh,ck);
     if(e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.type='button';og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openSaved(e.from);bar.appendChild(og)} // variant → back to its original recipe
     if(olds[rid]){ // « Hide earlier versions »: only the newest version of this recipe stays in the chat (nothing is deleted)
       const ob=document.createElement('button');ob.type='button';ob.className='cbtn';const h=oldHidden.has(rid);
@@ -2799,7 +2838,7 @@ $('#dclose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;
 document.querySelectorAll('.ditem').forEach(b=>b.onclick=()=>goTo(b.dataset.go));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classList.contains('on'))closeDrawer()});
 $('#cardback').onclick=()=>show('home');
-$('#tocard').onclick=()=>{if(currentId)openCard(currentId)};
+$('#toorig').onclick=resetToOriginal;
 // « Back to top » button: shown in the chat and on the recipe card once the reader has scrolled down.
 function topScroller(){return $('#chat').classList.contains('on')?log:$('#card').classList.contains('on')?$('#cardbody'):null}
 function updTop(){
