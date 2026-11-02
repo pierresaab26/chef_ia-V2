@@ -171,6 +171,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .chead .back{font-size:22px;padding:0 6px}
 .chead b{display:block;line-height:1.2}
 #cardT{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px}
+#cardorig{flex:none;padding:7px 12px;border-radius:999px;background:var(--card);color:var(--pink);border:2px solid var(--pink);font-size:14px;font-weight:700;white-space:nowrap} /* « ↺ Original recipe » in the card header, same place as in the chat */
 #log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
 .m{max-width:88%;padding:10px 14px;border-radius:18px;white-space:pre-wrap;word-wrap:break-word}
 .u{align-self:flex-end;background:var(--pink);color:#fff;border-bottom-right-radius:5px}
@@ -323,7 +324,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
   </section>
 
   <section class="view" id="card">
-    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b></div>
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b><button type="button" id="cardorig" style="display:none"></button></div>
     <div class="scroll" id="cardbody"></div>
   </section>
 
@@ -1954,7 +1955,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v92',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v93',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -2487,7 +2488,9 @@ function openCard(id){
   fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
   const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
-  act.append(fv,sh,ct);{const ri=resetInfoFor(id,e.messages||[]);if(ri&&ri.kind==='cut'){const rb=document.createElement('button');rb.className='cbtn';rb.textContent=t.origR;rb.onclick=async()=>{if(await eraseToOriginal(ri))openCard(id)};act.appendChild(rb)}}
+  act.append(fv,sh,ct);
+  {const ri=resetInfoFor(id,e.messages||[]),rb=$('#cardorig');rb.textContent=t.origR; // « ↺ Recette originale » at the top, like in the chat
+    rb.style.display=ri&&ri.kind==='cut'?'':'none';rb.onclick=ri&&ri.kind==='cut'?async()=>{if(await eraseToOriginal(ri))openCard(id)}:null}
   if(e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openCard(e.from);act.appendChild(og)}if(e.ideas){const ib=document.createElement('button');ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===id));act.appendChild(ib)}
   body.appendChild(act);body.appendChild(rateBox(id));
   const qg=document.createElement('div');qg.className='qgrid';quickCols(qg,txt=>{openSaved(id);send(txt)},true);body.appendChild(qg);
