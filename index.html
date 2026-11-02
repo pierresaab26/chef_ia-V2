@@ -1666,6 +1666,7 @@ function drawChefs(){const t=T(),box=$('#chefs');box.innerHTML='';const crs=t.cr
   const go=document.createElement('button');go.type='submit';go.textContent=t.frGo;
   fm.onsubmit=ev=>{ev.preventDefault();const v=q.value.trim();if(!v){q.focus();return}q.value='';q.blur();openChat({free:true,k:-1,n:'',e:'✨',p:''});send(t.frMsg.replace('{q}',v),true)};
   fm.append(q,go);f.append(h,p,fm);box.appendChild(f)}
+function cap1(x){x=String(x||'');const m=x.match(/^([\s«“"'(¡¿]*)(\p{L})/u);return m?m[1]+m[2].toLocaleUpperCase(lang)+x.slice(m[0].length):x} // display only: first letter in upper case
 function inl(p,t){t.split(/\*\*(.+?)\*\*/).forEach((x,i)=>{if(!x)return;if(i%2){const b=document.createElement('strong');b.textContent=x;p.appendChild(b)}else p.appendChild(document.createTextNode(x))})}
 function render(el,t){
   el.classList.remove('typing');el.classList.add('fmt');el.innerHTML='';let list=null,kind='';
@@ -1675,8 +1676,8 @@ function render(el,t){
     if(h){list=null;kind='';const e=document.createElement('h3');inl(e,h[1]);el.appendChild(e);return}
     const lab=b&&b[1].match(/^\*{0,2}([^:*]{1,40}?)\*{0,2}\s*[:：]\s*(.+)$/); // « - Label: text » → option card
     if(lab){if(kind!=='adv'){list=document.createElement('div');list.className='advl';el.appendChild(list);kind='adv'}
-      const c=document.createElement('div');c.className='adv';c.dataset.label=lab[1].trim();c.dataset.desc=lab[2].replace(/\*\*/g,'');
-      const ck=document.createElement('span');ck.className='ck';const h4=document.createElement('b');h4.textContent=lab[1].trim();const p=document.createElement('p');inl(p,lab[2]);c.append(ck,h4,p);
+      const c=document.createElement('div');c.className='adv';c.dataset.label=lab[1].trim();c.dataset.desc=cap1(lab[2].replace(/\*\*/g,''));
+      const ck=document.createElement('span');ck.className='ck';const h4=document.createElement('b');h4.textContent=lab[1].trim();const p=document.createElement('p');inl(p,cap1(lab[2]));c.append(ck,h4,p);
       // ideas / options of ANY list in the thread can be ticked (3 max in total): they feed « Generate the recipe(s) »
       const tg=()=>{const on=c.classList.contains('sel');
         if(!on&&log.querySelectorAll('.adv.sel').length>=3){toast(T().qMax);return}
@@ -1872,7 +1873,7 @@ async function snAsk(o,avoid){const t=T();let msg=(o.season?t.snSugS:t.snSugF).r
   const items=snParse((await res.json()).text);if(items.length<2)throw {code:'err'};return items}
 function snFill(sg,more,o){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];
   const showItems=items=>{sg.innerHTML='';items.forEach(([nm,ds])=>{const b=document.createElement('button');b.type='button';b.style.borderLeftColor=o.color;
-    const bb=document.createElement('b');bb.textContent=nm;b.append(bb,document.createTextNode(ds));
+    const bb=document.createElement('b');bb.textContent=nm;b.append(bb,document.createTextNode(cap1(ds)));
     b.onclick=()=>{openChat(null);send(t.idGen.replace('{x}',nm),true)};sg.appendChild(b)});more.style.display=''};
   const wait=(txt,btn,fn)=>{sg.innerHTML='';const w=document.createElement('div');w.className='snwait';w.textContent=txt;
     if(btn){const r=document.createElement('button');r.type='button';r.className='snmore';r.style.margin='8px 0 0';r.textContent=btn;r.onclick=fn;w.appendChild(r)}sg.appendChild(w);more.style.display='none'};
@@ -1901,7 +1902,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
 }
 
-const APP_VERSION='v82',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v83',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
@@ -2331,7 +2332,7 @@ function renderRecipe(el,txt,title,chat,swap){
       if(n)cnt=parseInt(n[1],10)||cnt+1;
       if(b){
         if(kind!=='b'){list=document.createElement('ul');list.className='ring';box.appendChild(list);kind='b'}
-        const li=document.createElement('li'),ck=document.createElement('span');ck.className='ck';const tx=document.createElement('span');tx.className='tx';tx.textContent=b[1];
+        const li=document.createElement('li'),ck=document.createElement('span');ck.className='ck';const tx=document.createElement('span');tx.className='tx';tx.textContent=cap1(b[1]);
         const tag=document.createElement('span');tag.className='mt';tag.textContent=T().missT;tag.hidden=true;tx.appendChild(tag);
         li.append(ck,tx);li.onclick=()=>{const d=li.classList.toggle('miss');ck.textContent=d?'✕':'';tag.hidden=!d;if(d)missing.add(b[1]);else missing.delete(b[1]);updBar()};
         list.appendChild(li);
