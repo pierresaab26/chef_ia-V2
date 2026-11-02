@@ -31,8 +31,6 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chip{flex:none;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 13px;font-size:13px;white-space:nowrap}
 .chip.on{background:var(--green);color:#10200a;border-color:var(--green);font-weight:700}
 /* Seasonal menu (home): seasons + French holidays + world festivals, country picker, ideas by course, seasonal background */
-#seasonBox .snlab{font-size:12px;color:var(--mut);margin:8px 0 4px}
-#seasonBox .chip.now{box-shadow:inset 0 0 0 2px var(--pink)}
 .snpanel{border-radius:20px;padding:14px;margin-top:10px;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#16121a}
 .snpanel.dk{color:#f4f1fa}
 .snpanel .snh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -408,8 +406,6 @@ fr:{
   sub:"Votre chef de poche, propulsé par l’IA",
   ask:"Que voulez-vous cuisiner ?",
   snT:"Menu de saison",
-  snF:"Saisons et fêtes",
-  snW:"Fêtes du monde",
   snNow:"En ce moment",
   snAmb:"🎨 Fond d’écran de saison",
   snMsg:"Propose-moi 4 idées de {c} pour {o}, avec les produits de saison.",
@@ -609,8 +605,6 @@ en:{
   sub:"Your pocket chef, powered by AI",
   ask:"What do you want to cook?",
   snT:"Seasonal menu",
-  snF:"Seasons and holidays",
-  snW:"World festivals",
   snNow:"Right now",
   snAmb:"🎨 Seasonal background",
   snMsg:"Suggest 4 ideas for {c} for {o}, with seasonal produce.",
@@ -810,8 +804,6 @@ es:{
   sub:"Tu chef de bolsillo, con IA",
   ask:"¿Qué quieres cocinar?",
   snT:"Menú de temporada",
-  snF:"Estaciones y fiestas",
-  snW:"Fiestas del mundo",
   snNow:"Ahora",
   snAmb:"🎨 Fondo de temporada",
   snMsg:"Propón 4 ideas de {c} para {o}, con productos de temporada.",
@@ -1011,8 +1003,6 @@ de:{
   sub:"Dein Taschenkoch mit KI",
   ask:"Was möchtest du kochen?",
   snT:"Saisonmenü",
-  snF:"Jahreszeiten und Feste",
-  snW:"Feste der Welt",
   snNow:"Gerade jetzt",
   snAmb:"🎨 Saison-Hintergrund",
   snMsg:"Schlag mir 4 Ideen für {c} zu {o} vor, mit Saisonprodukten.",
@@ -1212,8 +1202,6 @@ it:{
   sub:"Il tuo chef tascabile, con l’IA",
   ask:"Cosa vuoi cucinare?",
   snT:"Menu di stagione",
-  snF:"Stagioni e feste",
-  snW:"Feste del mondo",
   snNow:"Adesso",
   snAmb:"🎨 Sfondo di stagione",
   snMsg:"Proponimi 4 idee di {c} per {o}, con prodotti di stagione.",
@@ -1413,8 +1401,6 @@ pt:{
   sub:"O seu chef de bolso, com IA",
   ask:"O que quer cozinhar?",
   snT:"Menu da estação",
-  snF:"Estações e festas",
-  snW:"Festas do mundo",
   snNow:"Agora",
   snAmb:"🎨 Fundo da estação",
   snMsg:"Sugere 4 ideias de {c} para {o}, com produtos da estação.",
@@ -1845,7 +1831,6 @@ const SN_WHERE={chandeleur:'FR BE CH LU',halloween:'FR BE US CA GB IE AU NZ DE N
 // Lunar / lunisolar dates (month-day). Known up to 2028: extend this table for later years.
 const SN_DATES={cny:{2026:'02-17',2027:'02-06',2028:'01-26'},
   holi:{2026:'03-04',2027:'03-22',2028:'03-11'},diwali:{2026:'11-08',2027:'10-29',2028:'10-17'}};
-let snPick=null; // occasion chosen by the user on the home screen (null = the current one)
 function snCountry(){ // automatic only (browser region): decides « Right now » and the hemisphere, never shown
   for(const l of (navigator.languages||[navigator.language||''])){const m=String(l).match(/^[a-z]{2,3}-([A-Z]{2})\b/i);if(m)return m[1].toUpperCase()}
   return {fr:'FR',en:'US',es:'ES',de:'DE',it:'IT',pt:'PT'}[lang]||'FR'}
@@ -1909,14 +1894,8 @@ function snFill(sg,more,o){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];
   else if(f&&(f.code==='code'?!hasCode:Date.now()-f.t<6e4))failed(f.code);else run()}
 function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHTML='';
   const names=t.snN.split('|'),crs=t.crs.split('|'),crsL=t.crsL.split('|');
-  const c=snCountry(),now=snCurrent(new Date(),c),k=snPick||now,x=SN[SN_IDX[k]],i=SN_IDX[k];
-  // chips: seasons and French holidays, then world festivals
-  const chips=(label,kinds)=>{const l=document.createElement('div');l.className='snlab';l.textContent=label;const r=document.createElement('div');r.className='chips';
-    SN.forEach((y,j)=>{if(!kinds.includes(y[1]))return;const b=document.createElement('button');b.type='button';b.className='chip'+(y[0]===k?' on':'')+(y[0]===now?' now':'');
-      b.textContent=y[2]+' '+names[j];b.setAttribute('aria-pressed',y[0]===k?'true':'false');b.onclick=()=>{snPick=y[0];drawSeason()};r.appendChild(b)});
-    box.append(l,r)};
-  chips(t.snF,'sf');chips(t.snW,'w');
-  // selected occasion: products + 4 courses → 4 ideas (existing ideas flow)
+  const c=snCountry(),now=snCurrent(new Date(),c),k=now,x=SN[SN_IDX[k]],i=SN_IDX[k];
+  // current occasion (no picker since v80): products + 4 courses → 4 ideas (existing ideas flow)
   const pn=document.createElement('div');pn.className='snpanel'+(x[6]?' dk':'');pn.style.background='linear-gradient(160deg,'+x[3]+','+x[4]+')';
   const h=document.createElement('div');h.className='snh';const ic=document.createElement('i');ic.textContent=x[2];const nb=document.createElement('b');nb.textContent=names[i];nb.style.color=x[5];h.append(ic,nb);
   if(k===now){const nw=document.createElement('span');nw.className='snnow';nw.textContent=t.snNow;h.appendChild(nw)}
@@ -1928,13 +1907,12 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const bc=document.createElement('p');bc.className='snst';bc.textContent=t.snByC;
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]});
   pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
-  box.querySelectorAll('.chips .chip.on').forEach(b=>{const r=b.parentElement;r.scrollLeft=Math.max(0,b.offsetLeft-r.offsetLeft-16)}); // keep the selected chip visible
   // seasonal background on/off (device setting)
   const ab=document.createElement('button');ab.type='button';ab.id='snamb';ab.className='chip'+(ambOn()?' on':'');ab.textContent=t.snAmb;ab.setAttribute('aria-pressed',ambOn()?'true':'false');
   ab.onclick=()=>{try{localStorage.setItem('ambOff',ambOn()?'1':'0')}catch(e){}applyAmb();drawSeason()};box.appendChild(ab);
 }
 
-const APP_VERSION='v79',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v80',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
