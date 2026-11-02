@@ -31,8 +31,6 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chip{flex:none;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 13px;font-size:13px;white-space:nowrap}
 .chip.on{background:var(--green);color:#10200a;border-color:var(--green);font-weight:700}
 /* Seasonal menu (home): seasons + French holidays + world festivals, country picker, ideas by course, seasonal background */
-#seasonBox .snrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 10px;font-size:13px;color:var(--mut)}
-#seasonBox select{font:inherit;font-size:16px;border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;max-width:100%}
 #seasonBox .snlab{font-size:12px;color:var(--mut);margin:8px 0 4px}
 #seasonBox .chip.now{box-shadow:inset 0 0 0 2px var(--pink)}
 .snpanel{border-radius:20px;padding:14px;margin-top:10px;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#16121a}
@@ -40,12 +38,11 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .snpanel .snh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .snpanel .snh i{font-style:normal;font-size:30px}.snpanel .snh b{font-size:19px}
 .snpanel .snnow{font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px;background:rgba(255,255,255,.75);color:#16121a}
-.snpanel .snp{margin:6px 0 12px;font-size:14px;opacity:.85}
 .snpanel .crs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}@media (min-width:768px){.snpanel .crs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .snpanel .crs button{background:rgba(255,255,255,.85);border:2px solid currentColor;border-radius:999px;padding:10px 8px;font-weight:700;font-size:14px;color:inherit}
 .snpanel.dk .crs button{background:rgba(255,255,255,.08)}
 #snamb{margin-top:10px}
-.snpanel .snst{font-size:13px;font-weight:700;margin:2px 0 8px;opacity:.85}
+.snpanel .snst{font-size:13px;font-weight:700;margin:10px 0 8px;opacity:.85}
 .snpanel .snsug{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:8px}@media (min-width:768px){.snpanel .snsug{grid-template-columns:1fr 1fr}}
 .snpanel .snsug>button{text-align:left;background:rgba(255,255,255,.85);color:#16121a;border-radius:16px;padding:10px 12px;border-left:4px solid currentColor;font-size:13.5px;line-height:1.35}
 .snpanel.dk .snsug>button{background:rgba(255,255,255,.1);color:#f4f1fa}
@@ -414,15 +411,11 @@ fr:{
   snF:"Saisons et fêtes",
   snW:"Fêtes du monde",
   snNow:"En ce moment",
-  snC:"Pays",
-  snAuto:"Automatique",
-  snLoc:"Produits de saison du pays : {n}",
   snAmb:"🎨 Fond d’écran de saison",
-  snMsg:"Propose-moi 4 idées de {c} pour {o}, avec ces produits : {x}.",
-  snMsgC:"Propose-moi 4 idées de {c} pour {o} ({n}), avec les produits de saison de ce pays.",
+  snMsg:"Propose-moi 4 idées de {c} pour {o}, avec les produits de saison.",
   snSugT:"Les idées du chef",
-  snSugF:"Propose-moi 4 idées de recettes traditionnelles pour {o}, telles qu’on les prépare dans ce pays : {n}. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
-  snSugS:"Propose-moi 4 idées de recettes de saison pour {o}, typiques de ce pays : {n}, avec les produits du moment là-bas. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
+  snSugF:"Propose-moi 4 idées de recettes traditionnelles pour {o}, en piochant dans les spécialités de plusieurs pays et avec les produits de saison. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
+  snSugS:"Propose-moi 4 idées de recettes pour {o}, qui mettent en avant les produits de cette saison (fruits, légumes, champignons, poissons, viandes…), en piochant dans les cuisines de plusieurs pays. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
   snNot:" Pas celles-ci : {x}.",
   snMore:"🔄 Autres idées",
   snByC:"Plus d’idées par catégorie",
@@ -431,7 +424,6 @@ fr:{
   snRetry:"Réessayer",
   snShow:"🔒 Voir les idées du chef",
   snN:"Hiver|Chandeleur|Printemps|Pâques|Été|Automne|Halloween|Noël|Nouvel An chinois|Holi|Thanksgiving|Día de los Muertos|Diwali",
-  snP:"Poireaux, endives, oranges|Crêpes, pommes, poires|Asperges, petits pois, radis|Agneau, chocolat, œufs|Tomates, pêches, melon|Champignons, pommes, raisin|Courge, potiron, châtaigne|Marrons, agrumes, épices|Raviolis, nouilles, mandarines|Gujiya, thandaï, pakoras|Dinde, patate douce, tarte à la citrouille|Pan de muerto, tamales, chocolat chaud|Ladoos, samoussas, barfi",
   chefs:"Chefs IA",
   disc:"Discuter ›",
   cd:"Chef étoilé · cuisine du monde",
@@ -620,15 +612,11 @@ en:{
   snF:"Seasons and holidays",
   snW:"World festivals",
   snNow:"Right now",
-  snC:"Country",
-  snAuto:"Automatic",
-  snLoc:"Seasonal produce of: {n}",
   snAmb:"🎨 Seasonal background",
-  snMsg:"Suggest 4 ideas for {c} for {o}, with these ingredients: {x}.",
-  snMsgC:"Suggest 4 ideas for {c} for {o} ({n}), with that country’s seasonal produce.",
+  snMsg:"Suggest 4 ideas for {c} for {o}, with seasonal produce.",
   snSugT:"Chef’s ideas",
-  snSugF:"Suggest 4 traditional recipe ideas for {o}, the way they are made in this country: {n}. One starter, one main course, one dessert and one drink, in that order.",
-  snSugS:"Suggest 4 seasonal recipe ideas for {o}, typical of this country: {n}, with the produce in season there. One starter, one main course, one dessert and one drink, in that order.",
+  snSugF:"Suggest 4 traditional recipe ideas for {o}, drawing on the specialities of several countries and using seasonal produce. One starter, one main course, one dessert and one drink, in that order.",
+  snSugS:"Suggest 4 recipe ideas for {o} that showcase that season’s produce (fruit, vegetables, mushrooms, fish, meat…), drawing on the cuisines of several countries. One starter, one main course, one dessert and one drink, in that order.",
   snNot:" Not these: {x}.",
   snMore:"🔄 Other ideas",
   snByC:"More ideas by course",
@@ -637,7 +625,6 @@ en:{
   snRetry:"Retry",
   snShow:"🔒 Show the chef’s ideas",
   snN:"Winter|Candlemas|Spring|Easter|Summer|Autumn|Halloween|Christmas|Chinese New Year|Holi|Thanksgiving|Día de los Muertos|Diwali",
-  snP:"Leeks, endives, oranges|Crêpes, apples, pears|Asparagus, peas, radishes|Lamb, chocolate, eggs|Tomatoes, peaches, melon|Mushrooms, apples, grapes|Squash, pumpkin, chestnuts|Chestnuts, citrus, spices|Dumplings, noodles, mandarins|Gujiya, thandai, pakoras|Turkey, sweet potato, pumpkin pie|Pan de muerto, tamales, hot chocolate|Ladoos, samosas, barfi",
   chefs:"AI Chefs",
   disc:"Chat ›",
   cd:"Michelin-starred chef · world cuisine",
@@ -826,15 +813,11 @@ es:{
   snF:"Estaciones y fiestas",
   snW:"Fiestas del mundo",
   snNow:"Ahora",
-  snC:"País",
-  snAuto:"Automático",
-  snLoc:"Productos de temporada de: {n}",
   snAmb:"🎨 Fondo de temporada",
-  snMsg:"Propón 4 ideas de {c} para {o}, con estos productos: {x}.",
-  snMsgC:"Propón 4 ideas de {c} para {o} ({n}), con los productos de temporada de ese país.",
+  snMsg:"Propón 4 ideas de {c} para {o}, con productos de temporada.",
   snSugT:"Las ideas del chef",
-  snSugF:"Propón 4 ideas de recetas tradicionales para {o}, tal como se preparan en este país: {n}. Un entrante, un plato principal, un postre y una bebida, en ese orden.",
-  snSugS:"Propón 4 ideas de recetas de temporada para {o}, típicas de este país: {n}, con los productos de temporada de allí. Un entrante, un plato principal, un postre y una bebida, en ese orden.",
+  snSugF:"Propón 4 ideas de recetas tradicionales para {o}, tomando especialidades de varios países y con productos de temporada. Un entrante, un plato principal, un postre y una bebida, en ese orden.",
+  snSugS:"Propón 4 ideas de recetas para {o} que destaquen los productos de esa estación (frutas, verduras, setas, pescados, carnes…), tomando ideas de las cocinas de varios países. Un entrante, un plato principal, un postre y una bebida, en ese orden.",
   snNot:" Que no sean estas: {x}.",
   snMore:"🔄 Otras ideas",
   snByC:"Más ideas por categoría",
@@ -843,7 +826,6 @@ es:{
   snRetry:"Reintentar",
   snShow:"🔒 Ver las ideas del chef",
   snN:"Invierno|La Candelaria|Primavera|Pascua|Verano|Otoño|Halloween|Navidad|Año Nuevo chino|Holi|Acción de Gracias|Día de los Muertos|Diwali",
-  snP:"Puerros, endivias, naranjas|Crepes, manzanas, peras|Espárragos, guisantes, rábanos|Cordero, chocolate, huevos|Tomates, melocotones, melón|Setas, manzanas, uvas|Calabaza, zapallo, castañas|Castañas, cítricos, especias|Empanadillas, fideos, mandarinas|Gujiya, thandai, pakoras|Pavo, boniato, pastel de calabaza|Pan de muerto, tamales, chocolate caliente|Ladoos, samosas, barfi",
   chefs:"Chefs IA",
   disc:"Hablar ›",
   cd:"Chef con estrella · cocina del mundo",
@@ -1032,15 +1014,11 @@ de:{
   snF:"Jahreszeiten und Feste",
   snW:"Feste der Welt",
   snNow:"Gerade jetzt",
-  snC:"Land",
-  snAuto:"Automatisch",
-  snLoc:"Saisonprodukte aus: {n}",
   snAmb:"🎨 Saison-Hintergrund",
-  snMsg:"Schlag mir 4 Ideen für {c} zu {o} vor, mit diesen Zutaten: {x}.",
-  snMsgC:"Schlag mir 4 Ideen für {c} zu {o} vor ({n}), mit den Saisonprodukten dieses Landes.",
+  snMsg:"Schlag mir 4 Ideen für {c} zu {o} vor, mit Saisonprodukten.",
   snSugT:"Die Ideen des Chefs",
-  snSugF:"Schlag mir 4 traditionelle Rezeptideen für {o} vor, so wie man sie in diesem Land zubereitet: {n}. Eine Vorspeise, ein Hauptgericht, ein Dessert und ein Getränk, in dieser Reihenfolge.",
-  snSugS:"Schlag mir 4 saisonale Rezeptideen für {o} vor, typisch für dieses Land: {n}, mit den Produkten, die dort gerade Saison haben. Eine Vorspeise, ein Hauptgericht, ein Dessert und ein Getränk, in dieser Reihenfolge.",
+  snSugF:"Schlag mir 4 traditionelle Rezeptideen für {o} vor, aus den Spezialitäten mehrerer Länder und mit Saisonprodukten. Eine Vorspeise, ein Hauptgericht, ein Dessert und ein Getränk, in dieser Reihenfolge.",
+  snSugS:"Schlag mir 4 Rezeptideen für {o} vor, die die Produkte dieser Jahreszeit hervorheben (Obst, Gemüse, Pilze, Fisch, Fleisch…), aus den Küchen mehrerer Länder. Eine Vorspeise, ein Hauptgericht, ein Dessert und ein Getränk, in dieser Reihenfolge.",
   snNot:" Nicht diese: {x}.",
   snMore:"🔄 Andere Ideen",
   snByC:"Mehr Ideen nach Gang",
@@ -1049,7 +1027,6 @@ de:{
   snRetry:"Erneut versuchen",
   snShow:"🔒 Ideen des Chefs anzeigen",
   snN:"Winter|Lichtmess|Frühling|Ostern|Sommer|Herbst|Halloween|Weihnachten|Chinesisches Neujahr|Holi|Thanksgiving|Día de los Muertos|Diwali",
-  snP:"Lauch, Chicorée, Orangen|Crêpes, Äpfel, Birnen|Spargel, Erbsen, Radieschen|Lamm, Schokolade, Eier|Tomaten, Pfirsiche, Melone|Pilze, Äpfel, Trauben|Kürbis, Hokkaido, Esskastanien|Maronen, Zitrusfrüchte, Gewürze|Teigtaschen, Nudeln, Mandarinen|Gujiya, Thandai, Pakoras|Truthahn, Süßkartoffel, Kürbiskuchen|Pan de muerto, Tamales, heiße Schokolade|Ladoos, Samosas, Barfi",
   chefs:"KI-Köche",
   disc:"Chatten ›",
   cd:"Sternekoch · Weltküche",
@@ -1238,15 +1215,11 @@ it:{
   snF:"Stagioni e feste",
   snW:"Feste del mondo",
   snNow:"Adesso",
-  snC:"Paese",
-  snAuto:"Automatico",
-  snLoc:"Prodotti di stagione di: {n}",
   snAmb:"🎨 Sfondo di stagione",
-  snMsg:"Proponimi 4 idee di {c} per {o}, con questi prodotti: {x}.",
-  snMsgC:"Proponimi 4 idee di {c} per {o} ({n}), con i prodotti di stagione di quel paese.",
+  snMsg:"Proponimi 4 idee di {c} per {o}, con prodotti di stagione.",
   snSugT:"Le idee dello chef",
-  snSugF:"Proponimi 4 idee di ricette tradizionali per {o}, come si preparano in questo paese: {n}. Un antipasto, un piatto principale, un dolce e una bevanda, in quest’ordine.",
-  snSugS:"Proponimi 4 idee di ricette di stagione per {o}, tipiche di questo paese: {n}, con i prodotti di stagione del posto. Un antipasto, un piatto principale, un dolce e una bevanda, in quest’ordine.",
+  snSugF:"Proponimi 4 idee di ricette tradizionali per {o}, prendendo specialità di diversi paesi e con prodotti di stagione. Un antipasto, un piatto principale, un dolce e una bevanda, in quest’ordine.",
+  snSugS:"Proponimi 4 idee di ricette per {o} che valorizzino i prodotti di questa stagione (frutta, verdura, funghi, pesce, carne…), prendendo spunto dalle cucine di diversi paesi. Un antipasto, un piatto principale, un dolce e una bevanda, in quest’ordine.",
   snNot:" Non queste: {x}.",
   snMore:"🔄 Altre idee",
   snByC:"Altre idee per portata",
@@ -1255,7 +1228,6 @@ it:{
   snRetry:"Riprova",
   snShow:"🔒 Mostra le idee dello chef",
   snN:"Inverno|Candelora|Primavera|Pasqua|Estate|Autunno|Halloween|Natale|Capodanno cinese|Holi|Thanksgiving|Día de los Muertos|Diwali",
-  snP:"Porri, indivia, arance|Crêpes, mele, pere|Asparagi, piselli, ravanelli|Agnello, cioccolato, uova|Pomodori, pesche, melone|Funghi, mele, uva|Zucca, zucca violina, castagne|Marroni, agrumi, spezie|Ravioli cinesi, noodles, mandarini|Gujiya, thandai, pakora|Tacchino, patata dolce, torta di zucca|Pan de muerto, tamales, cioccolata calda|Ladoo, samosa, barfi",
   chefs:"Chef IA",
   disc:"Parla ›",
   cd:"Chef stellato · cucina del mondo",
@@ -1444,15 +1416,11 @@ pt:{
   snF:"Estações e festas",
   snW:"Festas do mundo",
   snNow:"Agora",
-  snC:"País",
-  snAuto:"Automático",
-  snLoc:"Produtos da estação de: {n}",
   snAmb:"🎨 Fundo da estação",
-  snMsg:"Sugere 4 ideias de {c} para {o}, com estes produtos: {x}.",
-  snMsgC:"Sugere 4 ideias de {c} para {o} ({n}), com os produtos da estação desse país.",
+  snMsg:"Sugere 4 ideias de {c} para {o}, com produtos da estação.",
   snSugT:"As ideias do chef",
-  snSugF:"Sugere 4 ideias de receitas tradicionais para {o}, como se fazem neste país: {n}. Uma entrada, um prato principal, uma sobremesa e uma bebida, por esta ordem.",
-  snSugS:"Sugere 4 ideias de receitas da estação para {o}, típicas deste país: {n}, com os produtos da época de lá. Uma entrada, um prato principal, uma sobremesa e uma bebida, por esta ordem.",
+  snSugF:"Sugere 4 ideias de receitas tradicionais para {o}, com especialidades de vários países e produtos da estação. Uma entrada, um prato principal, uma sobremesa e uma bebida, por esta ordem.",
+  snSugS:"Sugere 4 ideias de receitas para {o} que valorizem os produtos desta estação (fruta, legumes, cogumelos, peixe, carne…), inspiradas nas cozinhas de vários países. Uma entrada, um prato principal, uma sobremesa e uma bebida, por esta ordem.",
   snNot:" Não estas: {x}.",
   snMore:"🔄 Outras ideias",
   snByC:"Mais ideias por categoria",
@@ -1461,7 +1429,6 @@ pt:{
   snRetry:"Tentar de novo",
   snShow:"🔒 Ver as ideias do chef",
   snN:"Inverno|Candelária|Primavera|Páscoa|Verão|Outono|Halloween|Natal|Ano Novo chinês|Holi|Ação de Graças|Día de los Muertos|Diwali",
-  snP:"Alho-francês, endívias, laranjas|Crepes, maçãs, peras|Espargos, ervilhas, rabanetes|Borrego, chocolate, ovos|Tomates, pêssegos, melão|Cogumelos, maçãs, uvas|Abóbora, abóbora-menina, castanhas|Castanhas, citrinos, especiarias|Raviólis chineses, massa, tangerinas|Gujiya, thandai, pakoras|Peru, batata-doce, tarte de abóbora|Pan de muerto, tamales, chocolate quente|Ladoos, chamuças, barfi",
   chefs:"Chefs IA",
   disc:"Conversar ›",
   cd:"Chef estrelado · cozinha do mundo",
@@ -1862,7 +1829,7 @@ const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
 applySeason();document.addEventListener('visibilitychange',()=>{if(!document.hidden){applySeason();applyAmb()}});
 // ---------- Seasonal menu (replaces the old « Themes »): 4 seasons + 4 French holidays + 7 world festivals ----------
-// SN[i] = [key, kind ('s' season, 'f' French holiday, 'w' world festival), emoji, bg1, bg2, accent, dark?]. Names/products: t.snN / t.snP (same order).
+// SN[i] = [key, kind ('s' season, 'f' French holiday, 'w' world festival), emoji, bg1, bg2, accent, dark?]. Names: t.snN (same order).
 const SN=[
  ['hiver','s','❄️','#e3edf7','#c9daee','#1f4e79'],['chandeleur','f','🥞','#fdf0dc','#f6dcb4','#a55b00'],
  ['printemps','s','🌱','#e3f2d3','#c8e4b0','#3d7a1f'],['paques','f','🐣','#f3e6fb','#e0c9f2','#7a2fa8'],
@@ -1871,10 +1838,7 @@ const SN=[
  ['cny','w','🧧','#fde3e0','#f7c4bd','#c62828'],['holi','w','🎨','#fde2f3','#f9c3e6','#c2185b'],['thanksgiving','w','🦃','#f6e6d0','#ebcfa6','#8d4a12'],
  ['muertos','w','💀','#fde7f0','#f8c9dd','#ad1457'],['diwali','w','🪔','#fff0d6','#ffd99a','#c66900']];
 const SN_IDX=Object.fromEntries(SN.map((x,i)=>[x[0],i]));
-// Countries offered in the picker (names come from Intl.DisplayNames in the interface language).
-const SN_COUNTRIES='FR BE CH LU CA US MX BR AR CL PE GB IE DE AT NL ES PT IT GR PL SE NO DK FI MA DZ TN SN CI EG TR IL LB SA AE IN NP CN HK TW JP KR VN TH SG MY ID PH AU NZ ZA'.split(' ');
 const SN_SOUTH=new Set('AU NZ AR CL ZA UY PY BR PE BO'.split(' ')); // southern hemisphere: seasons are inverted
-const SN_FRLIKE=new Set('FR BE CH LU'.split(' ')); // the seasonal produce shown on the cards is the French one
 const SN_NOXMAS='CN JP IN IL MA DZ TN EG SA AE TR PK ID TH VN NP JO QA'.split(' ');
 // Which countries « live » each holiday (used for « Right now » and the background). '*' = everywhere except SN_NOXMAS.
 const SN_WHERE={chandeleur:'FR BE CH LU',halloween:'FR BE US CA GB IE AU NZ DE NL',paques:'*',noel:'*',cny:'CN TW HK SG MY VN KR',holi:'IN NP',thanksgiving:'US CA',muertos:'MX',diwali:'IN NP SG MY MU'};
@@ -1882,7 +1846,7 @@ const SN_WHERE={chandeleur:'FR BE CH LU',halloween:'FR BE US CA GB IE AU NZ DE N
 const SN_DATES={cny:{2026:'02-17',2027:'02-06',2028:'01-26'},
   holi:{2026:'03-04',2027:'03-22',2028:'03-11'},diwali:{2026:'11-08',2027:'10-29',2028:'10-17'}};
 let snPick=null; // occasion chosen by the user on the home screen (null = the current one)
-function snCountry(){let c='';try{c=localStorage.getItem('snCountry')||''}catch(e){}if(c)return c;
+function snCountry(){ // automatic only (browser region): decides « Right now » and the hemisphere, never shown
   for(const l of (navigator.languages||[navigator.language||''])){const m=String(l).match(/^[a-z]{2,3}-([A-Z]{2})\b/i);if(m)return m[1].toUpperCase()}
   return {fr:'FR',en:'US',es:'ES',de:'DE',it:'IT',pt:'PT'}[lang]||'FR'}
 function snLives(k,c){const w=SN_WHERE[k];if(!w)return true;return w==='*'?!SN_NOXMAS.includes(c):w.split(' ').includes(c)}
@@ -1924,12 +1888,12 @@ function snCache(){try{return JSON.parse(localStorage.getItem('snSug')||'{}')}ca
 function snSave(key,items){const all=snCache();all[key]={d:Date.now(),items};
   const ks=Object.keys(all).sort((a,b)=>all[b].d-all[a].d);ks.slice(24).forEach(x=>delete all[x]);try{localStorage.setItem('snSug',JSON.stringify(all))}catch(e){}}
 function snParse(txt){const out=[];String(txt||'').split('\n').forEach(l=>{const m=l.trim().match(/^[-•*]\s+\*{0,2}([^:*]{1,60}?)\*{0,2}\s*[:：]\s*(.+)$/);if(m&&out.length<4)out.push([m[1].trim(),m[2].replace(/\*\*/g,'').trim()])});return out}
-async function snAsk(o,avoid){const t=T();let msg=(o.season?t.snSugS:t.snSugF).replace('{o}',o.o).replace('{n}',o.n);if(avoid&&avoid.length)msg+=t.snNot.replace('{x}',avoid.join(', '));
+async function snAsk(o,avoid){const t=T();let msg=(o.season?t.snSugS:t.snSugF).replace('{o}',o.o);if(avoid&&avoid.length)msg+=t.snNot.replace('{x}',avoid.join(', '));
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
   const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:[{role:'user',content:'[UI] '+msg}],lang})});
   if(res.status===401)throw {code:'code'};if(!res.ok)throw {code:'err'};
   const items=snParse((await res.json()).text);if(items.length<2)throw {code:'err'};return items}
-function snFill(sg,more,o){const t=T(),key=lang+'|'+o.c+'|'+o.k,hit=snCache()[key];
+function snFill(sg,more,o){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];
   const showItems=items=>{sg.innerHTML='';items.forEach(([nm,ds])=>{const b=document.createElement('button');b.type='button';b.style.borderLeftColor=o.color;
     const bb=document.createElement('b');bb.textContent=nm;b.append(bb,document.createTextNode(ds));
     b.onclick=()=>{openChat(null);send(t.idGen.replace('{x}',nm),true)};sg.appendChild(b)});more.style.display=''};
@@ -1944,17 +1908,8 @@ function snFill(sg,more,o){const t=T(),key=lang+'|'+o.c+'|'+o.k,hit=snCache()[ke
   else if(snBusy.has(key))run();
   else if(f&&(f.code==='code'?!hasCode:Date.now()-f.t<6e4))failed(f.code);else run()}
 function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHTML='';
-  const names=t.snN.split('|'),prods=t.snP.split('|'),crs=t.crs.split('|'),crsL=t.crsL.split('|');
+  const names=t.snN.split('|'),crs=t.crs.split('|'),crsL=t.crsL.split('|');
   const c=snCountry(),now=snCurrent(new Date(),c),k=snPick||now,x=SN[SN_IDX[k]],i=SN_IDX[k];
-  let dn=null;try{dn=new Intl.DisplayNames([lang],{type:'region'})}catch(e){}
-  const cname=cc=>{try{return dn?dn.of(cc):cc}catch(e){return cc}};
-  // country picker
-  const row=document.createElement('div');row.className='snrow';const lb=document.createElement('label');lb.textContent=t.snC;lb.htmlFor='sncountry';
-  const sel=document.createElement('select');sel.id='sncountry';let saved='';try{saved=localStorage.getItem('snCountry')||''}catch(e){}
-  const auto=document.createElement('option');auto.value='';auto.textContent=t.snAuto+' · '+cname(c);sel.appendChild(auto);
-  SN_COUNTRIES.map(cc=>[cc,cname(cc)]).sort((a,b)=>a[1].localeCompare(b[1],lang)).forEach(([cc,n])=>{const o=document.createElement('option');o.value=cc;o.textContent=n;sel.appendChild(o)});
-  sel.value=saved;sel.onchange=()=>{try{sel.value?localStorage.setItem('snCountry',sel.value):localStorage.removeItem('snCountry')}catch(e){}snPick=null;applyAmb();drawSeason()};
-  row.append(lb,sel);box.appendChild(row);
   // chips: seasons and French holidays, then world festivals
   const chips=(label,kinds)=>{const l=document.createElement('div');l.className='snlab';l.textContent=label;const r=document.createElement('div');r.className='chips';
     SN.forEach((y,j)=>{if(!kinds.includes(y[1]))return;const b=document.createElement('button');b.type='button';b.className='chip'+(y[0]===k?' on':'')+(y[0]===now?' now':'');
@@ -1965,23 +1920,21 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const pn=document.createElement('div');pn.className='snpanel'+(x[6]?' dk':'');pn.style.background='linear-gradient(160deg,'+x[3]+','+x[4]+')';
   const h=document.createElement('div');h.className='snh';const ic=document.createElement('i');ic.textContent=x[2];const nb=document.createElement('b');nb.textContent=names[i];nb.style.color=x[5];h.append(ic,nb);
   if(k===now){const nw=document.createElement('span');nw.className='snnow';nw.textContent=t.snNow;h.appendChild(nw)}
-  const localProduce=x[1]==='s'&&!SN_FRLIKE.has(c);
-  const p=document.createElement('p');p.className='snp';p.textContent=localProduce?t.snLoc.replace('{n}',cname(c)):prods[i];
   const g=document.createElement('div');g.className='crs';
   crs.forEach((lab,j)=>{const b=document.createElement('button');b.type='button';b.textContent=lab;b.style.borderColor=x[5];
-    b.onclick=()=>{const msg=(localProduce?t.snMsgC.replace('{n}',cname(c)):t.snMsg.replace('{x}',prods[i])).replace('{c}',crsL[j]).replace('{o}',names[i]);openChat(null);send(msg,true)};g.appendChild(b)});
+    b.onclick=()=>{const msg=t.snMsg.replace('{c}',crsL[j]).replace('{o}',names[i]);openChat(null);send(msg,true)};g.appendChild(b)});
   const st=document.createElement('p');st.className='snst';st.textContent='✨ '+t.snSugT;
   const sg=document.createElement('div');sg.className='snsug';const more=document.createElement('button');more.type='button';more.className='snmore';more.textContent=t.snMore;
   const bc=document.createElement('p');bc.className='snst';bc.textContent=t.snByC;
-  snFill(sg,more,{k,c,o:names[i],n:cname(c),season:x[1]==='s',color:x[5]});
-  pn.append(h,p,st,sg,more,bc,g);box.appendChild(pn);
+  snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]});
+  pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
   box.querySelectorAll('.chips .chip.on').forEach(b=>{const r=b.parentElement;r.scrollLeft=Math.max(0,b.offsetLeft-r.offsetLeft-16)}); // keep the selected chip visible
   // seasonal background on/off (device setting)
   const ab=document.createElement('button');ab.type='button';ab.id='snamb';ab.className='chip'+(ambOn()?' on':'');ab.textContent=t.snAmb;ab.setAttribute('aria-pressed',ambOn()?'true':'false');
   ab.onclick=()=>{try{localStorage.setItem('ambOff',ambOn()?'1':'0')}catch(e){}applyAmb();drawSeason()};box.appendChild(ab);
 }
 
-const APP_VERSION='v78',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v79',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
