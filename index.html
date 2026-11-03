@@ -152,6 +152,9 @@ input,textarea,select{font-size:16px!important}
 #verpill.pv i{background:#a29cb3;box-shadow:none}
 .dver{margin-top:auto;color:var(--mut);font-size:12px;padding:10px 14px}
 #hsearchbox,#fsearchbox{padding:12px 18px 0}
+button.fgrp{display:flex;width:calc(100% - 8px);background:none;padding:0;font-family:inherit;text-align:left;cursor:pointer}
+.fgrp .fchev{display:inline-block;width:18px;color:var(--mut);font-size:13px}.fgrp .fnm{flex:1}
+.fgall{display:flex;justify-content:flex-end;margin:0 4px 2px}.fgall button{font-size:12.5px;color:var(--mut);padding:4px 8px;border-radius:999px;border:1px solid var(--bd);background:var(--card)}
 .hchk{flex:none;width:24px;height:24px;margin-left:12px;border-radius:50%;border:2px solid var(--mut);display:grid;place-items:center;font-size:14px;font-weight:800;color:#10200a;padding:0;line-height:1}
 .hchk[aria-checked=true]{background:var(--green);border-color:var(--green)}
 .hrow.hsel{outline:2px solid var(--green)}
@@ -505,6 +508,8 @@ fr:{
   hUnarchD:"{n} recette(s) restaurée(s)",
   hMvD:"{n} recette(s) déplacée(s)",
   hNoArch:"Aucune recette archivée. Sélectionnez des recettes puis touchez Archiver.",
+  hFoldAll:"Tout replier",
+  hUnfoldAll:"Tout déplier",
   share:"Partager",
   copied:"Recette copiée dans le presse-papiers",
   cont:"Continuer avec le chef",
@@ -726,6 +731,8 @@ en:{
   hUnarchD:"{n} recipe(s) restored",
   hMvD:"{n} recipe(s) moved",
   hNoArch:"No archived recipes. Select recipes, then tap Archive.",
+  hFoldAll:"Collapse all",
+  hUnfoldAll:"Expand all",
   share:"Share",
   copied:"Recipe copied to clipboard",
   cont:"Continue with the chef",
@@ -947,6 +954,8 @@ es:{
   hUnarchD:"{n} receta(s) restaurada(s)",
   hMvD:"{n} receta(s) movida(s)",
   hNoArch:"Ninguna receta archivada. Selecciona recetas y toca Archivar.",
+  hFoldAll:"Contraer todo",
+  hUnfoldAll:"Desplegar todo",
   share:"Compartir",
   copied:"Receta copiada al portapapeles",
   cont:"Seguir con el chef",
@@ -1168,6 +1177,8 @@ de:{
   hUnarchD:"{n} Rezept(e) wiederhergestellt",
   hMvD:"{n} Rezept(e) verschoben",
   hNoArch:"Keine archivierten Rezepte. Wähle Rezepte aus und tippe auf Archivieren.",
+  hFoldAll:"Alle einklappen",
+  hUnfoldAll:"Alle ausklappen",
   share:"Teilen",
   copied:"Rezept in die Zwischenablage kopiert",
   cont:"Mit dem Koch weitermachen",
@@ -1389,6 +1400,8 @@ it:{
   hUnarchD:"{n} ricette ripristinate",
   hMvD:"{n} ricette spostate",
   hNoArch:"Nessuna ricetta archiviata. Seleziona delle ricette e tocca Archivia.",
+  hFoldAll:"Comprimi tutto",
+  hUnfoldAll:"Espandi tutto",
   share:"Condividi",
   copied:"Ricetta copiata negli appunti",
   cont:"Continua con lo chef",
@@ -1610,6 +1623,8 @@ pt:{
   hUnarchD:"{n} receita(s) restaurada(s)",
   hMvD:"{n} receita(s) movida(s)",
   hNoArch:"Nenhuma receita arquivada. Seleciona receitas e toca em Arquivar.",
+  hFoldAll:"Recolher tudo",
+  hUnfoldAll:"Expandir tudo",
   share:"Partilhar",
   copied:"Receita copiada para a área de transferência",
   cont:"Continuar com o chef",
@@ -2121,7 +2136,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v102',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v103',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2191,7 +2206,8 @@ function rowFor(e,del,heart,sc){
     k.onclick=async()=>{if(await ask({text:T().delq,okLabel:T().del})){saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{drawMenu()}catch(x){}}};r.appendChild(k)}
   return r;
 }
-var hsel=null,harch=false,hshown=[]; // hsel = Set of selected ids while the selection mode is on; harch = « Archived » tab; hshown = ids on screen
+var hsel=null,harch=false,hshown=[],hfold=(()=>{try{return new Set(JSON.parse(localStorage.getItem('hFold')||'[]'))}catch(e){return new Set()}})(); // hfold = category indexes folded in the « Favoris » tab (kept on the device)
+function saveFold(){try{localStorage.setItem('hFold',JSON.stringify([...hfold]))}catch(e){}} // hsel = Set of selected ids while the selection mode is on; harch = « Archived » tab; hshown = ids on screen
 function refreshAll(){drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{drawMenu()}catch(x){}}
 function drawHistory(){
   const t=T(),all=loadH().filter(e=>!e.qa),a=all.filter(e=>!e.arch),ar=all.filter(e=>e.arch),h=$('#hhome'),l=$('#hlist');h.innerHTML='';l.innerHTML='';
@@ -2211,11 +2227,19 @@ function drawHistory(){
   const base=harch?ar:a,shown=base.filter(e=>(harch||!hfav||e.fav)&&(!q||nz(e.title).includes(q)));
   if(!shown.length)empty(l,q?t.noresult:(harch?t.hNoArch:hfav?t.nofav:t.empty));
   const sc=hsel?{set:hsel,upd:selBar}:null,addRow=e=>l.appendChild(sc?rowFor(e,false,false,sc):rowFor(e,true,true));
-  if(!harch&&hfav){ // « Favoris » tab: the list is sorted by category, same order and names as the Favorites view
-    const g={};shown.forEach(e=>{const k=recipeCat(e);(g[k]=g[k]||[]).push(e)});const names=t.cats.split('|'),order=[];
-    FAV_ORDER.filter(k=>g[k]).forEach(k=>{const hd=document.createElement('div');hd.className='fgrp';const sp=document.createElement('span');sp.textContent=names[k];const nb=document.createElement('b');nb.textContent=g[k].length;hd.append(sp,nb);l.appendChild(hd);g[k].forEach(e=>{addRow(e);order.push(e.id)})});
+  if(!harch&&hfav){ // « Favoris » tab: the list is sorted by category (same order and names as the Favorites view); a tap on a category title folds / unfolds its recipes
+    const g={};shown.forEach(e=>{const k=recipeCat(e);(g[k]=g[k]||[]).push(e)});const names=t.cats.split('|'),order=[],ks=FAV_ORDER.filter(k=>g[k]);
+    const fold=k=>!q&&hfold.has(k); // while searching, every match is shown
+    if(ks.length>1&&!q){const w=document.createElement('div');w.className='fgall';const ab=document.createElement('button');ab.type='button';
+      const allOff=ks.every(k=>hfold.has(k));ab.textContent=allOff?t.hUnfoldAll:t.hFoldAll;
+      ab.onclick=()=>{if(allOff)ks.forEach(k=>hfold.delete(k));else ks.forEach(k=>hfold.add(k));saveFold();drawHistory()};w.appendChild(ab);l.appendChild(w)}
+    ks.forEach(k=>{const hd=document.createElement('button');hd.type='button';hd.className='fgrp';const off=fold(k);hd.setAttribute('aria-expanded',String(!off));
+      const ch=document.createElement('span');ch.className='fchev';ch.textContent=off?'▸':'▾';const sp=document.createElement('span');sp.className='fnm';sp.textContent=names[k];const nb=document.createElement('b');nb.textContent=g[k].length;
+      hd.append(ch,sp,nb);hd.onclick=()=>{if(q)return;if(hfold.has(k))hfold.delete(k);else hfold.add(k);saveFold();drawHistory()};l.appendChild(hd);
+      if(!off)g[k].forEach(e=>{addRow(e);order.push(e.id)})});
     hshown=order;
   }else{hshown=shown.map(e=>e.id);shown.forEach(addRow)}
+  if(hsel)[...hsel].forEach(id=>{if(!hshown.includes(id))hsel.delete(id)}); // never keep a recipe selected that is not on screen (folded group, search)
   selBar();
 }
 // Selection bar (bottom of the History view while the selection mode is on): delete, move to a category, archive / restore.
