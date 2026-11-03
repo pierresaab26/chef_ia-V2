@@ -2164,7 +2164,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v113',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v114',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2645,7 +2645,7 @@ async function phFetch(id){
     const r=await fetchT('/api/photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':code},body:JSON.stringify({title:e.title,lang:e.lang||lang,skip})},30000);
     let j=null;try{j=await r.json()}catch(x){}
     if(!r.ok||!j){try{console.warn('Chef IA photo:',r.status,j&&j.error||'')}catch(x){}return false} // no key yet, not signed in, too many requests, offline: silent (see the console), tried again at the next opening
-    if(j.photo&&okU(j.photo.u)&&okU(j.photo.t)){updEntry(id,z=>{z.ph=j.photo;delete z.phNo;delete z.phNo2});repaintImgViews(id);return true}
+    if(j.photo&&okU(j.photo.u)&&okU(j.photo.t)){try{console.info('Chef IA photo: ok',j.photo.id)}catch(x){}updEntry(id,z=>{z.ph=j.photo;delete z.phNo;delete z.phNo2});repaintImgViews(id);return true}
     if(j.none){try{console.info('Chef IA photo: none',j.why||'')}catch(x){}updEntry(id,z=>{z.phNo2=Date.now()})}
     return false;
   }catch(x){try{console.warn('Chef IA photo:',x&&x.message||x)}catch(y){}return false}
