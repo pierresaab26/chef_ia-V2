@@ -2121,7 +2121,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v101',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v102',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2209,10 +2209,13 @@ function drawHistory(){
   sb.onclick=()=>{hsel=hsel?null:new Set();drawHistory()};f.appendChild(sb);
   const nz=x=>x.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#hsearch').value.trim());
   const base=harch?ar:a,shown=base.filter(e=>(harch||!hfav||e.fav)&&(!q||nz(e.title).includes(q)));
-  hshown=shown.map(e=>e.id);
   if(!shown.length)empty(l,q?t.noresult:(harch?t.hNoArch:hfav?t.nofav:t.empty));
-  const sc=hsel?{set:hsel,upd:selBar}:null;
-  shown.forEach(e=>l.appendChild(sc?rowFor(e,false,false,sc):rowFor(e,true,true)));
+  const sc=hsel?{set:hsel,upd:selBar}:null,addRow=e=>l.appendChild(sc?rowFor(e,false,false,sc):rowFor(e,true,true));
+  if(!harch&&hfav){ // « Favoris » tab: the list is sorted by category, same order and names as the Favorites view
+    const g={};shown.forEach(e=>{const k=recipeCat(e);(g[k]=g[k]||[]).push(e)});const names=t.cats.split('|'),order=[];
+    FAV_ORDER.filter(k=>g[k]).forEach(k=>{const hd=document.createElement('div');hd.className='fgrp';const sp=document.createElement('span');sp.textContent=names[k];const nb=document.createElement('b');nb.textContent=g[k].length;hd.append(sp,nb);l.appendChild(hd);g[k].forEach(e=>{addRow(e);order.push(e.id)})});
+    hshown=order;
+  }else{hshown=shown.map(e=>e.id);shown.forEach(addRow)}
   selBar();
 }
 // Selection bar (bottom of the History view while the selection mode is on): delete, move to a category, archive / restore.
