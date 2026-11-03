@@ -106,6 +106,7 @@ input,textarea,select{font-size:16px!important}
 .hid,.hidold{display:none!important}.chrow{align-self:stretch;margin:0 0 6px}.chhide{display:block;width:100%;margin:0;text-align:center;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
 .chact .cbtn.cook{background:var(--green);color:#10200a;border-color:var(--green);font-weight:700}
+.m .chact{margin:12px 0 16px}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
@@ -2163,7 +2164,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v112',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v113',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2526,7 +2527,8 @@ function chatActions(){
       ob.onclick=()=>{oldHidden.has(rid)?oldHidden.delete(rid):oldHidden.add(rid);chatActions()};bar.appendChild(ob)}
     if(e.ideas){const ib=document.createElement('button');ib.type='button';ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===rid));bar.appendChild(ib)}
     bar.append(rateBox(rid));
-    el.before(bar); // order: picture, actions, recipe (v112: the buttons are at the top, no scrolling needed)
+    { let a=el.querySelector(':scope > .rtitle'); // v113: same order as the recipe card: picture, title, info bubbles, actions, then the recipe
+      if(a){while(a.nextElementSibling&&a.nextElementSibling.classList.contains('cchips'))a=a.nextElementSibling;a.after(bar)}else el.before(bar)}
     bars[rid]=bar;
     if(lastOf[rid]===lastIdx&&rid===currentId){const cw=document.createElement('div');cw.className='chcom';cw.dataset.rid=rid;el.after(cw);buildComments(cw,slug(e.title))} // same shared comments as on the recipe card
   });
