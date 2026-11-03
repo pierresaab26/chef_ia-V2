@@ -3,5 +3,15 @@
     "api/*.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/season-ideas?run=1&at=7",
+      "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/season-ideas?run=1&at=8",
+      "schedule": "0 8 * * *"
+    }
+  ]
 }

@@ -45,6 +45,9 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .snpanel.dk .snsug>button{background:rgba(255,255,255,.1);color:#f4f1fa}
 .snpanel .snsug>button b{display:block;font-size:15px;margin-bottom:2px}
 .snpanel .snsug .snwait{grid-column:1/-1;font-size:14px;opacity:.8;padding:6px 2px}
+.snpanel .snpvbtn{display:block;width:100%;text-align:left;font-weight:700;font-size:13px;padding:8px 2px;margin:0 0 6px;color:inherit;opacity:.9}
+.snpanel .snpvh{font-size:12px;font-weight:700;margin:8px 0 6px;opacity:.75}
+.snpanel .snpvbox{margin-bottom:6px}
 .snpanel .snmore{display:block;margin:0 auto 12px;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.6);color:inherit}
 .snpanel.dk .snmore{background:rgba(255,255,255,.1)}
 .chefs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}@media (min-width:768px){.chefs{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -418,6 +421,8 @@ fr:{
   snSugS:"Propose-moi 4 idées de recettes pour la période « {o} » : des plats et boissons typiques de cette saison (ceux qu’on a envie de manger et de boire à cette période) et/ou qui mettent en avant ses produits de saison, en piochant dans les cuisines de plusieurs pays. Une entrée, un plat, un dessert et une boisson, dans cet ordre.",
   snNot:" Pas celles-ci : {x}.",
   snMore:"🔄 Autres idées",
+  snRange:"du {a} au {b}",
+  snPrevT:"Recettes précédentes",
   snByC:"Plus d’idées par catégorie",
   snLoad:"Le chef prépare ses idées…",
   snErr:"Idées indisponibles pour le moment.",
@@ -621,6 +626,8 @@ en:{
   snSugS:"Suggest 4 recipe ideas for {o}: dishes and drinks typical of this season (the ones people crave at this time of year) and/or that showcase its seasonal produce, drawing on the cuisines of several countries. One starter, one main course, one dessert and one drink, in that order.",
   snNot:" Not these: {x}.",
   snMore:"🔄 Other ideas",
+  snRange:"{a} – {b}",
+  snPrevT:"Previous recipes",
   snByC:"More ideas by course",
   snLoad:"The chef is preparing ideas…",
   snErr:"Ideas unavailable right now.",
@@ -824,6 +831,8 @@ es:{
   snSugS:"Propón 4 ideas de recetas para {o}: platos y bebidas típicos de esta estación (los que apetecen en esta época) y/o que destaquen sus productos de temporada, tomando ideas de las cocinas de varios países. Un entrante, un plato principal, un postre y una bebida, en ese orden.",
   snNot:" Que no sean estas: {x}.",
   snMore:"🔄 Otras ideas",
+  snRange:"del {a} al {b}",
+  snPrevT:"Recetas anteriores",
   snByC:"Más ideas por categoría",
   snLoad:"El chef está preparando ideas…",
   snErr:"Ideas no disponibles por ahora.",
@@ -1027,6 +1036,8 @@ de:{
   snSugS:"Schlag mir 4 Rezeptideen für {o} vor: Gerichte und Getränke, die typisch für diese Jahreszeit sind (worauf man jetzt Lust hat) und/oder ihre Saisonprodukte hervorheben, aus den Küchen mehrerer Länder. Eine Vorspeise, ein Hauptgericht, ein Dessert und ein Getränk, in dieser Reihenfolge.",
   snNot:" Nicht diese: {x}.",
   snMore:"🔄 Andere Ideen",
+  snRange:"{a} – {b}",
+  snPrevT:"Frühere Rezepte",
   snByC:"Mehr Ideen nach Gang",
   snLoad:"Der Chef bereitet Ideen vor…",
   snErr:"Ideen gerade nicht verfügbar.",
@@ -1230,6 +1241,8 @@ it:{
   snSugS:"Proponimi 4 idee di ricette per {o}: piatti e bevande tipici di questa stagione (quelli che si ha voglia di mangiare e bere in questo periodo) e/o che valorizzino i suoi prodotti di stagione, prendendo spunto dalle cucine di diversi paesi. Un antipasto, un piatto principale, un dolce e una bevanda, in quest’ordine.",
   snNot:" Non queste: {x}.",
   snMore:"🔄 Altre idee",
+  snRange:"dal {a} al {b}",
+  snPrevT:"Ricette precedenti",
   snByC:"Altre idee per portata",
   snLoad:"Lo chef sta preparando le idee…",
   snErr:"Idee non disponibili al momento.",
@@ -1433,6 +1446,8 @@ pt:{
   snSugS:"Sugere 4 ideias de receitas para {o}: pratos e bebidas típicos desta estação (os que apetecem nesta altura do ano) e/ou que valorizem os seus produtos da estação, inspiradas nas cozinhas de vários países. Uma entrada, um prato principal, uma sobremesa e uma bebida, por esta ordem.",
   snNot:" Não estas: {x}.",
   snMore:"🔄 Outras ideias",
+  snRange:"{a} – {b}",
+  snPrevT:"Receitas anteriores",
   snByC:"Mais ideias por categoria",
   snLoad:"O chef está a preparar ideias…",
   snErr:"Ideias indisponíveis de momento.",
@@ -1854,7 +1869,7 @@ function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.g
   if(md>=901&&md<=920)return'rentree';if(md>=1015&&md<=1102)return'halloween';if(md>=1201&&md<=1226)return'noel';return''}
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
-applySeason();document.addEventListener('visibilitychange',()=>{if(document.hidden)return;applySeason();const was=document.documentElement.dataset.amb;applyAmb();if(was!==document.documentElement.dataset.amb)try{drawSeason()}catch(e){}}); // new day: background AND seasonal panel follow
+applySeason();document.addEventListener('visibilitychange',()=>{if(document.hidden)return;applySeason();const was=document.documentElement.dataset.amb;applyAmb();if(was!==document.documentElement.dataset.amb||(snUntil&&Date.now()>snUntil))try{drawSeason()}catch(e){}}); // new day: background AND seasonal panel follow
 // ---------- Seasonal menu (replaces the old « Themes »): 4 seasons + 4 French holidays + 7 world festivals ----------
 // SN[i] = [key, kind ('s' season, 'f' French holiday, 'w' world festival), emoji, bg1, bg2, accent, dark?]. Names: t.snN (same order).
 const SN=[
@@ -1906,36 +1921,82 @@ function snCurrent(d,c){d=d||new Date();c=c||snCountry();
   st.textContent=css;document.head.appendChild(st)})();
 function applyAmb(){document.documentElement.dataset.amb=snCurrent();try{localStorage.removeItem('ambOff')}catch(e){}} // always on since v81 (the on/off button was removed)
 applyAmb();
-// Seasonal menu: the chef's 4 ideas for the selected occasion and country, fetched automatically and cached on the device
-// (localStorage `snSug`, 3 days per language + country + occasion). Tapping an idea asks for its complete recipe.
-const snBusy=new Map(),snFail=new Map(); // snFail: key → {t, code}; no automatic retry for 1 min after a failure (no code: until one is entered)
+// Seasonal menu: the chef's 4 ideas of the PERIOD (3 days, renewed at 9:00 Paris time) are the same for everybody: the server prepares them
+// (GET /api/season-ideas, see api/season-ideas.js) and the app keeps the answer until the next period starts (localStorage `snSer`).
+// « Other ideas » adds 4 more ideas on demand under the series (personal, nothing shared); « Previous recipes » (folded) lists the earlier series.
+// If the server cannot provide the series (route not deployed, no Redis, offline…) the app falls back to its own on-demand ideas (cached 3 days, `snSug2`).
+// Tapping an idea asks the chef for its complete recipe.
+const snBusy=new Map(),snFail=new Map(),snSrvBusy=new Map(); // snFail: key → {t, code}; no automatic retry for 1 min after a failure (no code: until one is entered)
+let snTimer=null,snUntil=0,snSrvOff=0; // snUntil: instant the displayed series ends (the panel is redrawn then); snSrvOff: time of the last server failure (no new request for 2 min)
 function snCache(){try{return JSON.parse(localStorage.getItem('snSug2')||'{}')}catch(e){return {}}}
 function snSave(key,items){const all=snCache();all[key]={d:Date.now(),items};
   const ks=Object.keys(all).sort((a,b)=>all[b].d-all[a].d);ks.slice(24).forEach(x=>delete all[x]);try{localStorage.setItem('snSug2',JSON.stringify(all))}catch(e){}}
+function snSerCache(){try{return JSON.parse(localStorage.getItem('snSer')||'{}')}catch(e){return {}}}
+function snSerSave(key,d){const all=snSerCache();all[key]={until:d.period.until,data:d};
+  const ks=Object.keys(all).sort((a,b)=>all[b].until-all[a].until);ks.slice(12).forEach(x=>delete all[x]);try{localStorage.setItem('snSer',JSON.stringify(all))}catch(e){}}
 function snParse(txt){const out=[];String(txt||'').split('\n').forEach(l=>{const m=l.trim().match(/^[-•*]\s+\*{0,2}([^:*]{1,60}?)\*{0,2}\s*[:：]\s*(.+)$/);if(m&&out.length<4)out.push([m[1].trim(),m[2].replace(/\*\*/g,'').trim()])});return out}
 async function snAsk(o,avoid){const t=T();let msg=(o.season?t.snSugS:t.snSugF).replace('{o}',o.o);if(avoid&&avoid.length)msg+=t.snNot.replace('{x}',avoid.join(', '));
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
   const res=await fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:[{role:'user',content:'[UI] '+msg}],lang})});
   if(res.status===401)throw {code:'code'};if(!res.ok)throw {code:'err'};
   const items=snParse((await res.json()).text);if(items.length<2)throw {code:'err'};return items}
-function snFill(sg,more,o){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];
-  const showItems=items=>{sg.innerHTML='';items.forEach(([nm,ds])=>{const b=document.createElement('button');b.type='button';b.style.borderLeftColor=o.color;
+// The series of the current period from the server: {period:{id,from,to,until}, current:[[name,sentence]×4], previous:[{from,to,items}]}.
+// Returns null when the server cannot provide it (→ fallback), the last known answer if the network fails, throws {code:'code'} on 401.
+function snServer(o){const key=lang+'|'+o.k;let pr=snSrvBusy.get(key);if(pr)return pr;
+  pr=(async()=>{
+    const cached=snSerCache()[key];if(cached&&cached.until>Date.now())return cached.data;
+    const stale=cached?cached.data:null;
+    if(Date.now()-snSrvOff<12e4)return stale;
+    let res;try{res=await fetchT('/api/season-ideas?lang='+lang+'&occ='+encodeURIComponent(o.k),{headers:{'x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()}},70000)}catch(e){snSrvOff=Date.now();return stale}
+    if(res.status===401)throw {code:'code'};
+    if(!res.ok){snSrvOff=Date.now();return stale}
+    let d=null;try{d=await res.json()}catch(e){}
+    if(!d||!d.period||!Array.isArray(d.current)||d.current.length<2){snSrvOff=Date.now();return stale}
+    snSrvOff=0;snSerSave(key,d);return d})().finally(()=>snSrvBusy.delete(key));
+  snSrvBusy.set(key,pr);return pr}
+function snFill(sg,more,o,ui){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];let served=null,exItems=[];
+  const cards=(box,items)=>{box.innerHTML='';items.forEach(([nm,ds])=>{const b=document.createElement('button');b.type='button';b.style.borderLeftColor=o.color;
     const bb=document.createElement('b');bb.textContent=nm;b.append(bb,document.createTextNode(cap1(ds)));
-    b.onclick=()=>{openChat(null);send(t.idGen.replace('{x}',nm),true)};sg.appendChild(b)});more.style.display=''};
-  const wait=(txt,btn,fn)=>{sg.innerHTML='';const w=document.createElement('div');w.className='snwait';w.textContent=txt;
-    if(btn){const r=document.createElement('button');r.type='button';r.className='snmore';r.style.margin='8px 0 0';r.textContent=btn;r.onclick=fn;w.appendChild(r)}sg.appendChild(w);more.style.display='none'};
-  const run=(avoid)=>{wait(t.snLoad);let pr=snBusy.get(key);if(!pr){pr=snAsk(o,avoid).finally(()=>snBusy.delete(key));snBusy.set(key,pr)}
-    pr.then(items=>{snFail.delete(key);snSave(key,items);if(sg.isConnected)showItems(items)}).catch(e=>{snFail.set(key,{t:Date.now(),code:e&&e.code});if(sg.isConnected)failed(e&&e.code,avoid)})};
-  const failed=(cd,avoid)=>{if(cd==='code')wait('',t.snShow,async()=>{const c2=await askCode();if(c2){snFail.clear();run(avoid)}});else wait(t.snErr,t.snRetry,()=>run(avoid))};
-  more.onclick=()=>run(((snCache()[key]||{}).items||[]).map(x=>x[0]));
-  const f=snFail.get(key),hasCode=(()=>{try{return !!localStorage.getItem('code')}catch(e){return false}})();
-  if(hit&&Date.now()-hit.d<3*864e5&&hit.items&&hit.items.length)showItems(hit.items);
-  else if(snBusy.has(key))run();
-  else if(f&&(f.code==='code'?!hasCode:Date.now()-f.t<6e4))failed(f.code);else run()}
+    b.onclick=()=>{openChat(null);send(t.idGen.replace('{x}',nm),true)};box.appendChild(b)})};
+  const wait=(box,txt,btn,fn)=>{box.innerHTML='';const w=document.createElement('div');w.className='snwait';w.textContent=txt;
+    if(btn){const r=document.createElement('button');r.type='button';r.className='snmore';r.style.margin='8px 0 0';r.textContent=btn;r.onclick=fn;w.appendChild(r)}box.appendChild(w)};
+  const waitMain=(txt,btn,fn)=>{wait(sg,txt,btn,fn);more.style.display='none'},showMain=items=>{cards(sg,items);more.style.display=''};
+  const fmt=iso=>new Date(iso+'T12:00:00Z').toLocaleDateString(lang,{day:'numeric',month:'short',timeZone:'UTC'});
+  const range=(a,b)=>t.snRange.replace('{a}',fmt(a)).replace('{b}',fmt(b));
+  // series from the server: title with its dates, the folded « Previous recipes » menu
+  const showServer=d=>{served=d;showMain(d.current);
+    ui.st.textContent='✨ '+t.snSugT+' · '+range(d.period.from,d.period.to);
+    const prev=d.previous||[];ui.pvBox.innerHTML='';ui.pvBox.style.display='none';ui.pvBtn.style.display=prev.length?'':'none';
+    const label=()=>(ui.pvBox.style.display==='none'?'▸ ':'▾ ')+t.snPrevT+' ('+prev.length+')';ui.pvBtn.textContent=label();ui.pvBtn.setAttribute('aria-expanded','false');
+    ui.pvBtn.onclick=()=>{const open=ui.pvBox.style.display==='none';ui.pvBox.style.display=open?'':'none';ui.pvBtn.textContent=label();ui.pvBtn.setAttribute('aria-expanded',String(open))};
+    prev.forEach(p=>{const h=document.createElement('p');h.className='snpvh';h.textContent=range(p.from,p.to);const g=document.createElement('div');g.className='snsug';cards(g,p.items);ui.pvBox.append(h,g)});
+    snUntil=d.period.until;clearTimeout(snTimer);const ms=snUntil-Date.now();if(ms>0)snTimer=setTimeout(()=>{try{drawSeason()}catch(e){}},Math.min(ms+5000,2147e6))};
+  // « Other ideas » (series from the server): 4 more ideas under the series, personal, never the same as the ones already shown
+  const extra=async()=>{ui.ex.style.display='';more.disabled=true;wait(ui.ex,t.snLoad);
+    const avoid=[...served.current,...(served.previous||[]).flatMap(p=>p.items),...exItems].map(x=>x[0]);
+    try{const items=await snAsk(o,avoid);exItems=items;if(ui.ex.isConnected)cards(ui.ex,items)}
+    catch(e){if(ui.ex.isConnected){if(e&&e.code==='code')wait(ui.ex,'',t.snShow,async()=>{const c2=await askCode();if(c2)extra()});else wait(ui.ex,t.snErr,t.snRetry,extra)}}
+    finally{more.disabled=false}};
+  // fallback: the app's own ideas, on demand (cached 3 days on the device)
+  const run=(avoid)=>{waitMain(t.snLoad);let pr=snBusy.get(key);if(!pr){pr=snAsk(o,avoid).finally(()=>snBusy.delete(key));snBusy.set(key,pr)}
+    pr.then(items=>{snFail.delete(key);snSave(key,items);if(sg.isConnected)showMain(items)}).catch(e=>{snFail.set(key,{t:Date.now(),code:e&&e.code});if(sg.isConnected)failed(e&&e.code,avoid)})};
+  const lock=()=>waitMain('',t.snShow,async()=>{const c2=await askCode();if(c2){snFail.clear();begin()}});
+  const failed=(cd,avoid)=>{if(cd==='code')lock();else waitMain(t.snErr,t.snRetry,()=>run(avoid))};
+  const personal=()=>{const f=snFail.get(key),hasCode=(()=>{try{return !!localStorage.getItem('code')}catch(e){return false}})();
+    if(hit&&Date.now()-hit.d<3*864e5&&hit.items&&hit.items.length)showMain(hit.items);
+    else if(snBusy.has(key))run();
+    else if(f&&(f.code==='code'?!hasCode:Date.now()-f.t<6e4))failed(f.code);else run()};
+  more.onclick=()=>{served?extra():run(((snCache()[key]||{}).items||[]).map(x=>x[0]))};
+  const begin=async()=>{waitMain(t.snLoad);let d=null;
+    try{d=await snServer(o)}catch(e){if(e&&e.code==='code'){if(sg.isConnected)lock();return}}
+    if(!sg.isConnected)return;
+    if(d){showServer(d);return}
+    ui.st.textContent='✨ '+t.snSugT;personal()};
+  begin()}
 function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHTML='';
   const names=t.snN.split('|'),crs=t.crs.split('|'),crsL=t.crsL.split('|');
   const c=snCountry(),now=snCurrent(new Date(),c),k=now,x=SN[SN_IDX[k]],i=SN_IDX[k];
-  // current occasion (no picker since v80): products + 4 courses → 4 ideas (existing ideas flow)
+  // current occasion (no picker since v80): the chef's ideas of the period + 4 courses → 4 ideas (existing ideas flow)
   const pn=document.createElement('div');pn.className='snpanel'+(x[6]?' dk':'');pn.style.background='linear-gradient(160deg,'+x[3]+','+x[4]+')';
   const h=document.createElement('div');h.className='snh';const ic=document.createElement('i');ic.textContent=x[2];const nb=document.createElement('b');nb.textContent=names[i];nb.style.color=x[5];h.append(ic,nb);
   if(k===now){const nw=document.createElement('span');nw.className='snnow';nw.textContent=t.snNow;h.appendChild(nw)}
@@ -1944,12 +2005,14 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
     b.onclick=()=>{const msg=t.snMsg.replace('{c}',crsL[j]).replace('{o}',names[i]);openChat(null);send(msg,true)};g.appendChild(b)});
   const st=document.createElement('p');st.className='snst';st.textContent='✨ '+t.snSugT;
   const sg=document.createElement('div');sg.className='snsug';const more=document.createElement('button');more.type='button';more.className='snmore';more.textContent=t.snMore;
+  const ex=document.createElement('div');ex.className='snsug';ex.style.display='none'; // « Other ideas » results
+  const pvBtn=document.createElement('button');pvBtn.type='button';pvBtn.className='snpvbtn';pvBtn.style.display='none'; // « Previous recipes » (folded)
+  const pvBox=document.createElement('div');pvBox.className='snpvbox';pvBox.style.display='none';
   const bc=document.createElement('p');bc.className='snst';bc.textContent=t.snByC;
-  snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]});
-  pn.append(h,st,sg,more,bc,g);box.appendChild(pn);
+  snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
+  pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-
-const APP_VERSION='v95',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v96',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
