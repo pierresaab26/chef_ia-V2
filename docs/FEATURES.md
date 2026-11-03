@@ -2,7 +2,7 @@
 
 Living documentation. For each area: what it is, how it behaves, what was done (version), where it lives in the code, what is stored and known limits.
 Keep it up to date whenever one of these areas changes (same rule as `CLAUDE.md`). A docs-only change does not bump `APP_VERSION`.
-Last update: v98 (2026-11-03). Never put secrets in this file (the repository may be public).
+Last update: v100 (2026-11-03). Never put secrets in this file (the repository may be public).
 
 ## Map of the app
 
@@ -59,6 +59,12 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 **Favorites (v54–v58).** ❤️ in the chat header, the action bar, and the search results. The Favorites view shows category tiles (3-recipe preview + « +N »); a tile opens its category (back button); a search box above matches title or category name and lists results flat.
 - Categories come from the heuristic `recipeCat(e)` (reads title and content). Order `FAV_ORDER = [0,1,8,6,7,2,3,'q']`: 🍲 Plats du quotidien (default), 🍰 Desserts et pâtisseries, 🍬 Chocolats et glaces, 🍞 Boulangerie et pains, 🧂 Sauces et accompagnements, 🍹 Cocktails, 🥤 Boissons, ❓ Questions de cuisine.
 - 11 labels exist in the `cats` list; 4 are never assigned automatically (Cuisine du monde, Végétarien et régimes, Ingrédients et techniques, Menus et idées de repas). An integer `e.cat` on an entry would override the heuristic (no UI for it yet).
+
+**History: selection, move, archive (v100).** In the History view the chip « ☑️ Sélectionner » starts a selection mode: each row gets a round checkbox (tap the row to toggle), the bottom navigation is replaced by a bar with the count, « Tout / Aucune », « Annuler » and three actions.
+- 🗑️ Supprimer: one confirmation « Supprimer N recette(s) ? », then everything is refreshed (history, favorites, home search, weekly menu).
+- 📁 Déplacer: dialog with the 7 favorite categories + « ↺ Automatique ». Sets `e.cat` (the override `recipeCat()` already honoured); « Automatique » removes it. Visible in Favorites and in the home search by category name.
+- 🗄️ Archiver / ↩ Désarchiver (in the archive tab): flag `e.arch`. A tab « 🗄️ Archivées (N) » appears next to « Toutes » and « Favoris » when something is archived. Archived recipes are hidden from the home history, the home search, Favorites and the weekly-menu picker; they are never removed by the 50-recipe trim; their ❤️ is kept and they return everywhere when restored. A weekly-menu slot that already holds an archived recipe still opens it.
+- Changing tab, leaving the History view or tapping Annuler ends the selection mode. Code: `drawHistory`, `selBar`, `selDelete`, `selMove`, `selArchive`, `pickCat`, `refreshAll`, 4th argument of `rowFor`.
 
 **Action bar under each recipe (v36–v37).** ❤️ Favorite, ↗ Share, rating (1–5 stars), comments under the latest version only.
 **Share.** Native share / link; shared recipes can be commented by others (`api/comments.js`, 5/min per IP) and rated (`api/ratings.js`, 30/min per IP; `r:log` keeps the last 5,000 ratings for analysis).
