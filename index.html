@@ -231,7 +231,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .imstat.err{border:1px solid var(--pink)}
 .imthumb{display:block;max-width:100%;max-height:200px;border-radius:16px;margin:0 auto 12px}
 .imcheck{color:var(--mut);font-size:13px;margin:10px 2px}
-.dphoto{flex:none;align-self:stretch;position:relative;width:100%;height:clamp(190px,34vw,300px);margin:2px 0 6px;border-radius:18px;overflow:hidden}
+.dphoto{flex:none;align-self:stretch;position:relative;width:100%;height:clamp(190px,34vw,300px);margin:6px 0 2px;border-radius:18px;overflow:hidden}
 .dphoto>svg,.dphoto>div,.dphoto>img{display:block;width:100%;height:100%;border-radius:0}
 .dphoto img{object-fit:cover}
 
@@ -1987,7 +1987,7 @@ async function genRecipes(picks,f){
       const a=loadH();a.unshift(e);if(!saveH(a))toast(t.stFull);ids.push(rid);try{ensurePhoto(rid)}catch(x){}if(tok!==convTok)continue; // left the thread: saved, nothing more on screen
       currentId=rid;try{dishPic(out,j.text,rid,true)}catch(x){}
       p.card.classList.remove('sel');p.card.setAttribute('aria-checked','false');p.card.classList.add('gen'); // ticked idea → generated
-      if(i===0)showStart(out); // stay at the start of the first recipe
+      if(i===0)showStart(startOf(out)); // stay at the start of the first recipe (its picture)
     }catch(x){if(tok!==convTok){err=x;break}err=x;H.pop();out.remove();const u=log.querySelectorAll('.m.u');u[u.length-1]&&u[u.length-1].remove();break}
   }
   if(tok!==convTok){if(ids.length){drawHistory();drawFavs()}return}
@@ -2163,7 +2163,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v109',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v110',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2526,26 +2526,26 @@ function chatActions(){
       ob.onclick=()=>{oldHidden.has(rid)?oldHidden.delete(rid):oldHidden.add(rid);chatActions()};bar.appendChild(ob)}
     if(e.ideas){const ib=document.createElement('button');ib.type='button';ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===rid));bar.appendChild(ib)}
     bar.append(rateBox(rid));
-    const nx=el.nextElementSibling;(nx&&nx.classList.contains('dphoto')?nx:el).after(bar); // under the dish picture when it sits right below the recipe
+    el.after(bar); // the dish picture is ABOVE the recipe, the actions come right under it
     bars[rid]=bar;
     if(lastOf[rid]===lastIdx&&rid===currentId){const cw=document.createElement('div');cw.className='chcom';bar.after(cw);buildComments(cw,slug(e.title))} // same shared comments as on the recipe card
   });
   if(recIdx.length>1){ // 2 recipes or more: a hide / show button under EACH recipe
-    const apply=()=>{recIdx.forEach(i=>{const el=els[i],hid=hiddenIdx.has(i),nx=el.nextElementSibling,ph=nx&&nx.classList.contains('dphoto')?nx:null;
+    const apply=()=>{recIdx.forEach(i=>{const el=els[i],hid=hiddenIdx.has(i),pv=el.previousElementSibling,ph=pv&&pv.classList.contains('dphoto')?pv:null;
         el.classList.toggle('hid',hid);if(ph)ph.classList.toggle('hid',hid);
         const rid=hist[i].rid,bar=rid&&bars[rid]&&lastOf[rid]===i?bars[rid]:null;
         if(bar){bar.classList.toggle('hid',hid);const cm=bar.nextElementSibling;if(cm&&cm.classList.contains('chcom'))cm.classList.toggle('hid',hid)}
         const hb=log.querySelector('.chhide[data-i="'+i+'"]');if(hb)hb.textContent=hid?t.showB1.replace('{t}',recipeTitle(hist[i].content)||''):t.hideB1});
       try{updTop()}catch(x){}};
-    recIdx.forEach(i=>{const el=els[i],nx=el.nextElementSibling,anchor=nx&&nx.classList.contains('dphoto')?nx:el;
+    recIdx.forEach(i=>{const el=els[i],anchor=el;
       const row=document.createElement('div');row.className='chrow';
       const hb=document.createElement('button');hb.type='button';hb.className='chhide';hb.dataset.i=i;
       hb.onclick=()=>{hiddenIdx.has(i)?hiddenIdx.delete(i):hiddenIdx.add(i);apply()};
       row.appendChild(hb);anchor.after(row)});
     apply();
   }
-  Object.keys(olds).forEach(rid=>{if(!oldHidden.has(rid))return;olds[rid].forEach(i=>{const el=els[i],nx=el.nextElementSibling;
-    el.classList.add('hidold');if(nx&&nx.classList.contains('dphoto'))nx.classList.add('hidold');
+  Object.keys(olds).forEach(rid=>{if(!oldHidden.has(rid))return;olds[rid].forEach(i=>{const el=els[i],pv=el.previousElementSibling;
+    el.classList.add('hidold');if(pv&&pv.classList.contains('dphoto'))pv.classList.add('hidold');
     const hb=log.querySelector('.chhide[data-i="'+i+'"]');if(hb&&hb.parentElement)hb.parentElement.classList.add('hidold')})});
   try{updTop()}catch(x){}
 }
@@ -2642,11 +2642,11 @@ async function phFetch(id){
     const skip=loadH().map(x=>x.ph&&x.ph.id).filter(Boolean); // every recipe gets its OWN photo
     const r=await fetchT('/api/photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':code},body:JSON.stringify({title:e.title,lang:e.lang||lang,skip})},30000);
     let j=null;try{j=await r.json()}catch(x){}
-    if(!r.ok||!j)return false; // no key yet, not signed in, too many requests, offline: silent, tried again at the next opening
+    if(!r.ok||!j){try{console.warn('Chef IA photo:',r.status,j&&j.error||'')}catch(x){}return false} // no key yet, not signed in, too many requests, offline: silent (see the console), tried again at the next opening
     if(j.photo&&okU(j.photo.u)&&okU(j.photo.t)){updEntry(id,z=>{z.ph=j.photo;delete z.phNo});repaintImgViews(id);return true}
     if(j.none)updEntry(id,z=>{z.phNo=Date.now()});
     return false;
-  }catch(x){return false}
+  }catch(x){try{console.warn('Chef IA photo:',x&&x.message||x)}catch(y){}return false}
 }
 function ensurePhoto(id){ // one lookup at a time, so two recipes never get the same photo; resolves true when a photo was found
   if(phBusy.has(id))return phBusy.get(id);
@@ -2927,6 +2927,7 @@ function dishArt(title){const d=document.createElement('div');d.innerHTML=dishSv
 let stickEl=null; // while set, nothing scrolls to the bottom: the start of a new recipe stays in view
 function toBottom(){const f=()=>{if(!stickEl)log.scrollTop=log.scrollHeight};f();requestAnimationFrame(f);setTimeout(f,150)}
 // Keeps the START of a new recipe at the top of the view (instead of jumping to the end of it).
+function startOf(el){const p=el&&el.previousElementSibling;return p&&p.classList.contains('dphoto')?p:el} // the picture sits above its recipe: the view starts at the picture
 function showStart(el){
   stickEl=el;const go=()=>{const lr=log.getBoundingClientRect(),r=el.getBoundingClientRect();log.scrollTop+=r.top-lr.top-8};
   go();requestAnimationFrame(go);setTimeout(()=>{go();stickEl=null},260);
@@ -2935,7 +2936,7 @@ function dishPic(b,text,rid,still){ // one picture under each recipe of the thre
   const id=rid||currentId;
   if(!b||!id||log.querySelector('.dphoto[data-rid="'+id+'"]')||!looksLikeRecipe(text||''))return;
   const e=loadH().find(x=>x.id===id);if(!e)return;
-  const box=document.createElement('div');box.className='dphoto';box.dataset.rid=id;b.after(box);
+  const box=document.createElement('div');box.className='dphoto';box.dataset.rid=id;b.before(box); // the picture sits ABOVE its recipe (same order as the recipe card)
   const dataPh=typeof e.photo==='string'&&/^data:/.test(e.photo)?e.photo:'',webPh=e.ph&&okU(e.ph.u)?e.ph.u:'';
   const mine=e.img||dataPh||webPh;
   if(mine){const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=mine;im.onerror=()=>{im.remove();const c=box.querySelector('.dcr');if(c)c.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';box.insertBefore(a,box.firstChild)};box.appendChild(im)} // chosen image, imported photo, or the Unsplash photo of the recipe
@@ -2997,7 +2998,7 @@ async function send(text,auto,ctx){
     if(tok!==convTok)return; // the user opened another conversation meanwhile
     renderMsg(out,j.text);hist.push({role:'assistant',content:j.text});drawQuick();try{saveCurrent()}catch(e){}if(qaMode)qaActions();
     try{dishPic(out,j.text)}catch(e){}
-    if(looksLikeRecipe(j.text))showStart(out);
+    if(looksLikeRecipe(j.text))showStart(startOf(out));
   }catch(e){
     if(tok!==convTok)return;
     hist.pop();
@@ -3124,7 +3125,7 @@ function closeImgSheet(){$('#isheetwrap').classList.remove('on');imgTarget=null}
 function repaintImgViews(id){
   if(cardId===id&&curView==='card')openCard(id);
   const box=log.querySelector('.dphoto[data-rid="'+id+'"]');
-  if(box){const b=box.previousElementSibling;box.remove();log.querySelectorAll('.chact').forEach(x=>x.remove());
+  if(box){const b=box.nextElementSibling;box.remove();log.querySelectorAll('.chact').forEach(x=>x.remove());
     const m=hist.find(x=>x.role==='assistant'&&x.rid===id)||hist.find(x=>x.role==='assistant'&&looksLikeRecipe(x.content));if(b&&m)dishPic(b,m.content,id,true)}
   drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}
 }

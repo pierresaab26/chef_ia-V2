@@ -127,6 +127,9 @@ async function missingList(res) {
 export default async function handler(req, res) {
   const q = req.query || {};
   if (req.method === "GET" && q.missing) return missingList(res);
+  // Health check for the owner (no secret, only yes / no): open /api/photo?status=1 in a browser.
+  if (req.method === "GET" && q.status)
+    return res.status(200).json({ unsplashKey: !!process.env.UNSPLASH_ACCESS_KEY, anthropicKey: !!process.env.ANTHROPIC_API_KEY, redis: hasRedis(), accessCode: !!process.env.APP_PASSWORD });
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
   if (!authOk(req, res)) return;
   if (!process.env.UNSPLASH_ACCESS_KEY) return res.status(503).json({ error: "nokey" });
