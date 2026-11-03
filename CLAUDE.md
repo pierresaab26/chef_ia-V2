@@ -3,6 +3,35 @@
 Read this first in every session. Keep it up to date when something important changes (state, decisions, rules).
 Never put secrets here (keys, passwords, tokens): this repository may be public.
 
+## 0. Resume here (state at the end of the session of 2026-11-03, app v108)
+
+**State.** Live site https://chefia-v3.vercel.app runs the latest commit of `main` (v108 at the time of writing; the badge « ▲ Vercel · vN » and the browser console line `Chef IA vN` tell which version is loaded). Vercel deploys every push: check it with `gh api repos/pierresaab26/chef_ia-V2/commits/<sha>/statuses` (two Vercel projects deploy the same repo, `chef_ia-v3` = the real site and `chef_ia-v2`); the sandbox itself cannot open the site (proxy 403). A user who still sees an old version just needs to close the tab / app completely and reopen it.
+
+**Preview artifact (give it after EVERY version).** claude.ai artifact `dfeb5e06-596b-400a-80e6-7bfbb6b26ea7` (https://claude.ai/artifact/UejMkvqR1ouD53QTinRJqt), title « Chef IA – vN (aperçu) ». It is `index.html` + a preview-only bridge that fakes `/api/chat`, `/api/comments` and `/api/season-ideas` with the artifact `sample` capability (the bridge is NOT in the repo: read the current artifact with `read_artifact` to get it, or rebuild from the previous preview, and insert the new `index.html`; `api/_season.js` is pasted into the bridge with its `export` keywords removed). Republish with `publish_files` on the same slug (`base_version` from `get_artifact`). The preview does not emulate the 3-month memory of the shared ideas (Redis only).
+
+**Where to read what.** `docs/FEATURES.md` = one section per area of the app (generation, history/favorites, weekly menu, seasonal menu, Chef IA), what it does, how it behaves, code names, storage, limits. Section 5 below = full changelog by version.
+
+**Done in this session (v76 → v108), by area.**
+- Seasonal menu: automatic season / holiday, seasonal background always on; the chef's 4 ideas are the SAME for everybody and renewed every 3 days at 9:00 Paris time (server `api/season-ideas.js`, Redis, crons), « Recettes précédentes » folded menu, « Autres idées »; an idea is never proposed again for 3 months; nothing out of season (v98).
+- Recipes: ingredient capitalisation, « Mode fourneau » card (simplified), « Recette originale » reset and « Recette d’origine » links, hide earlier versions, QA hardening (stale replies, timeouts, rate limits).
+- Home: search above import, ✕ delete everywhere, mascot / background follow the calendar; the duplicate Import entry of the left menu was removed (v108).
+- History (v100–v107): multi-select (delete, move category, archive), « Archivées » tab with a « Désarchiver » button per recipe, « Favoris » tab grouped by category with a Replier / Déplier button per category and « Tout replier », counters on the 3 tabs, ↑ button, « ← » back from a recipe opened from the History.
+- Workflow: docs/FEATURES.md, preview artifact after every version (v101).
+
+**To do by the owner (not doable from the sandbox).**
+1. Add `CRON_SECRET` (any long random string) in Vercel → Production → Environment Variables, then redeploy. Without it the warm-up cron answers 401 and the series are simply generated on first use.
+2. Health check of the shared ideas: open `https://chefia-v3.vercel.app/api/season-ideas?lang=fr&occ=automne` in a browser: `{"error":"code"}` = route and Redis are fine; `{"error":"storage"}` = Redis not reachable (the app then falls back to per-device ideas, which differ between devices); 404 = not deployed.
+3. Test on a real iPhone (everything was tested with Chromium emulation only) and watch the real cron behaviour over a few days.
+4. Rerun the 55-question « cuisine uniquement » bench only if `api/chat.js` prompts change (v96–v108 did not change them).
+
+**Assumptions to confirm with the owner.** « Les 3 dernières » = the last 3 series (≤ 12 ideas); archived recipes are hidden from Favorites too (a favorite archived disappears there until restored); « Chef IA » = the free chat 💬 + the ❓ cooking questions; on very narrow phones the « Sélectionner » chip and « Tout replier » take their own line, and the title of a card with « ↺ Recette originale » is truncated (offered: more compact buttons).
+
+**Known limits.** Fallback mode (server unreachable) has no 3-month memory and no « previous » menu; free chat requests are not season-filtered; 4 category labels (Cuisine du monde, Végétarien, Ingrédients et techniques, Menus) exist but are never assigned (the 7 used + ❓ questions = 8 groups); everything personal is device-only (no account, no sync).
+
+**Pending, not applied.** The roadmap slide artifacts (Slides `c794390e-e5c3-4226-a85b-747c71b25320` and its web copy `940a8c61-aa5f-4e9e-9bdf-dce44316b9a7`) are outdated (they still mention Ramadan / Hanukkah and « Trois chefs virtuels »); proposed fixes: remove those festivals, say « Quatre chefs virtuels et un chef libre », « mesure sans pixel de suivi », 55/55 « sur modèle simulé ». Only change them if the owner asks.
+
+**How to test (throw-away scripts are NOT in the repo; recreate them if needed).** Minimum before every delivery: `node --check api/*.js`; serve the folder (`python3 -m http.server 8123`); Playwright / Chromium on iPhone SE, iPhone 13 and iPad (gen 7) (use `show('view')` or the real buttons; fill the store through `localStorage.chefStore` = `{v:2,recipes:[…]}`; blur a field after `fill()` because an open keyboard hides the ↑ button); check that every new i18n key exists in the 6 languages; for the server, test `api/season-ideas.js` with a fake Redis (`/pipeline` endpoint: GET, SET NX, ZADD, ZRANGE, ZREMRANGEBYSCORE, EXPIRE) and a fake Anthropic answer. Then: update this file and `docs/FEATURES.md`, bump `APP_VERSION`, commit `vN: …` with the attribution lines, push to `main`, publish the preview artifact, answer the owner in French starting with « Bonjour, point N fait ».
+
 ## 1. Project
 
 - **Chef IA**: an AI cooking chat app. Users chat with virtual chefs, get recipes, adapt them, import them from a photo or a link, save, rate and share them.
@@ -85,7 +114,7 @@ Chat with chefs; import from photo and link; edit a recipe with the chef; histor
 
 ## 6. Current status and decisions
 
-- **New features are on hold.** Priority: stability, then a test phase with friends (do they come back each week?).
+- Priority: stability, then a test phase with friends (do they come back each week?). Since v76 the owner keeps asking for refinements one by one (see section 0 and section 5); do them one at a time, test, push, give the preview.
 - Still to check with the owner:
   - real recipe quality with the real model (earlier tests used mocked answers);
   - that Vercel is linked to this repo and shows the current version.
