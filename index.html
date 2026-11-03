@@ -2156,7 +2156,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v106',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v107',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2241,7 +2241,8 @@ function drawHistory(){
   if(!ar.length&&harch)harch=false; // the last archived recipe was restored: back to the main list
   if(!a.length)empty(h,t.empty);else a.slice(0,3).forEach(e=>h.appendChild(rowFor(e,true)));
   const f=$('#hfilter');f.innerHTML='';
-  const tabs=[['all',t.all],['fav','❤️ '+t.favs]];if(ar.length)tabs.push(['arch','🗄️ '+t.hArch+' ('+ar.length+')']);
+  const nFav=a.filter(e=>e.fav).length; // counters: « Toutes » and « Favoris » do not count the archived recipes
+  const tabs=[['all',t.all+' ('+a.length+')'],['fav','❤️ '+t.favs+' ('+nFav+')']];if(ar.length)tabs.push(['arch','🗄️ '+t.hArch+' ('+ar.length+')']);
   const cur=harch?'arch':hfav?'fav':'all';
   tabs.forEach(([v,lab])=>{const b=document.createElement('button');b.className='chip'+(cur===v?' on':'');b.textContent=lab;
     b.onclick=()=>{hfav=v==='fav';harch=v==='arch';if(hsel)hsel.clear();drawHistory()};f.appendChild(b)});
