@@ -80,13 +80,17 @@ export function parseIdeas(text) {
   return out;
 }
 
+// Name comparison key: lower case, no accents, single spaces (« Crème brûlée » = « creme brulee »).
+export const norm = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+
 // English request sent to the chef (the « [UI] » prefix makes him answer in the interface language, see api/chat.js).
 export function ideasPrompt(occ, avoid = []) {
   const [kind, name] = OCC[occ];
   const course = " One starter, one main course, one dessert and one drink, in that order.";
+  const season = " Everything must fit this exact time of year: nothing that belongs to another season (for example no hot mulled wine or heavy stews in summer, no ice cream or cold fresh salads in winter).";
   let msg = kind === "s"
-    ? `[UI] Suggest 4 recipe ideas for the period « ${name} »: dishes and drinks typical of this season (the ones people crave at this time of year) and/or that showcase its seasonal produce, drawing on the cuisines of several countries.` + course
-    : `[UI] Suggest 4 traditional recipe ideas for « ${name} », drawing on the specialities of several countries and using seasonal produce.` + course;
+    ? `[UI] Suggest 4 recipe ideas for the period « ${name} »: dishes and drinks typical of this season (the ones people crave at this time of year) and/or that showcase its seasonal produce, drawing on the cuisines of several countries.` + course + season
+    : `[UI] Suggest 4 traditional recipe ideas for « ${name} », drawing on the specialities of several countries and using seasonal produce.` + course + season;
   if (avoid.length) msg += ` Not these: ${avoid.join(", ")}.`;
   return msg;
 }

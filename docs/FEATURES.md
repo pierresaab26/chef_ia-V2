@@ -2,7 +2,7 @@
 
 Living documentation. For each area: what it is, how it behaves, what was done (version), where it lives in the code, what is stored and known limits.
 Keep it up to date whenever one of these areas changes (same rule as `CLAUDE.md`). A docs-only change does not bump `APP_VERSION`.
-Last update: v97 (2026-11-03). Never put secrets in this file (the repository may be public).
+Last update: v98 (2026-11-03). Never put secrets in this file (the repository may be public).
 
 ## Map of the app
 
@@ -89,6 +89,8 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 
 **Chef’s ideas = the same for everybody (v96–v97).**
 - 4 ideas (one starter, main, dessert, drink) per language and occasion, renewed every 3 days at 9:00 Paris time (the day changes at 9:00, not midnight; DST handled with `Intl`). Period 0 starts 3 Nov 2026.
+- **3-month rule (v98):** an idea that was published is never proposed again for 90 days, same language, ALL occasions. Redis sorted set `sh:<lang>` (member = idea name, score = publication time; older entries are dropped on read). When a series is generated, the 150 most recent names are sent as « Not these » and the answer is checked against ALL of them (case and accents ignored); up to 3 attempts, a repeated slot is refilled from the next attempt (order starter/main/dessert/drink kept); if it still fails nothing is stored and the app falls back. The route also returns `seen` so « Autres idées » avoids them. The fallback mode (server unreachable) cannot know this memory.
+- **In season only (v98):** the server request and the app prompts (`snSugS`, `snSugF`, `snMsg`, 6 languages) say that nothing may belong to another season (no mulled wine in summer, no ice cream in winter).
 - Server `api/season-ideas.js` (+ `api/_season.js`): `GET /api/season-ideas?lang=..&occ=..` → `{period, current, previous≤3}`. Generated on demand when missing, first writer wins (Redis `SET NX`), so everyone sees the same series; 2 attempts if fewer than 4 lines; nothing stored on failure. Previous ideas are sent as « Not these ».
 - Warm-up cron `?run=1` (needs `CRON_SECRET`) prepares the current FRENCH occasion in 6 languages (≤ 6 small model calls per period). Vercel crons are UTC only and, on the free plan, run once a day each anywhere in the hour: hence two entries (07:00 and 08:00 UTC) and on-demand generation as the safety net. Other occasions are generated on first use.
 - Title « ✨ Les idées du chef · du 3 nov. au 6 nov. ». « 🔄 Autres idées » adds 4 PERSONAL ideas below (never repeating names); the shared series does not change.
@@ -98,9 +100,9 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 - The panel redraws itself when the period ends (timer + `visibilitychange`).
 
 **Code.** `drawSeason`, `snFill`, `snServer`, `snAsk`, `snParse`, `snCurrent`, `snWindow`, `applyAmb`; server `season-ideas.js`, `_season.js`, `vercel.json` crons.
-**Stored.** Device: `snSer` (server series until `period.until`), `snSug2` (personal ideas, 3 days, 24 keys max). Redis: `si:<lang>:<occ>:<period>` (40 days), `rl:si:` (30/min).
+**Stored.** Device: `snSer` (server series until `period.until`), `snSug2` (personal ideas, 3 days, 24 keys max). Redis: `si:<lang>:<occ>:<period>` (40 days), `sh:<lang>` (names published in the last 90 days), `rl:si:` (30/min).
 **Setup needed.** `CRON_SECRET` (random value) in Vercel Production + redeploy. Without it the cron is refused (401) and series are simply generated on first use.
-**Cost.** ≤ 6 small model calls every 3 days, plus first use of other occasions and personal « Autres idées ».
+**Cost.** ≤ 6 small model calls every 3 days (a little more when a repeat forces a retry, max 3 attempts per series), plus first use of other occasions and personal « Autres idées ».
 **Limits.** Real Vercel cron behaviour not yet observed; « 3 previous » means the last 3 series (up to 12 ideas).
 
 ---
