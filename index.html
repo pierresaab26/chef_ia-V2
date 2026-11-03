@@ -402,7 +402,6 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
     <button class="ditem" data-go="home">🏠 <span id="dHome"></span></button>
     <button class="ditem" data-go="history">🕘 <span id="dHist"></span></button>
     <button class="ditem" data-go="favs">❤️ <span id="dFav"></span><span class="n" id="dFavN"></span></button>
-    <button class="ditem" data-go="imp">📥 <span id="dImp"></span></button>
     <div class="dver" id="dver"></div>
   </aside>
 
@@ -2156,7 +2155,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v107',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v108',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2961,7 +2960,7 @@ async function send(text,auto,ctx){
 // ---------- Import a recipe (photo or link) ----------
 let pendingMeta=null,imp=null,impTok=0;
 function impText(){const t=T();
-  $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#dImp').textContent=t.imT;$('#impT').textContent=t.imT;
+  $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#impT').textContent=t.imT;
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
   $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
 function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}

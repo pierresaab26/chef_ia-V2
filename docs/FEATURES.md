@@ -2,7 +2,7 @@
 
 Living documentation. For each area: what it is, how it behaves, what was done (version), where it lives in the code, what is stored and known limits.
 Keep it up to date whenever one of these areas changes (same rule as `CLAUDE.md`). A docs-only change does not bump `APP_VERSION`.
-Last update: v107 (2026-11-03). Never put secrets in this file (the repository may be public).
+Last update: v108 (2026-11-03). Never put secrets in this file (the repository may be public).
 
 ## Map of the app
 
@@ -44,7 +44,7 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 
 **« Trouver mes recettes » (home search, v57–v64, v95).** Box with 🔍 and a ❤️ toggle inside it. Searches ALL saved recipes by title or category name (accents and case ignored). While there is text or the toggle is on, the results replace the history block and show a count. Hidden when there are no saved recipes. ✕ delete button on each result (v95).
 
-**Import (v-early, shared with the chat 📎).** Photo (camera or gallery) → `api/import-photo.js` (vision model); web link → `api/import-link.js` (structured data first, then the model; `api/_page.js` blocks private addresses, limits redirects, size and time). Limits per IP: photos 6/min (`rl:ip:`), links 10/min (`rl:il:`). No fake import: if extraction fails the user sees an error.
+**Import (v-early, shared with the chat 📎).** Entry points: the « Importer une recette » card on the home screen and the 📎 button of the chat (the left-menu entry was removed in v108: it duplicated the home card). Photo (camera or gallery) → `api/import-photo.js` (vision model); web link → `api/import-link.js` (structured data first, then the model; `api/_page.js` blocks private addresses, limits redirects, size and time). Limits per IP: photos 6/min (`rl:ip:`), links 10/min (`rl:il:`). No fake import: if extraction fails the user sees an error.
 
 **Code.** `index.html`: `drawChefs`, `genRecipes`, `branchWith`, `saveCurrent`, `resetInfo*`, `drawHomeSearch`, `openImp`. Server: `api/chat.js` (`systemFor`, `PARTS`, `CHEFS`, `GUARD`), `api/import-*.js`.
 **Stored.** Recipes in `localStorage` key `chefStore` (device only).
