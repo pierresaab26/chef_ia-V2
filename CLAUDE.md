@@ -47,6 +47,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 - `si:<lang>:<occasion>:<period>` — the chef's seasonal ideas of one 3-day period (JSON `{items,at}`, 40 days)
 - `rl:si:<ip>:<minute>` (seasonal ideas, 30/min), `rl:<ip>:<minute>` (comments, 5/min), `rl:r:<ip>:<minute>` (ratings, 30/min), `rl:c:<ip>:<minute>` (chat, 20/min), `rl:ip:<ip>:<minute>` (photo import, 6/min), `rl:il:<ip>:<minute>` (link import, 10/min) — rate limiting
 
+**Feature documentation:** see `docs/FEATURES.md` (one section per area: generation, history/favorites, weekly menu, seasonal menu, Chef IA). Update it whenever one of these areas changes.
+
 ## 3. Working rules (from the owner)
 
 - **Reply to the owner in French**, concise, structured, direct. Few clarification loops.
