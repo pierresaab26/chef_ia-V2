@@ -59,6 +59,8 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 
 ---
 
+**Look of the recipe views (v115).** One accent (pink) on a cream background; the metadata row (`metaBar()`) shows prep / rest / cook / servings / health as icon + value in the chat and on the card; the recipe card has a full-width photo, a floating header (round buttons, « ⋯ » menu with « Recette originale », frosted + title after scrolling), tabs Ingrédients / Ustensiles / Préparation (`cardTabs()`) and a sticky « Continuer avec le chef » button (`#cardcta`) instead of the bottom bar. The rating pill sits next to the heart (average + number of votes in brackets once shared); « Continuer avec le chef », « Publier » and ↑ use a soft pale-pink style.
+
 ## 2. History and favorites
 
 **History.** Every recipe is saved automatically from the first reply that is a recipe (a leading question or refusal does not block saving). Home shows the latest ones; « more » opens the full History view (search + filter). Opening an entry reopens the thread up to that recipe (ideas + earlier recipes). ✕ with confirmation (`delq`) on every row in history, home search and favorites; after a delete, history, favorites, home search and weekly menu are redrawn (a weekly-menu slot of a deleted recipe becomes empty).

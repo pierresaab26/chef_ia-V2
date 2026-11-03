@@ -6,7 +6,7 @@
 <title>Chef IA – Recettes</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍳</text></svg>">
 <style>
-:root{--bg1:#eceaff;--bg2:#cdd6f4;--card:#fff;--ink:#16121a;--mut:#7b7684;--pink:#e5195f;--green:#84cc16;--dark:#15121a;--bd:rgba(0,0,0,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg1:#fffaf2;--bg2:#f9eddc;--card:#fff;--ink:#16121a;--mut:#7b7684;--pink:#e5195f;--dark:#15121a;--bd:rgba(0,0,0,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#1f1b33;--bg2:#12101d;--card:#272339;--ink:#f4f1fa;--mut:#a29cb3;--dark:#0b0910;--bd:rgba(255,255,255,.09)}}
 :root[data-theme="dark"]{--bg1:#1f1b33;--bg2:#12101d;--card:#272339;--ink:#f4f1fa;--mut:#a29cb3;--dark:#0b0910;--bd:rgba(255,255,255,.09)}
 *{box-sizing:border-box}
@@ -23,13 +23,13 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .sub{color:var(--mut);font-size:13px}
 .ask{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:6px 6px 6px 16px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
 .ask input{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:0;min-width:0}
-.ask button{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:8px 14px}
+.ask button{background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:8px 14px}
 h2{font-size:16px;margin:18px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
 h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .go{width:34px;height:34px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-weight:700;flex:none}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .chip{flex:none;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 13px;font-size:13px;white-space:nowrap}
-.chip.on{background:var(--green);color:#10200a;border-color:var(--green);font-weight:700}
+.chip.on{background:var(--pink);color:#fff;border-color:var(--pink);font-weight:700}
 /* Seasonal menu (home): seasons + French holidays + world festivals, country picker, ideas by course, seasonal background */
 .snpanel{border-radius:20px;padding:14px;margin-top:10px;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#16121a}
 .snpanel.dk{color:#f4f1fa}
@@ -65,7 +65,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chfree p{color:#c9c3d9;font-size:12.5px;margin:2px 0 10px}
 .chfree form{display:flex;gap:8px}
 .chfree input{flex:1;min-width:0;font-size:16px;border-radius:999px;border:0;padding:10px 14px;background:#fff;color:#16121a}
-.chfree button{flex:none;background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:10px 14px;font-size:14px}
+.chfree button{flex:none;background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:10px 14px;font-size:14px}
 .more{color:var(--pink);font-weight:600;font-size:13px}
 .favgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media (min-width:600px){.favgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .favtile{display:flex;flex-direction:column;gap:4px;min-width:0;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer}
@@ -89,15 +89,21 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .credit{display:block;color:var(--mut);font-size:11px;text-align:right;margin:3px 6px 0;min-height:14px}
 .ctitle{font-size:22px;margin:6px 0 8px;line-height:1.2}
 .cchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.cchips.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));gap:0;margin:4px 0 14px;border-top:1px dotted rgba(0,0,0,.18);border-bottom:1px dotted rgba(0,0,0,.18);padding:10px 0}
+.meta .mc{display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 6px;text-align:center;color:var(--ink);min-width:0}
+.meta .mc+.mc{border-left:1px dotted rgba(0,0,0,.18)}
+.meta .mc svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.meta .mc b{font-size:15px;font-weight:700;line-height:1.15;overflow-wrap:anywhere}
+.meta .mc small{font-size:11.5px;color:var(--mut);line-height:1.1}
+.cdate{color:var(--mut);font-size:12.5px;margin:0 2px 8px}
 .cchips span{background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mut)}
 .hs i{font-style:normal}.tb .ls{display:none}@media (max-width:480px){.hs .hl{display:none}.tb .lf{display:none}.tb .ls{display:inline}.cchips span{padding:4px 9px;font-size:11.5px}.cchips{gap:5px}}@media (max-width:380px){.tb .ls{display:none}} /* very small phones: icon + value only (🔪 15 min), always on one line */.hs i.off{opacity:.22;filter:grayscale(1)}.cchips+.cchips{margin-top:-4px}.m .cchips{margin:2px 0 8px}.m .cchips span{background:var(--bg1)}
 .cact{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.rate{display:flex;align-items:center;gap:8px;flex:1 0 100%;margin:2px 4px 12px;flex-wrap:wrap}
-.cact .rate{margin:2px 4px 0}
-#totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:var(--pink);color:#fff;font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.25);padding:0}#totop.on{display:grid}
+.rate{display:inline-flex;align-items:center;gap:4px;flex:none;margin:0;padding:3px 10px;background:var(--card);border:1px solid var(--bd);border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.05)}.rate .rl{display:none}
+#totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.12);padding:0}#totop.on{display:grid}
 .qgrid{padding:0;margin:0 0 14px}
-.dlgw{position:fixed;inset:0;z-index:60;background:rgba(10,8,20,.45);display:grid;place-items:center;padding:20px}.dlg{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.3)}.dlg p{margin:0 0 14px;line-height:1.4}.dlg input{width:100%;box-sizing:border-box;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg1);color:var(--ink);margin:0 0 14px}.dlgb{display:flex;gap:8px;justify-content:flex-end}.dlgb .cbtn{border:1px solid var(--bd)}.dlgb .dlgok{background:var(--green);color:#10200a;border-color:transparent}
+.dlgw{position:fixed;inset:0;z-index:60;background:rgba(10,8,20,.45);display:grid;place-items:center;padding:20px}.dlg{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.3)}.dlg p{margin:0 0 14px;line-height:1.4}.dlg input{width:100%;box-sizing:border-box;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg1);color:var(--ink);margin:0 0 14px}.dlgb{display:flex;gap:8px;justify-content:flex-end}.dlgb .cbtn{border:1px solid var(--bd)}.dlgb .dlgok{background:var(--pink);color:#fff;border-color:transparent}
 .flash{animation:flash 1.5s ease}@keyframes flash{0%,60%{box-shadow:0 0 0 3px var(--pink)}100%{box-shadow:0 0 0 3px transparent}}
 #cardbody{padding-bottom:168px} /* room for the bottom bar and the ↑ button above it */
 /* iOS zooms the whole page when a field smaller than 16px gets focus (which broke the layout while writing a comment) */
@@ -105,15 +111,15 @@ input,textarea,select{font-size:16px!important}
 .kb #quick,.kb #totop{display:none!important} /* keyboard open: give the room back to the conversation */
 .hid,.hidold{display:none!important}.chrow{align-self:stretch;margin:0 0 6px}.chhide{display:block;width:100%;margin:0;text-align:center;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
-.chact .cbtn.cook{background:var(--green);color:#10200a;border-color:var(--green);font-weight:700}
+.chact .cbtn.cook{background:var(--pink);color:#fff;border-color:var(--pink);font-weight:700}
 .m .chact{margin:12px 0 16px}
-.chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}.chact .rate{margin:2px 4px 0}
+.chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
-.stars button{background:none;border:0;padding:2px 3px;font-size:26px;line-height:1;color:#cfd0dc;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.stars button{background:none;border:0;padding:2px 1px;font-size:19px;line-height:1;color:#cfd0dc;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .stars button.on{color:#f5b301}
 .ri{font-size:13px;color:var(--mut);font-weight:600}
-.cbtn.go{background:var(--green);color:#10200a;flex:1;min-width:160px}
+.cbtn.go{background:var(--pink);color:#fff;flex:1;min-width:160px}
 .rtext{max-width:100%}
 .coms{margin-top:22px}
 .clist{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
@@ -125,15 +131,15 @@ input,textarea,select{font-size:16px!important}
 .cbub p{margin:2px 0 0;word-wrap:break-word;white-space:pre-wrap}
 .cmeta{display:flex;gap:12px;color:var(--mut);font-size:12px;padding:3px 10px}
 .cmeta button{color:var(--pink);font-size:12px;font-weight:600}
-.cmsg{color:var(--mut);font-size:14px;margin:6px 0 10px}
+.cmsg{color:var(--mut);font-size:14px;margin:2px 0 10px}.cmsg:empty{display:none}.coms h2{margin:0 0 6px;font-size:18px}.clist:empty{display:none}
 .cform{display:flex;flex-direction:column;gap:8px}
 .cform input{font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
 .crow{display:flex;gap:8px}.crow input{flex:1}
-.cpub{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:0 18px}
+.cpub{background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-weight:700;border-radius:999px;padding:0 18px}
 .cpub:disabled{opacity:.5}
 #hfilter{display:flex;gap:8px;padding:10px 18px 10px}
 
-@media (min-width:768px){#app{max-width:760px}.cphoto{height:300px}}
+@media (min-width:768px){#app{max-width:760px}#cardbody .cphoto{height:380px}}
 #scrim{position:fixed;inset:0;background:rgba(10,8,20,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
 #scrim.on{opacity:1;pointer-events:auto}
 #drawer{position:fixed;top:0;bottom:0;left:0;width:min(300px,82vw);background:var(--card);z-index:41;transform:translateX(-102%);transition:transform .28s ease;display:flex;flex-direction:column;padding:calc(14px + env(safe-area-inset-top,0px)) 14px 14px;box-shadow:4px 0 24px rgba(0,0,0,.2);visibility:hidden}
@@ -142,9 +148,9 @@ input,textarea,select{font-size:16px!important}
 .dhead b{flex:1;font-size:17px}
 .dclose{font-size:20px;padding:6px 10px;color:var(--mut)}
 .ditem{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:14px;font-size:16px;font-weight:600;text-align:left}
-.ditem.on{background:var(--green);color:#10200a}
+.ditem.on{background:var(--pink);color:#fff}
 .ditem span.n{margin-left:auto;color:var(--mut);font-size:13px;font-weight:600}
-.ditem.on span.n{color:#10200a}
+.ditem.on span.n{color:#fff}
 .menubtn{font-size:22px;padding:0 6px;line-height:1;flex:none}
 @media (min-width:768px){#drawer{width:320px}}
 #verpill{display:inline-flex;align-items:center;gap:7px;background:#111;color:#fff;border-radius:999px;padding:4px 12px 4px 10px;font-size:12px;font-weight:700;margin:0 0 12px;letter-spacing:.2px}
@@ -157,9 +163,9 @@ input,textarea,select{font-size:16px!important}
 .fgall{display:flex;justify-content:flex-end;margin:0 4px 2px}.fgall button{font-size:12.5px;color:var(--mut);padding:4px 8px;border-radius:999px;border:1px solid var(--bd);background:var(--card)}
 .harc{flex-wrap:wrap}.harc .hopen{flex:1 1 calc(100% - 56px);order:0}.harc .hdel{order:1}.harc .hunar{order:2;flex:1 1 100%;margin:0 10px 10px;text-align:center;padding:8px 10px}
 .hunar{font-size:12.5px;font-weight:600;color:var(--ink);background:var(--bg1);border:1px solid var(--bd);border-radius:999px;padding:6px 10px;white-space:nowrap}
-.hchk{flex:none;width:24px;height:24px;margin-left:12px;border-radius:50%;border:2px solid var(--mut);display:grid;place-items:center;font-size:14px;font-weight:800;color:#10200a;padding:0;line-height:1}
-.hchk[aria-checked=true]{background:var(--green);border-color:var(--green)}
-.hrow.hsel{outline:2px solid var(--green)}
+.hchk{flex:none;width:24px;height:24px;margin-left:12px;border-radius:50%;border:2px solid var(--mut);display:grid;place-items:center;font-size:14px;font-weight:800;color:#fff;padding:0;line-height:1}
+.hchk[aria-checked=true]{background:var(--pink);border-color:var(--pink)}
+.hrow.hsel{outline:2px solid var(--pink)}
 #hfilter{flex-wrap:wrap}#hfilter .hselb{margin-left:auto}
 #hselbar{display:none;position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--card);border-radius:22px;padding:10px;box-shadow:0 4px 18px rgba(0,0,0,.18);flex-direction:column;gap:8px}
 #app.selmode #hselbar{display:flex}#app.selmode nav{display:none}#app.selmode #hlist{padding-bottom:150px}
@@ -183,33 +189,58 @@ input,textarea,select{font-size:16px!important}
 nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(4,1fr);align-items:center;justify-items:center;background:var(--card);border-radius:999px;padding:8px 10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
 nav button{width:48px;height:48px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:22px;line-height:1;opacity:.5}
 nav button.on{opacity:1}
-#n3{opacity:1;background:#5b5866;font-size:20px}
+#n3{opacity:1;background:var(--bg1);font-size:20px}
 #n4{opacity:1;background:var(--bg1);font-size:22px}
-nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1;box-shadow:0 4px 12px rgba(132,204,22,.5)}
+nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;box-shadow:0 4px 12px rgba(229,25,95,.4)}
 .chead{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--bd)}
 .chead .back{font-size:22px;padding:0 6px}
-@media (max-width:359px){#card .chead.hashist #cardback{display:none}} /* very narrow phones: the ← (back to History) replaces the 🏠 so the title keeps some room next to « Recette originale » */
+@media (max-width:359px){#card .chead.hashist #cardback{display:none}} /* very narrow phones: the ← (back to History) replaces the 🏠 */
 .chead b{display:block;line-height:1.2}
 #cardT{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px}
-#cardorig{flex:none;padding:7px 12px;border-radius:999px;background:var(--card);color:var(--pink);border:2px solid var(--pink);font-size:14px;font-weight:700;white-space:nowrap} /* « ↺ Original recipe » in the card header, same place as in the chat */
+/* v115: the recipe-card header floats over the photo (round buttons); the title shows up when the photo has scrolled away; « ↺ Original recipe » is in the « ⋯ » menu */
+#card{position:relative}
+#card .chead{position:absolute;top:0;left:0;right:0;z-index:6;height:var(--hh,64px);padding:0 14px;background:transparent;border-bottom:1px solid transparent;transition:background .2s,border-color .2s}
+#card .chead .back,#card .chead .menubtn{width:40px;height:40px;border-radius:50%;padding:0;display:grid;place-items:center;font-size:19px;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.2);flex:none;transition:box-shadow .2s,background .2s}
+#card .chead #cardT{opacity:0;transition:opacity .2s}
+#card .chead.solid{background:var(--card);background:color-mix(in srgb,var(--card) 82%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-bottom-color:var(--bd)}
+#card .chead.solid .back,#card .chead.solid .menubtn{background:transparent;box-shadow:none}
+#card .chead.solid #cardT{opacity:1}
+:root{--hh:64px}
+#cardbody{padding-top:0;padding-bottom:104px;scroll-padding-top:var(--hh)}
+#cardbody .cphoto{margin:0 -18px;border-radius:0 0 28px 28px;height:clamp(300px,56vw,400px)}
+#cardbody .cphoto .camb{top:auto;bottom:12px;right:14px}
+#cardbody .credit{margin:6px 2px 0;font-size:11px;opacity:.8}
+#cardbody .ctitle{font-size:28px;letter-spacing:-.02em;margin:10px 0 6px;line-height:1.12}
+.mw{position:relative;flex:none;display:none}.mw.on{display:block}
+.mpop{display:none;position:absolute;right:0;top:calc(100% + 8px);z-index:20;min-width:210px;background:var(--card);border:1px solid var(--bd);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:6px}.mw.open .mpop{display:block}
+.mpop button{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:11px;font-weight:600;font-size:15px;color:var(--ink);white-space:nowrap}.mpop button:active{background:var(--bd)}
+/* sticky main button of the card (replaces the bottom bar there) */
+#card.on~nav{display:none}
+#cardcta{position:absolute;left:16px;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:7;height:54px;border-radius:999px;background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-weight:700;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.kb #cardcta{display:none}
+/* segmented tabs */
+.seg{display:flex;gap:4px;background:rgba(0,0,0,.06);border-radius:999px;padding:4px;margin:0 0 14px}
+.seg button{flex:1;padding:9px 6px;border-radius:999px;font-weight:600;font-size:14px;color:var(--mut)}
+.seg button.on{background:var(--card);color:var(--pink);box-shadow:0 1px 6px rgba(0,0,0,.1)}
+.tabbed .rsec>h3{display:none}.tabbed .rsec.fold .rut{display:flex}.rsec[hidden]{display:none}
 #log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
 .m{max-width:88%;padding:10px 14px;border-radius:18px;white-space:pre-wrap;word-wrap:break-word}
 .u{align-self:flex-end;background:var(--pink);color:#fff;border-bottom-right-radius:5px}
 .a{align-self:flex-start;background:var(--card);border-bottom-left-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.a h3{margin:.7em 0 .2em;font-size:15px;color:var(--pink)}
+.a h3{margin:.7em 0 .2em;font-size:15px;color:var(--ink)}
 .a h3:first-child{margin-top:0}
 .m.fmt{white-space:normal;line-height:1.5}
 .advl{margin:.5em 0 .8em}.adv{position:relative;display:block;background:var(--bg1);border-left:4px solid var(--pink);border-radius:12px;padding:10px 12px;margin:0 0 8px}.advl .adv:last-child{margin-bottom:0}.adv b{display:block;color:var(--pink);font-size:14.5px;margin-bottom:2px}.adv p{margin:0;line-height:1.4}.adv .ck{display:none;position:absolute;left:12px;top:11px;width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);box-sizing:border-box;text-align:center;color:#fff;font-size:13px;line-height:18px}.adv.live{cursor:pointer;padding-left:44px}.adv.live .ck{display:block}.adv.sel{background:rgba(229,25,95,.1);outline:2px solid var(--pink)}.adv.sel .ck{background:var(--pink)}.adv.sel .ck::before{content:'✓'}.adv.gen b::after{content:' ✓ ';color:#2e9e3a}
 .fmt p{margin:0 0 .6em}.fmt p:last-child,.fmt .rl:last-child{margin-bottom:0}
-.fmt .rl{margin:.2em 0 .7em;padding-left:1.3em}.fmt .rl li{margin:.25em 0;padding-left:.2em}.fmt ul.rl li::marker{color:var(--pink)}
+.fmt .rl{margin:.2em 0 .7em;padding-left:1.3em}.fmt .rl li{margin:.25em 0;padding-left:.2em}.fmt ul.rl li::marker{color:var(--mut)}
 #quick,.qgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 14px;align-items:start}#quick{padding:10px 14px 10px;margin:0 auto;width:100%;box-sizing:border-box}#quick:empty{display:none}
-.qcol .chip.on{background:var(--pink);color:#fff;border-color:var(--pink)}.qgo{margin-top:2px;padding:10px 14px;border:0;border-radius:999px;background:var(--green);color:#10200a;font:inherit;font-weight:700;font-size:14px;cursor:pointer}.qgo[hidden]{display:none}.qacts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}.qacts .qgo{flex:1 1 150px;margin-top:2px}.qacts .qgo[hidden]{display:none}.qacts .qmore{background:var(--card);color:var(--ink);border:1px solid var(--bd)}
+.qcol .chip.on{background:var(--pink);color:#fff;border-color:var(--pink)}.qgo{margin-top:2px;padding:10px 14px;border:0;border-radius:999px;background:var(--pink);color:#fff;font:inherit;font-weight:700;font-size:14px;cursor:pointer}.qgo[hidden]{display:none}.qacts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}.qacts .qgo{flex:1 1 150px;margin-top:2px}.qacts .qgo[hidden]{display:none}.qacts .qmore{background:var(--card);color:var(--ink);border:1px solid var(--bd)}
 .qcol{display:flex;flex-direction:column;gap:5px;min-width:0}.qh{font-size:12px;color:var(--mut);font-weight:600;padding:0 2px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qi{display:inline-block;width:1.4em;flex:none;text-align:center}.qcol .chip{width:100%;padding:6px 8px;font-size:12.5px;white-space:normal;text-align:center;line-height:1.2}
 @media (max-width:380px){#quick,.qgrid{gap:6px}#quick{padding:10px 10px}.qcol .chip{padding:6px 4px;font-size:12px}}
 @media (min-width:600px){.qcol .chip{font-size:13.5px;padding:7px 10px}}
 #bar{display:flex;gap:8px;padding:4px 14px 14px}
 #inp{flex:1;font:inherit;padding:11px 16px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
-#send{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:0 18px}
+#send{background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:0 18px}
 #send:disabled{opacity:.5}
 #lang{appearance:none;-webkit-appearance:none;border:1px solid var(--bd);background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23888' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:11px;color:var(--ink);border-radius:999px;padding:8px 32px 8px 14px;font:inherit;font-size:13px;cursor:pointer}
 #mic,#home2,#impChat{width:44px;border-radius:50%;background:var(--card);border:1px solid var(--bd);font-size:18px}
@@ -227,7 +258,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .imbtns .cbtn{flex:1;min-width:140px;text-align:center;border:1px solid var(--bd)}
 .urlrow{display:flex;gap:8px}
 .urlrow input{flex:1;min-width:0;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:999px;padding:10px 14px;font:inherit;color:var(--ink);outline:0}
-.urlrow button{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:10px 16px}
+.urlrow button{background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:10px 16px}
 .imstat{padding:14px;border-radius:16px;background:var(--card);font-size:14px;margin-bottom:12px}
 .imstat.err{border:1px solid var(--pink)}
 .imthumb{display:block;max-width:100%;max-height:200px;border-radius:16px;margin:0 auto 12px}
@@ -240,7 +271,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .cbtn.go{flex:1 0 100%;text-align:center}
 .rmeta{color:var(--mut);font-size:14px;margin:0 2px 12px}
 .rsec{background:var(--card);border-radius:22px;padding:16px 18px;margin:0 0 14px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.rsec h3{color:var(--pink);font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.rsec h3{color:var(--ink);font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
 .rsec.fold h3{cursor:pointer;margin:0;-webkit-tap-highlight-color:transparent}.rsec.fold.open h3{margin-bottom:8px}.rsec.fold h3 .arr{margin-left:auto;font-size:16px;transition:transform .2s;transform:rotate(-90deg)}.rsec.fold.open h3 .arr{transform:none}.rsec.fold .rut{display:none}.rsec.fold.open .rut{display:flex}
 .rsec ul,.rsec ol{list-style:none;padding:0;margin:0}
 .ring li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -254,9 +285,9 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .swbar[hidden],.mt[hidden]{display:none}
 .swp{flex:none;align-self:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--pink);font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}
 .swh{color:var(--mut);font-size:13px;margin:0 4px 10px}
-.ring .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);flex:none;margin-top:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
+.ring .ck{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--mut);flex:none;margin-top:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
 .rstep li{display:flex;gap:14px;align-items:flex-start;padding:11px 0;line-height:1.5}
-.rstep .num{width:30px;height:30px;border-radius:50%;background:var(--pink);color:#fff;font-weight:700;display:grid;place-items:center;flex:none;font-size:14px}
+.rstep .num{width:30px;height:30px;border-radius:50%;background:rgba(229,25,95,.12);background:color-mix(in srgb,var(--pink) 14%,transparent);color:var(--pink);font-weight:700;display:grid;place-items:center;flex:none;font-size:14px}
 .rp{margin:6px 0;line-height:1.5}
 .m.rich{background:none;box-shadow:none;padding:0;max-width:100%;width:100%;white-space:normal}
 .rtitle{font-size:20px;font-weight:700;color:var(--ink);margin:2px 4px 10px;line-height:1.25}
@@ -285,7 +316,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 @media (max-width:519px){.chathd.hascook .avw{display:none}} /* phones: room for « Original recipe » */
 @media (max-width:359px){.chathd.hascook #back{display:none}} /* very small phones: the 🏠 of the input bar stays */
 .avw{position:relative;flex:none;margin-left:2px}
-.avw::after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:var(--green);border:2px solid var(--card)}
+.avw::after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:#34c759;border:2px solid var(--card)}
 .chtx{flex:1;min-width:0}
 .chtx b{font-size:16px;line-height:1.15}
 .chtx .sub{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -346,8 +377,9 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
   </section>
 
   <section class="view" id="card">
-    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="cardhist" type="button" style="display:none">←</button><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b><button type="button" id="cardorig" style="display:none"></button></div>
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="cardhist" type="button" style="display:none">←</button><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b><div class="mw" id="cardmore"><button class="back" type="button" aria-label="⋯" aria-haspopup="true" aria-expanded="false">⋯</button><div class="mpop"><button type="button" id="cardorig"></button></div></div></div>
     <div class="scroll" id="cardbody"></div>
+    <button type="button" id="cardcta"></button>
   </section>
 
   <section class="view" id="favs">
@@ -642,6 +674,9 @@ fr:{
   hs2:"Ça va",
   hs3:"Healthy",
   prepL:"Préparation",
+  tabIng:"Ingrédients",
+  tabUt:"Ustensiles",
+  tabPrep:"Préparation",
   restL:"Repos",
   cookL:"Cuisson",
   prepS:"Prépa",
@@ -869,6 +904,9 @@ en:{
   hs2:"OK",
   hs3:"Healthy",
   prepL:"Prep",
+  tabIng:"Ingredients",
+  tabUt:"Utensils",
+  tabPrep:"Method",
   restL:"Rest",
   cookL:"Cook",
   prepS:"Prep",
@@ -1096,6 +1134,9 @@ es:{
   hs2:"Aceptable",
   hs3:"Saludable",
   prepL:"Preparación",
+  tabIng:"Ingredientes",
+  tabUt:"Utensilios",
+  tabPrep:"Preparación",
   restL:"Reposo",
   cookL:"Cocción",
   prepS:"Prep.",
@@ -1323,6 +1364,9 @@ de:{
   hs2:"Geht so",
   hs3:"Gesund",
   prepL:"Vorbereitung",
+  tabIng:"Zutaten",
+  tabUt:"Utensilien",
+  tabPrep:"Zubereitung",
   restL:"Ruhezeit",
   cookL:"Garzeit",
   prepS:"Vorb.",
@@ -1550,6 +1594,9 @@ it:{
   hs2:"Così così",
   hs3:"Salutare",
   prepL:"Preparazione",
+  tabIng:"Ingredienti",
+  tabUt:"Utensili",
+  tabPrep:"Preparazione",
   restL:"Riposo",
   cookL:"Cottura",
   prepS:"Prep.",
@@ -1777,6 +1824,9 @@ pt:{
   hs2:"Razoável",
   hs3:"Saudável",
   prepL:"Preparação",
+  tabIng:"Ingredientes",
+  tabUt:"Utensílios",
+  tabPrep:"Preparação",
   restL:"Repouso",
   cookL:"Cozedura",
   prepS:"Prep.",
@@ -2068,7 +2118,7 @@ function snCurrent(d,c){d=d||new Date();c=c||snCountry();
   SN.forEach(x=>{const sel=':root[data-amb="'+x[0]+'"]';
     if(x[6]){const card=x[0]==='halloween'?'#3a2414':'#174a39',mut=x[0]==='halloween'?'#c9a98a':'#9fc3b3',ink=x[0]==='halloween'?'#f8ece0':'#e6f2ec';
       css+=sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+';--card:'+card+';--ink:'+ink+';--mut:'+mut+';--dark:#060403;--bd:rgba(255,255,255,.1)'+(x[0]==='halloween'?';--pink:#ff8a1f':'')+'}'}
-    else css+='@media (prefers-color-scheme:light){'+sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+'}}'});
+    else css+='@media (prefers-color-scheme:light){'+sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+'}}'+'@media (prefers-color-scheme:light){'+sel+'{--bg1:color-mix(in srgb,'+x[3]+' 38%,#fffaf2);--bg2:color-mix(in srgb,'+x[4]+' 38%,#f9eddc)}}'}); // v115: the season only TINTS the cream (browsers without color-mix keep the full season colour)
   st.textContent=css;document.head.appendChild(st)})();
 function applyAmb(){document.documentElement.dataset.amb=snCurrent();try{localStorage.removeItem('ambOff')}catch(e){}} // always on since v81 (the on/off button was removed)
 applyAmb();
@@ -2164,7 +2214,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v114',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v115',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2526,7 +2576,7 @@ function chatActions(){
       ob.textContent=h?'👁️ '+t.oldS.replace('{n}',olds[rid].length):'✂️ '+t.oldH;
       ob.onclick=()=>{oldHidden.has(rid)?oldHidden.delete(rid):oldHidden.add(rid);chatActions()};bar.appendChild(ob)}
     if(e.ideas){const ib=document.createElement('button');ib.type='button';ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===rid));bar.appendChild(ib)}
-    bar.append(rateBox(rid));
+    fv.after(rateBox(rid)); // the rating sits right next to the heart
     { let a=el.querySelector(':scope > .rtitle'); // v113: same order as the recipe card: picture, title, info bubbles, actions, then the recipe
       if(a){while(a.nextElementSibling&&a.nextElementSibling.classList.contains('cchips'))a=a.nextElementSibling;a.after(bar)}else el.before(bar)}
     bars[rid]=bar;
@@ -2608,6 +2658,26 @@ function headInfo(txt){
   o.fresh=!!(o.hs||o.prep||o.rest||o.cook);o.txt=t;return o;
 }
 const bub=txt=>{const s=document.createElement('span');s.textContent=txt;return s};
+// v115: ONE metadata row (icon + value + small label, thin dotted separators) in the chat AND on the recipe card, like Jow / Marmiton.
+const MI={ // line icons (24 px, drawn with the text colour)
+  prep:'<path d="M3 21l9.5-9.5M12.5 11.5C12 7 15 3.5 21 3c-.5 6-4 9-8.5 8.5z"/>',
+  rest:'<path d="M7 3h10M7 21h10M8 3c0 5 4 5 4 9s-4 4-4 9M16 3c0 5-4 5-4 9s4 4 4 9"/>',
+  cook:'<path d="M4 12h16v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5v-3zM2 12h2M20 12h2M9 4c0 1.5 1.5 1.5 1.5 3M13.5 4c0 1.5 1.5 1.5 1.5 3"/>',
+  serv:'<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 21V3c-2.5 1.5-3 5-3 8h3"/>',
+  leaf:'<path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15M5 19l8-8"/>',
+  time:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>'};
+function metaCell(ic,val,lab){const d=document.createElement('div');d.className='mc';
+  d.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+MI[ic]+'</svg>';
+  const b=document.createElement('b');b.textContent=val;d.appendChild(b);
+  if(lab){const l=document.createElement('small');l.textContent=lab;d.appendChild(l)}return d}
+// hd = headInfo(); sv = the « 🍽️ Portions : 4 » chip text (or ''); tot = the old single « ⏱ 45 min » chip (recipes without the new header lines)
+function metaBar(hd,sv,tot){const t=T(),w=document.createElement('div');w.className='cchips meta';
+  const cl=v=>String(v).replace(/\s*\([^)]*\)/g,'').trim();
+  if(hd.prep)w.appendChild(metaCell('prep',cl(hd.prep),t.prepL));if(hd.rest)w.appendChild(metaCell('rest',cl(hd.rest),t.restL));if(hd.cook)w.appendChild(metaCell('cook',cl(hd.cook),t.cookL));
+  if(!hd.prep&&!hd.rest&&!hd.cook&&tot)w.appendChild(metaCell('time',String(tot).replace(/^⏱\s*/,''),''));
+  if(sv){const m=String(sv).replace(/^🍽️\s*/,'').match(/^(.*?)[:：]?\s*(\d+(?:\s*[-–]\s*\d+)?)\s*(.*)$/);w.appendChild(metaCell('serv',m?m[2].replace(/\s+/g,''):String(sv),m?(m[1]||m[3]||'').trim().slice(0,14):''))}
+  if(hd.hs)w.appendChild(metaCell('leaf',hd.hs+'/3',t['hs'+hd.hs]));
+  return w.children.length?w:null}
 // Same bubbles in the chat and on the recipe card: row 1 = (date) servings + health, row 2 = prep / rest / cook.
 function timeBubbles(hd){const t=T(),o=[];
   const mk=(ic,lf,ls,v)=>{v=String(v).replace(/\s*\([^)]*\)/g,'').trim();const w=document.createElement('span');w.className='tb';
@@ -2727,8 +2797,7 @@ function renderRecipe(el,txt,title,chat,swap){
     const bul=sec.lines.filter(l=>/^[-•*]\s+/.test(l)),num=sec.lines.filter(l=>/^\d+[.)]\s+/.test(l));
     if(!sec.h||skipH){ // texte d'introduction (portions, temps…)
       sec.lines.forEach(l=>{if(nz(l.replace(/[:：]\s*$/,''))===nz(title)||((!chat||hd.fresh)&&(/^(portions?|servings?|personnes?|people|porzioni|persone|porções|porciones|portionen|personen)\s*[:：]?\s*\d/i.test(l)||/^\d+\s*(portions?|personnes?|servings?|people|porzioni|persone|porções|porciones|portionen|personen)\b/i.test(l))))return;const p=document.createElement('div');p.className=(bul.length||num.length)?'rp':'rmeta';p.textContent=l.replace(/^[-•*]\s+/,'');el.appendChild(p)});if(i===0&&chat&&hd.fresh){ // bubbles: servings + health, then the times
-        const r1=document.createElement('div');r1.className='cchips';if(pvTxt)r1.appendChild(bub(pvTxt));if(hd.hs)r1.appendChild(healthEl(hd.hs));if(r1.children.length)el.appendChild(r1);
-        const tb=timeBubbles(hd);if(tb.length){const r2=document.createElement('div');r2.className='cchips';tb.forEach(x=>r2.appendChild(x));el.appendChild(r2)}}
+        const mb=metaBar(hd,pvTxt,'');if(mb)el.appendChild(mb)}
       return}
     const box=document.createElement('section');box.className='rsec';
     const h=document.createElement('h3');const ic=secIcon(sec.h);h.textContent=(ic?ic+' ':'')+sec.h;box.appendChild(h);
@@ -2778,13 +2847,25 @@ function rateBox(id){ // 1 to 5 stars: 1 = terrible, 5 = the best. Rating kept o
   const paint=n=>bs.forEach((b,i)=>{b.classList.toggle('on',i<n);b.setAttribute('aria-pressed',String(i+1===n))});
   paint(e0.stars||0);
   const key=slug(e0.title);
-  const show=j=>{if(j&&j.count)info.textContent='· ★ '+j.avg.toFixed(1).replace('.',T().sr&&/^(fr|es|de|it|pt)/.test(T().sr)?',':'.')+' ('+j.count+')';if(j&&j.mine&&!e0.stars){paint(j.mine);updEntry(id,z=>{z.stars=j.mine})}};
+  const show=j=>{if(j&&j.count)info.textContent=j.avg.toFixed(1).replace('.',T().sr&&/^(fr|es|de|it|pt)/.test(T().sr)?',':'.')+' ('+j.count+')'; // shared rating: average + number of votes, only when someone voted
+    if(j&&j.mine&&!e0.stars){paint(j.mine);updEntry(id,z=>{z.stars=j.mine})}};
   capi('GET','?key='+key,null,'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
   bs.forEach((b,i)=>b.onclick=()=>{const n=i+1;const cur=(loadH().find(x=>x.id===id)||{}).stars||0;if(n===cur)return;
     updEntry(id,z=>{z.stars=n});paint(n);toast(t.rateOk.replace('{n}',n));
     capi('POST','',{key,stars:n,title:e0.title,lang},'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{})});
   box.append(lb,st,info);return box;
 }
+// v115: Ingredients / Utensils / Preparation as three tabs (one section at a time) instead of one long scroll
+function cardTabs(rt){
+  const t=T(),secs=[...rt.querySelectorAll(':scope > .rsec')];if(secs.length<2)return;
+  const kind=x=>x.querySelector('.ring')?'ing':x.querySelector('.rut')?'ut':'prep';
+  const groups={};secs.forEach(x=>{const k=kind(x);(groups[k]=groups[k]||[]).push(x)});
+  const order=['ing','ut','prep'].filter(k=>groups[k]);if(order.length<2)return;
+  const lab={ing:t.tabIng,ut:t.tabUt,prep:t.tabPrep},seg=document.createElement('div');seg.className='seg';seg.setAttribute('role','tablist');
+  rt.classList.add('tabbed');
+  const pick=k=>{order.forEach(o=>{groups[o].forEach(x=>{x.hidden=o!==k;if(o==='ut')x.classList.add('open')});btns[o].setAttribute('aria-selected',String(o===k));btns[o].classList.toggle('on',o===k)})};
+  const btns={};order.forEach(k=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=lab[k];b.onclick=()=>pick(k);btns[k]=b;seg.appendChild(b)});
+  rt.insertBefore(seg,rt.firstChild);pick(order[0])}
 function openCard(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
   if(e.qa){openQAEntry(e);return}
@@ -2809,26 +2890,22 @@ function openCard(id){
   ph.appendChild(cam);
   const h=document.createElement('h1');h.className='ctitle';h.textContent=curT;body.appendChild(h);
   const txt=recipeText(e),hd=headInfo(txt),info=infoChips(hd.txt);
-  const chips=document.createElement('div');chips.className='cchips'; // row 1: date, source, servings, health score
-  [fmtDate(e.date),e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:'',info.find(x=>x.startsWith('🍽️'))].filter(Boolean).forEach(c=>chips.appendChild(bub(c)));
-  if(hd.hs)chips.appendChild(healthEl(hd.hs));
-  body.appendChild(chips);
-  const row2=document.createElement('div');row2.className='cchips'; // row 2: preparation / rest / cooking (older recipes: the single total time)
-  (hd.prep||hd.rest||hd.cook?timeBubbles(hd):info.filter(x=>x.startsWith('⏱')).map(bub)).forEach(x=>row2.appendChild(x));
-  if(row2.children.length)body.appendChild(row2);
+  const dl=document.createElement('div');dl.className='cdate'; // date + source
+  dl.textContent=[fmtDate(e.date),e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:''].filter(Boolean).join(' · ');body.appendChild(dl);
+  {const mb=metaBar(hd,info.find(x=>x.startsWith('🍽️'))||'',(info.find(x=>x.startsWith('⏱'))||''));if(mb)body.appendChild(mb)}
   const act=document.createElement('div');act.className='cact';
   const fv=document.createElement('button');fv.className='cbtn'+(e.fav?' on':'');fv.textContent=e.fav?'❤️':'🤍';fv.setAttribute('aria-label',t.fav);
   fv.onclick=()=>{const f=toggleFav(id);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
   const sh=document.createElement('button');sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe(loadH().find(x=>x.id===id)||e);
-  const ct=document.createElement('button');ct.className='cbtn go';ct.textContent='💬 '+t.cont;ct.onclick=()=>openSaved(id);
-  act.append(fv,sh,ct);
+  act.append(fv,rateBox(id),sh);
+  {const cta=$('#cardcta');cta.textContent='💬 '+t.cont;cta.onclick=()=>openSaved(id)} // sticky main button at the bottom of the card
   {const ri=resetInfoFor(id,e.messages||[]),rb=$('#cardorig');rb.textContent=t.origR; // « ↺ Recette originale » at the top, like in the chat
-    rb.style.display=ri&&ri.kind==='cut'?'':'none';rb.onclick=ri&&ri.kind==='cut'?async()=>{if(await eraseToOriginal(ri))openCard(id)}:null}
+    {const cm=$('#cardmore');cm.classList.toggle('on',!!(ri&&ri.kind==='cut'));cm.classList.remove('open')}rb.onclick=ri&&ri.kind==='cut'?async()=>{$('#cardmore').classList.remove('open');if(await eraseToOriginal(ri))openCard(id)}:null}
   if(e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openCard(e.from);act.appendChild(og)}if(e.ideas){const ib=document.createElement('button');ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===id));act.appendChild(ib)}
-  body.appendChild(act);body.appendChild(rateBox(id));
-  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,curT,false,(ings,m)=>openBranch(id,ings,m));body.appendChild(rt);
+  body.appendChild(act);
+  const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,curT,false,(ings,m)=>openBranch(id,ings,m));cardTabs(rt);body.appendChild(rt);
   buildComments(body,slug(e.title));
-  show('card');body.scrollTop=0;
+  show('card');body.scrollTop=0;try{window.cardHdr()}catch(x){}
 }
 // ----- Comments (stored server-side: /api/comments) -----
 const OWN=(()=>{try{let o=localStorage.getItem('owner');if(!o){o=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Math.random().toString(36).slice(2)+Date.now().toString(36));localStorage.setItem('owner',o)}return o}catch(x){return 'a'+Math.random().toString(36).slice(2)}})();
@@ -3184,6 +3261,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classL
 $('#cardback').onclick=()=>show('home');
 $('#cardhist').onclick=()=>{show('history');const l=$('#hlist');l.scrollTop=hScroll;try{updTop()}catch(x){}}; // back to the History list exactly where it was (same tab, same position)
 $('#toorig').onclick=resetToOriginal;
+// recipe card: « ⋯ » menu, and the header turns solid (title visible) once the photo has scrolled away
+{const w=$('#cardmore'),b=w.querySelector('.back');
+  b.onclick=ev=>{ev.stopPropagation();const o=!w.classList.contains('open');w.classList.toggle('open',o);b.setAttribute('aria-expanded',String(o))};
+  document.addEventListener('click',ev=>{if(!ev.target.closest('#cardmore')){w.classList.remove('open');b.setAttribute('aria-expanded','false')}});
+  const cb=$('#cardbody'),hd=$('#card .chead'),upd=()=>{const ph=cb.querySelector('.cphoto'),lim=(ph?ph.offsetHeight:300)-(hd.offsetHeight||64)-8;hd.classList.toggle('solid',cb.scrollTop>lim)};
+  cb.addEventListener('scroll',upd,{passive:true});window.cardHdr=upd}
 // « Back to top » button: shown in the chat and on the recipe card once the reader has scrolled down.
 function topScroller(){return $('#chat').classList.contains('on')?log:$('#card').classList.contains('on')?$('#cardbody'):$('#history').classList.contains('on')?$('#hlist'):$('#favs').classList.contains('on')?$('#flist'):null}
 function updTop(){
@@ -3199,7 +3282,7 @@ function updTop(){
     const nv=document.querySelector('nav'),nb=nv&&nv.offsetParent!==null?nv.querySelector('button:last-child'):null;
     if(nb){const n=nv.getBoundingClientRect(),c=nb.getBoundingClientRect();b.style.left=Math.round(c.left+c.width/2-22)+'px';b.style.top=Math.round(n.top-44-12)+'px'}
     else if($('#app').classList.contains('selmode')){const hb=$('#hselbar').getBoundingClientRect();b.style.left=Math.round(r.right-62)+'px';b.style.top=Math.round(hb.top-44-10)+'px'} // History selection mode: just above the action bar, on the right
-    else{b.style.left=(r.right-62)+'px';b.style.top=(r.bottom-62)+'px'}
+    else{b.style.left=(r.right-62)+'px';b.style.top=(r.bottom-62-($('#card').classList.contains('on')?68:0))+'px'}
   }
   b.classList.add('on');
 }
