@@ -2163,7 +2163,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v110',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v111',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2625,7 +2625,7 @@ function infoChips(txt){
 }
 // ---------- A photo for every recipe (found by /api/photo on Unsplash; the photographer is credited) ----------
 // The photo is stored in the recipe as e.ph = {id,u,t,by,bu,pg}. A picture chosen by the user (e.img) or an imported photo always wins.
-// No photo found: e.phNo (retried after 1 h) and the server keeps the title in a list for a manual check (GET /api/photo?missing=1).
+// No photo found: e.phNo2 (retried after 30 min; the older e.phNo of v109–v110 is ignored) and the server keeps the title in a list for a manual check (GET /api/photo?missing=1).
 const okU=u=>/^https:\/\/(images\.)?unsplash\.com\//.test(u||'');
 const UNS='https://unsplash.com/?utm_source=chef_ia&utm_medium=referral'; // Unsplash API rule: credit links carry utm_source=<app>&utm_medium=referral
 const hasOwnImg=e=>!!(e.img||(typeof e.photo==='string'&&/^data:/.test(e.photo)));
@@ -2643,15 +2643,15 @@ async function phFetch(id){
     const r=await fetchT('/api/photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':code},body:JSON.stringify({title:e.title,lang:e.lang||lang,skip})},30000);
     let j=null;try{j=await r.json()}catch(x){}
     if(!r.ok||!j){try{console.warn('Chef IA photo:',r.status,j&&j.error||'')}catch(x){}return false} // no key yet, not signed in, too many requests, offline: silent (see the console), tried again at the next opening
-    if(j.photo&&okU(j.photo.u)&&okU(j.photo.t)){updEntry(id,z=>{z.ph=j.photo;delete z.phNo});repaintImgViews(id);return true}
-    if(j.none)updEntry(id,z=>{z.phNo=Date.now()});
+    if(j.photo&&okU(j.photo.u)&&okU(j.photo.t)){updEntry(id,z=>{z.ph=j.photo;delete z.phNo;delete z.phNo2});repaintImgViews(id);return true}
+    if(j.none){try{console.info('Chef IA photo: none',j.why||'')}catch(x){}updEntry(id,z=>{z.phNo2=Date.now()})}
     return false;
   }catch(x){try{console.warn('Chef IA photo:',x&&x.message||x)}catch(y){}return false}
 }
 function ensurePhoto(id){ // one lookup at a time, so two recipes never get the same photo; resolves true when a photo was found
   if(phBusy.has(id))return phBusy.get(id);
   const e=loadH().find(x=>x.id===id);
-  if(!e||e.qa||e.ph||hasOwnImg(e)||(e.phNo&&Date.now()-e.phNo<36e5))return Promise.resolve(false);
+  if(!e||e.qa||e.ph||hasOwnImg(e)||(e.phNo2&&Date.now()-e.phNo2<18e5))return Promise.resolve(false);
   const p=phQ.then(()=>phFetch(id)).finally(()=>phBusy.delete(id));
   phQ=p.catch(()=>{});phBusy.set(id,p);return p;
 }
