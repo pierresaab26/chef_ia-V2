@@ -2,7 +2,7 @@
 
 Living documentation. For each area: what it is, how it behaves, what was done (version), where it lives in the code, what is stored and known limits.
 Keep it up to date whenever one of these areas changes (same rule as `CLAUDE.md`). A docs-only change does not bump `APP_VERSION`.
-Last update: v109 (2026-11-03). Never put secrets in this file (the repository may be public).
+Last update: v108 (2026-11-03). Never put secrets in this file (the repository may be public).
 
 ## Map of the app
 
@@ -46,13 +46,8 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 
 **Import (v-early, shared with the chat 📎).** Entry points: the « Importer une recette » card on the home screen and the 📎 button of the chat (the left-menu entry was removed in v108: it duplicated the home card). Photo (camera or gallery) → `api/import-photo.js` (vision model); web link → `api/import-link.js` (structured data first, then the model; `api/_page.js` blocks private addresses, limits redirects, size and time). Limits per IP: photos 6/min (`rl:ip:`), links 10/min (`rl:il:`). No fake import: if extraction fails the user sees an error.
 
-**A photo for every recipe (v109).** Each saved recipe gets its OWN photo, free of charge, from Pexels (free licence; the photographer is credited, which the owner accepts). The server route `api/photo.js` searches Pexels with the recipe title (locale of the interface language; if nothing, the model gives a short English phrase and it searches again), keeps the candidates in Redis for 90 days, and the app sends the ids already used on the device (`skip`) so two recipes never share a photo. The lookup runs by itself after a recipe is saved or generated, and when an older recipe is opened. Shown: under EACH recipe in the chat (a thread of several generated recipes shows one picture per recipe), on the recipe card, and as the thumbnail in History / Favorites / search. Credit: « Photo : Name · Pexels » (both links) under the photo on the card and as a chip on the picture in the chat. A picture chosen by the user, or an imported photo, always wins; « reset » brings the Pexels photo back.
-- **Nothing found (manual check).** The recipe keeps the code-drawn illustration (the card may try Wikipedia) and the title is added to a list: open `/api/photo?missing=1` (public, titles only, newest first, 100 max) and tell Claude, who decides what to do (reword the search, choose a photo by hand…). The app does not ask again for the same recipe for 1 hour; the server remembers « nothing found » for 6 hours.
-- **Setup.** `PEXELS_API_KEY` (free key, pexels.com/api) in Vercel → Production, then redeploy. Without it `/api/photo` answers 503 and the app silently keeps the old behaviour.
-- **Limits.** The match is the first Pexels result for the title: an unusual dish may get an approximate photo (the owner can change it with the 📷 button). Free Pexels quota: 200 requests per hour and 20,000 per month (the Redis cache saves most of them). The preview artifact does not emulate this route.
-
-**Code.** `index.html`: `drawChefs`, `genRecipes`, `branchWith`, `saveCurrent`, `resetInfo*`, `drawHomeSearch`, `openImp`, `ensurePhoto` / `phFetch` / `phCreditInto`, `dishPic`, `repaintImgViews`. Server: `api/chat.js` (`systemFor`, `PARTS`, `CHEFS`, `GUARD`), `api/import-*.js`, `api/photo.js`.
-**Stored.** Recipes in `localStorage` key `chefStore` (device only); a recipe's photo is `e.ph={id,u,t,by,bu,pg}`, or `e.phNo` (time of a « nothing found »). Redis: `ph:*`, `phn:*`, `ph:missing`, `rl:ph:*`.
+**Code.** `index.html`: `drawChefs`, `genRecipes`, `branchWith`, `saveCurrent`, `resetInfo*`, `drawHomeSearch`, `openImp`. Server: `api/chat.js` (`systemFor`, `PARTS`, `CHEFS`, `GUARD`), `api/import-*.js`.
+**Stored.** Recipes in `localStorage` key `chefStore` (device only).
 **Limits.** The chef may answer « without X » with a list of options instead of the full recipe (open point since v71). Quality with the real model was only checked by the 55-question bench (scope) and manual tests.
 
 ---
