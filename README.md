@@ -25,8 +25,9 @@ Front end: a single `index.html` (vanilla JS, 6 interface languages: fr, en, es,
    - `MODEL` (optional): chat model. Default `claude-haiku-5-5`.
    - `VISION_MODEL` (optional): photo import model. Default `claude-haiku-5-5`.
    - `EXTRACT_MODEL` (optional): link import model. Default `MODEL`, then `claude-haiku-5-5`.
-3. Comments and ratings need an Upstash Redis database (Vercel → Storage → Upstash). The `KV_REST_API_URL` and `KV_REST_API_TOKEN` variables are added automatically. Without it, the app still works; comments are disabled and ratings stay on the device.
-4. Set a monthly spend limit at https://platform.claude.com/settings/billing.
+3. Recipe photos: create an app at https://unsplash.com/developers and add its Access Key as `UNSPLASH_ACCESS_KEY` (Vercel → Environment Variables), then redeploy. Every recipe then gets its own photo, with the photographer credited. A new Unsplash app is limited to 50 requests per hour (demo mode); apply for Production before opening the app to the public. Without the key the app still works (illustrations only).
+4. Comments and ratings need an Upstash Redis database (Vercel → Storage → Upstash). The `KV_REST_API_URL` and `KV_REST_API_TOKEN` variables are added automatically. Without it, the app still works; comments are disabled and ratings stay on the device.
+5. Set a monthly spend limit at https://platform.claude.com/settings/billing.
 
 ## Cost
 

@@ -261,6 +261,8 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
 .rtitle{font-size:20px;font-weight:700;color:var(--ink);margin:2px 4px 10px;line-height:1.25}
 
 .tap{position:relative;cursor:pointer}
+.dcr{position:absolute;left:8px;bottom:8px;max-width:calc(100% - 16px);font-size:11px;line-height:1.3;padding:3px 9px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:2}
+.dcr a,.credit a{color:inherit;text-decoration:underline}
 .camb{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;font-size:16px;pointer-events:none}
 #isheetwrap{position:fixed;inset:0;background:rgba(10,8,20,.5);display:none;align-items:flex-end;justify-content:center;z-index:60}
 #isheetwrap.on{display:flex}
@@ -528,6 +530,7 @@ fr:{
   cErr:"Impossible de charger les commentaires.",
   cRate:"Trop de commentaires, réessayez dans une minute.",
   credit:"Photo : Wikipédia",
+  phBy:"Photo :",
   anon:"Anonyme",
   now:"à l’instant",
   home:"Accueil",
@@ -754,6 +757,7 @@ en:{
   cErr:"Could not load comments.",
   cRate:"Too many comments, try again in a minute.",
   credit:"Photo: Wikipedia",
+  phBy:"Photo:",
   anon:"Anonymous",
   now:"just now",
   home:"Home",
@@ -980,6 +984,7 @@ es:{
   cErr:"No se pudieron cargar los comentarios.",
   cRate:"Demasiados comentarios, inténtalo en un minuto.",
   credit:"Foto: Wikipedia",
+  phBy:"Foto:",
   anon:"Anónimo",
   now:"ahora mismo",
   home:"Inicio",
@@ -1206,6 +1211,7 @@ de:{
   cErr:"Kommentare konnten nicht geladen werden.",
   cRate:"Zu viele Kommentare, versuche es in einer Minute erneut.",
   credit:"Foto: Wikipedia",
+  phBy:"Foto:",
   anon:"Anonym",
   now:"gerade eben",
   home:"Start",
@@ -1432,6 +1438,7 @@ it:{
   cErr:"Impossibile caricare i commenti.",
   cRate:"Troppi commenti, riprova tra un minuto.",
   credit:"Foto: Wikipedia",
+  phBy:"Foto:",
   anon:"Anonimo",
   now:"adesso",
   home:"Home",
@@ -1658,6 +1665,7 @@ pt:{
   cErr:"Não foi possível carregar os comentários.",
   cRate:"Demasiados comentários, tente novamente num minuto.",
   credit:"Foto: Wikipedia",
+  phBy:"Foto:",
   anon:"Anónimo",
   now:"agora mesmo",
   home:"Início",
@@ -1976,8 +1984,8 @@ async function genRecipes(picks,f){
       H.push({role:'assistant',content:j.text,rid});
       const e={id:rid,title:recipeTitle(j.text)||p.label,date:new Date().toISOString(),updatedAt:Date.now(),k:K,fav:false,lang,
         messages:H.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content}),ideas:{at,pick:p.label}};
-      const a=loadH();a.unshift(e);if(!saveH(a))toast(t.stFull);ids.push(rid);if(tok!==convTok)continue; // left the thread: saved, nothing more on screen
-      currentId=rid;
+      const a=loadH();a.unshift(e);if(!saveH(a))toast(t.stFull);ids.push(rid);try{ensurePhoto(rid)}catch(x){}if(tok!==convTok)continue; // left the thread: saved, nothing more on screen
+      currentId=rid;try{dishPic(out,j.text,rid,true)}catch(x){}
       p.card.classList.remove('sel');p.card.setAttribute('aria-checked','false');p.card.classList.add('gen'); // ticked idea → generated
       if(i===0)showStart(out); // stay at the start of the first recipe
     }catch(x){if(tok!==convTok){err=x;break}err=x;H.pop();out.remove();const u=log.querySelectorAll('.m.u');u[u.length-1]&&u[u.length-1].remove();break}
@@ -2155,7 +2163,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v108',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v109',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2203,14 +2211,14 @@ function saveCurrent(){
   }else{a.splice(a.indexOf(e),1)}
   hist.forEach(m=>{if(m.role==='assistant'&&!m.rid&&looksLikeRecipe(m.content))m.rid=currentId}); // recipe message → saved recipe
   e.messages=hist.map(m=>m.rid?{role:m.role,content:m.content,rid:m.rid}:{role:m.role,content:m.content});e.updatedAt=Date.now();
-  a.unshift(e);if(!saveH(a))toast(T().stFull);drawHistory();syncCardBtn();
+  a.unshift(e);if(!saveH(a))toast(T().stFull);drawHistory();syncCardBtn();try{ensurePhoto(currentId)}catch(x){}
 }
 function rowFor(e,del,heart,sc,unarch){
   const [em,bg]=dishLook(e.title);
   const r=document.createElement('div');r.className='hrow';
   const o=document.createElement('button');o.className='hopen';
   const p=document.createElement('div');p.className='hpic';p.style.background=bg;p.textContent=em;
-  if(e.img){p.textContent='';const im=document.createElement('img');im.alt='';im.referrerPolicy='no-referrer';im.src=e.img;im.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:14px;display:block';im.onerror=()=>{im.remove();p.textContent=em};p.appendChild(im)}
+  const ru=e.img||(e.ph&&okU(e.ph.t)?e.ph.t:'');if(ru){p.textContent='';const im=document.createElement('img');im.alt='';im.referrerPolicy='no-referrer';im.src=ru;im.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:14px;display:block';im.onerror=()=>{im.remove();p.textContent=em};p.appendChild(im)}
   const x=document.createElement('div');x.className='htx';
   const b=document.createElement('b');b.textContent=(e.fav?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
   x.append(b,d);o.append(p,x);o.onclick=()=>openCard(e.id);r.appendChild(o);
@@ -2326,7 +2334,7 @@ function openSaved(id){
   chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=id;branchFrom=null;
   hist.forEach(m=>add(m.role==='user'?'u':'a',shown(m.content)));
   refreshChat();drawQuick();show('chat');
-  try{let i=-1;hist.forEach((m,k)=>{if(m.rid===id)i=k});if(i<0)i=hist.findIndex(m=>m.role==='assistant'&&looksLikeRecipe(m.content));if(i>=0)dishPic(log.children[i],hist[i].content)}catch(x){} // picture under this recipe
+  try{const seen=new Set(),els=[...log.querySelectorAll(':scope > .m')];hist.forEach((m,k)=>{if(m.role==='assistant'&&m.rid&&!seen.has(m.rid)){seen.add(m.rid);dishPic(els[k],m.content,m.rid,true);ensurePhoto(m.rid)}});if(seen.size)toBottom()}catch(x){} // a picture under EACH recipe of the thread (its own photo)
   try{chatActions()}catch(x){}
 }
 // ---------- Fiches recette : photo, favoris, partage, commentaires ----------
@@ -2615,6 +2623,38 @@ function infoChips(txt){
   if(tm)out.push('⏱ '+tm[1].trim());
   return out;
 }
+// ---------- A photo for every recipe (found by /api/photo on Unsplash; the photographer is credited) ----------
+// The photo is stored in the recipe as e.ph = {id,u,t,by,bu,pg}. A picture chosen by the user (e.img) or an imported photo always wins.
+// No photo found: e.phNo (retried after 1 h) and the server keeps the title in a list for a manual check (GET /api/photo?missing=1).
+const okU=u=>/^https:\/\/(images\.)?unsplash\.com\//.test(u||'');
+const UNS='https://unsplash.com/?utm_source=chef_ia&utm_medium=referral'; // Unsplash API rule: credit links carry utm_source=<app>&utm_medium=referral
+const hasOwnImg=e=>!!(e.img||(typeof e.photo==='string'&&/^data:/.test(e.photo)));
+const phBusy=new Map();let phQ=Promise.resolve();
+function phCreditInto(el,ph){ // « Photo : Name · Unsplash », both parts are links
+  el.textContent='';
+  const lk=(txt,href)=>{const a=document.createElement('a');a.textContent=txt;a.href=href;a.target='_blank';a.rel='noopener noreferrer';a.onclick=ev=>ev.stopPropagation();return a};
+  el.append(T().phBy+' ',lk(ph.by||'Unsplash',okU(ph.bu)?ph.bu:UNS),' · ',lk('Unsplash',UNS));
+}
+async function phFetch(id){
+  try{
+    const e=loadH().find(x=>x.id===id);if(!e||e.ph||hasOwnImg(e))return false;
+    let code='';try{code=localStorage.getItem('code')||''}catch(x){}
+    const skip=loadH().map(x=>x.ph&&x.ph.id).filter(Boolean); // every recipe gets its OWN photo
+    const r=await fetchT('/api/photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':code},body:JSON.stringify({title:e.title,lang:e.lang||lang,skip})},30000);
+    let j=null;try{j=await r.json()}catch(x){}
+    if(!r.ok||!j)return false; // no key yet, not signed in, too many requests, offline: silent, tried again at the next opening
+    if(j.photo&&okU(j.photo.u)&&okU(j.photo.t)){updEntry(id,z=>{z.ph=j.photo;delete z.phNo});repaintImgViews(id);return true}
+    if(j.none)updEntry(id,z=>{z.phNo=Date.now()});
+    return false;
+  }catch(x){return false}
+}
+function ensurePhoto(id){ // one lookup at a time, so two recipes never get the same photo; resolves true when a photo was found
+  if(phBusy.has(id))return phBusy.get(id);
+  const e=loadH().find(x=>x.id===id);
+  if(!e||e.qa||e.ph||hasOwnImg(e)||(e.phNo&&Date.now()-e.phNo<36e5))return Promise.resolve(false);
+  const p=phQ.then(()=>phFetch(id)).finally(()=>phBusy.delete(id));
+  phQ=p.catch(()=>{});phBusy.set(id,p);return p;
+}
 async function getPhoto(e){
   if(typeof e.photo==='string')return e.photo;
   let url='';
@@ -2629,7 +2669,8 @@ async function getPhoto(e){
 }
 function toggleFav(id){const e=updEntry(id,z=>{z.fav=!z.fav});drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}return e&&e.fav}
 async function shareRecipe(e){
-  const body=e.title+'\n\n'+plain(recipeText(e))+(e.link?'\n\n'+e.link:/^https?:/.test(location.href)?'\n\n'+location.origin:'');
+  const pic=e.ph&&!hasOwnImg(e)&&okU(e.ph.pg)?'\n\n📷 '+T().phBy+' '+(e.ph.by||'Unsplash')+' · Unsplash\n'+e.ph.pg:''; // the recipient gets the credit and the link of the SAME photo
+  const body=e.title+'\n\n'+plain(recipeText(e))+pic+(e.link?'\n\n'+e.link:/^https?:/.test(location.href)?'\n\n'+location.origin:'');
   if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
   let ok=false;
   try{await navigator.clipboard.writeText(body);ok=true}catch(x){}
@@ -2757,8 +2798,12 @@ function openCard(id){
   ph.onclick=()=>openImgSheet(id);ph.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
   if(e.img){emo.remove();const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=e.img;im.style.cssText='display:block;width:100%;height:100%;object-fit:cover';
     im.onerror=()=>{im.remove();toast(T().imgBad)};ph.appendChild(im)}
+  else if(e.ph&&okU(e.ph.u)){emo.remove();const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=e.ph.u;im.style.cssText='display:block;width:100%;height:100%;object-fit:cover';
+    im.onerror=()=>{im.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.insertBefore(a,ph.firstChild);credit.textContent=''};ph.appendChild(im);phCreditInto(credit,e.ph)}
   else{const art=()=>{if(cardId!==id||!emo.isConnected)return;ph.style.background='linear-gradient(to bottom,transparent 76.4%,rgba(255,255,255,.35) 76.4%),'+bg;emo.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.appendChild(a)};
-  art();getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+encodeURI(u).replace(/"/g,'%22').replace(/\)/g,'%29')+'")';ph.appendChild(cam);credit.textContent=/^data:/.test(u)?'':T().credit}})}
+  art();
+  const wiki=()=>getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+encodeURI(u).replace(/"/g,'%22').replace(/\)/g,'%29')+'")';ph.appendChild(cam);credit.textContent=/^data:/.test(u)?'':T().credit}});
+  ensurePhoto(id).then(ok=>{if(!ok&&cardId===id&&curView==='card')wiki()})}
   ph.appendChild(cam);
   const h=document.createElement('h1');h.className='ctitle';h.textContent=curT;body.appendChild(h);
   const txt=recipeText(e),hd=headInfo(txt),info=infoChips(hd.txt);
@@ -2886,18 +2931,21 @@ function showStart(el){
   stickEl=el;const go=()=>{const lr=log.getBoundingClientRect(),r=el.getBoundingClientRect();log.scrollTop+=r.top-lr.top-8};
   go();requestAnimationFrame(go);setTimeout(()=>{go();stickEl=null},260);
 }
-function dishPic(b,text){
-  if(!b||log.querySelector('.dphoto')||!looksLikeRecipe(text||''))return;
-  const e=currentId?loadH().find(x=>x.id===currentId):null;if(!e)return;
-  const box=document.createElement('div');box.className='dphoto';b.after(box);
-  const mine=e.img||(typeof e.photo==='string'&&/^data:/.test(e.photo)?e.photo:'');
-  if(mine){const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=mine;im.onerror=()=>{im.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';box.insertBefore(a,box.firstChild)};box.appendChild(im)} // chosen image, or thumbnail of the imported photo
+function dishPic(b,text,rid,still){ // one picture under each recipe of the thread (rid = saved recipe; default: the current one); still = do not scroll
+  const id=rid||currentId;
+  if(!b||!id||log.querySelector('.dphoto[data-rid="'+id+'"]')||!looksLikeRecipe(text||''))return;
+  const e=loadH().find(x=>x.id===id);if(!e)return;
+  const box=document.createElement('div');box.className='dphoto';box.dataset.rid=id;b.after(box);
+  const dataPh=typeof e.photo==='string'&&/^data:/.test(e.photo)?e.photo:'',webPh=e.ph&&okU(e.ph.u)?e.ph.u:'';
+  const mine=e.img||dataPh||webPh;
+  if(mine){const im=document.createElement('img');im.alt=e.title;im.referrerPolicy='no-referrer';im.src=mine;im.onerror=()=>{im.remove();const c=box.querySelector('.dcr');if(c)c.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';box.insertBefore(a,box.firstChild)};box.appendChild(im)} // chosen image, imported photo, or the Unsplash photo of the recipe
   else{const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';box.appendChild(a)}
+  if(webPh&&mine===webPh){const c=document.createElement('span');c.className='dcr';phCreditInto(c,e.ph);box.appendChild(c)} // photographer credit
   box.classList.add('tap');box.setAttribute('role','button');box.tabIndex=0;box.setAttribute('aria-label',T().imgT);
   const cb=document.createElement('span');cb.className='camb';cb.textContent='📷';box.appendChild(cb);
-  const id=currentId;box.onclick=()=>openImgSheet(id);box.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
+  box.onclick=()=>openImgSheet(id);box.onkeydown=ev=>{if(ev.target===box&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();openImgSheet(id)}};
   try{chatActions()}catch(x){}
-  toBottom();
+  if(!still)toBottom();
 }
 function openChat(chef){
   newConv();qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
@@ -3075,10 +3123,10 @@ function openImgSheet(id){
 function closeImgSheet(){$('#isheetwrap').classList.remove('on');imgTarget=null}
 function repaintImgViews(id){
   if(cardId===id&&curView==='card')openCard(id);
-  const box=log.querySelector('.dphoto');
-  if(box&&currentId===id){const b=box.previousElementSibling;box.remove();log.querySelectorAll('.chact').forEach(x=>x.remove());
-    const m=hist.find(x=>x.role==='assistant'&&looksLikeRecipe(x.content));if(b&&m)dishPic(b,m.content)}
-  drawHistory();drawFavs();
+  const box=log.querySelector('.dphoto[data-rid="'+id+'"]');
+  if(box){const b=box.previousElementSibling;box.remove();log.querySelectorAll('.chact').forEach(x=>x.remove());
+    const m=hist.find(x=>x.role==='assistant'&&x.rid===id)||hist.find(x=>x.role==='assistant'&&looksLikeRecipe(x.content));if(b&&m)dishPic(b,m.content,id,true)}
+  drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}
 }
 function finishImg(url){
   const id=imgTarget;if(!id)return;
