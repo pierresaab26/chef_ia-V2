@@ -61,6 +61,7 @@ Files starting with `_` in `api/` are helpers, not routes.
 - **No fake buttons**: no simulated image recognition or link extraction. Every visible feature must really work.
 - **Examine the structure before changing anything. Test before delivering** (at least `node --check api/*.js`, and load `index.html` in Playwright/Chromium on a phone and a tablet viewport).
 - **Push to GitHub yourself** (`main`), then tell the owner which files changed.
+- **After EVERY app version, always give the owner the preview artifact** (rebuild it from the new `index.html` and republish it on the same artifact, title « Chef IA – vN (aperçu) »), without being asked.
 - The owner reports problems with screenshots.
 
 ## 4. Chef behavior (api/chat.js)
