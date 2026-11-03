@@ -130,7 +130,7 @@ input,textarea,select{font-size:16px!important}
 .crow{display:flex;gap:8px}.crow input{flex:1}
 .cpub{background:var(--green);color:#10200a;font-weight:700;border-radius:999px;padding:0 18px}
 .cpub:disabled{opacity:.5}
-#hfilter{display:flex;gap:8px;padding:10px 18px 0}
+#hfilter{display:flex;gap:8px;padding:10px 18px 10px}
 
 @media (min-width:768px){#app{max-width:760px}.cphoto{height:300px}}
 #scrim{position:fixed;inset:0;background:rgba(10,8,20,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
@@ -2121,7 +2121,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v100',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v101',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2217,14 +2217,14 @@ function drawHistory(){
 }
 // Selection bar (bottom of the History view while the selection mode is on): delete, move to a category, archive / restore.
 function selBar(){
-  const bar=$('#hselbar'),t=T();bar.innerHTML='';$('#app').classList.toggle('selmode',!!hsel);if(!hsel)return;
+  const bar=$('#hselbar'),t=T();bar.innerHTML='';$('#app').classList.toggle('selmode',!!hsel);if(!hsel){try{updTop()}catch(x){}return}
   const n=hsel.size,mk=(txt,fn,cls)=>{const b=document.createElement('button');b.type='button';b.textContent=txt;if(cls)b.className=cls;b.onclick=fn;return b};
   const r1=document.createElement('div');r1.className='hsr';const c=document.createElement('b');c.textContent=t.hSelN.replace('{n}',n);
   const allOn=hshown.length>0&&hshown.every(id=>hsel.has(id));
   r1.append(c,mk(allOn?t.hNone:t.hAll,()=>{if(allOn)hsel.clear();else hshown.forEach(id=>hsel.add(id));drawHistory()}),mk(t.imCancel,()=>{hsel=null;drawHistory()}));
   const r2=document.createElement('div');r2.className='hsr';
   const del=mk('🗑️ '+t.del,selDelete,'dng'),mv=mk('📁 '+t.hMv,selMove),ar=mk(harch?'↩ '+t.hUnarchB:'🗄️ '+t.hArchB,()=>selArchive(!harch));
-  [del,mv,ar].forEach(b=>b.disabled=!n);r2.append(del,mv,ar);bar.append(r1,r2);
+  [del,mv,ar].forEach(b=>b.disabled=!n);r2.append(del,mv,ar);bar.append(r1,r2);try{updTop()}catch(x){}
 }
 async function selDelete(){
   const S=new Set(hsel);if(!S.size||!await ask({text:T().hDelN.replace('{n}',S.size),okLabel:T().del}))return;
@@ -3075,7 +3075,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classL
 $('#cardback').onclick=()=>show('home');
 $('#toorig').onclick=resetToOriginal;
 // « Back to top » button: shown in the chat and on the recipe card once the reader has scrolled down.
-function topScroller(){return $('#chat').classList.contains('on')?log:$('#card').classList.contains('on')?$('#cardbody'):null}
+function topScroller(){return $('#chat').classList.contains('on')?log:$('#card').classList.contains('on')?$('#cardbody'):$('#history').classList.contains('on')?$('#hlist'):$('#favs').classList.contains('on')?$('#flist'):null}
 function updTop(){
   const b=$('#totop'),sc=topScroller();if(!b)return;
   if(!sc||sc.scrollTop<400){b.classList.remove('on');return}
@@ -3088,13 +3088,14 @@ function updTop(){
   }else{ // recipe card: above the bottom bar, centered over its last icon (✨), never on top of it
     const nv=document.querySelector('nav'),nb=nv&&nv.offsetParent!==null?nv.querySelector('button:last-child'):null;
     if(nb){const n=nv.getBoundingClientRect(),c=nb.getBoundingClientRect();b.style.left=Math.round(c.left+c.width/2-22)+'px';b.style.top=Math.round(n.top-44-12)+'px'}
+    else if($('#app').classList.contains('selmode')){const hb=$('#hselbar').getBoundingClientRect();b.style.left=Math.round(r.right-62)+'px';b.style.top=Math.round(hb.top-44-10)+'px'} // History selection mode: just above the action bar, on the right
     else{b.style.left=(r.right-62)+'px';b.style.top=(r.bottom-62)+'px'}
   }
   b.classList.add('on');
 }
 {const b=document.createElement('button');b.id='totop';b.type='button';b.textContent='↑';b.setAttribute('aria-label','Top');
   b.onclick=()=>{const sc=topScroller();if(sc)sc.scrollTo({top:0,behavior:'smooth'})};document.body.appendChild(b);
-  [log,$('#cardbody')].forEach(x=>x.addEventListener('scroll',updTop,{passive:true}));addEventListener('resize',updTop);
+  [log,$('#cardbody'),$('#hlist'),$('#flist')].forEach(x=>x.addEventListener('scroll',updTop,{passive:true}));addEventListener('resize',updTop);
   if(window.ResizeObserver){const ro=new ResizeObserver(()=>updTop());[log,$('#quick'),$('#bar')].forEach(x=>ro.observe(x))}} // follow layout changes (new reply, filters button)
 $('#tofav').onclick=()=>{if(currentId){const f=toggleFav(currentId);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
