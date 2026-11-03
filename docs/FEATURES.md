@@ -59,7 +59,7 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 
 ---
 
-**Look of the recipe views (v115).** One accent (pink) on a cream background; the metadata row (`metaBar()`) shows prep / rest / cook / servings / health as icon + value in the chat and on the card; the recipe card has a full-width photo, a floating header (round buttons, « ⋯ » menu with « Recette originale », frosted + title after scrolling), tabs Ingrédients / Ustensiles / Préparation (`cardTabs()`) and a sticky « Continuer avec le chef » button (`#cardcta`) instead of the bottom bar. The rating pill sits next to the heart (average + number of votes in brackets once shared); « Continuer avec le chef », « Publier » and ↑ use a soft pale-pink style. v117: on the card the action row (heart, rating, share) sits under the title and date, above the metadata row; share is an icon only on phones.
+**Look of the recipe views (v115).** One accent (pink) on a cream background; the metadata row (`metaBar()`) shows prep / rest / cook / servings / health as icon + value in the chat and on the card; the recipe card has a full-width photo, a floating header (round buttons, « ⋯ » menu with « Recette originale », frosted + title after scrolling), tabs Ingrédients / Ustensiles / Préparation (`cardTabs()`) and a sticky « Ajuster avec le chef » button (`#cardcta`) instead of the bottom bar. The rating pill sits next to the heart (average + number of votes in brackets once shared); « Ajuster avec le chef », « Publier » and ↑ use a soft pale-pink style. v117: on the card the action row (heart, rating, share) sits under the title and date, above the metadata row; share is an icon only on phones.
 
 ## 2. History and favorites
 

@@ -6,7 +6,8 @@
 <title>Chef IA – Recettes</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍳</text></svg>">
 <style>
-:root{--bg1:#fffaf2;--bg2:#f9eddc;--card:#fff;--ink:#16121a;--mut:#7b7684;--pink:#e5195f;--dark:#15121a;--bd:rgba(0,0,0,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--psoft:#fde6ee;--psbd:rgba(229,25,95,.22);--bg1:#fffaf2;--bg2:#f9eddc;--card:#fff;--ink:#16121a;--mut:#7b7684;--pink:#e5195f;--dark:#15121a;--bd:rgba(0,0,0,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@supports(background:color-mix(in srgb,red,blue)){:root{--psoft:color-mix(in srgb,var(--pink) 14%,var(--card))}} /* v118: ONE soft-pink style for every action button and selected chip */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#1f1b33;--bg2:#12101d;--card:#272339;--ink:#f4f1fa;--mut:#a29cb3;--dark:#0b0910;--bd:rgba(255,255,255,.09)}}
 :root[data-theme="dark"]{--bg1:#1f1b33;--bg2:#12101d;--card:#272339;--ink:#f4f1fa;--mut:#a29cb3;--dark:#0b0910;--bd:rgba(255,255,255,.09)}
 *{box-sizing:border-box}
@@ -23,13 +24,13 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .sub{color:var(--mut);font-size:13px}
 .ask{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:6px 6px 6px 16px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
 .ask input{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:0;min-width:0}
-.ask button{background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:8px 14px}
+.ask button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:8px 14px}
 h2{font-size:16px;margin:18px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
 h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .go{width:34px;height:34px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-weight:700;flex:none}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .chip{flex:none;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:6px 13px;font-size:13px;white-space:nowrap}
-.chip.on{background:var(--pink);color:#fff;border-color:var(--pink);font-weight:700}
+.chip.on{background:var(--psoft);color:var(--pink);border-color:var(--psbd);font-weight:700}
 /* Seasonal menu (home): seasons + French holidays + world festivals, country picker, ideas by course, seasonal background */
 .snpanel{border-radius:20px;padding:14px;margin-top:10px;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#16121a}
 .snpanel.dk{color:#f4f1fa}
@@ -65,7 +66,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chfree p{color:#c9c3d9;font-size:12.5px;margin:2px 0 10px}
 .chfree form{display:flex;gap:8px}
 .chfree input{flex:1;min-width:0;font-size:16px;border-radius:999px;border:0;padding:10px 14px;background:#fff;color:#16121a}
-.chfree button{flex:none;background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:10px 14px;font-size:14px}
+.chfree button{flex:none;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:10px 14px;font-size:14px}
 .more{color:var(--pink);font-weight:600;font-size:13px}
 .favgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media (min-width:600px){.favgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .favtile{display:flex;flex-direction:column;gap:4px;min-width:0;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer}
@@ -111,7 +112,7 @@ input,textarea,select{font-size:16px!important}
 .kb #quick,.kb #totop{display:none!important} /* keyboard open: give the room back to the conversation */
 .hid,.hidold{display:none!important}.chrow{align-self:stretch;margin:0 0 6px}.chhide{display:block;width:100%;margin:0;text-align:center;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
-.chact .cbtn.cook{background:var(--pink);color:#fff;border-color:var(--pink);font-weight:700}
+.chact .cbtn.cook{background:var(--psoft);color:var(--pink);border-color:var(--psbd);font-weight:700}
 .m .chact{margin:12px 0 16px}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}
 .rl{font-size:13px;color:var(--mut)}
@@ -119,7 +120,7 @@ input,textarea,select{font-size:16px!important}
 .stars button{background:none;border:0;padding:2px 1px;font-size:19px;line-height:1;color:#cfd0dc;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .stars button.on{color:#f5b301}
 .ri{font-size:13px;color:var(--mut);font-weight:600}
-.cbtn.go{background:var(--pink);color:#fff;flex:1;min-width:160px}
+.cbtn.go{background:var(--psoft);color:var(--pink);border-color:var(--psbd);flex:1;min-width:160px}
 .rtext{max-width:100%}
 .coms{margin-top:22px}
 .clist{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
@@ -148,7 +149,7 @@ input,textarea,select{font-size:16px!important}
 .dhead b{flex:1;font-size:17px}
 .dclose{font-size:20px;padding:6px 10px;color:var(--mut)}
 .ditem{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:14px;font-size:16px;font-weight:600;text-align:left}
-.ditem.on{background:var(--pink);color:#fff}
+.ditem.on{background:var(--psoft);color:var(--pink)}
 .ditem span.n{margin-left:auto;color:var(--mut);font-size:13px;font-weight:600}
 .ditem.on span.n{color:#fff}
 .menubtn{font-size:22px;padding:0 6px;line-height:1;flex:none}
@@ -234,13 +235,13 @@ nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;
 .fmt p{margin:0 0 .6em}.fmt p:last-child,.fmt .rl:last-child{margin-bottom:0}
 .fmt .rl{margin:.2em 0 .7em;padding-left:1.3em}.fmt .rl li{margin:.25em 0;padding-left:.2em}.fmt ul.rl li::marker{color:var(--mut)}
 #quick,.qgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 14px;align-items:start}#quick{padding:10px 14px 10px;margin:0 auto;width:100%;box-sizing:border-box}#quick:empty{display:none}
-.qcol .chip.on{background:var(--pink);color:#fff;border-color:var(--pink)}.qgo{margin-top:2px;padding:10px 14px;border:0;border-radius:999px;background:var(--pink);color:#fff;font:inherit;font-weight:700;font-size:14px;cursor:pointer}.qgo[hidden]{display:none}.qacts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}.qacts .qgo{flex:1 1 150px;margin-top:2px}.qacts .qgo[hidden]{display:none}.qacts .qmore{background:var(--card);color:var(--ink);border:1px solid var(--bd)}
+.qcol .chip.on{background:var(--psoft);color:var(--pink);border-color:var(--psbd)}.qgo{margin-top:2px;padding:10px 14px;border:1px solid var(--psbd);border-radius:999px;background:var(--psoft);color:var(--pink);font:inherit;font-weight:700;font-size:14px;cursor:pointer}.qgo[hidden]{display:none}.qacts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}.qacts .qgo{flex:1 1 150px;margin-top:2px}.qacts .qgo[hidden]{display:none}.qacts .qmore{background:var(--card);color:var(--ink);border:1px solid var(--bd)}
 .qcol{display:flex;flex-direction:column;gap:5px;min-width:0}.qh{font-size:12px;color:var(--mut);font-weight:600;padding:0 2px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qi{display:inline-block;width:1.4em;flex:none;text-align:center}.qcol .chip{width:100%;padding:6px 8px;font-size:12.5px;white-space:normal;text-align:center;line-height:1.2}
 @media (max-width:380px){#quick,.qgrid{gap:6px}#quick{padding:10px 10px}.qcol .chip{padding:6px 4px;font-size:12px}}
 @media (min-width:600px){.qcol .chip{font-size:13.5px;padding:7px 10px}}
 #bar{display:flex;gap:8px;padding:4px 14px 14px}
 #inp{flex:1;font:inherit;padding:11px 16px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
-#send{background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:0 18px}
+#send{background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-weight:700;border-radius:999px;padding:0 18px} /* v118: same soft pink as « Publier » and « Ajuster avec le chef » */
 #send:disabled{opacity:.5}
 #lang{appearance:none;-webkit-appearance:none;border:1px solid var(--bd);background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23888' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:11px;color:var(--ink);border-radius:999px;padding:8px 32px 8px 14px;font:inherit;font-size:13px;cursor:pointer}
 #mic,#home2,#impChat{width:44px;border-radius:50%;background:var(--card);border:1px solid var(--bd);font-size:18px}
@@ -258,7 +259,7 @@ nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;
 .imbtns .cbtn{flex:1;min-width:140px;text-align:center;border:1px solid var(--bd)}
 .urlrow{display:flex;gap:8px}
 .urlrow input{flex:1;min-width:0;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:999px;padding:10px 14px;font:inherit;color:var(--ink);outline:0}
-.urlrow button{background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:10px 16px}
+.urlrow button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:10px 16px}
 .imstat{padding:14px;border-radius:16px;background:var(--card);font-size:14px;margin-bottom:12px}
 .imstat.err{border:1px solid var(--pink)}
 .imthumb{display:block;max-width:100%;max-height:200px;border-radius:16px;margin:0 auto 12px}
@@ -280,7 +281,7 @@ nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;
 .ring .tx{flex:1;min-width:0}
 .ring li.miss .tx{text-decoration:line-through;opacity:.55}.ring li.miss .ck{background:var(--pink)}
 .mt{display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--pink);text-decoration:none!important;vertical-align:middle}
-.swgo{display:block;width:100%;margin-top:10px;padding:12px 16px;border:0;border-radius:14px;background:var(--pink);color:#fff;font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
+.swgo{display:block;width:100%;margin-top:10px;padding:12px 16px;border:1px solid var(--psbd);border-radius:14px;background:var(--psoft);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
 .swbar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.swbar .swgo,.swbar .swno{flex:1 1 140px;margin:0}.swno{display:block;padding:12px 16px;border:2px solid var(--pink);border-radius:14px;background:var(--card);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
 .swbar[hidden],.mt[hidden]{display:none}
 .swp{flex:none;align-self:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--pink);font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}
@@ -551,7 +552,7 @@ fr:{
   hBack:"Retour à l’historique",
   share:"Partager",
   copied:"Recette copiée dans le presse-papiers",
-  cont:"Continuer avec le chef",
+  cont:"Ajuster avec le chef",
   com:"Commentaires",
   nocom:"Aucun commentaire pour l’instant. Soyez le premier !",
   pub:"Publier",
@@ -782,7 +783,7 @@ en:{
   hBack:"Back to history",
   share:"Share",
   copied:"Recipe copied to clipboard",
-  cont:"Continue with the chef",
+  cont:"Adjust with the chef",
   com:"Comments",
   nocom:"No comments yet. Be the first!",
   pub:"Post",
@@ -1013,7 +1014,7 @@ es:{
   hBack:"Volver al historial",
   share:"Compartir",
   copied:"Receta copiada al portapapeles",
-  cont:"Seguir con el chef",
+  cont:"Ajustar con el chef",
   com:"Comentarios",
   nocom:"Aún no hay comentarios. ¡Sé el primero!",
   pub:"Publicar",
@@ -1244,7 +1245,7 @@ de:{
   hBack:"Zurück zum Verlauf",
   share:"Teilen",
   copied:"Rezept in die Zwischenablage kopiert",
-  cont:"Mit dem Koch weitermachen",
+  cont:"Mit dem Koch anpassen",
   com:"Kommentare",
   nocom:"Noch keine Kommentare. Sei der Erste!",
   pub:"Posten",
@@ -1475,7 +1476,7 @@ it:{
   hBack:"Torna alla cronologia",
   share:"Condividi",
   copied:"Ricetta copiata negli appunti",
-  cont:"Continua con lo chef",
+  cont:"Regola con lo chef",
   com:"Commenti",
   nocom:"Ancora nessun commento. Sii il primo!",
   pub:"Pubblica",
@@ -1706,7 +1707,7 @@ pt:{
   hBack:"Voltar ao histórico",
   share:"Partilhar",
   copied:"Receita copiada para a área de transferência",
-  cont:"Continuar com o chef",
+  cont:"Ajustar com o chef",
   com:"Comentários",
   nocom:"Ainda sem comentários. Seja o primeiro!",
   pub:"Publicar",
@@ -2220,7 +2221,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v117',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v118',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
