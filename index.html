@@ -187,6 +187,7 @@ nav button.on{opacity:1}
 nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1;box-shadow:0 4px 12px rgba(132,204,22,.5)}
 .chead{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--bd)}
 .chead .back{font-size:22px;padding:0 6px}
+@media (max-width:359px){#card .chead.hashist #cardback{display:none}} /* very narrow phones: the ← (back to History) replaces the 🏠 so the title keeps some room next to « Recette originale » */
 .chead b{display:block;line-height:1.2}
 #cardT{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px}
 #cardorig{flex:none;padding:7px 12px;border-radius:999px;background:var(--card);color:var(--pink);border:2px solid var(--pink);font-size:14px;font-weight:700;white-space:nowrap} /* « ↺ Original recipe » in the card header, same place as in the chat */
@@ -342,7 +343,7 @@ nav .mid{width:56px;height:56px;background:var(--green);font-size:24px;opacity:1
   </section>
 
   <section class="view" id="card">
-    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b><button type="button" id="cardorig" style="display:none"></button></div>
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="cardhist" type="button" style="display:none">←</button><button class="back" id="cardback" aria-label="Home">🏠</button><b id="cardT"></b><button type="button" id="cardorig" style="display:none"></button></div>
     <div class="scroll" id="cardbody"></div>
   </section>
 
@@ -513,6 +514,7 @@ fr:{
   hUnfoldAll:"Tout déplier",
   hFold:"Replier",
   hUnfold:"Déplier",
+  hBack:"Retour à l’historique",
   share:"Partager",
   copied:"Recette copiée dans le presse-papiers",
   cont:"Continuer avec le chef",
@@ -738,6 +740,7 @@ en:{
   hUnfoldAll:"Expand all",
   hFold:"Collapse",
   hUnfold:"Expand",
+  hBack:"Back to history",
   share:"Share",
   copied:"Recipe copied to clipboard",
   cont:"Continue with the chef",
@@ -963,6 +966,7 @@ es:{
   hUnfoldAll:"Desplegar todo",
   hFold:"Contraer",
   hUnfold:"Desplegar",
+  hBack:"Volver al historial",
   share:"Compartir",
   copied:"Receta copiada al portapapeles",
   cont:"Seguir con el chef",
@@ -1188,6 +1192,7 @@ de:{
   hUnfoldAll:"Alle ausklappen",
   hFold:"Einklappen",
   hUnfold:"Ausklappen",
+  hBack:"Zurück zum Verlauf",
   share:"Teilen",
   copied:"Rezept in die Zwischenablage kopiert",
   cont:"Mit dem Koch weitermachen",
@@ -1413,6 +1418,7 @@ it:{
   hUnfoldAll:"Espandi tutto",
   hFold:"Comprimi",
   hUnfold:"Espandi",
+  hBack:"Torna alla cronologia",
   share:"Condividi",
   copied:"Ricetta copiata negli appunti",
   cont:"Continua con lo chef",
@@ -1638,6 +1644,7 @@ pt:{
   hUnfoldAll:"Expandir tudo",
   hFold:"Recolher",
   hUnfold:"Expandir",
+  hBack:"Voltar ao histórico",
   share:"Partilhar",
   copied:"Receita copiada para a área de transferência",
   cont:"Continuar com o chef",
@@ -2149,7 +2156,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v105',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v106',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2323,7 +2330,7 @@ function openSaved(id){
   try{chatActions()}catch(x){}
 }
 // ---------- Fiches recette : photo, favoris, partage, commentaires ----------
-let cardId=null,hfav=false;
+let cardId=null,hfav=false,cardFrom=null,hScroll=0; // cardFrom = 'history' when the recipe card was opened from the History view (shows the ← back button); hScroll = list position to restore
 // ---------- Side menu ----------
 // ---------- Weekly menu (home): 7 days x starter/main/dessert + « Others », filled from the saved recipes ----------
 const MENU_KEY='chefMenu';
@@ -2739,6 +2746,8 @@ function openCard(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
   if(e.qa){openQAEntry(e);return}
   const curT=recipeTitle(recipeText(e))||e.title; // title of the version shown (e.g. « Brioche sans lactose »), not the first one
+  if(curView!=='card'){cardFrom=curView==='history'?'history':null;if(cardFrom)hScroll=$('#hlist').scrollTop} // opened from the History view: remember it (and the scroll position) so « ← » can go back; moving from card to card (original recipe…) keeps it
+  { const hb=$('#cardhist');$('#card .chead').classList.toggle('hashist',cardFrom==='history');hb.style.display=cardFrom==='history'?'':'none';hb.setAttribute('aria-label',T().hBack);hb.title=T().hBack }
   cardId=id;const t=T(),body=$('#cardbody');body.innerHTML='';$('#cardT').textContent=curT;$('#cardT').title=curT;
   const ph=document.createElement('div');ph.className='cphoto';const [em,bg]=dishLook(e.title);ph.style.background=bg;
   const emo=document.createElement('span');emo.textContent=em;ph.appendChild(emo);body.appendChild(ph);
@@ -3121,6 +3130,7 @@ $('#dclose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;
 document.querySelectorAll('.ditem').forEach(b=>b.onclick=()=>goTo(b.dataset.go));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#drawer').classList.contains('on'))closeDrawer()});
 $('#cardback').onclick=()=>show('home');
+$('#cardhist').onclick=()=>{show('history');const l=$('#hlist');l.scrollTop=hScroll;try{updTop()}catch(x){}}; // back to the History list exactly where it was (same tab, same position)
 $('#toorig').onclick=resetToOriginal;
 // « Back to top » button: shown in the chat and on the recipe card once the reader has scrolled down.
 function topScroller(){return $('#chat').classList.contains('on')?log:$('#card').classList.contains('on')?$('#cardbody'):$('#history').classList.contains('on')?$('#hlist'):$('#favs').classList.contains('on')?$('#flist'):null}

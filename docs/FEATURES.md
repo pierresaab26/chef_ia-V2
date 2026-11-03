@@ -2,7 +2,7 @@
 
 Living documentation. For each area: what it is, how it behaves, what was done (version), where it lives in the code, what is stored and known limits.
 Keep it up to date whenever one of these areas changes (same rule as `CLAUDE.md`). A docs-only change does not bump `APP_VERSION`.
-Last update: v105 (2026-11-03). Never put secrets in this file (the repository may be public).
+Last update: v106 (2026-11-03). Never put secrets in this file (the repository may be public).
 
 ## Map of the app
 
@@ -67,6 +67,8 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 - Changing tab, leaving the History view or tapping Annuler ends the selection mode. The ↑ button (v101) is also available in the History and Favorites lists (above the bottom bar, or above the selection bar). Code: `drawHistory`, `selBar`, `selDelete`, `selMove`, `selArchive`, `pickCat`, `refreshAll`, 4th argument of `rowFor`.
 
 **History tabs (v102).** « Toutes » and « Archivées » are flat lists; « ❤️ Favoris » is grouped by category, like the Favorites view (headers with emoji, name and count; same order; search and selection mode keep the groups). Since v103 each category can be folded / unfolded one by one with a visible button next to its title (« ▴ Replier » / « ▾ Déplier », v104; the count stays on the title), « Tout replier / Tout déplier » folds all, the choice is remembered on the device (`hFold`), a search ignores the folds, and only the recipes on screen can be selected.
+
+**Back from a recipe to the History (v106).** A recipe opened from the History view (any tab) shows a « ← » button in the card header; it returns to the History on the same tab and scroll position. Not shown when the card is opened from elsewhere (home, search, Favorites, chat).
 
 **Action bar under each recipe (v36–v37).** ❤️ Favorite, ↗ Share, rating (1–5 stars), comments under the latest version only.
 **Share.** Native share / link; shared recipes can be commented by others (`api/comments.js`, 5/min per IP) and rated (`api/ratings.js`, 30/min per IP; `r:log` keeps the last 5,000 ratings for analysis).
