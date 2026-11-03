@@ -423,6 +423,7 @@ fr:{
   snMore:"🔄 Autres idées",
   snRange:"du {a} au {b}",
   snPrevT:"Recettes précédentes",
+  snPrevNone:"Les séries passées apparaîtront ici à partir du {d} à 9 h.",
   snByC:"Plus d’idées par catégorie",
   snLoad:"Le chef prépare ses idées…",
   snErr:"Idées indisponibles pour le moment.",
@@ -628,6 +629,7 @@ en:{
   snMore:"🔄 Other ideas",
   snRange:"{a} – {b}",
   snPrevT:"Previous recipes",
+  snPrevNone:"Past series will appear here from {d} at 9 am.",
   snByC:"More ideas by course",
   snLoad:"The chef is preparing ideas…",
   snErr:"Ideas unavailable right now.",
@@ -833,6 +835,7 @@ es:{
   snMore:"🔄 Otras ideas",
   snRange:"del {a} al {b}",
   snPrevT:"Recetas anteriores",
+  snPrevNone:"Las series pasadas aparecerán aquí a partir del {d} a las 9 h.",
   snByC:"Más ideas por categoría",
   snLoad:"El chef está preparando ideas…",
   snErr:"Ideas no disponibles por ahora.",
@@ -1038,6 +1041,7 @@ de:{
   snMore:"🔄 Andere Ideen",
   snRange:"{a} – {b}",
   snPrevT:"Frühere Rezepte",
+  snPrevNone:"Vergangene Serien erscheinen hier ab dem {d} um 9 Uhr.",
   snByC:"Mehr Ideen nach Gang",
   snLoad:"Der Chef bereitet Ideen vor…",
   snErr:"Ideen gerade nicht verfügbar.",
@@ -1243,6 +1247,7 @@ it:{
   snMore:"🔄 Altre idee",
   snRange:"dal {a} al {b}",
   snPrevT:"Ricette precedenti",
+  snPrevNone:"Le serie passate appariranno qui dal {d} alle 9.",
   snByC:"Altre idee per portata",
   snLoad:"Lo chef sta preparando le idee…",
   snErr:"Idee non disponibili al momento.",
@@ -1448,6 +1453,7 @@ pt:{
   snMore:"🔄 Outras ideias",
   snRange:"{a} – {b}",
   snPrevT:"Receitas anteriores",
+  snPrevNone:"As séries passadas aparecerão aqui a partir de {d} às 9 h.",
   snByC:"Mais ideias por categoria",
   snLoad:"O chef está a preparar ideias…",
   snErr:"Ideias indisponíveis de momento.",
@@ -1966,9 +1972,10 @@ function snFill(sg,more,o,ui){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];le
   // series from the server: title with its dates, the folded « Previous recipes » menu
   const showServer=d=>{served=d;showMain(d.current);
     ui.st.textContent='✨ '+t.snSugT+' · '+range(d.period.from,d.period.to);
-    const prev=d.previous||[];ui.pvBox.innerHTML='';ui.pvBox.style.display='none';ui.pvBtn.style.display=prev.length?'':'none';
-    const label=()=>(ui.pvBox.style.display==='none'?'▸ ':'▾ ')+t.snPrevT+' ('+prev.length+')';ui.pvBtn.textContent=label();ui.pvBtn.setAttribute('aria-expanded','false');
+    const prev=d.previous||[];ui.pvBox.innerHTML='';ui.pvBox.style.display='none';ui.pvBtn.style.display='';
+    const label=()=>(ui.pvBox.style.display==='none'?'▸ ':'▾ ')+t.snPrevT+(prev.length?' ('+prev.length+')':'');ui.pvBtn.textContent=label();ui.pvBtn.setAttribute('aria-expanded','false');
     ui.pvBtn.onclick=()=>{const open=ui.pvBox.style.display==='none';ui.pvBox.style.display=open?'':'none';ui.pvBtn.textContent=label();ui.pvBtn.setAttribute('aria-expanded',String(open))};
+    if(!prev.length){const e=document.createElement('p');e.className='snpvh';e.textContent=t.snPrevNone.replace('{d}',fmt(d.period.to));ui.pvBox.appendChild(e)}
     prev.forEach(p=>{const h=document.createElement('p');h.className='snpvh';h.textContent=range(p.from,p.to);const g=document.createElement('div');g.className='snsug';cards(g,p.items);ui.pvBox.append(h,g)});
     snUntil=d.period.until;clearTimeout(snTimer);const ms=snUntil-Date.now();if(ms>0)snTimer=setTimeout(()=>{try{drawSeason()}catch(e){}},Math.min(ms+5000,2147e6))};
   // « Other ideas » (series from the server): 4 more ideas under the series, personal, never the same as the ones already shown
@@ -2012,7 +2019,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v96',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v97',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
 // In-memory copy of the store: the phone storage is read and decoded once, then only written.
