@@ -2295,7 +2295,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v129',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v130',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2440,7 +2440,7 @@ function rowFor(e,del,heart,sc,unarch){
   const ru=e.img||(e.ph&&okU(e.ph.t)?e.ph.t:'');if(ru){p.textContent='';const im=document.createElement('img');im.alt='';im.referrerPolicy='no-referrer';im.src=ru;im.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:14px;display:block';im.onerror=()=>{im.remove();p.textContent=em};p.appendChild(im)}
   const x=document.createElement('div');x.className='htx';
   const b=document.createElement('b');b.textContent=(e.fav?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
-  x.append(b,d);o.append(p,x);o.onclick=()=>{const f=e._fam?ownIdx(e)[0]:e._vi;openCard(e.id,f)};/* v129: from the favorites, the card of the Originale */r.appendChild(o);
+  x.append(b,d);o.append(p,x);o.onclick=()=>{if(e.qa){openCard(e.id);return}const a=loadH(),r=famRoot(e,a)||e;openCard(r.id,ownIdx(r)[0])};/* v130: every row opens the card of the ORIGINALE of its family */r.appendChild(o);
   if(sc){ // selection mode: a round checkbox on the left, tapping the row toggles it (no heart, no ✕)
     const c=document.createElement('button');c.type='button';c.className='hchk';c.setAttribute('role','checkbox');
     const paint=()=>{const on=sc.set.has(e.id);c.textContent=on?'✓':'';c.setAttribute('aria-checked',String(on));r.classList.toggle('hsel',on)};
