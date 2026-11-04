@@ -153,3 +153,5 @@ Throw-away suites were used each version (22-journey Playwright QA on iPhone 13 
 **Multi-line fields (v131).** The message bar, the comment field, the comment edit (buttons below) and the « Chef libre » field are textareas that grow with their text; on a touch screen Entrée makes a new line (send with the button), on a computer Entrée sends and Maj+Entrée makes a new line. Searches, name, access code and link import stay single-line.
 
 **Removing / replacing an ingredient (v132).** « Sans » / « Remplacer » behaves like the quick filters: same conversation, the answer is a new version of the same recipe (badge « 2ème recette »…), its card opens afterwards; the Originale is untouched. No separate variant is created any more.
+
+**Unsuitable combinations (v133).** The chef warns about a senseless combination (chocolate in hummus), explains why and asks whether to continue; if the user confirms, he gives the recipe. Bold pairings that work are not blocked.
