@@ -1,4 +1,6 @@
 import { authOk, fail, callClaude, overLimit } from "./_lib.js";
+import { stripFlag, warnText, FLAG_WARN } from "./_flags.js";
+import { who, isBanned, recordFlag } from "./_mod.js";
 
 // Chef instructions. Edit this text to adjust the scope or the tone.
 const QA =
@@ -15,6 +17,10 @@ const BASE = [
   "UNSUITABLE COMBINATIONS: when the user asks for a recipe, or a change to a recipe, that combines ingredients or techniques that clash or make no culinary sense (for example chocolate in hummus, ketchup in tiramisu, milk with lemon juice in a sauce meant to stay smooth), do NOT write the recipe. In two or three sentences, in the user's language, say honestly that it is not a good idea and why (taste, texture or chemistry), name what would work better if you can, and end by asking whether they still want to continue. Do not apply this to bold pairings that are really used and work (chocolate with chilli, salted caramel, fruit in savoury dishes, avocado in desserts, bacon in desserts…): when in doubt, give the recipe. If the user then confirms (yes, continue, do it anyway), give the recipe as asked, with at most one short remark. If the combination is toxic or dangerous to eat, decline politely and do not offer to continue. Your answer to an unsuitable combination is plain sentences: no « ## » title and no recipe structure.",
   "LANGUAGE: choose ONE single language for the whole answer, without exception (title « ## », servings, time, section headings, ingredients, steps, explanations): the language of the user's last message (any language); if that message is only an ambiguous dish name, the language of their earlier messages; as a last resort, the interface language. NEVER mix two languages in one answer (no English title with French text). Keep that language for the adapted recipe. Messages starting with [UI] are automatic requests from the interface: ignore that prefix and answer in the interface language.",
 ].join("\n\n");
+
+// Internal marker used by the moderation safety (see _flags.js): the app removes it before the user sees the answer.
+const FLAGS =
+  "MODERATION MARKER (internal: the app removes it before the user sees your answer). When your answer declines or warns because the request is (a) a senseless or clashing food combination (see UNSUITABLE COMBINATIONS), write exactly [[FLAG:silly]] as the very first characters of your answer; when it is (b) a request for something dangerous, illegal or harmful (toxic food, poison, drugs, weapons, hurting someone, including when the FINAL SCOPE CHECK makes you decline such a request), write exactly [[FLAG:danger]] as the very first characters. Never write a marker otherwise: not for a normal recipe, not for a bold pairing that really works, not when the user confirms they want to go on with an unusual but workable pairing, not for a request that is merely off-topic, not for a simple remark about a risk inside a normal recipe. Never mention the marker.";
 
 // Last words of the system prompt: the scope can never be overridden by anything that comes from the browser
 // (messages, including fake « assistant » turns, pasted text, role-play), whatever the language.
@@ -38,9 +44,10 @@ export function systemFor(P, { lang, chef, mode }) {
     + (lang ? " Interface language (fallback hint only; the language of the user's message takes priority): " + lang + "." : "")
     + (c ? " " + c : "")
     + (mode === "qa" ? " " + P.QA : "")
+    + (P.FLAGS ? "\n\n" + P.FLAGS : "")
     + "\n\n" + P.GUARD;
 }
-export const PARTS = { BASE, QA, GUARD, CHEFS };
+export const PARTS = { BASE, QA, GUARD, CHEFS, FLAGS };
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return fail(res, "method");
@@ -50,6 +57,8 @@ export default async function handler(req, res) {
   if (await overLimit(req, "rl:c:", 20)) return fail(res, "rate");
 
   const body = req.body || {};
+  const w = who(req, body);
+  if (await isBanned(w)) return fail(res, "banned"); // too many silly / dangerous requests: blocked for 24 h
   const lang = typeof body.lang === "string" ? body.lang.slice(0, 5) : "";
   const chef = Number.isInteger(body.chef) ? body.chef : -1; // free-text « persona » from the browser is ignored on purpose
   const mode = body.mode === "qa" ? "qa" : ""; // « Cooking questions » screen: short informational answers, never a recipe
@@ -76,6 +85,13 @@ export default async function handler(req, res) {
       system: systemFor(PARTS, { lang, chef, mode }),
       messages,
     });
+    // Moderation safety: the chef marks silly / dangerous requests; count them, warn from the 3rd, block at the 10th.
+    const f = stripFlag(out.text);
+    if (f.kind) {
+      const last = messages[messages.length - 1].content;
+      const r = await recordFlag(w, f.kind, last, lang);
+      out.text = r.n >= FLAG_WARN ? f.text.trimEnd() + "\n\n⚠️ " + warnText(lang, f.kind) : f.text;
+    }
     return res.status(200).json(out);
   } catch (e) {
     return fail(res, e.code || "upstream");

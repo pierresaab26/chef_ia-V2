@@ -495,6 +495,7 @@ fr:{
   cd:"Chef étoilé · cuisine du monde",
   ph:"Ex. : sans persil, j’ai du cajun",
   e429:"Trop de demandes, réessayez dans un instant.",
+  eBan:"Trop de demandes non sérieuses ou interdites : l’accès au chef est suspendu pendant 24 h.",
   err:"Une erreur est survenue, réessayez.",
   code:"Code d’accès :",
   send:"Envoyer",
@@ -737,6 +738,7 @@ en:{
   cd:"Michelin-starred chef · world cuisine",
   ph:"E.g. swap olive oil for butter",
   e429:"Too many requests, please try again in a moment.",
+  eBan:"Too many silly or forbidden requests: access to the chef is suspended for 24 hours.",
   err:"Something went wrong, please try again.",
   code:"Access code:",
   send:"Send",
@@ -979,6 +981,7 @@ es:{
   cd:"Chef con estrella · cocina del mundo",
   ph:"Ej.: cambia el aceite por mantequilla",
   e429:"Demasiadas solicitudes, inténtalo de nuevo en un momento.",
+  eBan:"Demasiadas peticiones poco serias o prohibidas: el acceso al chef queda suspendido 24 horas.",
   err:"Ha ocurrido un error, inténtalo de nuevo.",
   code:"Código de acceso:",
   send:"Enviar",
@@ -1221,6 +1224,7 @@ de:{
   cd:"Sternekoch · Weltküche",
   ph:"z. B. Olivenöl durch Butter",
   e429:"Zu viele Anfragen, bitte gleich nochmal versuchen.",
+  eBan:"Zu viele unernste oder verbotene Anfragen: der Zugang zum Chef ist 24 Stunden gesperrt.",
   err:"Es ist ein Fehler aufgetreten, bitte erneut versuchen.",
   code:"Zugangscode:",
   send:"Senden",
@@ -1463,6 +1467,7 @@ it:{
   cd:"Chef stellato · cucina del mondo",
   ph:"Es.: l’olio col burro",
   e429:"Troppe richieste, riprova tra poco.",
+  eBan:"Troppe richieste non serie o vietate: l’accesso allo chef è sospeso per 24 ore.",
   err:"Si è verificato un errore, riprova.",
   code:"Codice di accesso:",
   send:"Invia",
@@ -1705,6 +1710,7 @@ pt:{
   cd:"Chef estrelado · cozinha do mundo",
   ph:"Ex.: troque o azeite por manteiga",
   e429:"Muitos pedidos, tente novamente daqui a pouco.",
+  eBan:"Demasiados pedidos pouco sérios ou proibidos: o acesso ao chef está suspenso durante 24 horas.",
   err:"Ocorreu um erro, tente novamente.",
   code:"Código de acesso:",
   send:"Enviar",
@@ -2305,7 +2311,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v133',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v134',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3218,15 +3224,16 @@ function openChat(chef){
 function openQA(){openChat(null);qaMode=true;log.innerHTML='';showWelcome();qaUI()}
 function start(q){openChat(null);send(q,true)}
 /*CALL_START*/
+function devId(){try{let d=localStorage.getItem('chefDev');if(!d){d=(crypto.randomUUID?crypto.randomUUID().replace(/-/g,''):Math.random().toString(36).slice(2)+Date.now().toString(36)+Math.random().toString(36).slice(2));localStorage.setItem('chefDev',d)}return d}catch(e){return ''}}
 async function chatCall(h,out){
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
-  const call=()=>fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h.map(m=>({role:m.role,content:m.content})),chef:chefNow&&chefNow.k>=0?chefNow.k:undefined,lang,mode:qaMode?'qa':undefined})});
+  const call=()=>fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h.map(m=>({role:m.role,content:m.content})),chef:chefNow&&chefNow.k>=0?chefNow.k:undefined,lang,dev:devId(),mode:qaMode?'qa':undefined})});
   let res=await call();
   if(res.status===401){const c=await askCode();if(c)res=await call()}
   if(!res.ok){
     if(res.status===401){try{localStorage.removeItem('code')}catch(e){}throw {code:'code'}}
     let ec='';try{ec=(await res.json()).error||''}catch(e){}
-    throw {code:res.status===429||ec==='rate'?'rate_limited':res.status===503?'nokey':['credit','badkey','model'].includes(ec)?ec:'err'};
+    throw {code:ec==='banned'?'banned':res.status===429||ec==='rate'?'rate_limited':res.status===503?'nokey':['credit','badkey','model'].includes(ec)?ec:'err'};
   }
   return await res.json();
 }
@@ -3248,7 +3255,7 @@ async function completeReply(h,out){
   }
   return j;
 }
-const errText=e=>e&&e.code==='rate_limited'?T().e429:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err;
+const errText=e=>e&&e.code==='rate_limited'?T().e429:e&&e.code==='banned'?T().eBan:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err;
 async function send(text,auto,ctx){
   text=(text||inp.value).trim();if(!text||busy)return;
   inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});

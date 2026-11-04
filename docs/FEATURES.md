@@ -155,3 +155,5 @@ Throw-away suites were used each version (22-journey Playwright QA on iPhone 13 
 **Removing / replacing an ingredient (v132).** « Sans » / « Remplacer » behaves like the quick filters: same conversation, the answer is a new version of the same recipe (badge « 2ème recette »…), its card opens afterwards; the Originale is untouched. No separate variant is created any more.
 
 **Unsuitable combinations (v133).** The chef warns about a senseless combination (chocolate in hummus), explains why and asks whether to continue; if the user confirms, he gives the recipe. Bold pairings that work are not blocked.
+
+**Moderation safety (v134).** Silly requests (houmous au coca) and dangerous / illegal ones are flagged by the chef; from the 3rd in 7 days a warning is added to the answer, at the 10th the user (IP + device) is blocked 24 h and the moderation gets an email (Resend, optional) and a log entry (`/api/moderation?key=CRON_SECRET`). Off-topic questions are only refused, not counted.
