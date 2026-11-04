@@ -42,7 +42,7 @@ export async function recordFlag(w, kind, request, lang) {
     if (n >= FLAG_BLOCK) {
       await redis(ids.map((i) => ["SET", "bk:" + i, "1", "EX", FLAG_BLOCK_S]));
       const [first] = await redis([["SET", "fl:sent:" + ids[0], "1", "EX", FLAG_WEEK, "NX"]]);
-      if (first) await notify(ids[0], n, lang);
+      if (first) await notify(ids, n, lang);
     }
     return { n };
   } catch {
@@ -50,10 +50,11 @@ export async function recordFlag(w, kind, request, lang) {
   }
 }
 
-async function notify(id, n, lang) {
+async function notify(ids, n, lang) {
+  const id = ids[0];
   let lastReq = [];
   try { [lastReq] = await redis([["LRANGE", "fl:last:" + id, 0, 9]]); } catch {}
-  const entry = { at: new Date().toISOString(), id, count: n, lang: String(lang || "").slice(0, 5), blockedHours: FLAG_BLOCK_S / 3600, last: lastReq };
+  const entry = { at: new Date().toISOString(), id, ids, count: n, lang: String(lang || "").slice(0, 5), blockedHours: FLAG_BLOCK_S / 3600, last: lastReq };
   try { await redis([["LPUSH", "mod:log", JSON.stringify(entry)], ["LTRIM", "mod:log", 0, 199]]); } catch {}
   const key = process.env.RESEND_API_KEY, to = process.env.MOD_EMAIL;
   if (!key || !to) return;
@@ -65,7 +66,7 @@ async function notify(id, n, lang) {
         from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
         to: [to],
         subject: "Chef IA : utilisateur bloqué (" + n + " demandes non conformes)",
-        text: "Un utilisateur (id " + id + ", langue " + entry.lang + ") a envoyé " + n + " demandes farfelues, dangereuses ou illégales en 7 jours.\nIl est bloqué " + entry.blockedHours + " h.\n\nDernières demandes (type|texte) :\n" + lastReq.join("\n"),
+        text: "Un utilisateur (id " + ids.join(" / ") + ", langue " + entry.lang + ") a envoyé " + n + " demandes farfelues, dangereuses ou illégales en 7 jours.\nIl est bloqué " + entry.blockedHours + " h.\nPour le débloquer : /api/moderation?key=<CRON_SECRET>&unblock=" + id + "\n\nDernières demandes (type|texte) :\n" + lastReq.join("\n"),
       }),
       signal: AbortSignal.timeout(5000),
     });
