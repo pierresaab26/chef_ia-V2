@@ -64,8 +64,9 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chfree{grid-column:1/-1;background:#1f1b33;color:#f4f1fa;border-radius:20px;padding:14px;border:1px solid rgba(255,255,255,.09)}
 .chfree b{display:block;font-size:15px}.chfree b em{font-style:normal;color:#ff6fa0}
 .chfree p{color:#c9c3d9;font-size:12.5px;margin:2px 0 10px}
-.chfree form{display:flex;gap:8px}
+.chfree form{display:flex;gap:8px;align-items:flex-end}
 .chfree input{flex:1;min-width:0;font-size:16px;border-radius:999px;border:0;padding:10px 14px;background:#fff;color:#16121a}
+.chfree textarea{flex:1;display:block;margin:0;min-width:0;font:inherit;font-size:16px;line-height:22px;border-radius:22px;border:0;padding:10px 14px;background:#fff;color:#16121a;resize:none;overflow-y:hidden;-webkit-appearance:none;appearance:none;box-sizing:border-box}
 .chfree button{flex:none;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:10px 14px;font-size:14px}
 .more{color:var(--pink);font-weight:600;font-size:13px}
 .favgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media (min-width:600px){.favgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -138,9 +139,9 @@ input,textarea,select{font-size:16px!important}
 .cmsg{color:var(--mut);font-size:14px;margin:2px 0 10px}.cmsg:empty{display:none}.coms h2{margin:0 0 6px;font-size:18px}.clist:empty{display:none}
 .cform{display:flex;flex-direction:column;gap:8px}
 .cform input{font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
-.crow{display:flex;gap:8px}.crow input{flex:1}
-.ceditrow{align-items:center;margin-top:4px}.ceditrow .ccan{color:var(--mut);font-size:13px;font-weight:600;padding:6px 4px}.ceditrow .cpub{white-space:nowrap}
-.ceditrow input.cedit{font:inherit;padding:8px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
+.cform textarea,.ceditrow textarea{display:block;margin:0;font:inherit;line-height:22px;padding:11px 14px;border-radius:22px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0;resize:none;overflow-y:hidden;-webkit-appearance:none;appearance:none;box-sizing:border-box}
+.crow{display:flex;gap:8px;align-items:flex-end}.crow input,.crow textarea{flex:1}.crow .cpub{height:46px}
+.ceditrow{display:block;margin-top:4px}.ceditrow textarea.cedit{width:100%}.ceditbtns{display:flex;gap:10px;align-items:center;margin-top:8px}.ceditbtns .cpub{height:42px;padding:0 18px;white-space:nowrap}.ceditbtns .ccan{color:var(--mut);font-size:14px;font-weight:600;padding:8px 10px}
 .cpub{background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-weight:700;border-radius:999px;padding:0 18px}
 .cpub:disabled{opacity:.5}
 #hfilter{display:flex;gap:8px;padding:10px 18px 10px}
@@ -244,8 +245,9 @@ nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;
 .qcol{display:flex;flex-direction:column;gap:5px;min-width:0}.qh{font-size:12px;color:var(--mut);font-weight:600;padding:0 2px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qi{display:inline-block;width:1.4em;flex:none;text-align:center}.qcol .chip{width:100%;padding:6px 8px;font-size:12.5px;white-space:normal;text-align:center;line-height:1.2}
 @media (max-width:380px){#quick,.qgrid{gap:6px}#quick{padding:10px 10px}.qcol .chip{padding:6px 4px;font-size:12px}}
 @media (min-width:600px){.qcol .chip{font-size:13.5px;padding:7px 10px}}
-#bar{display:flex;gap:8px;padding:4px 14px 14px}
-#inp{flex:1;font:inherit;padding:11px 16px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0}
+#bar{display:flex;align-items:flex-end;gap:8px;padding:4px 14px 14px}
+#inp{flex:1;display:block;margin:0;font:inherit;line-height:22px;padding:12px 16px;border-radius:24px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0;resize:none;overflow-y:hidden;max-height:136px;-webkit-appearance:none;appearance:none;box-sizing:border-box} /* v131: multi-line field that grows (autoTA); 22 px line + 12 px padding keeps the text and the cursor centred on iPhone */
+#bar button{height:48px}
 #send{background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-weight:700;border-radius:999px;padding:0 18px} /* v118: same soft pink as « Publier » and « Ajuster avec le chef » */
 #send:disabled{opacity:.5}
 #lang{appearance:none;-webkit-appearance:none;border:1px solid var(--bd);background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23888' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:11px;color:var(--ink);border-radius:999px;padding:8px 32px 8px 14px;font:inherit;font-size:13px;cursor:pointer}
@@ -422,7 +424,7 @@ nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;
     <div id="log"></div>
     <div id="qanote"></div>
     <div id="quick"></div>
-    <div id="bar"><button id="home2" aria-label="Home">🏠</button><input id="inp" autocomplete="off"><button id="impChat" aria-label="Import">📎</button><button id="mic" aria-label="Speak">🎤</button><button id="send"></button></div>
+    <div id="bar"><button id="home2" aria-label="Home">🏠</button><textarea id="inp" rows="1" autocomplete="off"></textarea><button id="impChat" aria-label="Import">📎</button><button id="mic" aria-label="Speak">🎤</button><button id="send"></button></div>
   </section>
 
   <div id="isheetwrap"><div class="isheet" role="dialog" aria-modal="true" aria-labelledby="imgTt">
@@ -1922,7 +1924,14 @@ const DISHES=["lasagna","chicken tikka masala","pad thai","ratatouille","beef bo
 let lastDish="";
 function randomDish(){let d;do{d=DISHES[Math.floor(Math.random()*DISHES.length)]}while(d===lastDish);lastDish=d;return d}
 const $=s=>document.querySelector(s);
-const log=$('#log'),inp=$('#inp'),sendB=$('#send');
+const TOUCH=(()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}})(); // v131: on a touch screen « Entrée » = new line (send with the button); on a computer Entrée sends, Maj+Entrée = new line
+const enterSends=e=>e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&!TOUCH;
+function autoTA(el,max){ // multi-line field that grows with its text (also when the value is set by code)
+  const d=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value');
+  const g=()=>{if(!d.get.call(el)){el.style.height='';el.style.overflowY='hidden';return}/* empty: the long placeholder must not count */el.style.height='auto';const h=el.scrollHeight;if(!h){el.style.height='';return}const b=el.offsetHeight-el.clientHeight;el.style.height=Math.min(h+b,max)+'px';el.style.overflowY=h+b>max?'auto':'hidden'};
+  Object.defineProperty(el,'value',{get(){return d.get.call(el)},set(v){d.set.call(el,v);g()}});
+  el.addEventListener('input',g);addEventListener('resize',g);return g}
+const log=$('#log'),inp=$('#inp'),sendB=$('#send');autoTA(inp,136);
 // ---------- Phone keyboard: the app always fills exactly the visible area (iPhone / Android) ----------
 (function(){
   const vv=window.visualViewport,root=document.documentElement;
@@ -1999,10 +2008,10 @@ function drawChefs(){const t=T(),box=$('#chefs');box.innerHTML='';const crs=t.cr
     pn.append(g,dc);const pos=CHEF_ORDER.indexOf(k),cols=innerWidth>=768?4:2,after=box.children[Math.min(CHEF_ORDER.length,(Math.floor(pos/cols)+1)*cols)-1];after.after(pn)}
   const f=document.createElement('div');f.className='chfree';
   const h=document.createElement('b');h.innerHTML='✨ <em></em>';h.querySelector('em').textContent=t.frN;const p=document.createElement('p');p.textContent=t.frD;
-  const fm=document.createElement('form');const q=document.createElement('input');q.type='text';q.maxLength=200;q.placeholder=t.frPh;q.setAttribute('aria-label',t.frN);q.enterKeyHint='go';
+  const fm=document.createElement('form');const q=document.createElement('textarea');q.rows=1;q.maxLength=200;q.placeholder=t.frPh;q.setAttribute('aria-label',t.frN);const gq=autoTA(q,110);q.addEventListener('keydown',ev=>{if(enterSends(ev)){ev.preventDefault();fm.requestSubmit()}});
   const go=document.createElement('button');go.type='submit';go.textContent=t.frGo;
   fm.onsubmit=ev=>{ev.preventDefault();const v=q.value.trim();if(!v){q.focus();return}q.value='';q.blur();openChat({free:true,k:-1,n:'',e:'✨',p:''});send(t.frMsg.replace('{q}',v),true)};
-  fm.append(q,go);f.append(h,p,fm);box.appendChild(f)}
+  fm.append(q,go);f.append(h,p,fm);box.appendChild(f);gq()}
 function cap1(x){x=String(x||'');const m=x.match(/^([\s«“"'(¡¿]*)(\p{L})/u);return m?m[1]+m[2].toLocaleUpperCase(lang)+x.slice(m[0].length):x} // display only: first letter in upper case
 function inl(p,t){t.split(/\*\*(.+?)\*\*/).forEach((x,i)=>{if(!x)return;if(i%2){const b=document.createElement('strong');b.textContent=x;p.appendChild(b)}else p.appendChild(document.createTextNode(x))})}
 function render(el,t){
@@ -2295,7 +2304,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v130',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v131',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3095,19 +3104,19 @@ function buildComments(parent,key,opts){opts=opts||{};
   const form=document.createElement('div');form.className='cform';
   const nm=document.createElement('input');nm.placeholder=t.nm;nm.maxLength=30;try{nm.value=localStorage.getItem('uname')||''}catch(x){}
   const row=document.createElement('div');row.className='crow';
-  const tx=document.createElement('input');tx.placeholder=t.wr;tx.maxLength=500;
+  const tx=document.createElement('textarea');tx.rows=1;tx.placeholder=t.wr;tx.maxLength=500;
   const pb=document.createElement('button');pb.textContent=t.pub;pb.className='cpub';
-  row.append(tx,pb);form.append(nm,row);box.appendChild(form);parent.appendChild(box);
+  row.append(tx,pb);form.append(nm,row);box.appendChild(form);parent.appendChild(box);const gtx=autoTA(tx,136);gtx();
   const draw=cs=>{list.innerHTML='';msg.textContent=cs.length?'':t.nocom;
     cs.forEach(c=>{const d=document.createElement('div');d.className='com';
       const av=document.createElement('div');av.className='av';av.textContent=(c.name||'?').trim().charAt(0).toUpperCase();
       const w=document.createElement('div');w.className='cw';
       const b=document.createElement('div');b.className='cbub';const n=document.createElement('b');n.textContent=c.name;const p=document.createElement('p');p.textContent=c.text;b.append(n,p);
       const m=document.createElement('div');m.className='cmeta';const s=document.createElement('span');s.textContent=ago(c.ts)+(c.edited?' · '+t.cedd:'');m.appendChild(s);
-      if(c.mine){const ed=document.createElement('button');ed.textContent=t.cedit;ed.onclick=()=>{const ti=document.createElement('input');ti.value=c.text;ti.maxLength=500;ti.className='cedit';const sv=document.createElement('button');sv.type='button';sv.textContent=t.csave;sv.className='cpub';const cn=document.createElement('button');cn.type='button';cn.textContent=t.ccan;cn.className='ccan';const rw=document.createElement('div');rw.className='crow ceditrow';rw.append(ti,sv,cn);p.replaceWith(rw);m.style.display='none';ti.focus();
+      if(c.mine){const ed=document.createElement('button');ed.textContent=t.cedit;ed.onclick=()=>{const ti=document.createElement('textarea');ti.rows=2;ti.value=c.text;ti.maxLength=500;ti.className='cedit';const sv=document.createElement('button');sv.type='button';sv.textContent=t.csave;sv.className='cpub';const cn=document.createElement('button');cn.type='button';cn.textContent=t.ccan;cn.className='ccan';const rw=document.createElement('div');rw.className='ceditrow';const br=document.createElement('div');br.className='ceditbtns';br.append(sv,cn);rw.append(ti,br);p.replaceWith(rw);m.style.display='none';const gti=autoTA(ti,200);gti();ti.focus();try{ti.setSelectionRange(ti.value.length,ti.value.length)}catch(x){}
           cn.onclick=()=>draw(cs);
           sv.onclick=async()=>{const v=ti.value.trim();if(!v||sv.disabled)return;sv.disabled=true;try{const r=await capi('PUT','',{key,id:c.id,text:v});if(r.status===429)toast(t.cRate);else if(!r.ok)toast(t.cErr);else await load()}catch(e){toast(t.cErr)}finally{sv.disabled=false}};
-          ti.addEventListener('keydown',ev=>{if(ev.key==='Enter')sv.click();if(ev.key==='Escape')cn.click()})};m.appendChild(ed);const x=document.createElement('button');x.textContent=t.cdel;x.onclick=async()=>{if(!await ask({text:t.cdq,okLabel:t.cdel}))return;try{const r=await capi('DELETE','?key='+key+'&id='+encodeURIComponent(c.id));if(r.ok)load()}catch(e){}};m.appendChild(x)}
+          ti.addEventListener('keydown',ev=>{if(enterSends(ev)){ev.preventDefault();sv.click()}if(ev.key==='Escape')cn.click()})};m.appendChild(ed);const x=document.createElement('button');x.textContent=t.cdel;x.onclick=async()=>{if(!await ask({text:t.cdq,okLabel:t.cdel}))return;try{const r=await capi('DELETE','?key='+key+'&id='+encodeURIComponent(c.id));if(r.ok)load()}catch(e){}};m.appendChild(x)}
       w.append(b,m);d.append(av,w);list.appendChild(d)})};
   const load=async()=>{try{const r=await capi('GET','?key='+key);
       if(r.status===501||r.status===404){form.style.display='none';msg.textContent=t.cOff;return}
@@ -3117,7 +3126,7 @@ function buildComments(parent,key,opts){opts=opts||{};
       const r=await capi('POST','',{key,text,name:nm.value.trim()||t.anon});
       if(r.status===429)toast(t.cRate);else if(!r.ok)toast(t.cErr);else{tx.value='';await load()}
     }catch(e){toast(t.cErr)}finally{pb.disabled=false}};
-  pb.onclick=post;tx.addEventListener('keydown',e=>{if(e.key==='Enter')post()});
+  pb.onclick=post;tx.addEventListener('keydown',e=>{if(enterSends(e)){e.preventDefault();post()}});
   load();
   if(opts.poll){ // keep the thread live: a reply from someone else shows up without reopening the screen
     const tick=()=>{if(!box.isConnected){clearInterval(iv);document.removeEventListener('visibilitychange',vis);return}if(!document.hidden&&document.activeElement!==tx&&document.activeElement!==nm&&!box.querySelector('.cedit'))load()};
@@ -3477,7 +3486,7 @@ $('#n2').onclick=()=>{if(!log.children.length||qaMode)openChat(null);else show('
 $('#n3').onclick=()=>start(T().req+randomDish());
 $('#n4').onclick=()=>{if(qaMode&&hist.length)show('chat');else openQA()}; // resume the open questions thread, otherwise start a new one
 sendB.onclick=()=>send();
-inp.addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+inp.addEventListener('keydown',e=>{if(enterSends(e)){e.preventDefault();send()}});
 const sel=$('#lang');Object.keys(I18).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=I18[k].n;sel.appendChild(o)});
 sel.value=lang;sel.onchange=()=>{lang=sel.value;try{localStorage.setItem('lang',lang)}catch(e){}applyUI()};
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition,mic=$('#mic');
