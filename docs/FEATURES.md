@@ -159,3 +159,5 @@ Throw-away suites were used each version (22-journey Playwright QA on iPhone 13 
 **Moderation safety (v134).** Silly requests (houmous au coca) and dangerous / illegal ones are flagged by the chef; from the 3rd in 7 days a warning is added to the answer, at the 10th the user (IP + device) is blocked 24 h and the moderation gets an email (Resend, optional) and a log entry (`/api/moderation?key=CRON_SECRET`). Off-topic questions are only refused, not counted.
 
 **Unblock (v135).** `/api/moderation?key=CRON_SECRET&unblock=<id>` lifts the block and resets the counters of one user (id from the log / email); `&unblock=all` does it for everybody. The block message tells the user that support has been notified.
+
+**Warning language (v136).** The moderation warning is written in the language the chef answered in (marker `[[FLAG:kind:xx]]`), not in the interface language.

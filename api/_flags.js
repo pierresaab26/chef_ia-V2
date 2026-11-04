@@ -7,16 +7,17 @@ export const FLAG_BLOCK = 10; // at this count: moderation is told and the user 
 export const FLAG_WEEK = 7 * 24 * 3600; // the counter lives 7 days from the first flag
 export const FLAG_BLOCK_S = 24 * 3600; // length of the block
 
-const FLAG_RE = /\[\[\s*FLAG\s*:\s*(silly|danger)\s*\]\]/gi;
+const FLAG_RE = /\[\[\s*FLAG\s*:\s*(silly|danger)(?:\s*:\s*([a-z]{2}))?\s*\]\]/gi;
 
-// Removes every marker from the model's answer; kind = the first one found (or "").
+// Removes every marker from the model's answer; kind = the first one found (or ""), lang = the language
+// the chef wrote his answer in (marker [[FLAG:silly:fr]]), so the warning matches the user's own language.
 export function stripFlag(text) {
-  let kind = "";
-  const out = String(text || "").replace(FLAG_RE, (_, k) => {
-    if (!kind) kind = k.toLowerCase();
+  let kind = "", lang = "";
+  const out = String(text || "").replace(FLAG_RE, (_, k, l) => {
+    if (!kind) { kind = k.toLowerCase(); lang = l ? l.toLowerCase() : ""; }
     return "";
   });
-  return { text: kind ? out.replace(/^\s+/, "") : out, kind };
+  return { text: kind ? out.replace(/^\s+/, "") : out, kind, lang };
 }
 
 const WARN = {

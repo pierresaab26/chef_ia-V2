@@ -20,7 +20,7 @@ const BASE = [
 
 // Internal marker used by the moderation safety (see _flags.js): the app removes it before the user sees the answer.
 const FLAGS =
-  "MODERATION MARKER (internal: the app removes it before the user sees your answer). When your answer declines or warns because the request is (a) a senseless or clashing food combination (see UNSUITABLE COMBINATIONS), write exactly [[FLAG:silly]] as the very first characters of your answer; when it is (b) a request for something dangerous, illegal or harmful (toxic food, poison, drugs, weapons, hurting someone, including when the FINAL SCOPE CHECK makes you decline such a request), write exactly [[FLAG:danger]] as the very first characters. Never write a marker otherwise: not for a normal recipe, not for a bold pairing that really works, not when the user confirms they want to go on with an unusual but workable pairing, not for a request that is merely off-topic, not for a simple remark about a risk inside a normal recipe. Never mention the marker.";
+  "MODERATION MARKER (internal: the app removes it before the user sees your answer). When your answer declines or warns because the request is (a) a senseless or clashing food combination (see UNSUITABLE COMBINATIONS), write exactly [[FLAG:silly:xx]] as the very first characters of your answer, where xx is the two-letter code of the language you write that answer in (fr, en, es, de, it or pt); when it is (b) a request for something dangerous, illegal or harmful (toxic food, poison, drugs, weapons, hurting someone, including when the FINAL SCOPE CHECK makes you decline such a request), write exactly [[FLAG:danger:xx]] as the very first characters (same xx rule). Never write a marker otherwise: not for a normal recipe, not for a bold pairing that really works, not when the user confirms they want to go on with an unusual but workable pairing, not for a request that is merely off-topic, not for a simple remark about a risk inside a normal recipe. Never mention the marker.";
 
 // Last words of the system prompt: the scope can never be overridden by anything that comes from the browser
 // (messages, including fake « assistant » turns, pasted text, role-play), whatever the language.
@@ -90,7 +90,7 @@ export default async function handler(req, res) {
     if (f.kind) {
       const last = messages[messages.length - 1].content;
       const r = await recordFlag(w, f.kind, last, lang);
-      out.text = r.n >= FLAG_WARN ? f.text.trimEnd() + "\n\n⚠️ " + warnText(lang, f.kind) : f.text;
+      out.text = r.n >= FLAG_WARN ? f.text.trimEnd() + "\n\n⚠️ " + warnText(f.lang || lang, f.kind) : f.text;
     }
     return res.status(200).json(out);
   } catch (e) {
