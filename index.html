@@ -248,6 +248,7 @@ nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;
 #bar{display:flex;align-items:flex-end;gap:8px;padding:4px 14px 14px}
 #inp{flex:1;display:block;margin:0;font:inherit;line-height:22px;padding:12px 16px;border-radius:24px;border:1px solid var(--bd);background:var(--card);color:var(--ink);min-width:0;resize:none;overflow-y:hidden;max-height:136px;-webkit-appearance:none;appearance:none;box-sizing:border-box} /* v131: multi-line field that grows (autoTA); 22 px line + 12 px padding keeps the text and the cursor centred on iPhone */
 #bar button{height:48px}
+textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} /* v132: the help text stays on ONE line (… when too long) */
 #send{background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-weight:700;border-radius:999px;padding:0 18px} /* v118: same soft pink as « Publier » and « Ajuster avec le chef » */
 #send:disabled{opacity:.5}
 #lang{appearance:none;-webkit-appearance:none;border:1px solid var(--bd);background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23888' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:11px;color:var(--ink);border-radius:999px;padding:8px 32px 8px 14px;font:inherit;font-size:13px;cursor:pointer}
@@ -492,7 +493,7 @@ fr:{
   chefs:"Chefs IA",
   disc:"Discuter ›",
   cd:"Chef étoilé · cuisine du monde",
-  ph:"Ex. : je n’ai pas de persil, j’ai du Cajun",
+  ph:"Ex. : sans persil, j’ai du cajun",
   e429:"Trop de demandes, réessayez dans un instant.",
   err:"Une erreur est survenue, réessayez.",
   code:"Code d’accès :",
@@ -516,7 +517,7 @@ fr:{
   e_badkey:"Clé API refusée : vérifiez ANTHROPIC_API_KEY dans Vercel, puis redéployez.",
   e_model:"Modèle introuvable : vérifiez la variable MODEL (ou supprimez-la) dans Vercel.",
   e_code:"Code d’accès incorrect. Réessayez.",
-  swapMsg:"Je n’ai pas : {i}. Crée-moi une nouvelle recette complète avec un autre ingrédient à la place, en ajustant les quantités et les étapes.",
+  swapMsg:"Je n’ai pas : {i}. Redonne-moi la recette complète avec un autre ingrédient à la place, en ajustant les quantités et les étapes.",
   verO:"Originale",
   verN:"{n}ème recette",
   allV:"Afficher toutes les variantes",
@@ -734,7 +735,7 @@ en:{
   chefs:"AI Chefs",
   disc:"Chat ›",
   cd:"Michelin-starred chef · world cuisine",
-  ph:"E.g. replace the olive oil with butter",
+  ph:"E.g. swap olive oil for butter",
   e429:"Too many requests, please try again in a moment.",
   err:"Something went wrong, please try again.",
   code:"Access code:",
@@ -758,7 +759,7 @@ en:{
   e_badkey:"API key rejected: check ANTHROPIC_API_KEY in Vercel, then redeploy.",
   e_model:"Model not found: check the MODEL variable (or remove it) in Vercel.",
   e_code:"Wrong access code. Try again.",
-  swapMsg:"I don’t have: {i}. Create a new complete recipe using another ingredient instead, adjusting quantities and steps.",
+  swapMsg:"I don’t have: {i}. Give me the complete recipe again, using another ingredient instead, adjusting quantities and steps.",
   verO:"Original",
   verN:"Version {n}",
   allV:"Show all versions",
@@ -976,7 +977,7 @@ es:{
   chefs:"Chefs IA",
   disc:"Hablar ›",
   cd:"Chef con estrella · cocina del mundo",
-  ph:"Ej.: cambia el aceite de oliva por mantequilla",
+  ph:"Ej.: cambia el aceite por mantequilla",
   e429:"Demasiadas solicitudes, inténtalo de nuevo en un momento.",
   err:"Ha ocurrido un error, inténtalo de nuevo.",
   code:"Código de acceso:",
@@ -1000,7 +1001,7 @@ es:{
   e_badkey:"Clave API rechazada: revisa ANTHROPIC_API_KEY en Vercel y vuelve a desplegar.",
   e_model:"Modelo no encontrado: revisa la variable MODEL (o elimínala) en Vercel.",
   e_code:"Código de acceso incorrecto. Inténtalo de nuevo.",
-  swapMsg:"No tengo: {i}. Crea una receta nueva y completa con otro ingrediente en su lugar, ajustando cantidades y pasos.",
+  swapMsg:"No tengo: {i}. Dame de nuevo la receta completa con otro ingrediente en su lugar, ajustando cantidades y pasos.",
   verO:"Original",
   verN:"Versión {n}",
   allV:"Ver todas las versiones",
@@ -1218,7 +1219,7 @@ de:{
   chefs:"KI-Köche",
   disc:"Chatten ›",
   cd:"Sternekoch · Weltküche",
-  ph:"z. B. ersetze das Olivenöl durch Butter",
+  ph:"z. B. Olivenöl durch Butter",
   e429:"Zu viele Anfragen, bitte gleich nochmal versuchen.",
   err:"Es ist ein Fehler aufgetreten, bitte erneut versuchen.",
   code:"Zugangscode:",
@@ -1242,7 +1243,7 @@ de:{
   e_badkey:"API-Schlüssel abgelehnt: ANTHROPIC_API_KEY in Vercel prüfen und neu deployen.",
   e_model:"Modell nicht gefunden: Variable MODEL in Vercel prüfen (oder entfernen).",
   e_code:"Falscher Zugangscode. Versuche es erneut.",
-  swapMsg:"Ich habe nicht: {i}. Erstelle ein neues vollständiges Rezept mit einer anderen Zutat statt dieser, mit angepassten Mengen und Schritten.",
+  swapMsg:"Ich habe nicht: {i}. Gib mir das vollständige Rezept noch einmal, mit einer anderen Zutat statt dieser, mit angepassten Mengen und Schritten.",
   verO:"Original",
   verN:"Version {n}",
   allV:"Alle Versionen anzeigen",
@@ -1460,7 +1461,7 @@ it:{
   chefs:"Chef IA",
   disc:"Parla ›",
   cd:"Chef stellato · cucina del mondo",
-  ph:"Es.: sostituisci l’olio d’oliva con il burro",
+  ph:"Es.: l’olio col burro",
   e429:"Troppe richieste, riprova tra poco.",
   err:"Si è verificato un errore, riprova.",
   code:"Codice di accesso:",
@@ -1484,7 +1485,7 @@ it:{
   e_badkey:"Chiave API rifiutata: controlla ANTHROPIC_API_KEY su Vercel e rifai il deploy.",
   e_model:"Modello non trovato: controlla la variabile MODEL (o rimuovila) su Vercel.",
   e_code:"Codice di accesso errato. Riprova.",
-  swapMsg:"Non ho: {i}. Crea una nuova ricetta completa con un altro ingrediente al suo posto, adattando quantità e passaggi.",
+  swapMsg:"Non ho: {i}. Dammi di nuovo la ricetta completa con un altro ingrediente al suo posto, adattando quantità e passaggi.",
   verO:"Originale",
   verN:"Versione {n}",
   allV:"Mostra tutte le versioni",
@@ -1726,7 +1727,7 @@ pt:{
   e_badkey:"Chave API rejeitada: verifique ANTHROPIC_API_KEY na Vercel e volte a publicar.",
   e_model:"Modelo não encontrado: verifique a variável MODEL (ou remova-a) na Vercel.",
   e_code:"Código de acesso incorreto. Tente novamente.",
-  swapMsg:"Não tenho: {i}. Crie uma nova receita completa com outro ingrediente no lugar, ajustando quantidades e passos.",
+  swapMsg:"Não tenho: {i}. Dê-me de novo a receita completa com outro ingrediente no lugar, ajustando quantidades e passos.",
   verO:"Original",
   verN:"Versão {n}",
   allV:"Ver todas as versões",
@@ -2304,7 +2305,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v131',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v132',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2550,10 +2551,10 @@ async function selMove(){
   hsel=null;refreshAll();
 }
 const shown=c=>c.replace(/\n\n§§[\s\S]*$/,'').replace(/^\[UI\] /,'');
-function branchWith(src,ings,mode){ // new separate recipe saved in the history: the original recipe (and its favorite) stays untouched
-  newConv();hist=[];log.innerHTML='';hiddenIdx=new Set();
-  chefNow=src.k>=0&&CHEFS[src.k]?{...CHEFS[src.k],k:src.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=null;branchFrom={title:src.title,k:src.k,lang:src.lang,from:src.id||''};
-  refreshChat();drawQuick();show('chat');try{chatActions()}catch(x){}
+function branchWith(src,ings,mode){ // v132: like the quick filters — same conversation, the answer is a NEW VERSION of the same recipe (no separate variant any more)
+  if(busy)return;
+  const e=src.id?loadH().find(x=>x.id===src.id):null;
+  if(e)openSaved(e.id); // the whole thread of that recipe, new request below it
   send((mode==='no'?T().noMsg:T().swapMsg).replace('{i}',ings.join(' ; ')),false,T().swapCtx+'\n'+src.text);
 }
 function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({id,text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
