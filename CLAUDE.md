@@ -64,6 +64,7 @@ No framework, no build step. `package.json` only sets `"type": "module"`.
 | `api/_page.js` | Web page fetching for link import (SSRF protection, redirect/size/time limits). |
 | `api/selftest.js` | Daily « food only » self-test (2 Vercel crons, half of the 55 questions each; needs `CRON_SECRET`). `GET /api/selftest` = public report (last run + 30-day history). |
 | `api/_selftest-cases.js` | The 55 test questions (also used by the browser test bench). |
+| `api/_selftest-i18n.js` | The same 55 questions in the 6 languages (`ALL_CASES`, 330 cases; used by the morning check, not by the daily cron). |
 | `vercel.json` | Functions: 60 s max duration. Two crons (UTC, once a day each) call `/api/season-ideas?run=1` at 07:00 and 08:00 UTC, so that 9:00 Paris time is covered in summer (CEST) and in winter (CET); the warm-up is idempotent. The self-test has NO cron (it costs model calls): it is run from the browser test bench artifact instead. |
 
 Files starting with `_` in `api/` are helpers, not routes.
@@ -174,6 +175,8 @@ v136 (owner's screenshot: the warning came in English under a French answer, bec
 v137 (owner's request): (1) STAY IN THE CONVERSATION: `api/chat.js` BASE rule « STAY IN THE CONVERSATION »: when the user says what THEY will do / cook / serve (« je vais faire des pommes de terre au four »), the chef answers in 1–2 plain sentences (acknowledges, one tip, offers the recipe) and writes NO recipe, no rewrite, no new ideas list; a recipe only when asked. PROMPT CHANGED: rerun the 55-question bench. (2) INGREDIENT LABELS: a version shows pink « Nouveau » (ingredient not in the previous version) and amber « Modifié » (same ingredient, other quantity) pills next to the ingredient, and a « Retiré : … » line under the list (`ingKey()`, `ingMap()`, `prevVerAt()` / `prevVerOf()`, 6th argument `prevTxt` of `renderRecipe()`; keys `ingNew` / `ingMod` / `ingRem` in 6 languages). The previous version = the previous recipe message of the same `rid`; the Originale has no labels; if most quantities differ and nothing is new (servings change) the « Modifié » labels are not shown. Works in the chat, the family view and the card.
 
 v138 (owner's screenshot: « je vais faire du riz avec » got only advice, the beef roast recipe was not updated): `api/chat.js` rule STAY IN THE CONVERSATION reworded: if a recipe is already in the thread, the chef UPDATES THAT recipe for the user's plan (full recipe via the MODIFICATION steps, « What changed » mentions the accompaniment; so it becomes a new version « 2ème recette » with the ingredient labels, card opens) and never writes a separate recipe for the side; if nothing needs to change, or no recipe exists yet (ideas only), plain 1–2 sentences and no recipe. PROMPT CHANGED: rerun the 55-question bench. Not tested with the real model.
+
+Tests (2026-11-05, owner's request « 55 questions dans toutes les langues »): new `api/_selftest-i18n.js` = the SAME 55 questions in each of the 6 languages (275 added versions, ids `<id>-<lang>`; `CASES_I18N`, `ALL_CASES` = 330 cases, 55 per language). `api/selftest.js` (daily cron, costs model calls) still runs the 55 original `CASES` only. The morning check (scheduled task « Contrôle matinal Chef IA », 7:25 Paris) runs `ALL_CASES` with haiku sub-agents (approximate measure; the artifact bench stays the reference).
 
 ## 6. Current status and decisions
 
