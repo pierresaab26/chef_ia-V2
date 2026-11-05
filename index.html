@@ -114,10 +114,10 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 /* iOS zooms the whole page when a field smaller than 16px gets focus (which broke the layout while writing a comment) */
 input,textarea,select{font-size:16px!important}
 .kb #quick,.kb #totop{display:none!important} /* keyboard open: give the room back to the conversation */
-.hid,.hidold{display:none!important}.chrow{align-self:stretch;margin:0 0 6px}.chhide{display:block;width:100%;margin:0;text-align:center;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
+.hid,.hidold{display:none!important}.chrow{align-self:stretch;margin:0 0 6px}.chblk{align-self:stretch}.chblk .delv{width:100%;margin:4px 0 0;padding:6px 0}.chhide{display:block;width:100%;margin:0;text-align:center;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--bd);font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
 .chact .cbtn.cook{background:var(--psoft);color:var(--pink);border-color:var(--psbd);font-weight:700}
-.m .chact{margin:12px 0 16px}.chact .cbtn.cook{flex:1 0 100%;text-align:center;justify-content:center}.chcom .comb{margin:0 0 8px}.delv{flex:1 0 100%;background:none;border:0;color:var(--mut);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;padding:2px 0;cursor:pointer;text-align:center}.cdelv{display:block;margin:-6px auto 10px}
+.m .chact{margin:12px 0 16px}.chact .cbtn.cook{flex:1 0 100%;text-align:center;justify-content:center}.chcom .comb{margin:0 0 8px}.delv{flex:1 0 100%;background:none;border:0;color:#c04a42;font-size:13px;font-weight:500;padding:6px 0;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}.delv svg{display:block;flex:none;width:15px;height:15px}.cdelv{display:flex;margin:-6px auto 10px}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
@@ -308,6 +308,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tap{position:relative;cursor:pointer}
 .dcr{position:absolute;left:8px;bottom:8px;max-width:calc(100% - 16px);font-size:11px;line-height:1.3;padding:3px 9px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:2}
 .dcr a,.credit a{color:inherit;text-decoration:underline}
+.srcpill{position:absolute;left:14px;bottom:12px;background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mut);pointer-events:none;max-width:calc(100% - 80px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@media (max-width:480px){.srcpill{padding:4px 9px;font-size:11.5px}}
 .camb{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;font-size:16px;pointer-events:none}
 #isheetwrap{position:fixed;inset:0;background:rgba(10,8,20,.5);display:none;align-items:flex-end;justify-content:center;z-index:60}
 #isheetwrap.on{display:flex}
@@ -2333,7 +2334,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v138',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v149',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2355,11 +2356,12 @@ function readStoreRaw(){
   }catch(e){}
   return {v:STORE_V,recipes:[]};
 }
-function loadH(){const st=readStore();if(!st._fm){st.recipes.forEach(favMig);st._fm=1}if(!st._vk){st.recipes.forEach(e=>{if(!e.qa)ownIdx(e).forEach(i=>{const m=e.messages[i];if(!m.vk)m.vk=vKey(e,i)})});st._vk=1}return st.recipes} // v129: the recipes that already exist keep their title-based comment keys (frozen), the new ones get a unique key
+function loadH(){const st=readStore();if(!st._fm){st.recipes.forEach(favMig);st._fm=1}if(!st._fv){st.recipes.forEach(e=>{if(e&&!e.qa&&e.fav&&e.messages&&!ownIdx(e).some(i=>e.messages[i].fav)){const o=ownIdx(e);if(o.length)e.messages[o[0]].fav=true}});st._fv=1} // v147: old recipe-level favorites move onto the first version of that recipe
+  if(!st._vk){st.recipes.forEach(e=>{if(!e.qa)ownIdx(e).forEach(i=>{const m=e.messages[i];if(!m.vk)m.vk=vKey(e,i)})});st._vk=1}return st.recipes} // v129: the recipes that already exist keep their title-based comment keys (frozen), the new ones get a unique key
 function newVk(){let r='';try{r=crypto.randomUUID().replace(/-/g,'').slice(0,16)}catch(x){}if(r.length<12)r=(Math.random().toString(36).slice(2)+Date.now().toString(36)+'0000000000').replace(/[^a-z0-9]/g,'').slice(0,16);return 'u-'+r} // v129: unique key (comments + ratings) of one recipe version
 function saveH(a){
   a.forEach(e=>{if(e&&!e.qa)ownIdx(e).forEach(i=>{const m=e.messages[i];if(!m.vk)m.vk=newVk()})});
-  let n=0;const out=a.filter(x=>x.fav||x.arch||(n++<MAX_RECENT)); // favorites and archived recipes are never removed automatically
+  let n=0;const out=a.filter(x=>famFav(x)||x.arch||(n++<MAX_RECENT)); // favorites and archived recipes are never removed automatically
   const st={v:STORE_V,updatedAt:Date.now(),device:deviceId(),recipes:out,_vk:1};
   try{localStorage.setItem(STORE_KEY,JSON.stringify(st));storeCache=st;return true}catch(e){storeCache=null;return false}
 }
@@ -2377,24 +2379,24 @@ function msgOut(m){const o={role:m.role,content:m.content};if(m.rid)o.rid=m.rid;
 // v127: every version of a recipe has its OWN favorite, rating, comments and share
 function ownIdx(e){const r=[];(e&&e.messages||[]).forEach((m,i)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id))r.push(i)});return r}
 function lastVi(e){const o=ownIdx(e);return o.length?o[o.length-1]:null}
-function favMig(e){if(!e||!e.messages)return;const o=ownIdx(e);if(!o.length)return;if(!e.favV){if(e.stars&&!e.messages[o[0]].stars)e.messages[o[0]].stars=e.stars;e.favV=1}if(e.messages.some(m=>m.fav)){e.fav=true;e.messages.forEach(m=>{delete m.fav})}} // old stars → first version; v128: the favorite is the whole recipe again (v127 per-version hearts → recipe heart)
+function favMig(e){if(!e||!e.messages)return;const o=ownIdx(e);if(!o.length)return;if(!e.favV){if(e.stars&&!e.messages[o[0]].stars)e.messages[o[0]].stars=e.stars;e.favV=1}} // old stars → first version; v128: the favorite is the whole recipe again (v127 per-version hearts → recipe heart)
 function famMembers(e,a){a=a||loadH();const r=famRoot(e,a);return r?a.filter(x=>!x.qa&&famRoot(x,a).id===r.id):[e]}
-function famFav(e){if(!e)return false;if(e.qa)return !!e.fav;return famMembers(e).some(x=>x.fav)} // old favorites → the latest version, old stars → the first version (same shared key as before)
-function favAt(e,vi){return famFav(e)} // v128: one heart for the recipe and all its versions / variants
+function famFav(e){if(!e)return false;if(e.qa)return !!e.fav;return ownIdx(e).some(i=>e.messages[i].fav)} // v147: the favorite is PER RECIPE = PER VERSION (message.fav); the entry is « favorite » when one of its versions is // old favorites → the latest version, old stars → the first version (same shared key as before)
+function favAt(e,vi){if(!e)return false;if(e.qa||vi==null)return famFav(e);const m=e.messages&&e.messages[vi];return !!(m&&m.fav)} // v147: the heart of THIS version only (Originale, 2ème, 3ème recette, variants: all independent)
 function vKey(e,vi){const o=ownIdx(e),k=vi==null?o.length-1:o.indexOf(vi),b=slug(e.title),m=e.messages&&e.messages[o[k]];if(m&&m.vk)return m.vk;return k<=0?b:b+'-v'+(k+1)} // comments / ratings key: the first version keeps the old key
 function verOf(e,vi){if(vi==null||!e.messages||!e.messages[vi])return e;return {...e,messages:e.messages.slice(0,vi+1),title:recipeTitle(e.messages[vi].content)||e.title}}
 function resolveVi(e,i,content){if(e.messages&&e.messages[i]&&e.messages[i].content===content)return i;const j=(e.messages||[]).findIndex(m=>m.role==='assistant'&&m.content===content);return j>=0?j:lastVi(e)}
-function favItems(list){const a=loadH(),seen=new Set(),out=[];list.forEach(e=>{if(e.qa){if(e.fav)out.push(e);return}if(!famFav(e))return;const r=famRoot(e,a)||e;if(seen.has(r.id))return;seen.add(r.id);out.push({...r,fav:true,_fam:famVersions(r).length>1})});return out} // v128: ONE row per favorite recipe (it groups all its versions)
-function verBar(e,vi,isLast){ // favorite, rating, share of THIS version + « Commencer la recette » (full width)
+function favItems(list){const a=loadH(),seen=new Set(),out=[];list.forEach(e=>{if(e.qa){if(e.fav)out.push(e);return}if(!famFav(e))return;ownIdx(e).forEach(i=>{const m=e.messages[i];if(m.fav)out.push({...e,fav:true,_vi:i,title:recipeTitle(m.content)||e.title,_fam:famVersions(e).length>1})})});return out} // v128: ONE row per favorite recipe (it groups all its versions)
+function verBar(e,vi,isLast,noDel){ // favorite, rating, share of THIS version + « Commencer la recette » (full width)
   const t=T(),rid=e.id,bar=document.createElement('div');bar.className='chact';bar.dataset.rid=rid;bar.dataset.vi=vi;const on=favAt(e,vi);
   const fv=document.createElement('button');fv.type='button';fv.className='cbtn fvb'+(on?' on':'');fv.textContent=(on?'❤️ ':'🤍 ')+t.fav;fv.onclick=()=>toggleFav(rid,vi);
-  const heart=isOriginale(e,vi); // v129: the heart is only on the Originale
   const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>{const z=loadH().find(x=>x.id===rid);if(z)shareRecipe(verOf(z,vi))};
-  if(heart)bar.append(fv);bar.append(rateBox(rid,vi),sh);
+  sh.addEventListener('pointerdown',()=>{try{const z=loadH().find(x=>x.id===rid);if(z)shareLink(verOf(z,vi),true)}catch(x){}}); // v139: the shared link is prepared before the tap ends
+  bar.append(fv,rateBox(rid,vi),sh); // v139: the heart is back on every version / variant (it still marks the whole recipe)
   if(isLast&&e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.type='button';og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openSaved(e.from);bar.appendChild(og)}
   if(isLast&&e.ideas){const ib=document.createElement('button');ib.type='button';ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===rid));bar.appendChild(ib)}
   const ck=document.createElement('button');ck.type='button';ck.className='cbtn cook';ck.textContent='🍳 '+t.cookB;ck.onclick=()=>openCard(rid,isLast?undefined:vi);bar.appendChild(ck);
-  {const dl=delLink(e,vi);if(dl)bar.appendChild(dl)} // v128: « Supprimer cette version » (not on the Originale)
+  if(!noDel){const dl=delLink(e,vi);if(dl)bar.appendChild(dl)} // v128: « Supprimer cette version » (not on the Originale); v139: in the chat it sits under « Masquer cette recette » (chatActions)
   return bar}
 function isOriginale(e,vi){const a=loadH(),r=famRoot(e,a)||e,o=ownIdx(e);return r.id===e.id&&o.indexOf(vi)===0}
 async function sidFor(k){try{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(OWN+'|'+k));return 'l-'+[...new Uint8Array(d)].slice(0,12).map(b=>b.toString(36).padStart(2,'0')).join('').slice(0,24)}catch(x){return 'l-'+(OWN+k).replace(/[^a-z0-9]/gi,'').toLowerCase().slice(0,30)}} // id of the shared copy of a version (one per sender)
@@ -2414,7 +2416,7 @@ async function delVersion(id,vi){const t=T();if(!await ask({text:t.delVQ,okLabel
   saveH(a);drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}toast('🗑️ '+t.delV);
   const still=loadH().find(x=>x.id===e.id);
   if($('#card').classList.contains('on')){openCard(still?still.id:root.id)}else if(onFam){openFamily(still||root)}else openSaved(still?still.id:root.id)}
-function delLink(e,vi){if(!canDelV(e,vi))return null;const b=document.createElement('button');b.type='button';b.className='delv';b.textContent='🗑️ '+T().delV;b.onclick=()=>delVersion(e.id,vi);return b}
+function delLink(e,vi){if(!canDelV(e,vi))return null;const b=document.createElement('button');b.type='button';b.className='delv';b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';b.append(document.createTextNode(T().delV));b.onclick=()=>delVersion(e.id,vi);return b}
 function comFold(e,vi){ // the comments of THIS version, folded in the chat: « 💬 Commentaires (N) »
   const t=T(),w=document.createElement('div');w.className='chcom';w.dataset.rid=e.id;const b=document.createElement('button');b.type='button';b.className='chhide comb';
   const box=document.createElement('div');box.hidden=true;let n=0;const lab=()=>{b.textContent='💬 '+t.com+(n?' ('+n+')':'')+(box.hidden?' ▾':' ▴')};lab();
@@ -2441,6 +2443,7 @@ function openFamily(e){ // v126: the normal chat with EVERY version of the recip
   const a=loadH(),vs=famVersions(e);if(!vs.length)return;
   const lat=vs.reduce((p,q)=>(q.at||0)>=(p.at||0)?q:p);
   openSaved(lat.eid);
+  qOpen=false;qf={};repaintQuick(); // v145: « all variants » opens with the filters FOLDED; the bottom button (« Adapte la recette Chef ») opens them again
   const anchor=log.firstChild,ex=vs.filter(v=>v.eid!==lat.eid);
   ex.forEach(v=>{const x=a.find(z=>z.id===v.eid);const m=x&&x.messages[v.idx];if(!m)return;
     const el=document.createElement('div');el.className='m a rich xfam';el.dataset.eid=v.eid;
@@ -2467,25 +2470,26 @@ function saveCurrent(){
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
   hist.forEach(m=>{if(m.role==='assistant'&&!m.rid&&looksLikeRecipe(m.content))m.rid=currentId}); // recipe message → saved recipe
-  {const old=e.messages||[];e.messages=hist.map((m,i)=>{const o=msgOut(m),q=old[i];if(q&&q.content===m.content){if(q.stars)o.stars=q.stars;if(q.vn)o.vn=q.vn;if(q.vk)o.vk=q.vk}return o});e.favV=1}e.updatedAt=Date.now();
+  {const old=e.messages||[];e.messages=hist.map((m,i)=>{const o=msgOut(m),q=old[i];if(q&&q.content===m.content){if(q.stars)o.stars=q.stars;if(q.vn)o.vn=q.vn;if(q.vk)o.vk=q.vk;if(q.fav)o.fav=true}return o});e.favV=1}e.updatedAt=Date.now();
   a.unshift(e);if(!saveH(a))toast(T().stFull);drawHistory();syncCardBtn();try{ensurePhoto(currentId)}catch(x){}
 }
 function rowFor(e,del,heart,sc,unarch){
+  if(e&&e._vi==null&&!e.qa&&famFav(e)){const fo=ownIdx(e).filter(i=>e.messages[i].fav),fi=fo[fo.length-1];e={...e,_vi:fi,title:recipeTitle(e.messages[fi].content)||e.title}} // v149: a recipe with a favorite version shows (and opens) THAT version in the History too
   const [em,bg]=dishLook(e.title);
   const r=document.createElement('div');r.className='hrow';
   const o=document.createElement('button');o.className='hopen';
   const p=document.createElement('div');p.className='hpic';p.style.background=bg;p.textContent=em;
   const ru=e.img||(e.ph&&okU(e.ph.t)?e.ph.t:'');if(ru){p.textContent='';const im=document.createElement('img');im.alt='';im.referrerPolicy='no-referrer';im.src=ru;im.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:14px;display:block';im.onerror=()=>{im.remove();p.textContent=em};p.appendChild(im)}
   const x=document.createElement('div');x.className='htx';
-  const b=document.createElement('b');b.textContent=(e.fav?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
-  x.append(b,d);o.append(p,x);o.onclick=()=>{if(e.qa){openCard(e.id);return}const a=loadH(),r=famRoot(e,a)||e;openCard(r.id,ownIdx(r)[0])};/* v130: every row opens the card of the ORIGINALE of its family */r.appendChild(o);
+  const b=document.createElement('b');b.textContent=(famFav(e)?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
+  x.append(b,d);o.append(p,x);o.onclick=()=>{if(e.qa){openCard(e.id);return}if(e._vi!=null){openCard(e.id,e._vi);return}const a=loadH(),r=famRoot(e,a)||e;openCard(r.id,ownIdx(r)[0])};/* v130: every row opens the card of the ORIGINALE of its family */r.appendChild(o);
   if(sc){ // selection mode: a round checkbox on the left, tapping the row toggles it (no heart, no ✕)
     const c=document.createElement('button');c.type='button';c.className='hchk';c.setAttribute('role','checkbox');
     const paint=()=>{const on=sc.set.has(e.id);c.textContent=on?'✓':'';c.setAttribute('aria-checked',String(on));r.classList.toggle('hsel',on)};
     const tg=()=>{sc.set.has(e.id)?sc.set.delete(e.id):sc.set.add(e.id);paint();sc.upd()};
     paint();c.onclick=tg;o.onclick=tg;r.insertBefore(c,o);
   }
-  if(heart&&!(e.from&&loadH().some(x=>x.id===e.from))){const h=document.createElement('button');h.className='hdel';h.textContent=(e._vi!=null||favAt(e))?'❤️':'🤍';h.setAttribute('aria-label',T().fav);h.onclick=()=>toggleFav(e.id,e._vi);r.appendChild(h)}
+  if(heart){const h=document.createElement('button');h.className='hdel';h.textContent=(e._vi!=null||famFav(e))?'❤️':'🤍';h.setAttribute('aria-label',T().fav);h.onclick=()=>toggleFav(e.id,e._vi!=null?e._vi:null);r.appendChild(h)}
   if(unarch){ // « Archivées » tab: a visible button restores this recipe alone (no confirmation: nothing is lost)
     r.classList.add('harc');
     const u=document.createElement('button');u.type='button';u.className='hunar';u.textContent='↩ '+T().hUnarchB;u.setAttribute('aria-label',T().hUnarchB+' – '+e.title);
@@ -2614,7 +2618,7 @@ function pickRecipe(askText){ // dialog: pick a saved recipe (search) or ask the
     const end=v=>{w.remove();done(v)};
     const paint=()=>{l.innerHTML='';const q=nz(f.value.trim()),hit=a.filter(e=>!q||nz(e.title).includes(q));
       if(!hit.length){const p=document.createElement('p');p.className='empty';p.textContent=a.length?t.noresult:t.mNone;l.appendChild(p);return}
-      hit.forEach(e=>{const b=document.createElement('button');b.type='button';b.textContent=(e.fav?'❤️ ':'')+e.title;const s=document.createElement('small');s.textContent=fmtDate(e.date);b.appendChild(s);b.onclick=()=>end(e.id);l.appendChild(b)})};
+      hit.forEach(e=>{const b=document.createElement('button');b.type='button';b.textContent=(famFav(e)?'❤️ ':'')+e.title;const s=document.createElement('small');s.textContent=fmtDate(e.date);b.appendChild(s);b.onclick=()=>end(e.id);l.appendChild(b)})};
     f.oninput=paint;paint();
     const row=document.createElement('div');row.className='dlgb';
     const no=document.createElement('button');no.type='button';no.className='cbtn';no.textContent=t.imCancel;no.onclick=()=>end(null);
@@ -2760,7 +2764,7 @@ let hiddenIdx=new Set(); // thread positions of the recipes currently hidden
 let oldHidden=new Set(); // recipes (rid) whose earlier versions are hidden in the chat (reset by newConv)
 function chatActions(){
   if(qaMode){qaActions();return}
-  log.querySelectorAll('.chact,.chcom,.chrow').forEach(x=>{if(!x.closest('.xfam'))x.remove()});
+  log.querySelectorAll('.chact,.chcom,.chrow,.chblk').forEach(x=>{if(!x.closest('.xfam'))x.remove()});
   log.querySelectorAll('.hid,.hidold').forEach(x=>x.classList.remove('hid','hidold'));
   const els=[...log.querySelectorAll('.m:not(.xfam)')],t=T();
   const recIdx=[];hist.forEach((m,i)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&els[i])recIdx.push(i)});
@@ -2772,25 +2776,27 @@ function chatActions(){
   const lastOf={};hist.forEach((m,i)=>{if(m.rid&&els[i]&&m.role==='assistant')lastOf[m.rid]=i});
   const olds={}; // earlier versions of each recipe (same rid, not the latest one)
   hist.forEach((m,i)=>{if(m.rid&&m.role==='assistant'&&els[i]&&lastOf[m.rid]!==i&&looksLikeRecipe(m.content))(olds[m.rid]=olds[m.rid]||[]).push(i)});
+  const delFor=i=>{const e=H2.find(x=>x.id===hist[i].rid);if(!e)return null;const d=delLink(e,resolveVi(e,i,hist[i].content));if(d)d.dataset.i=i;return d};
   const bars={},H2=loadH(); // v127: every version has its own bar (favorite, rating, share, « Commencer la recette ») and its own folded comments
   recIdx.forEach(i=>{const rid=hist[i].rid;if(!rid)return;const e=H2.find(x=>x.id===rid);if(!e)return;const el=els[i],vi=resolveVi(e,i,hist[i].content),last=lastOf[rid]===i;
-    const bar=verBar(e,vi,last);placeBar(el,bar);bars[i]=bar;const cw=comFold(e,vi);cw.dataset.i=i;el.after(cw)});
+    const bar=verBar(e,vi,last,true);placeBar(el,bar);bars[i]=bar;const cw=comFold(e,vi);cw.dataset.i=i;const blk=document.createElement('div');blk.className='chblk';blk.dataset.i=i;blk.appendChild(cw);el.after(blk)}); // v140: order under a recipe = hide, comments, delete
   if(recIdx.length>1){ // 2 recipes or more: a hide / show button under EACH recipe
     const apply=()=>{recIdx.forEach(i=>{const el=els[i],hid=hiddenIdx.has(i),ph=picOf(el);
         el.classList.toggle('hid',hid);if(ph)ph.classList.remove('hid'); // v123: the picture stays when the recipe is hidden
-        const bar=bars[i];if(bar)bar.classList.toggle('hid',hid);{const cm=log.querySelector('.chcom[data-i="'+i+'"]');if(cm)cm.classList.toggle('hid',hid)}
+        const bar=bars[i];if(bar)bar.classList.toggle('hid',hid);{const dv=log.querySelector('.delv[data-i="'+i+'"]');if(dv)dv.classList.toggle('hid',hid)}{const cm=log.querySelector('.chcom[data-i="'+i+'"]');if(cm)cm.classList.toggle('hid',hid)}
         const hb=log.querySelector('.chhide[data-i="'+i+'"]');if(hb)hb.textContent=hid?t.showB1.replace('{t}',recipeTitle(hist[i].content)||''):t.hideB1});
       try{updTop()}catch(x){}};
     recIdx.forEach(i=>{const el=els[i],anchor=el;
       const row=document.createElement('div');row.className='chrow';
       const hb=document.createElement('button');hb.type='button';hb.className='chhide';hb.dataset.i=i;
       hb.onclick=()=>{hiddenIdx.has(i)?hiddenIdx.delete(i):hiddenIdx.add(i);apply()};
-      row.appendChild(hb);anchor.after(row)});
+      row.appendChild(hb);const blk=log.querySelector('.chblk[data-i="'+i+'"]');if(blk)blk.insertBefore(row,blk.firstChild);else anchor.after(row);{const dv=delFor(i);if(dv)(blk||row).appendChild(dv)}}); // v139: « Supprimer cette version » right under « Masquer cette recette »
     apply();
-  }
+  }else{recIdx.forEach(i=>{const dv=delFor(i);if(!dv)return;const blk=log.querySelector('.chblk[data-i="'+i+'"]');if(blk)blk.appendChild(dv)})}
+  try{const li=hist[lastIdx],le=li&&li.rid&&H2.find(x=>x.id===li.rid);if(le)setTimeout(()=>shareLink(verOf(le,resolveVi(le,lastIdx,li.content)),true),600)}catch(x){} // v139: the link of the newest version is ready before the share tap
   Object.keys(olds).forEach(rid=>{if(!oldHidden.has(rid))return;olds[rid].forEach(i=>{const el=els[i],pv=picOf(el);
     el.classList.add('hidold');if(pv)pv.classList.add('hidold');
-    const hb=log.querySelector('.chhide[data-i="'+i+'"]');if(hb&&hb.parentElement)hb.parentElement.classList.add('hidold')})});
+    const hb=log.querySelector('.chhide[data-i="'+i+'"]');if(hb&&hb.closest('.chblk'))hb.closest('.chblk').classList.add('hidold')})});
   try{updTop()}catch(x){}
 }
 // « Cooking questions »: under each answer, Favorite (saves the question + answer in Favorites, group « Cooking questions »; tapping again deletes it),
@@ -2931,11 +2937,19 @@ async function getPhoto(e){
   }catch(x){return null}
   updEntry(e.id,z=>{z.photo=url});return url;
 }
-function toggleFav(id,vi){let res=false;const a=loadH(),e=a.find(x=>x.id===id);if(e){if(e.qa){e.fav=!e.fav;res=e.fav}else{const ms=famMembers(e,a),on=ms.some(x=>x.fav);ms.forEach(x=>{x.fav=false});if(!on)(famRoot(e,a)||e).fav=true;res=!on}e.updatedAt=Date.now();saveH(a)}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}return res}
+function toggleFav(id,vi){let res=false;const a=loadH(),e=a.find(x=>x.id===id);if(e){if(e.qa){e.fav=!e.fav;res=e.fav}else{const o=ownIdx(e);if(vi==null){if(famFav(e)){o.forEach(i=>{delete e.messages[i].fav});res=false}else if(o.length){e.messages[o[0]].fav=true;res=true}}else{const m=e.messages[vi];if(m){if(m.fav)delete m.fav;else m.fav=true;res=!!m.fav}}}e.updatedAt=Date.now();saveH(a)}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}return res}
+// v139: the shared copy of a version is created ONCE and kept (shareMemo), ideally BEFORE the tap (card opened, finger down on the button):
+// iOS refuses navigator.share() when the page has waited for the server after the tap, which made the share button look broken.
+const shareMemo={};
+function shareLink(e,quiet){
+  if(!/^https?:/.test(location.href))return Promise.resolve('');
+  const k=vKey(e),ck=k+'|'+recipeText(e).length;
+  if(shareMemo[ck])return shareMemo[ck];
+  const p=(async()=>{try{const sid=await sidFor(k),r=await capi('POST','',{sid,ck:k,title:e.title,text:recipeText(e),lang:e.lang||lang,ph:e.ph&&!hasOwnImg(e)?e.ph:null},'/api/shared',quiet);if(r.ok)return location.origin+'/?s='+sid}catch(x){}delete shareMemo[ck];return ''})(); // v129: the friend opens this link → the recipe AND its comments
+  shareMemo[ck]=p;return p}
 async function shareRecipe(e){
   const pic=e.ph&&!hasOwnImg(e)&&okU(e.ph.pg)?'\n\n📷 '+T().phBy+' '+(e.ph.by||'Unsplash')+' · Unsplash\n'+e.ph.pg:''; // the recipient gets the credit and the link of the SAME photo
-  let slink='';
-  if(/^https?:/.test(location.href)){try{const k=vKey(e),sid=await sidFor(k),r=await capi('POST','',{sid,ck:k,title:e.title,text:recipeText(e),lang:e.lang||lang,ph:e.ph&&!hasOwnImg(e)?e.ph:null},'/api/shared');if(r.ok)slink=location.origin+'/?s='+sid}catch(x){}} // v129: the friend opens this link → the recipe AND its comments
+  const slink=await Promise.race([shareLink(e),new Promise(r=>setTimeout(()=>r(''),2500))]); // already resolved when prepared: no wait, the tap is still « fresh »
   const body=e.title+'\n\n'+plain(recipeText(e))+pic+(e.link?'\n\n'+e.link:'')+(slink?'\n\n💬 '+slink:!e.link&&/^https?:/.test(location.href)?'\n\n'+location.origin:'');
   if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
   let ok=false;
@@ -3092,7 +3106,7 @@ function openCard(id,vi){
   cardId=id;const t=T(),body=$('#cardbody');body.innerHTML='';$('#cardT').textContent=curT;$('#cardT').title=curT;
   const ph=document.createElement('div');ph.className='cphoto';const [em,bg]=dishLook(e.title);ph.style.background=bg;
   const emo=document.createElement('span');emo.textContent=em;ph.appendChild(emo);body.appendChild(ph);
-  const credit=document.createElement('small');credit.className='credit';body.appendChild(credit);
+  let srcPill=null;const credit=document.createElement('small');credit.className='credit';body.appendChild(credit);
   ph.classList.add('tap');ph.setAttribute('role','button');ph.tabIndex=0;ph.setAttribute('aria-label',t.imgT);
   const cam=document.createElement('span');cam.className='camb';cam.textContent='📷';
   ph.onclick=()=>openImgSheet(id);ph.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImgSheet(id)}};
@@ -3102,19 +3116,21 @@ function openCard(id,vi){
     im.onerror=()=>{im.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.insertBefore(a,ph.firstChild);credit.textContent=''};ph.appendChild(im);phCreditInto(credit,e.ph)}
   else{const art=()=>{if(cardId!==id||!emo.isConnected)return;ph.style.background='linear-gradient(to bottom,transparent 76.4%,rgba(255,255,255,.35) 76.4%),'+bg;emo.remove();const a=dishArt(e.title);a.style.cssText='display:block;width:100%;height:100%';ph.appendChild(a)};
   art();
-  const wiki=()=>getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+encodeURI(u).replace(/"/g,'%22').replace(/\)/g,'%29')+'")';ph.appendChild(cam);credit.textContent=/^data:/.test(u)?'':T().credit}});
+  const wiki=()=>getPhoto(e).then(u=>{if(u&&cardId===id){ph.innerHTML='';ph.style.background=bg;ph.style.backgroundImage='url("'+encodeURI(u).replace(/"/g,'%22').replace(/\)/g,'%29')+'")';ph.appendChild(cam);if(srcPill)ph.appendChild(srcPill);credit.textContent=/^data:/.test(u)?'':T().credit}});
   ensurePhoto(id).then(ok=>{if(!ok&&cardId===id&&curView==='card')wiki()})}
   ph.appendChild(cam);
+  if(e.src==='photo'){ph.style.position='relative';srcPill=document.createElement('span');srcPill.className='srcpill';srcPill.textContent='📷 '+t.srcP;ph.appendChild(srcPill)} // v141: « Importée d’une photo » as a chip ON the photo (bottom left), same look as the other chips
   const h=document.createElement('h1');h.className='ctitle';h.textContent=curT;body.appendChild(h);
   const txt=RTX,hd=headInfo(txt),info=infoChips(hd.txt);
   {const own=(e.messages||[]).map((m,i)=>({m,i})).filter(o=>o.m.role==='assistant'&&looksLikeRecipe(o.m.content)&&(!o.m.rid||o.m.rid===e.id)),k=vm?own.findIndex(o=>o.i===vi):own.length-1,lt=own[k];
-   const dl=verLine(e,vm&&k>=0?vnOf(e,vi):verNum(e),lt&&lt.m.at,lt?{eid:e.id,idx:lt.i}:null);const so=e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:e.src==='photo'?'📷 '+t.srcP:'';if(so){const sp=document.createElement('span');sp.textContent=so;dl.insertBefore(sp,dl.children[1])}body.appendChild(dl)} // v125: date, version badge, « all versions », source
+   const dl=verLine(e,vm&&k>=0?vnOf(e,vi):verNum(e),lt&&lt.m.at,lt?{eid:e.id,idx:lt.i}:null);const so=e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:'';if(so){const sp=document.createElement('span');sp.textContent=so;dl.insertBefore(sp,dl.children[1])}body.appendChild(dl)} // v125: date, version badge, « all versions », source
   const mb=metaBar(hd,info.find(x=>x.startsWith('🍽️'))||'',(info.find(x=>x.startsWith('⏱'))||'')); // v117: shown AFTER the action row
   const act=document.createElement('div');act.className='cact';
   const cvi=vm?vi:lastVi(e),cf=favAt(e,cvi);const fv=document.createElement('button');fv.className='cbtn'+(cf?' on':'');fv.textContent=cf?'❤️':'🤍';fv.setAttribute('aria-label',t.fav);
   fv.onclick=()=>{const f=toggleFav(id,cvi);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
   const sh=document.createElement('button');sh.className='cbtn shr';sh.innerHTML='↗<span class="shl"> '+t.share.replace(/</g,'&lt;')+'</span>';sh.setAttribute('aria-label',t.share);sh.onclick=()=>shareRecipe(verOf(loadH().find(x=>x.id===id)||e,cvi)); // v117: icon only on phones
-  if(isOriginale(e,cvi))act.append(fv);act.append(rateBox(id,cvi),sh); // v129: heart only on the Originale
+  act.append(fv,rateBox(id,cvi),sh); // v139: heart on every version again
+  sh.addEventListener('pointerdown',()=>{try{shareLink(verOf(loadH().find(x=>x.id===id)||e,cvi),true)}catch(x){}});setTimeout(()=>{try{if(cardId===id)shareLink(verOf(loadH().find(x=>x.id===id)||e,cvi),true)}catch(x){}},500); // v139: prepare the shared link (iOS cancels a share that waits for the server)
   {const cta=$('#cardcta');cta.textContent='💬 '+t.cont;cta.onclick=()=>openSaved(id)} // sticky main button at the bottom of the card
   {const ri=resetInfoFor(id,e.messages||[]),rb=$('#cardorig');rb.textContent='🗑️ '+t.origDel; // « ↺ Recette originale » at the top, like in the chat
     {const cm=$('#cardmore');cm.classList.toggle('on',false);cm.classList.remove('open')}rb.onclick=ri&&ri.kind==='cut'?async()=>{$('#cardmore').classList.remove('open');if(await eraseToOriginal(ri))openCard(id)}:null}
@@ -3126,11 +3142,11 @@ function openCard(id,vi){
 }
 // ----- Comments (stored server-side: /api/comments) -----
 const OWN=(()=>{try{let o=localStorage.getItem('owner');if(!o){o=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Math.random().toString(36).slice(2)+Date.now().toString(36));localStorage.setItem('owner',o)}return o}catch(x){return 'a'+Math.random().toString(36).slice(2)}})();
-async function capi(method,qs,data,path){
+async function capi(method,qs,data,path,quiet){
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
     return fetchT((path||'/api/comments')+qs,{method,headers:{'Content-Type':'application/json','x-code':c,'x-owner':OWN},body:data?JSON.stringify(data):undefined})};
   let r=await call();
-  if(r.status===401){const c=await askCode();if(c)r=await call()}
+  if(r.status===401&&!quiet){const c=await askCode();if(c)r=await call()} // quiet: background calls never open the code dialog
   return r;
 }
 function ago(ts){const s=Math.round((ts-Date.now())/1000),a=Math.abs(s);if(a<60)return T().now;
@@ -3469,7 +3485,7 @@ function drawHomeSearch(){
   const fb=$('#hsfav');fb.textContent='❤️ '+t.favs;fb.classList.toggle('on',hsFav);fb.onclick=()=>{hsFav=!hsFav;drawHomeSearch()};
   const active=!!q||hsFav||hsCat!==null;$('#hwrap').style.display=active?'none':'';
   if(!active)return;
-  const hit=a.filter(e=>(!hsFav||famFav(e))&&(hsCat===null||recipeCat(e)===hsCat)&&(!q||nz(e.title).includes(q)||nz(names[recipeCat(e)]).includes(q)));
+  const hit=(hsFav?favItems(a):a).filter(e=>(hsCat===null||recipeCat(e)===hsCat)&&(!q||nz(e.title).includes(q)||nz(names[recipeCat(e)]).includes(q)));
   if(!hit.length){const p=document.createElement('div');p.className='empty';p.textContent=t.noresult;l.appendChild(p);return}
   const c=document.createElement('div');c.className='hscnt';c.textContent=hit.length+' '+(hit.length>1?t.resN:t.res1);l.appendChild(c);
   hit.sort((x,y)=>(y.updatedAt||0)-(x.updatedAt||0)).forEach(e=>l.appendChild(rowFor(e,true,true)));
@@ -3519,7 +3535,7 @@ function updTop(){
   b.onclick=()=>{const sc=topScroller();if(sc)sc.scrollTo({top:0,behavior:'smooth'})};document.body.appendChild(b);
   [log,$('#cardbody'),$('#hlist'),$('#flist')].forEach(x=>x.addEventListener('scroll',updTop,{passive:true}));addEventListener('resize',updTop);
   if(window.ResizeObserver){const ro=new ResizeObserver(()=>updTop());[log,$('#quick'),$('#bar')].forEach(x=>ro.observe(x))}} // follow layout changes (new reply, filters button)
-$('#tofav').onclick=()=>{if(currentId){const f=toggleFav(currentId);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
+$('#tofav').onclick=()=>{if(currentId){const z=loadH().find(x=>x.id===currentId),f=toggleFav(currentId,z&&!z.qa&&!famFav(z)?lastVi(z):null);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
