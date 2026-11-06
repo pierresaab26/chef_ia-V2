@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v175 (owner's request « aggrandis la pastille, remplace le rouge par le rose du GO »): the pill is 210 × 60 px, 14 px text; its logo mark is the soft pink of the « Go » button with pink dots (no solid red). Local only, not pushed.
+
 v174 (owner's request): the pill reads « Reprends ta recette ou ta question » (fr); the bar is `minmax(48px,1fr) auto minmax(48px,1fr)` so 🏠 and 🕘 are centred in the white space on each side of the pill; the pill is 210 px wide, 52 px high. Local only, not pushed.
 
 v173 (owner's request « c'est pas beau, fais ça bien »): the pill is quiet: cream fill with a thin border, 13 px semibold text, the pink only on the small logo mark; 🏠, pill and 🕘 share one style (`nav button{background:transparent}`). Local only, not pushed.
