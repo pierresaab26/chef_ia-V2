@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v184 (owner: « à gauche ») the cart button is the FIRST element of the ingredient row, on the left of the tick circle (`li.prepend`); it was on the right before.
+
 v183 (owner: icon only, no text): the cart button is a 36 px round 🛒 without text, ✓ once listed.
 
 v182 (owner's request: « à côté de chaque ingrédient un bouton ajouter au panier qui ouvre une liste de course dans le burger menu »): each ingredient line of a recipe (chat and card, `renderRecipe()`, `cartBtn()`) has a round 🛒 button (v183: icon only, title and aria-label « Ajouter au panier »; becomes ✓ and disabled « Dans le panier » once listed; the tap does not tick the ingredient). The list is device-only in localStorage `chefShop` (`[{t,r,d}]`: text, recipe title, ticked flag; no duplicate by text, `shopAdd()`); the drawer has « 🛒 Liste de courses » (`data-go="shop"`, view `#shop`, `drawShop()`): tap a row to tick it, ✕ to delete, « Retirer les cochés » and « Tout effacer » (confirmation). A toast « Ajouté à la liste de courses » has « Voir ». Keys `dShop`, `shopT`, `shopAdd`, `shopIn`, `shopAdded`, `shopSee`, `shopEmpty`, `shopDone`, `shopClear`, `shopClearQ` in 6 languages. Local only, not pushed.
