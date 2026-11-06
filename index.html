@@ -70,7 +70,6 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .chfree button{flex:none;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:10px 14px;font-size:14px}
 .more{color:var(--pink);font-weight:600;font-size:13px}
 .favgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-.favtile.qa{border:2px solid var(--pink)}
 .fsub{font-size:13px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .favtile{display:flex;flex-direction:column;gap:4px;min-width:0;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer}
 .favtile .ftop{display:flex;align-items:center;justify-content:space-between}.favtile .ftop i{font-style:normal;font-size:30px;line-height:1.1}.favtile .ftop span{background:var(--bg1);color:var(--mut);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700}
@@ -2357,7 +2356,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v159',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v160',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2742,7 +2741,7 @@ function drawFavs(){
     const more=g[k].length>3?' · +'+(g[k].length-3):'';
     sub.textContent=g[k].slice(0,3).map(e=>e.title).join(' · ')+more;
     tile.append(top,sub);
-    if(k==='q')tile.classList.add('qa'); // the cooking questions folder is highlighted
+
     tile.onclick=()=>{favCat=k;drawFavs()};
     grid.appendChild(tile);
   });
