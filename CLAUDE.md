@@ -185,6 +185,8 @@ v153 (owner's request): when a cooking-question answer is added to Favorites, a 
 
 v155–v156 (owner's requests): the Favorites label stays « Favoris » (6 languages); the drawer item shows a small grey subtitle under it (`#dFavS`, key `favsS` « Recettes et questions cuisine », 6 languages), so the menu stays on one line per entry.
 
+v159 (owner's request, from the Favorites mockup): the category tiles of Favorites are one full-width column, all the same width; each tile shows the name and the count on one line and one subtitle line with the first titles (« · +N » when there are more), no per-row icons; « Questions cuisine » has a pink border (`drawFavs()`, `.favgrid`, `.fsub`, `.favtile.qa`).
+
 Tests (2026-11-05, owner's request « 55 questions dans toutes les langues »): new `api/_selftest-i18n.js` = the SAME 55 questions in each of the 6 languages (275 added versions, ids `<id>-<lang>`; `CASES_I18N`, `ALL_CASES` = 330 cases, 55 per language). `api/selftest.js` (daily cron, costs model calls) still runs the 55 original `CASES` only. The morning check (scheduled task « Contrôle matinal Chef IA », 7:25 Paris) runs `ALL_CASES` with haiku sub-agents (approximate measure; the artifact bench stays the reference).
 
 ## 6. Current status and decisions
