@@ -302,7 +302,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ring li.miss .tx{text-decoration:line-through;opacity:.55}.ring li.miss .ck{background:var(--pink)}
 /* v182: shopping list (device only) */
 .cartb{flex:none;align-self:center;width:36px;height:36px;padding:0;display:grid;place-items:center;font-size:17px;line-height:1;border-radius:50%;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);cursor:pointer}
-.cartb:disabled{background:transparent;border-color:var(--bd);color:var(--pink);cursor:default}
+.cartb.on{background:var(--pink);border-color:var(--pink);color:#fff}
 .shact{display:flex;gap:8px;margin:4px 0 12px}
 .shact button{flex:1;font:inherit;font-size:14px;padding:10px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);cursor:pointer}
 .shempty{color:var(--mut);text-align:center;padding:30px 10px}
@@ -661,6 +661,7 @@ fr:{
   surpQ:"Quel type de plat te fait envie ?",
   resumeT:"Reprends ta recette ou ta question",
   qHomeT:"Une question cuisine, demande-moi",
+  shopRm:"Retirer du panier",
   dShop:"Liste de courses",shopT:"Liste de courses",shopAdd:"Ajouter au panier",shopIn:"Dans le panier",shopAdded:"Ajouté à la liste de courses",shopSee:"Voir",shopEmpty:"Ta liste est vide. Ajoute des ingrédients depuis une recette.",shopDone:"Retirer les cochés",shopClear:"Tout effacer",shopClearQ:"Effacer toute la liste de courses ?",qHomeS:"Réponses courtes, sans recette",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
@@ -916,6 +917,7 @@ en:{
   surpQ:"Which kind of dish do you fancy?",
   resumeT:"Resume the recipe or the question",
   qHomeT:"A cooking question, ask me",
+  shopRm:"Remove from the cart",
   dShop:"Shopping list",shopT:"Shopping list",shopAdd:"Add to cart",shopIn:"In the cart",shopAdded:"Added to the shopping list",shopSee:"View",shopEmpty:"Your list is empty. Add ingredients from a recipe.",shopDone:"Remove ticked",shopClear:"Clear all",shopClearQ:"Clear the whole shopping list?",qHomeS:"Short answers, no recipe",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
@@ -1171,6 +1173,7 @@ es:{
   surpQ:"¿Qué tipo de plato te apetece?",
   resumeT:"Retomar la receta o la pregunta",
   qHomeT:"Una pregunta de cocina, pregúntame",
+  shopRm:"Quitar del carrito",
   dShop:"Lista de la compra",shopT:"Lista de la compra",shopAdd:"Añadir al carrito",shopIn:"En el carrito",shopAdded:"Añadido a la lista de la compra",shopSee:"Ver",shopEmpty:"Tu lista está vacía. Añade ingredientes desde una receta.",shopDone:"Quitar marcados",shopClear:"Vaciar todo",shopClearQ:"¿Vaciar toda la lista de la compra?",qHomeS:"Respuestas breves, sin receta",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -1426,6 +1429,7 @@ de:{
   surpQ:"Welche Art von Gericht hast du Lust auf?",
   resumeT:"Rezept oder Frage fortsetzen",
   qHomeT:"Eine Kochfrage, frag mich",
+  shopRm:"Aus dem Warenkorb entfernen",
   dShop:"Einkaufsliste",shopT:"Einkaufsliste",shopAdd:"In den Warenkorb",shopIn:"Im Warenkorb",shopAdded:"Zur Einkaufsliste hinzugefügt",shopSee:"Ansehen",shopEmpty:"Deine Liste ist leer. Füge Zutaten aus einem Rezept hinzu.",shopDone:"Markierte entfernen",shopClear:"Alles löschen",shopClearQ:"Gesamte Einkaufsliste leeren?",qHomeS:"Kurze Antworten, ohne Rezept",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
@@ -1681,6 +1685,7 @@ it:{
   surpQ:"Che tipo di piatto ti va?",
   resumeT:"Riprendi la ricetta o la domanda",
   qHomeT:"Una domanda di cucina, chiedimi",
+  shopRm:"Rimuovi dal carrello",
   dShop:"Lista della spesa",shopT:"Lista della spesa",shopAdd:"Aggiungi al carrello",shopIn:"Nel carrello",shopAdded:"Aggiunto alla lista della spesa",shopSee:"Vedi",shopEmpty:"La tua lista è vuota. Aggiungi ingredienti da una ricetta.",shopDone:"Rimuovi i spuntati",shopClear:"Svuota tutto",shopClearQ:"Svuotare tutta la lista della spesa?",qHomeS:"Risposte brevi, senza ricetta",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
@@ -1936,6 +1941,7 @@ pt:{
   surpQ:"Que tipo de prato te apetece?",
   resumeT:"Retomar a receita ou a pergunta",
   qHomeT:"Uma pergunta de cozinha, pergunte-me",
+  shopRm:"Remover do carrinho",
   dShop:"Lista de compras",shopT:"Lista de compras",shopAdd:"Adicionar ao carrinho",shopIn:"No carrinho",shopAdded:"Adicionado à lista de compras",shopSee:"Ver",shopEmpty:"A tua lista está vazia. Adiciona ingredientes a partir de uma receita.",shopDone:"Remover marcados",shopClear:"Limpar tudo",shopClearQ:"Esvaziar toda a lista de compras?",qHomeS:"Respostas curtas, sem receita",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -2420,7 +2426,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v184',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v185',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3104,12 +3110,13 @@ function loadShop(){try{const a=JSON.parse(localStorage.getItem(SHOP_KEY)||'[]')
 function saveShop(a){try{localStorage.setItem(SHOP_KEY,JSON.stringify(a))}catch(x){toast(T().stFull)}}
 function shopHas(t){const k=t.toLowerCase();return loadShop().some(x=>String(x.t).toLowerCase()===k)}
 function shopAdd(t,from){if(shopHas(t))return;const a=loadShop();a.unshift({t,r:from||'',d:0});saveShop(a)}
+function shopRemove(t){const k=t.toLowerCase();saveShop(loadShop().filter(x=>String(x.t).toLowerCase()!==k))}
 function cartBtn(name,from){
   const t=T(),txt=cap1(name),b=document.createElement('button');
   b.type='button';b.className='cartb';
-  const st=()=>{const on=shopHas(txt);b.textContent=on?'✓':'🛒';b.title=on?t.shopIn:t.shopAdd;b.setAttribute('aria-label',on?t.shopIn:t.shopAdd);b.disabled=on};
+  const st=()=>{const on=shopHas(txt);b.classList.toggle('on',on);b.textContent=on?'✓':'🛒';b.title=on?t.shopRm:t.shopAdd;b.setAttribute('aria-label',on?t.shopRm:t.shopAdd)};
   st();
-  b.onclick=ev=>{ev.stopPropagation();shopAdd(txt,from);st();toastAct(t.shopAdded,t.shopSee,()=>goTo('shop'))};
+  b.onclick=ev=>{ev.stopPropagation();if(shopHas(txt)){shopRemove(txt);st();return}shopAdd(txt,from);st();toastAct(t.shopAdded,t.shopSee,()=>goTo('shop'))};
   return b;
 }
 function drawShop(){

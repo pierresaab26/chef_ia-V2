@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v185 (owner: « il faut pouvoir le retirer du panier aussi »): tapping the ✓ button removes the ingredient from the shopping list (`shopRemove()`, the button turns back to 🛒); the ✓ is filled pink (`.cartb.on`). Key `shopRm` ("Retirer du panier", 6 languages). Local only, not pushed.
+
 v184 (owner: « à gauche ») the cart button is the FIRST element of the ingredient row, on the left of the tick circle (`li.prepend`); it was on the right before.
 
 v183 (owner: icon only, no text): the cart button is a 36 px round 🛒 without text, ✓ once listed.
