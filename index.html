@@ -2014,7 +2014,7 @@ const log=$('#log'),inp=$('#inp'),sendB=$('#send');autoTA(inp,136);
     [120,320,600].forEach(d=>setTimeout(()=>{fit();try{t.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}},d))}); // once the keyboard is up
   addEventListener('focusout',()=>{setTimeout(()=>{if(!isField(document.activeElement)){root.classList.remove('kb');fit()}},60)});
 })();
-let hist=[],busy=false,persona="",chefNow=null,lang="en",currentId=null,branchFrom=null,qaMode=false,qaComs={},qaHide=new Set(); // qaMode = « Cooking questions » screen; qaComs / qaHide = comment blocks and hidden state per answer
+let hist=[],busy=false,persona="",chefNow=null,lang="en",currentId=null,branchFrom=null,qaMode=false,qaId=null,qaComs={},qaHide=new Set(); // qaId = the saved favorite of this Questions conversation (ONE per conversation) // qaMode = « Cooking questions » screen; qaComs / qaHide = comment blocks and hidden state per answer
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
 const T=()=>I18[lang];
@@ -2119,7 +2119,7 @@ function qaWelcomeEl(){ // welcome of the « Cooking questions » screen: exampl
   const w=document.createElement('div');w.className='wex';
   t.qaEx.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x.replace(/^\S+\s+/,''));w.appendChild(b)});
   d.append(h,p,w);return d}
-function qaUI(){const t=T();$('#chat').classList.toggle('qa',qaMode);$('#qanote').textContent=qaMode?t.qaNote:'';if(qaMode){$('#cname').textContent=t.qaT;$('#cdesc').textContent=t.qaD;$('#quick').innerHTML=''}}
+function qaUI(){try{syncFavUI()}catch(x){}const t=T();$('#chat').classList.toggle('qa',qaMode);$('#qanote').textContent=qaMode?t.qaNote:'';if(qaMode){$('#cname').textContent=t.qaT;$('#cdesc').textContent=t.qaD;$('#quick').innerHTML=''}}
 function showWelcome(){log.appendChild(qaMode?qaWelcomeEl():welcomeEl())}
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,(ings,m)=>{const src=hist.find(x=>x.role==='assistant'&&x.content===t);branchWith({id:(src&&src.rid)||currentId,text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings,m)},prevVerOf(hist,t))}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
@@ -2374,7 +2374,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v169',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v170',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2794,7 +2794,9 @@ async function resetToOriginal(){
 function syncCardBtn(){try{const q=$('#quick');q._paint&&q._paint()}catch(x){}{$('#toorig').style.display='none';$('.chathd').classList.remove('hascook')/* v125: no destructive reset in the chat header */}try{chatActions()}catch(x){}syncFavUI()}
 // Keeps every favorite heart of the open chat (header + action bar) in line with the saved recipe.
 function syncFavUI(){
-  const h=$('#tofav');if(!h)return;const e=currentId?loadH().find(x=>x.id===currentId):null;
+  const h=$('#tofav');if(!h)return;
+  if(qaMode){const e=qaId?loadH().find(x=>x.id===qaId):null,on=!!(e&&e.fav);h.style.display='';h.textContent=on?'❤️':'🤍';h.title=T().fav;h.setAttribute('aria-label',T().fav);h.classList.toggle('on',on);return} // Questions: the heart is the conversation's favorite
+  const e=currentId?loadH().find(x=>x.id===currentId):null;
   h.style.display=e?'':'none';if(!e)return;
   const hf=favAt(e);h.textContent=hf?'❤️':'🤍';h.setAttribute('aria-label',T().fav);h.title=T().fav;h.classList.toggle('on',hf);
   log.querySelectorAll('.chact').forEach(bar=>{const z=loadH().find(x=>x.id===bar.dataset.rid),b=bar.querySelector('.fvb');if(z&&b&&bar.dataset.vi!=null){const f=favAt(z,+bar.dataset.vi);b.textContent=(f?'❤️ ':'🤍 ')+T().fav;b.classList.toggle('on',f)}});
@@ -2848,12 +2850,11 @@ function qaActions(){
   log.querySelectorAll('.chcom').forEach(x=>x.remove()); // detached only: the comment blocks are kept in qaComs and put back below (no reload, a half-typed comment survives)
   hist.forEach((m,i)=>{
     if(m.role!=='assistant'||!els[i]||!hist[i-1]||hist[i-1].role!=='user')return;
-    const q=hist[i-1].content,a=loadH(),e=m.qid&&a.find(x=>x.id===m.qid),on=!!(e&&e.fav);
+    const q=hist[i-1].content;
     const bar=document.createElement('div');bar.className='chact qabar';
-    const fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(on?' on':'');fv.textContent=(on?'❤️ ':'🤍 ')+t.fav;fv.onclick=()=>qaFav(i);
     const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>shareRecipe({title:q,link:/^https?:/.test(location.href)?location.origin+'/?q='+encodeURIComponent(q.slice(0,200)):'',messages:[{role:'user',content:q},{role:'assistant',content:m.content+'\n\n'+t.qaNote}]}); // the link reopens this question, with its shared comments
     const cm=document.createElement('button');cm.type='button';cm.className='cbtn';cm.textContent='💬 '+t.qaCom;
-    bar.append(fv,sh,cm);els[i].after(bar);
+    bar.append(sh,cm);els[i].after(bar);
     // comments: shown right away under the answer (shared by question), with a full-width hide / show button
     let c=qaComs[i];if(!c||c.q!==q){const cw=document.createElement('div');cw.className='chcom';c=qaComs[i]={q,cw,n:0,h:null};c.h=buildComments(cw,'q-'+slug(q),{poll:true,onCount:n=>{c.n=n;c.paint&&c.paint()}})}
     bar.after(c.cw);
@@ -2865,17 +2866,23 @@ function qaActions(){
   });
   try{updTop()}catch(x){}
 }
-function qaFav(i){
-  const m=hist[i],q=hist[i-1];if(!m||!q)return;
-  const a=loadH(),e=m.qid&&a.find(x=>x.id===m.qid);
-  if(e){saveH(a.filter(x=>x.id!==m.qid));delete m.qid}
-  else{const ne={id:Date.now().toString(36)+'q',title:q.content.slice(0,90),date:new Date().toISOString(),updatedAt:Date.now(),k:-1,fav:true,lang,qa:true,messages:[{role:'user',content:q.content},{role:'assistant',content:m.content}]};a.unshift(ne);saveH(a);m.qid=ne.id;
+function qaFav(){ // ONE favorite per Questions conversation: title = the main question, messages = the whole discussion
+  if(!qaMode||!hist.length)return;
+  const a=loadH(),e=qaId&&a.find(x=>x.id===qaId);
+  if(e){saveH(a.filter(x=>x.id!==qaId));qaId=null}
+  else{const q=hist.find(m=>m.role==='user');if(!q)return;qaId=Date.now().toString(36)+'q';
+    a.unshift({id:qaId,title:q.content.slice(0,90),date:new Date().toISOString(),updatedAt:Date.now(),k:-1,fav:true,lang,qa:true,messages:hist.map(m=>({role:m.role,content:m.content}))});saveH(a);
     const tt=T();toastAct(tt.qaFavOk,tt.qaFavSee,()=>{favCat='q';goTo('favs');favCat='q';drawFavs()})}
   try{drawFavs();drawHistory();drawHomeSearch()}catch(x){}
-  qaActions();
+  syncFavUI();
+}
+function qaSync(){ // keeps the saved favorite conversation up to date (the whole discussion)
+  if(!qaMode||!qaId)return;const a=loadH(),e=a.find(x=>x.id===qaId);if(!e)return;
+  e.messages=hist.map(m=>({role:m.role,content:m.content}));e.updatedAt=Date.now();saveH(a);
+  try{drawFavs();drawHistory()}catch(x){}
 }
 function openQAEntry(e){ // reopen a saved question from Favorites
-  openChat(null);qaMode=true;log.innerHTML='';
+  openChat(null);qaMode=true;qaId=e.id;log.innerHTML='';
   hist=e.messages.map(m=>({role:m.role,content:m.content}));hist.forEach((m,i)=>{if(m.role==='assistant')m.qid=e.id;add(m.role==='user'?'u':'a',m.content)});
   qaUI();show('chat');qaActions();
 }
@@ -3308,7 +3315,7 @@ function dishPic(b,text,rid,still){ // one picture under each recipe of the thre
   if(!still)toBottom();
 }
 function openChat(chef){
-  newConv();qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
+  newConv();qaMode=false;qaId=null;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
   persona=chef?chef.p:"";$('#cname').textContent=chefName(chef);$('#cdesc').textContent=chefDesc(chef);
   showWelcome();qaUI();
   show('chat');
@@ -3356,7 +3363,7 @@ async function send(text,auto,ctx){
   try{
     const j=await completeReply(hist,out);
     if(tok!==convTok){cardAfter=false;return} // the user opened another conversation meanwhile
-    renderMsg(out,j.text);hist.push({role:'assistant',content:j.text,at:Date.now()});drawQuick();try{saveCurrent()}catch(e){}if(qaMode)qaActions();
+    renderMsg(out,j.text);hist.push({role:'assistant',content:j.text,at:Date.now()});drawQuick();try{saveCurrent()}catch(e){}if(qaMode){qaSync();qaActions()}
     try{dishPic(out,j.text)}catch(e){}
     if(looksLikeRecipe(j.text))showStart(startOf(out));
     cardAfter=false;if(!qaMode&&looksLikeRecipe(j.text)&&currentId&&loadH().some(x=>x.id===currentId))openCard(currentId); // v121: EVERY new / adapted / regenerated recipe is shown on the recipe card (tabs)
@@ -3579,7 +3586,7 @@ function updTop(){
   b.onclick=()=>{const sc=topScroller();if(sc)sc.scrollTo({top:0,behavior:'smooth'})};document.body.appendChild(b);
   [log,$('#cardbody'),$('#hlist'),$('#flist')].forEach(x=>x.addEventListener('scroll',updTop,{passive:true}));addEventListener('resize',updTop);
   if(window.ResizeObserver){const ro=new ResizeObserver(()=>updTop());[log,$('#quick'),$('#bar')].forEach(x=>ro.observe(x))}} // follow layout changes (new reply, filters button)
-$('#tofav').onclick=()=>{if(currentId){const z=loadH().find(x=>x.id===currentId),f=toggleFav(currentId,z&&!z.qa&&!famFav(z)?lastVi(z):null);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
+$('#tofav').onclick=()=>{if(qaMode){qaFav();return}if(currentId){const z=loadH().find(x=>x.id===currentId),f=toggleFav(currentId,z&&!z.qa&&!famFav(z)?lastVi(z):null);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');

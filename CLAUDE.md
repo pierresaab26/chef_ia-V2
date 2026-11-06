@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v170 (owner's request « le favori des questions est uniquement pour la question principale et inclut toute la discussion »): in the Questions screen there is ONE favorite per conversation (`qaId`): title = the main (first) question, messages = the whole discussion, kept up to date after every answer (`qaSync()`). The heart is the chat-header heart (`#tofav`, `qaFav()`, `syncFavUI()`); the per-answer heart is removed (share and comment stay per answer). Reopening it from Favorites restores the whole discussion (`openQAEntry()`).
+
 v169 (owner's request « retire Discuter » in the Questions screen): the Discuter / Questions switch is removed from the app entirely (markup, handlers, `qaUI()` toggles). Back to the chat: the 🏠 of the header, then 💬 Chef in the bottom bar. The `#modesw` CSS and the unused keys `mDisc` / `mQ` remain (harmless).
 
 v168 (owner's request « enlève Questions depuis Que voulez-vous cuisiner ? »): the Discuter / Questions switch (`#modesw`) is shown ONLY in the Questions screen (`qaMode`); a normal chat never shows it, not even after the first message. `surpConv` is removed.
