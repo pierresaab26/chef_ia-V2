@@ -614,6 +614,7 @@ fr:{
   close:"Fermer",
   favT:"Mes recettes favorites",
   search:"Rechercher une recette…",
+  fsPh:"Rechercher une recette ou une question",
   noresult:"Aucune recette trouvée.",
   hsPh:"Trouver mes recettes",
   resN:"résultats",
@@ -867,6 +868,7 @@ en:{
   close:"Close",
   favT:"My favorite recipes",
   search:"Search a recipe…",
+  fsPh:"Search a recipe or a question",
   noresult:"No recipe found.",
   hsPh:"Find your recipes",
   resN:"results",
@@ -1120,6 +1122,7 @@ es:{
   close:"Cerrar",
   favT:"Mis recetas favoritas",
   search:"Buscar una receta…",
+  fsPh:"Buscar una receta o una pregunta",
   noresult:"No se encontró ninguna receta.",
   hsPh:"Encuentra tus recetas",
   resN:"resultados",
@@ -1373,6 +1376,7 @@ de:{
   close:"Schließen",
   favT:"Meine Lieblingsrezepte",
   search:"Rezept suchen…",
+  fsPh:"Rezept oder Frage suchen",
   noresult:"Kein Rezept gefunden.",
   hsPh:"Finde deine Rezepte",
   resN:"Ergebnisse",
@@ -1626,6 +1630,7 @@ it:{
   close:"Chiudi",
   favT:"Le mie ricette preferite",
   search:"Cerca una ricetta…",
+  fsPh:"Cerca una ricetta o una domanda",
   noresult:"Nessuna ricetta trovata.",
   hsPh:"Trova le tue ricette",
   resN:"risultati",
@@ -1879,6 +1884,7 @@ pt:{
   close:"Fechar",
   favT:"As minhas receitas favoritas",
   search:"Pesquisar uma receita…",
+  fsPh:"Pesquisar uma receita ou uma pergunta",
   noresult:"Nenhuma receita encontrada.",
   hsPh:"Encontra as tuas receitas",
   resN:"resultados",
@@ -2389,7 +2395,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v178',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v179',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2707,7 +2713,7 @@ function drawMenu(){
 function drawerText(){const t=T();drawMenu();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
-  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.search;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#dFavS').textContent=t.favsS;impText();$('#fpT').textContent=t.favT;
+  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.fsPh;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#dFavS').textContent=t.favsS;impText();$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}

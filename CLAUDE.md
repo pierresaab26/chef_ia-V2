@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v179 (owner's screenshot of Favorites: the search box « Rechercher une recette… » must say « Rechercher une recette ou une question »): new key `fsPh` (6 languages) used only by the Favorites search box `#fsearch`; the home search keeps `search` (recipes only). Local only, not pushed.
+
 v178 (owner's iPhone screenshot: the one-line text overflowed the pill and looked cramped; « et » → « ou »): fr text « Reprends ta recette ou ta question »; the pill is `min(268px, 100vw − 150px)` wide, text may wrap on two centred lines (`text-wrap:balance`), so it never spills out of the bar; mark 40 px. Measured at 320, 375, 430 and 820 px: text inside the pill, 🏠 and 🕘 centred (0 px off), no horizontal scroll. Local only, not pushed.
 
 v177 (owner's request « reprends ta recette et ta question » on ONE line, font in line with the charter): text changed to « Reprends ta recette et ta question » (fr, the other languages unchanged); the pill is `white-space:nowrap`, its width follows the text, 56 px high, 13 px semibold (the charter's 15 px does not fit one line beside the two 40 px icons on a 375 px phone; 12 px under 360 px). Measured at 320, 375 and 820 px: one line, no overflow, 🏠 and 🕘 centred (0 px off). Local only, not pushed.
