@@ -207,6 +207,8 @@ v182 (owner's request: « à côté de chaque ingrédient un bouton ajouter au p
 
 v188 (owner: « il faut qu'on puisse sélectionner plusieurs articles et ensuite ajouter à une liste existante ou une nouvelle liste »): each recipe's ingredient list has a « 🛒 Sélectionner des ingrédients » button (`addSelectBar()`); while selecting, a tap on a row picks it (pink outline), a bottom bar shows the count, « Tout », « Annuler » and « Ajouter à une liste » (`openSheet(txts,from,onDone)`: the same sheet as the single 🛒, existing list or new list). Keys `listSelect`, `listAddSel`, `listCancel`, `listAll`, `listN` in 6 languages. Local only, not pushed.
 
+v189 (owner: « je veux juste que le tap sur le 🛒 sélectionne l'ingrédient »): while selecting, the 🛒 of an ingredient toggles its selection instead of opening the list sheet (`cb.onclick` wrapper in `renderRecipe()`). Local only, not pushed.
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
