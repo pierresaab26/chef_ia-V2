@@ -341,7 +341,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .selbar button{font:inherit;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);cursor:pointer}
 .selbar .selgo{flex:1;background:var(--psoft);border-color:var(--psbd);color:var(--pink);font-weight:700}
 .selbar .selgo:disabled{opacity:.45}
-.ring li.picked .cartb{background:var(--pink);border-color:var(--pink);color:#fff}
+.ring li.picked .cartb{background:var(--psoft);border-color:var(--pink);box-shadow:0 0 0 2px var(--psbd)}
 .mt{display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--pink);text-decoration:none!important;vertical-align:middle}
 .swgo{display:block;width:100%;margin-top:10px;padding:12px 16px;border:1px solid var(--psbd);border-radius:14px;background:var(--psoft);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
 .swbar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.swbar .swgo,.swbar .swno{flex:1 1 140px;margin:0}.swno{display:block;padding:12px 16px;border:2px solid var(--pink);border-radius:14px;background:var(--card);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
@@ -2467,7 +2467,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v193',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v194',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
