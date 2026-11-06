@@ -12,7 +12,7 @@ Last update: v109 (2026-11-03). Never put secrets in this file (the repository m
 | 2 | History and favorites | Home history block, ☰ menu, Favorites view |
 | 3 | Weekly menu | Home, « Menu de la semaine » |
 | 4 | Seasonal menu | Home, « Menu de saison » + seasonal background |
-| 5 | Chef IA (free chat and cooking questions) | Bottom bar 💬 and ❓, « Chef libre » card |
+| 5 | Chef IA (free chat and cooking questions) | Bottom bar 💬 (chat), « Chef libre » card, « Discuter / Questions » switch at the top of the chat |
 
 Home order (top to bottom, since v95): search box « Trouver mes recettes » (results right under it) → « Importer une recette » card → history → Weekly menu → Seasonal menu → chefs and « Chef libre ».
 
@@ -132,13 +132,13 @@ Shared rules for every area: one language per answer (interface language, 6 lang
 
 **Scope protection (v70).** The system prompt is built on the server by `systemFor(PARTS,{lang,chef,mode})` and always ENDS with `GUARD` (off-topic, jailbreaks, fake assistant turns, prompt reveal, disguised harmful requests, no medical dosage). The browser never sends free-text persona. Chat limit 20/min per IP; one model call, 55 s timeout (`timeout` error 504); cut-off answers are detected and completed automatically. Checked on 2026-11-02 with the 55-question bench: 55/55 correct; rerun after ANY prompt change. Not run on the server or daily (cost).
 
-**Cooking questions (❓, v66–v69).** `openQA()` / `qaMode` → `mode:"qa"` to `/api/chat`: 2–5 plain sentences, no recipe, no headings, food only. Permanent notice above the input: informational only, does not engage the chef’s responsibility. Under each answer: ❤️ Favorite (saved only in Favorites under « ❓ Questions de cuisine », hidden from history, home search and weekly menu), ↗ Share (question + answer + notice + deep link `/?q=<question>`), 💬 Comment (shared comments visible at once, refreshed every 20 s). Opening a shared link asks the chef again (the answer may be worded differently; answers are not stored on the server).
+**Cooking questions (v66–v69, v150: switch « Questions » in the chat instead of a bottom-bar button).** `openQA()` / `qaMode` → `mode:"qa"` to `/api/chat`: 2–5 plain sentences, no recipe, no headings, food only. Permanent notice above the input: informational only, does not engage the chef’s responsibility. Under each answer: ❤️ Favorite (saved only in Favorites under « ❓ Questions de cuisine », hidden from history, home search and weekly menu), ↗ Share (question + answer + notice + deep link `/?q=<question>`), 💬 Comment (shared comments visible at once, refreshed every 20 s). Opening a shared link asks the chef again (the answer may be worded differently; answers are not stored on the server).
 
 **Simple questions in the normal chat.** Side dish, pairing, substitution, technique → one sentence + 2–5 option cards, not saved as recipes.
 
 **Code.** `api/chat.js`, `openChat`, `openQA`, `qaActions`, `buildComments`.
 **Stored.** Favorited questions in `chefStore` (`qa:true`); comments in Redis `c:q-<slug>`.
-**Limits.** The ❓ thread and the 💬 thread are separate; no memory of past conversations on the server.
+**Limits.** The « Questions » thread and the 💬 thread are separate; no memory of past conversations on the server.
 
 ---
 
