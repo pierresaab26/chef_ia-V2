@@ -187,6 +187,8 @@ v155–v156 (owner's requests): the Favorites label stays « Favoris » (6 langu
 
 v159 (owner's request, from the Favorites mockup): the category tiles of Favorites are one full-width column, all the same width; each tile shows the name and the count on one line and one subtitle line with the first titles (« · +N » when there are more), no per-row icons; (v160: no highlight border on the questions tile.)
 
+v161–v162 (owner's requests): « Surprends-moi » shows the four course buttons (Entrées, Plats, Desserts, Boissons: `drawSurp()`, `#surpBox`, labels from `crs`, text from `crsL` + key `surpM`, 6 languages); the chosen course starts a surprise recipe for that course. The Discuter / Questions switch is hidden in that conversation (`#modesw`, reset by `openChat()`).
+
 Tests (2026-11-05, owner's request « 55 questions dans toutes les langues »): new `api/_selftest-i18n.js` = the SAME 55 questions in each of the 6 languages (275 added versions, ids `<id>-<lang>`; `CASES_I18N`, `ALL_CASES` = 330 cases, 55 per language). `api/selftest.js` (daily cron, costs model calls) still runs the 55 original `CASES` only. The morning check (scheduled task « Contrôle matinal Chef IA », 7:25 Paris) runs `ALL_CASES` with haiku sub-agents (approximate measure; the artifact bench stays the reference).
 
 ## 6. Current status and decisions
