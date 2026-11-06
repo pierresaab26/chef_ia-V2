@@ -895,7 +895,7 @@ en:{
   surpM:"Give me a surprise recipe for {c}, picked at random.",
   surpQ:"Which kind of dish do you fancy?",
   resumeT:"Resume the recipe or the question",
-  qHomeT:"Ask a cooking question",qHomeS:"Short answers, no recipe",
+  qHomeT:"A cooking question, ask me",qHomeS:"Short answers, no recipe",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
   qaHideCom:"Hide comments",
@@ -1149,7 +1149,7 @@ es:{
   surpM:"Dame una receta sorpresa de {c}, elegida al azar.",
   surpQ:"¿Qué tipo de plato te apetece?",
   resumeT:"Retomar la receta o la pregunta",
-  qHomeT:"Haz una pregunta de cocina",qHomeS:"Respuestas breves, sin receta",
+  qHomeT:"Una pregunta de cocina, pregúntame",qHomeS:"Respuestas breves, sin receta",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
   qaHideCom:"Ocultar comentarios",
@@ -1403,7 +1403,7 @@ de:{
   surpM:"Gib mir ein überraschendes Rezept: {c}, zufällig gewählt.",
   surpQ:"Welche Art von Gericht hast du Lust auf?",
   resumeT:"Rezept oder Frage fortsetzen",
-  qHomeT:"Stell eine Kochfrage",qHomeS:"Kurze Antworten, ohne Rezept",
+  qHomeT:"Eine Kochfrage, frag mich",qHomeS:"Kurze Antworten, ohne Rezept",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
   qaHideCom:"Kommentare ausblenden",
@@ -1657,7 +1657,7 @@ it:{
   surpM:"Dammi una ricetta a sorpresa: {c}, scelta a caso.",
   surpQ:"Che tipo di piatto ti va?",
   resumeT:"Riprendi la ricetta o la domanda",
-  qHomeT:"Fai una domanda di cucina",qHomeS:"Risposte brevi, senza ricetta",
+  qHomeT:"Una domanda di cucina, chiedimi",qHomeS:"Risposte brevi, senza ricetta",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
   qaHideCom:"Nascondi i commenti",
@@ -1911,7 +1911,7 @@ pt:{
   surpM:"Dê-me uma receita surpresa de {c}, escolhida ao acaso.",
   surpQ:"Que tipo de prato te apetece?",
   resumeT:"Retomar a receita ou a pergunta",
-  qHomeT:"Faça uma pergunta de cozinha",qHomeS:"Respostas curtas, sem receita",
+  qHomeT:"Uma pergunta de cozinha, pergunte-me",qHomeS:"Respostas curtas, sem receita",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
   qaHideCom:"Ocultar comentários",
@@ -2395,7 +2395,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v180',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v181',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}

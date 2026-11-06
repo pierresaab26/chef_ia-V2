@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
+
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
 
 v179 (owner's screenshot of Favorites: the search box « Rechercher une recette… » must say « Rechercher une recette ou une question »): new key `fsPh` (6 languages) used only by the Favorites search box `#fsearch`; the home search keeps `search` (recipes only). Local only, not pushed.
