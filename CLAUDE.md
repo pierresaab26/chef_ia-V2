@@ -183,6 +183,8 @@ v151 (owner's request): the « Importer une recette » card sits directly under 
 
 v153 (owner's request): when a cooking-question answer is added to Favorites, a confirmation appears (« Ajouté à vos favoris · Questions de cuisine », button « Voir ») that opens Favorites on the « Questions de cuisine » folder (`toastAct()`, `#toast.act`, `qaFav()`; keys `qaFavOk`, `qaFavSee` in 6 languages). Un-favouriting stays silent.
 
+v155–v156 (owner's requests): the Favorites label stays « Favoris » (6 languages); the drawer item shows a small grey subtitle under it (`#dFavS`, key `favsS` « Recettes et questions cuisine », 6 languages), so the menu stays on one line per entry.
+
 Tests (2026-11-05, owner's request « 55 questions dans toutes les langues »): new `api/_selftest-i18n.js` = the SAME 55 questions in each of the 6 languages (275 added versions, ids `<id>-<lang>`; `CASES_I18N`, `ALL_CASES` = 330 cases, 55 per language). `api/selftest.js` (daily cron, costs model calls) still runs the 55 original `CASES` only. The morning check (scheduled task « Contrôle matinal Chef IA », 7:25 Paris) runs `ALL_CASES` with haiku sub-agents (approximate measure; the artifact bench stays the reference).
 
 ## 6. Current status and decisions

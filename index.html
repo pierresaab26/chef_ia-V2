@@ -157,6 +157,7 @@ input,textarea,select{font-size:16px!important}
 .dclose{font-size:20px;padding:6px 10px;color:var(--mut)}
 .ditem{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:14px;font-size:16px;font-weight:600;text-align:left}
 .ditem.on{background:var(--psoft);color:var(--pink)}
+.ditem .dtx{flex:1;min-width:0;display:flex;flex-direction:column}.ditem .dtx small{font-size:12px;font-weight:400;color:var(--mut);line-height:1.3}.ditem.on .dtx small{color:var(--pink)}
 .ditem span.n{margin-left:auto;color:var(--mut);font-size:13px;font-weight:600}
 .ditem.on span.n{color:#fff}
 .menubtn{font-size:22px;padding:0 6px;line-height:1;flex:none}
@@ -453,7 +454,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     <div class="dhead"><svg class="mascot" style="width:40px;height:40px"><use href="#mascot"/></svg><b>Chef IA</b><button class="dclose" id="dclose" aria-label="Close">✕</button></div>
     <button class="ditem" data-go="home">🏠 <span id="dHome"></span></button>
     <button class="ditem" data-go="history">🕘 <span id="dHist"></span></button>
-    <button class="ditem" data-go="favs">❤️ <span id="dFav"></span><span class="n" id="dFavN"></span></button>
+    <button class="ditem" data-go="favs">❤️ <span class="dtx"><span id="dFav"></span><small id="dFavS"></small></span><span class="n" id="dFavN"></span></button>
     <div class="dver" id="dver"></div>
   </aside>
 
@@ -556,7 +557,8 @@ fr:{
   oldS:"Revoir les versions précédentes ({n})",
   cookB:"Commencer la recette",
   fav:"Favori",
-  favs:"Favoris recettes et questions cuisine",
+  favs:"Favoris",
+  favsS:"Recettes et questions cuisine",
   all:"Toutes",
   nofav:"Aucun favori pour l’instant. Touchez ❤️ sur une recette.",
   hArch:"Archivées",
@@ -805,6 +807,7 @@ en:{
   cookB:"Start the recipe",
   fav:"Favorite",
   favs:"Favorites",
+  favsS:"Recipes and cooking questions",
   all:"All",
   nofav:"No favorites yet. Tap ❤️ on a recipe.",
   hArch:"Archived",
@@ -1053,6 +1056,7 @@ es:{
   cookB:"Empezar la receta",
   fav:"Favorito",
   favs:"Favoritos",
+  favsS:"Recetas y preguntas de cocina",
   all:"Todas",
   nofav:"Aún no hay favoritos. Toca ❤️ en una receta.",
   hArch:"Archivadas",
@@ -1301,6 +1305,7 @@ de:{
   cookB:"Rezept starten",
   fav:"Favorit",
   favs:"Favoriten",
+  favsS:"Rezepte und Kochfragen",
   all:"Alle",
   nofav:"Noch keine Favoriten. Tippe auf ❤️ bei einem Rezept.",
   hArch:"Archiviert",
@@ -1549,6 +1554,7 @@ it:{
   cookB:"Inizia la ricetta",
   fav:"Preferito",
   favs:"Preferiti",
+  favsS:"Ricette e domande di cucina",
   all:"Tutte",
   nofav:"Ancora nessun preferito. Tocca ❤️ su una ricetta.",
   hArch:"Archiviate",
@@ -1797,6 +1803,7 @@ pt:{
   cookB:"Começar a receita",
   fav:"Favorito",
   favs:"Favoritos",
+  favsS:"Receitas e perguntas de cozinha",
   all:"Todas",
   nofav:"Ainda sem favoritos. Toque em ❤️ numa receita.",
   hArch:"Arquivadas",
@@ -2348,7 +2355,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v155',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v156',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2666,7 +2673,7 @@ function drawMenu(){
 function drawerText(){const t=T();drawMenu();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
-  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.search;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;impText();$('#fpT').textContent=t.favT;
+  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.search;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#dFavS').textContent=t.favsS;impText();$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
