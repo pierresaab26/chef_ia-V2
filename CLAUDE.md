@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
+
 v179 (owner's screenshot of Favorites: the search box « Rechercher une recette… » must say « Rechercher une recette ou une question »): new key `fsPh` (6 languages) used only by the Favorites search box `#fsearch`; the home search keeps `search` (recipes only). Local only, not pushed.
 
 v178 (owner's iPhone screenshot: the one-line text overflowed the pill and looked cramped; « et » → « ou »): fr text « Reprends ta recette ou ta question »; the pill is `min(268px, 100vw − 150px)` wide, text may wrap on two centred lines (`text-wrap:balance`), so it never spills out of the bar; mark 40 px. Measured at 320, 375, 430 and 820 px: text inside the pill, 🏠 and 🕘 centred (0 px off), no horizontal scroll. Local only, not pushed.
