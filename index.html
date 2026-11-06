@@ -336,6 +336,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lf{font-size:12px;color:var(--mut);margin-top:8px}
 .selbtn{display:inline-block;margin:10px 0 2px;padding:9px 14px;border-radius:999px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .selbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;bottom:8px;background:var(--card);border-radius:18px;padding:10px 12px;margin-top:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.selbar[hidden]{display:none}
 .selbar span{flex:1 1 100%;font-size:13px;color:var(--mut)}
 .selbar button{font:inherit;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);cursor:pointer}
 .selbar .selgo{flex:1;background:var(--psoft);border-color:var(--psbd);color:var(--pink);font-weight:700}
@@ -2466,7 +2467,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v189',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v191',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3273,10 +3274,10 @@ function addSelectBar(box,items,from){
   const go=document.createElement('button');go.type='button';go.className='selgo';go.textContent=t.listAddSel;
   bar.append(cnt,all,cancel,go);
   const picked=new Set();let on=false;
-  const paint=()=>{items.forEach(it=>it.li.classList.toggle('picked',picked.has(it)));cnt.textContent=t.listN.replace('{n}',picked.size);go.disabled=!picked.size};
+  const paint=()=>{items.forEach(it=>it.li.classList.toggle('picked',picked.has(it)));cnt.textContent=t.listN.replace('{n}',picked.size);go.disabled=!picked.size;bar.hidden=!picked.size};
   const exit=()=>{on=false;bar.hidden=true;picked.clear();paint()};
   items.forEach(it=>{it.li._pick=()=>{if(!on)return false;picked.has(it)?picked.delete(it):picked.add(it);paint();return true}});
-  sb.onclick=()=>{if(on){exit();return}on=true;bar.hidden=false;paint()};
+  sb.onclick=()=>{if(on){exit();return}on=true;paint()};
   all.onclick=()=>{items.forEach(it=>picked.add(it));paint()};
   cancel.onclick=exit;
   go.onclick=()=>{const list=items.filter(it=>picked.has(it)).map(it=>it.t);if(list.length)openSheet(list,from,exit)};
