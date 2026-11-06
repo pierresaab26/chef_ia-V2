@@ -197,18 +197,19 @@ input,textarea,select{font-size:16px!important}
 #chat.on~nav{display:none}
 #modesw[hidden]{display:none}#modesw{display:flex;gap:4px;margin:8px 14px 0;background:var(--card);border-radius:999px;padding:4px}#modesw button{flex:1;padding:7px 8px;border-radius:999px;font-size:13px;color:var(--mut);background:transparent}#modesw button.on{background:var(--psoft);color:var(--pink);font-weight:600}
 #qanote{display:none;padding:6px 14px;font-size:12px;line-height:1.35;color:var(--mut);text-align:center}#chat.qa #qanote{display:block}#chat.qa #quick{display:none}
-nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:8px;align-items:center;justify-items:center;background:var(--card);border-radius:999px;padding:8px 10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:minmax(48px,1fr) auto minmax(48px,1fr);gap:8px;align-items:center;justify-items:center;background:var(--card);border-radius:999px;padding:8px 10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
 nav button{width:48px;height:48px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:22px;line-height:1;opacity:.5}
 nav button.on{opacity:1}
 #n4{opacity:1;background:transparent;font-size:22px}
 nav .mid{width:56px;height:56px;background:var(--pink);font-size:24px;opacity:1;box-shadow:0 4px 12px rgba(229,25,95,.4)}
 /* v173: the pill inside the bottom bar: quiet (cream, thin border), the pink only on the small logo mark; the three buttons share one style */
 nav button{background:transparent}
-nav #n2.rp{width:auto;max-width:100%;height:46px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px 0 5px;min-width:0;background:var(--bg1);border:1px solid var(--bd);color:var(--ink);font-size:12px;font-weight:600;line-height:1.25;text-align:center;opacity:1;box-shadow:none}
-nav #n2.rp .mk{flex:none;width:34px;height:34px;border-radius:50%;background:var(--pink);display:flex;align-items:center;justify-content:center;gap:2px}
+nav #n2.rp{width:210px;max-width:100%;height:52px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 14px 0 6px;min-width:0;background:var(--bg1);border:1px solid var(--bd);color:var(--ink);font-size:13px;font-weight:600;line-height:1.25;text-align:center;opacity:1;box-shadow:none}
+nav #n2.rp .mk{flex:none;width:38px;height:38px;border-radius:50%;background:var(--pink);display:flex;align-items:center;justify-content:center;gap:2px}
 nav #n2.rp .mk i{width:3px;height:3px;border-radius:50%;background:#fff;display:block}
 nav #n2.rp .mk i:nth-child(2){opacity:.6}nav #n2.rp .mk i:nth-child(3){opacity:.3}
 nav #n2.rp #rT{min-width:0;text-align:center}
+@media (max-width:360px){nav #n2.rp{width:162px;padding:0 10px 0 4px;gap:7px;font-size:12px}nav #n2.rp .mk{width:32px;height:32px}}
 .chead{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--bd)}
 .chead .back{font-size:22px;padding:0 6px}
 @media (max-width:359px){#card .chead.hashist #cardback{display:none}} /* very narrow phones: the ← (back to History) replaces the 🏠 */
@@ -469,7 +470,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   <div id="hselbar" role="toolbar"></div>
   <nav>
     <button id="n1" class="on" aria-label="Home">🏠</button>
-    <button class="rp" id="n2" aria-label="Chat"><span class="mk" aria-hidden="true"><i></i><i></i><i></i></span><span id="rT">Reprends la recette ou la question</span></button>
+    <button class="rp" id="n2" aria-label="Chat"><span class="mk" aria-hidden="true"><i></i><i></i><i></i></span><span id="rT">Reprends ta recette ou ta question</span></button>
     <button id="n4" aria-label="History">🕘</button>
   </nav>
 </div>
@@ -637,7 +638,7 @@ fr:{
   surpT:"Surprends-moi",surpS:"Un plat tiré au hasard, à cuisiner",mDisc:"Discuter",mQ:"Questions",
   surpM:"Donne-moi une recette surprise {c}, tirée au hasard.",
   surpQ:"Quel type de plat te fait envie ?",
-  resumeT:"Reprends la recette ou la question",
+  resumeT:"Reprends ta recette ou ta question",
   qHomeT:"Pose une question cuisine",qHomeS:"Réponses courtes, sans recette",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
@@ -2387,7 +2388,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v173',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v174',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
