@@ -627,7 +627,7 @@ fr:{
   qaEx:"🍊 Je peux mélanger orange et chocolat ?|🧅 Je peux congeler mon oignon ?|🥚 Combien de temps garder des œufs durs ?|🍚 Comment rattraper un riz trop cuit ?",
   qaNote:"ℹ️ Réponses données à titre informatif. Elles n’engagent pas la responsabilité du chef.",
   surpT:"Surprends-moi",surpS:"Un plat tiré au hasard, à cuisiner",mDisc:"Discuter",mQ:"Questions",
-  qaFavOk:"Ajouté à vos favoris · Questions de cuisine",qaFavSee:"Voir",
+  qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
   qaHideCom:"Masquer les commentaires",
   qaShowCom:"Afficher les commentaires",
@@ -2355,7 +2355,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v157',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v158',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
