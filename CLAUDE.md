@@ -227,6 +227,8 @@ v197 (owner: « quand on crée une liste, il faut pouvoir ajouter des ingrédien
 
 v198 (owner's screenshot: « 50 grammes de sucres » and « 250 grammes de sucres » in one list): the same ingredient is ADDED UP when both lines have a quantity in the same family (g/kg, ml/cl/l): `qParse()`, `qKey()` (name without quantity, accents and plural ignored), `sameItem()`, `addMerge()` (used by the recipe 🛒 and the free-text field); lines without quantity still dedupe by name; `shopHas()` / `removeAll()` match by name. Result shown in the unit of the first line (« 300 grammes de sucres », « 1,5 kg de farine »). Local only, not pushed.
 
+v199 (owner: « 4 jaunes d'œufs et 5 jaunes d'œufs, ça fait 9 »): lines WITHOUT a unit but with a leading count (« 4 jaunes d'œuf ») are added up too (`qCount()`, family `c`); for them the key drops the parenthesised detail and the adjectives (frais, gros, entier…), « œ » = « oe »; the merged line keeps the first noun and drops its parenthesis (« 9 jaunes d'œuf »). Local only, not pushed.
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
