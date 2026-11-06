@@ -213,6 +213,8 @@ v190 (owner's screenshot: the selection bar showed « 0 sélectionné(s) »): th
 
 v191 (owner's screenshot: the bar still showed with nothing picked): `.selbar` set `display:flex`, which overrode the `hidden` attribute; `.selbar[hidden]{display:none}` added. Local only, not pushed.
 
+v192 (owner: « tap sur le panier ouvre la barre de sélection »): outside selection mode the 🛒 of an ingredient turns selection on and picks that ingredient (`li._cart`), instead of opening the list sheet; an ingredient already in a list is still removed by the ✓. Local only, not pushed.
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.

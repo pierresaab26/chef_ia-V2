@@ -2467,7 +2467,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v191',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v192',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3276,7 +3276,9 @@ function addSelectBar(box,items,from){
   const picked=new Set();let on=false;
   const paint=()=>{items.forEach(it=>it.li.classList.toggle('picked',picked.has(it)));cnt.textContent=t.listN.replace('{n}',picked.size);go.disabled=!picked.size;bar.hidden=!picked.size};
   const exit=()=>{on=false;bar.hidden=true;picked.clear();paint()};
-  items.forEach(it=>{it.li._pick=()=>{if(!on)return false;picked.has(it)?picked.delete(it):picked.add(it);paint();return true}});
+  items.forEach(it=>{it.li._pick=()=>{if(!on)return false;picked.has(it)?picked.delete(it):picked.add(it);paint();return true};
+    // outside selection, the cart opens the selection bar with this ingredient picked (not the list sheet); an ingredient already in a list is still removed by the cart
+    it.li._cart=()=>{if(!on&&shopHas(it.t))return false;on=true;picked.has(it)?picked.delete(it):picked.add(it);paint();return true}});
   sb.onclick=()=>{if(on){exit();return}on=true;paint()};
   all.onclick=()=>{items.forEach(it=>picked.add(it));paint()};
   cancel.onclick=exit;
@@ -3319,7 +3321,7 @@ function renderRecipe(el,txt,title,chat,swap,prevTxt){
         const li=document.createElement('li'),ck=document.createElement('span');ck.className='ck';const tx=document.createElement('span');tx.className='tx';tx.textContent=cap1(b[1]);
         const tag=document.createElement('span');tag.className='mt';tag.textContent=T().missT;tag.hidden=true;tx.appendChild(tag);
         if(ingDiff&&ingS){const k=ingKey(l),lab=ingDiff.nw.has(k)?'ingNew':ingDiff.md.has(k)?'ingMod':'';if(lab){const c=document.createElement('span');c.className='chg'+(lab==='ingMod'?' mod':'');c.textContent=T()[lab];tx.appendChild(c)}}
-        li.append(ck,tx);if(ingS){const cb=cartBtn(b[1],String(title||''));const oc=cb.onclick;cb.onclick=ev=>{if(li._pick&&li._pick()){ev.stopPropagation();return}oc(ev)};li.prepend(cb);ingEls.push({li,t:b[1]})}li.onclick=()=>{if(li._pick&&li._pick())return;const d=li.classList.toggle('miss');ck.textContent=d?'✕':'';tag.hidden=!d;if(d)missing.add(b[1]);else missing.delete(b[1]);updBar()};
+        li.append(ck,tx);if(ingS){const cb=cartBtn(b[1],String(title||''));const oc=cb.onclick;cb.onclick=ev=>{if(li._cart&&li._cart()){ev.stopPropagation();return}oc(ev)};li.prepend(cb);ingEls.push({li,t:b[1]})}li.onclick=()=>{if(li._pick&&li._pick())return;const d=li.classList.toggle('miss');ck.textContent=d?'✕':'';tag.hidden=!d;if(d)missing.add(b[1]);else missing.delete(b[1]);updBar()};
         list.appendChild(li);
       }else if(n){
         if(kind!=='n'){list=document.createElement('ol');list.className='rstep';box.appendChild(list);kind='n'}
