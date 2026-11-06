@@ -189,6 +189,8 @@ v159 (owner's request, from the Favorites mockup): the category tiles of Favorit
 
 v161–v162 (owner's requests): « Surprends-moi » shows the four course buttons (Entrées, Plats, Desserts, Boissons: `drawSurp()`, `#surpBox`, labels from `crs`, text from `crsL` + key `surpM`, 6 languages); the chosen course starts a surprise recipe for that course. The Discuter / Questions switch is hidden in that conversation (`#modesw`, reset by `openChat()`).
 
+v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()`): a question « Quel type de plat te fait envie ? » and the four course buttons appear in the conversation (`.surpq` / `.surpbox`); the chosen course sends the surprise request. `drawSurp()` and the old `#surpBox` are removed. The Discuter / Questions switch stays hidden in that conversation.
+
 Tests (2026-11-05, owner's request « 55 questions dans toutes les langues »): new `api/_selftest-i18n.js` = the SAME 55 questions in each of the 6 languages (275 added versions, ids `<id>-<lang>`; `CASES_I18N`, `ALL_CASES` = 330 cases, 55 per language). `api/selftest.js` (daily cron, costs model calls) still runs the 55 original `CASES` only. The morning check (scheduled task « Contrôle matinal Chef IA », 7:25 Paris) runs `ALL_CASES` with haiku sub-agents (approximate measure; the artifact bench stays the reference).
 
 ## 6. Current status and decisions

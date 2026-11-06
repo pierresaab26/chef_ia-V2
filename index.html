@@ -195,7 +195,7 @@ input,textarea,select{font-size:16px!important}
 .mclear{display:block;margin:10px auto 0;background:none;border:0;color:var(--mut);font:inherit;font-size:13px;text-decoration:underline;padding:8px}
 .pickl{max-height:46vh;overflow:auto;margin:10px 0;display:flex;flex-direction:column;gap:6px}.pickl button{text-align:left;background:var(--bg1);border:1px solid var(--bd);border-radius:12px;padding:9px 11px;font:inherit;color:var(--ink)}.pickl small{display:block;color:var(--mut);font-size:12px}.dlg.wide{max-width:420px}
 #chat.on~nav{display:none}
-#modesw[hidden]{display:none}.surpbox{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:-6px 0 16px}.surpbox[hidden]{display:none}.surpbox button{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 8px;font-weight:700;font-size:14px;color:var(--pink);box-shadow:0 2px 10px rgba(0,0,0,.05)}#modesw{display:flex;gap:4px;margin:8px 14px 0;background:var(--card);border-radius:999px;padding:4px}#modesw button{flex:1;padding:7px 8px;border-radius:999px;font-size:13px;color:var(--mut);background:transparent}#modesw button.on{background:var(--psoft);color:var(--pink);font-weight:600}
+#modesw[hidden]{display:none}.surpbox{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:-6px 0 16px}.surpbox[hidden]{display:none}.surpq{margin:10px 14px 14px}.surpq p{margin:0 0 10px;font-weight:600}.surpq .surpbox{margin:0}.surpbox button{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 8px;font-weight:700;font-size:14px;color:var(--pink);box-shadow:0 2px 10px rgba(0,0,0,.05)}#modesw{display:flex;gap:4px;margin:8px 14px 0;background:var(--card);border-radius:999px;padding:4px}#modesw button{flex:1;padding:7px 8px;border-radius:999px;font-size:13px;color:var(--mut);background:transparent}#modesw button.on{background:var(--psoft);color:var(--pink);font-weight:600}
 #qanote{display:none;padding:6px 14px;font-size:12px;line-height:1.35;color:var(--mut);text-align:center}#chat.qa #qanote{display:block}#chat.qa #quick{display:none}
 nav{position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(3,1fr);align-items:center;justify-items:center;background:var(--card);border-radius:999px;padding:8px 10px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
 nav button{width:48px;height:48px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:22px;line-height:1;opacity:.5}
@@ -383,7 +383,6 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav"></button></div>
       <div id="hsres"></div>
       <button class="impcard" id="surpHome"><i>✨</i><div><b id="surpT"></b><span id="surpS"></span></div></button>
-      <div id="surpBox" class="surpbox" hidden></div>
       <div id="hwrap"><h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
       <div id="hhome"></div></div>
       <h2 id="menuT"></h2>
@@ -630,6 +629,7 @@ fr:{
   qaNote:"ℹ️ Réponses données à titre informatif. Elles n’engagent pas la responsabilité du chef.",
   surpT:"Surprends-moi",surpS:"Un plat tiré au hasard, à cuisiner",mDisc:"Discuter",mQ:"Questions",
   surpM:"Donne-moi une recette surprise {c}, tirée au hasard.",
+  surpQ:"Quel type de plat te fait envie ?",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
   qaHideCom:"Masquer les commentaires",
@@ -880,6 +880,7 @@ en:{
   qaNote:"ℹ️ Answers are for information only and do not engage the chef’s liability.",
   surpT:"Surprise me",surpS:"A random dish to cook",mDisc:"Chat",mQ:"Questions",
   surpM:"Give me a surprise recipe for {c}, picked at random.",
+  surpQ:"Which kind of dish do you fancy?",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
   qaHideCom:"Hide comments",
@@ -1130,6 +1131,7 @@ es:{
   qaNote:"ℹ️ Las respuestas son meramente informativas y no comprometen la responsabilidad del chef.",
   surpT:"Sorpréndeme",surpS:"Un plato al azar para cocinar",mDisc:"Charlar",mQ:"Preguntas",
   surpM:"Dame una receta sorpresa de {c}, elegida al azar.",
+  surpQ:"¿Qué tipo de plato te apetece?",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
   qaHideCom:"Ocultar comentarios",
@@ -1380,6 +1382,7 @@ de:{
   qaNote:"ℹ️ Die Antworten dienen nur zur Information und begründen keine Haftung des Kochs.",
   surpT:"Überrasch mich",surpS:"Ein zufälliges Gericht zum Kochen",mDisc:"Plaudern",mQ:"Fragen",
   surpM:"Gib mir ein überraschendes Rezept: {c}, zufällig gewählt.",
+  surpQ:"Welche Art von Gericht hast du Lust auf?",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
   qaHideCom:"Kommentare ausblenden",
@@ -1630,6 +1633,7 @@ it:{
   qaNote:"ℹ️ Le risposte sono solo a scopo informativo e non impegnano la responsabilità dello chef.",
   surpT:"Sorprendimi",surpS:"Un piatto a caso da cucinare",mDisc:"Chiacchiera",mQ:"Domande",
   surpM:"Dammi una ricetta a sorpresa: {c}, scelta a caso.",
+  surpQ:"Che tipo di piatto ti va?",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
   qaHideCom:"Nascondi i commenti",
@@ -1880,6 +1884,7 @@ pt:{
   qaNote:"ℹ️ As respostas são meramente informativas e não implicam a responsabilidade do chef.",
   surpT:"Surpreenda-me",surpS:"Um prato ao acaso para cozinhar",mDisc:"Conversar",mQ:"Perguntas",
   surpM:"Dê-me uma receita surpresa de {c}, escolhida ao acaso.",
+  surpQ:"Que tipo de prato te apetece?",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
   qaHideCom:"Ocultar comentários",
@@ -2363,7 +2368,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v162',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v163',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3362,7 +3367,7 @@ function impText(){const t=T();
   $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#impT').textContent=t.imT;
   $('#surpT').textContent=t.surpT;$('#surpS').textContent=t.surpS;$('#mDisc').textContent=t.mDisc;$('#mQ').textContent=t.mQ;
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
-  $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT;try{drawSurp()}catch(x){}}
+  $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
 function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
 function openImp(){resetImp();show('imp')}
 async function apiPost(path,data){
@@ -3573,11 +3578,16 @@ $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
 $('#n2').onclick=()=>{if(!log.children.length||qaMode)openChat(null);else show('chat')};
-function drawSurp(){const t=T(),box=$('#surpBox');box.innerHTML='';const crs=t.crs.split('|'),crsL=t.crsL.split('|');
+// « Surprends-moi »: opens the chat and the chef proposes the four courses as buttons, in the conversation
+function surpChat(){const t=T();openChat(null);$('#modesw').hidden=true; // a surprise conversation does not need the Discuter / Questions switch
+  const crs=t.crs.split('|'),crsL=t.crsL.split('|');
+  const w=document.createElement('div');w.className='surpq';
+  const p=document.createElement('p');p.textContent=t.surpQ;w.appendChild(p);
+  const g=document.createElement('div');g.className='surpbox';
   crs.forEach((c,j)=>{const b=document.createElement('button');b.type='button';b.textContent=c;
-    b.onclick=()=>{box.hidden=true;start(t.surpM.replace('{c}',crsL[j]));$('#modesw').hidden=true}; // a surprise recipe does not need the Discuter / Questions switch
-    box.appendChild(b)})}
-$('#surpHome').onclick=()=>{const box=$('#surpBox');if(!box.hidden){box.hidden=true;return}drawSurp();box.hidden=false}; // tap: choose the course, then a surprise recipe for it
+    b.onclick=()=>{w.remove();send(t.surpM.replace('{c}',crsL[j]),true)};g.appendChild(b)});
+  w.appendChild(g);log.appendChild(w);try{toBottom()}catch(x){}}
+$('#surpHome').onclick=surpChat;
 $('#n4').onclick=()=>goTo('history');
 $('#mDisc').onclick=()=>{if(qaMode)openChat(null)};
 $('#mQ').onclick=()=>{if(!qaMode)openQA()};
