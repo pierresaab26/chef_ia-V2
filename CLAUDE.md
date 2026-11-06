@@ -211,6 +211,8 @@ v189 (owner: « je veux juste que le tap sur le 🛒 sélectionne l'ingrédient 
 
 v190 (owner's screenshot: the selection bar showed « 0 sélectionné(s) »): the bar (count, Tout, Annuler, Ajouter à une liste) appears only once at least one ingredient is picked (`paint()` sets `bar.hidden`). Local only, not pushed.
 
+v191 (owner's screenshot: the bar still showed with nothing picked): `.selbar` set `display:flex`, which overrode the `hidden` attribute; `.selbar[hidden]{display:none}` added. Local only, not pushed.
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
