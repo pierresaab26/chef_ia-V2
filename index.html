@@ -334,6 +334,13 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lbar{height:6px;border-radius:3px;background:#efe6ea;overflow:hidden}
 .lbar i{display:block;height:100%;background:var(--pink);border-radius:3px}
 .lf{font-size:12px;color:var(--mut);margin-top:8px}
+.selbtn{display:inline-block;margin:10px 0 2px;padding:9px 14px;border-radius:999px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.selbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;bottom:8px;background:var(--card);border-radius:18px;padding:10px 12px;margin-top:10px;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.selbar span{flex:1 1 100%;font-size:13px;color:var(--mut)}
+.selbar button{font:inherit;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);cursor:pointer}
+.selbar .selgo{flex:1;background:var(--psoft);border-color:var(--psbd);color:var(--pink);font-weight:700}
+.selbar .selgo:disabled{opacity:.45}
+.ring li.picked{outline:2px solid var(--psbd);background:var(--psoft);border-radius:12px}
 .mt{display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--pink);text-decoration:none!important;vertical-align:middle}
 .swgo{display:block;width:100%;margin-top:10px;padding:12px 16px;border:1px solid var(--psbd);border-radius:14px;background:var(--psoft);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
 .swbar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.swbar .swgo,.swbar .swno{flex:1 1 140px;margin:0}.swno{display:block;padding:12px 16px;border:2px solid var(--pink);border-radius:14px;background:var(--card);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
@@ -684,6 +691,7 @@ fr:{
   qHomeT:"Une question cuisine, demande-moi",
   shopRm:"Retirer du panier",
   listsT:"Listes de courses",listDay:"Courses du {d}",listNew:"＋ Nouvelle liste",listPick:"Choisir la liste",listCnt:"{n} articles",listDone:"{d} sur {n} cochés",listRen:"Renommer la liste",listDel:"Supprimer la liste",listDelQ:"Supprimer cette liste et ses articles ?",listAdded:"Ajouté à {l}",listChange:"Changer",listShare:"Partager",listCreated:"Créée le {d}",listGo:"Ajouter",listCopied:"Liste copiée",listEmptyL:"Cette liste est vide.",listOld:"Ma liste",
+  listSelect:"Sélectionner des ingrédients",listAddSel:"Ajouter à une liste",listCancel:"Annuler",listAll:"Tout",listN:"{n} sélectionné(s)",
   dShop:"Liste de courses",shopT:"Liste de courses",shopAdd:"Ajouter au panier",shopIn:"Dans le panier",shopAdded:"Ajouté à la liste de courses",shopSee:"Voir",shopEmpty:"Ta liste est vide. Ajoute des ingrédients depuis une recette.",shopDone:"Retirer les cochés",shopClear:"Tout effacer",shopClearQ:"Effacer toute la liste de courses ?",qHomeS:"Réponses courtes, sans recette",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
@@ -941,6 +949,7 @@ en:{
   qHomeT:"A cooking question, ask me",
   shopRm:"Remove from the cart",
   listsT:"Shopping lists",listDay:"Shopping for {d}",listNew:"＋ New list",listPick:"Choose the list",listCnt:"{n} items",listDone:"{d} of {n} ticked",listRen:"Rename the list",listDel:"Delete the list",listDelQ:"Delete this list and its items?",listAdded:"Added to {l}",listChange:"Change",listShare:"Share",listCreated:"Created on {d}",listGo:"Add",listCopied:"List copied",listEmptyL:"This list is empty.",listOld:"My list",
+  listSelect:"Select ingredients",listAddSel:"Add to a list",listCancel:"Cancel",listAll:"All",listN:"{n} selected",
   dShop:"Shopping list",shopT:"Shopping list",shopAdd:"Add to cart",shopIn:"In the cart",shopAdded:"Added to the shopping list",shopSee:"View",shopEmpty:"Your list is empty. Add ingredients from a recipe.",shopDone:"Remove ticked",shopClear:"Clear all",shopClearQ:"Clear the whole shopping list?",qHomeS:"Short answers, no recipe",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
@@ -1198,6 +1207,7 @@ es:{
   qHomeT:"Una pregunta de cocina, pregúntame",
   shopRm:"Quitar del carrito",
   listsT:"Listas de la compra",listDay:"Compra del {d}",listNew:"＋ Nueva lista",listPick:"Elige la lista",listCnt:"{n} artículos",listDone:"{d} de {n} marcados",listRen:"Renombrar la lista",listDel:"Eliminar la lista",listDelQ:"¿Eliminar esta lista y sus artículos?",listAdded:"Añadido a {l}",listChange:"Cambiar",listShare:"Compartir",listCreated:"Creada el {d}",listGo:"Añadir",listCopied:"Lista copiada",listEmptyL:"Esta lista está vacía.",listOld:"Mi lista",
+  listSelect:"Seleccionar ingredientes",listAddSel:"Añadir a una lista",listCancel:"Cancelar",listAll:"Todo",listN:"{n} seleccionado(s)",
   dShop:"Lista de la compra",shopT:"Lista de la compra",shopAdd:"Añadir al carrito",shopIn:"En el carrito",shopAdded:"Añadido a la lista de la compra",shopSee:"Ver",shopEmpty:"Tu lista está vacía. Añade ingredientes desde una receta.",shopDone:"Quitar marcados",shopClear:"Vaciar todo",shopClearQ:"¿Vaciar toda la lista de la compra?",qHomeS:"Respuestas breves, sin receta",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -1455,6 +1465,7 @@ de:{
   qHomeT:"Eine Kochfrage, frag mich",
   shopRm:"Aus dem Warenkorb entfernen",
   listsT:"Einkaufslisten",listDay:"Einkauf am {d}",listNew:"＋ Neue Liste",listPick:"Liste wählen",listCnt:"{n} Artikel",listDone:"{d} von {n} abgehakt",listRen:"Liste umbenennen",listDel:"Liste löschen",listDelQ:"Diese Liste und ihre Artikel löschen?",listAdded:"Hinzugefügt zu {l}",listChange:"Ändern",listShare:"Teilen",listCreated:"Erstellt am {d}",listGo:"Hinzufügen",listCopied:"Liste kopiert",listEmptyL:"Diese Liste ist leer.",listOld:"Meine Liste",
+  listSelect:"Zutaten auswählen",listAddSel:"Zu einer Liste hinzufügen",listCancel:"Abbrechen",listAll:"Alle",listN:"{n} ausgewählt",
   dShop:"Einkaufsliste",shopT:"Einkaufsliste",shopAdd:"In den Warenkorb",shopIn:"Im Warenkorb",shopAdded:"Zur Einkaufsliste hinzugefügt",shopSee:"Ansehen",shopEmpty:"Deine Liste ist leer. Füge Zutaten aus einem Rezept hinzu.",shopDone:"Markierte entfernen",shopClear:"Alles löschen",shopClearQ:"Gesamte Einkaufsliste leeren?",qHomeS:"Kurze Antworten, ohne Rezept",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
@@ -1712,6 +1723,7 @@ it:{
   qHomeT:"Una domanda di cucina, chiedimi",
   shopRm:"Rimuovi dal carrello",
   listsT:"Liste della spesa",listDay:"Spesa del {d}",listNew:"＋ Nuova lista",listPick:"Scegli la lista",listCnt:"{n} articoli",listDone:"{d} su {n} spuntati",listRen:"Rinomina la lista",listDel:"Elimina la lista",listDelQ:"Eliminare questa lista e i suoi articoli?",listAdded:"Aggiunto a {l}",listChange:"Cambia",listShare:"Condividi",listCreated:"Creata il {d}",listGo:"Aggiungi",listCopied:"Lista copiata",listEmptyL:"Questa lista è vuota.",listOld:"La mia lista",
+  listSelect:"Seleziona ingredienti",listAddSel:"Aggiungi a una lista",listCancel:"Annulla",listAll:"Tutti",listN:"{n} selezionati",
   dShop:"Lista della spesa",shopT:"Lista della spesa",shopAdd:"Aggiungi al carrello",shopIn:"Nel carrello",shopAdded:"Aggiunto alla lista della spesa",shopSee:"Vedi",shopEmpty:"La tua lista è vuota. Aggiungi ingredienti da una ricetta.",shopDone:"Rimuovi i spuntati",shopClear:"Svuota tutto",shopClearQ:"Svuotare tutta la lista della spesa?",qHomeS:"Risposte brevi, senza ricetta",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
@@ -1969,6 +1981,7 @@ pt:{
   qHomeT:"Uma pergunta de cozinha, pergunte-me",
   shopRm:"Remover do carrinho",
   listsT:"Listas de compras",listDay:"Compras de {d}",listNew:"＋ Nova lista",listPick:"Escolher a lista",listCnt:"{n} artigos",listDone:"{d} de {n} marcados",listRen:"Renomear a lista",listDel:"Apagar a lista",listDelQ:"Apagar esta lista e os seus artigos?",listAdded:"Adicionado a {l}",listChange:"Mudar",listShare:"Partilhar",listCreated:"Criada em {d}",listGo:"Adicionar",listCopied:"Lista copiada",listEmptyL:"Esta lista está vazia.",listOld:"A minha lista",
+  listSelect:"Selecionar ingredientes",listAddSel:"Adicionar a uma lista",listCancel:"Cancelar",listAll:"Todos",listN:"{n} selecionados",
   dShop:"Lista de compras",shopT:"Lista de compras",shopAdd:"Adicionar ao carrinho",shopIn:"No carrinho",shopAdded:"Adicionado à lista de compras",shopSee:"Ver",shopEmpty:"A tua lista está vazia. Adiciona ingredientes a partir de uma receita.",shopDone:"Remover marcados",shopClear:"Limpar tudo",shopClearQ:"Esvaziar toda a lista de compras?",qHomeS:"Respostas curtas, sem receita",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -2453,7 +2466,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v187',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v188',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3161,22 +3174,23 @@ function cartBtn(name,from){
     const L=loadLists();
     if(!L.length){const id=newList();addItem(id,txt,from);refreshCarts();toastChange(id,txt,from);return}
     if(L.length===1){addItem(L[0].id,txt,from);refreshCarts();toastChange(L[0].id,txt,from);return}
-    openSheet(txt,from);
+    openSheet([txt],from);
   };
   return b;
 }
-function toastChange(id,txt,from){const l=loadLists().find(x=>x.id===id);toastAct(T().listAdded.replace('{l}',l?l.name:''),T().listChange,()=>openSheet(txt,from))}
+function toastChange(id,txt,from){const l=loadLists().find(x=>x.id===id);toastAct(T().listAdded.replace('{l}',l?l.name:''),T().listChange,()=>openSheet([txt],from))}
 function closeSheet(){const w=document.getElementById('lsheet');if(w)w.remove()}
-function openSheet(txt,from){
+function openSheet(txts,from,onDone){
   closeSheet();
-  const t=T(),cur=loadLists().find(l=>l.items.some(x=>sameTxt(x.t,txt)));
+  if(!loadLists().length)newList();
+  const t=T(),cur=loadLists().find(l=>l.items.some(x=>sameTxt(x.t,txts[0])));
   let sel=cur?cur.id:((loadLists()[0]||{}).id);
   const w=document.createElement('div');w.id='lsheet';w.className='lsw';
   const sc=document.createElement('div');sc.className='lss';sc.onclick=closeSheet;
   const sh=document.createElement('div');sh.className='lsh';
   const gr=document.createElement('div');gr.className='grab';
   const h=document.createElement('h4');h.textContent=t.listPick;
-  const sub=document.createElement('div');sub.className='lsub';sub.textContent='« '+txt+' »';
+  const sub=document.createElement('div');sub.className='lsub';sub.textContent=txts.length===1?'« '+txts[0]+' »':t.listN.replace('{n}',txts.length);
   const opts=document.createElement('div');
   const draw=()=>{opts.textContent='';loadLists().forEach(l=>{
     const o=document.createElement('button');o.type='button';o.className='lopt'+(l.id===sel?' sel':'');
@@ -3188,7 +3202,7 @@ function openSheet(txt,from){
   const nb=document.createElement('button');nb.type='button';nb.className='lnew';nb.textContent=t.listNew;
   nb.onclick=()=>{sel=newList();draw()};
   const go=document.createElement('button');go.type='button';go.className='lgo';go.textContent=t.listGo;
-  go.onclick=()=>{if(!sel)return;removeAll(txt);addItem(sel,txt,from);closeSheet();refreshCarts();const l=loadLists().find(x=>x.id===sel);toast(t.listAdded.replace('{l}',l?l.name:''))};
+  go.onclick=()=>{if(!sel)return;if(txts.length===1)removeAll(txts[0]);txts.forEach(x=>addItem(sel,x,from));closeSheet();refreshCarts();onDone&&onDone();const l=loadLists().find(x=>x.id===sel);toast(t.listAdded.replace('{l}',l?l.name:''))};
   sh.append(gr,h,sub,opts,nb,go);
   w.append(sc,sh);document.body.appendChild(w);
 }
@@ -3248,6 +3262,26 @@ function renderShop(){
 }
 $('#sback').onclick=()=>show('home');
 $('#slb').onclick=()=>drawShop();
+// v188: select several ingredients of a recipe, then add them to a new or an existing list
+function addSelectBar(box,items,from){
+  const t=T();
+  const sb=document.createElement('button');sb.type='button';sb.className='selbtn';sb.textContent='🛒 '+t.listSelect;
+  const bar=document.createElement('div');bar.className='selbar';bar.hidden=true;
+  const cnt=document.createElement('span');
+  const all=document.createElement('button');all.type='button';all.textContent=t.listAll;
+  const cancel=document.createElement('button');cancel.type='button';cancel.textContent=t.listCancel;
+  const go=document.createElement('button');go.type='button';go.className='selgo';go.textContent=t.listAddSel;
+  bar.append(cnt,all,cancel,go);
+  const picked=new Set();let on=false;
+  const paint=()=>{items.forEach(it=>it.li.classList.toggle('picked',picked.has(it)));cnt.textContent=t.listN.replace('{n}',picked.size);go.disabled=!picked.size};
+  const exit=()=>{on=false;bar.hidden=true;picked.clear();paint()};
+  items.forEach(it=>{it.li._pick=()=>{if(!on)return false;picked.has(it)?picked.delete(it):picked.add(it);paint();return true}});
+  sb.onclick=()=>{if(on){exit();return}on=true;bar.hidden=false;paint()};
+  all.onclick=()=>{items.forEach(it=>picked.add(it));paint()};
+  cancel.onclick=exit;
+  go.onclick=()=>{const list=items.filter(it=>picked.has(it)).map(it=>it.t);if(list.length)openSheet(list,from,exit)};
+  box.append(sb,bar);
+}
 function renderRecipe(el,txt,title,chat,swap,prevTxt){
   el.classList.remove('typing');el.removeAttribute('aria-label');el.innerHTML='';
   const hd=headInfo(txt);txt=hd.txt; // health / prep / rest / cook lines are shown as bubbles, not as text lines
@@ -3269,7 +3303,7 @@ function renderRecipe(el,txt,title,chat,swap,prevTxt){
     const close=()=>{list=null;kind=''};
     const utS=UT_RE.test(sec.h),noteS=NOTE_RE.test(sec.h)&&!/ingr|zutat|ingred/i.test(sec.h)&&!UT_RE.test(sec.h)&&!/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);
     const ingS=/ingr|zutat|ingred/i.test(sec.h),stS=!ingS&&/étape|etape|prépar|prepar|method|step|zubereit|passagg|modo|instruc/i.test(sec.h);let cnt=0;const missing=new Set();let bar=null;const updBar=()=>{if(!bar)return;bar.hidden=!missing.size;const x=[...missing].join(' ; ');bar.children[0].textContent=T().swNo.replace('{i}',x);bar.children[1].textContent=T().swRep.replace('{i}',x)};
-    sec.lines.forEach(l=>{
+    const ingEls=[];sec.lines.forEach(l=>{
       if(utS){ // utensils: plain chips, nothing to tick or replace
         if(kind!=='u'){list=document.createElement('ul');list.className='rut';box.appendChild(list);kind='u'}
         const li=document.createElement('li');li.textContent=l.replace(/^[-•*]\s+/,'');list.appendChild(li);return}
@@ -3284,7 +3318,7 @@ function renderRecipe(el,txt,title,chat,swap,prevTxt){
         const li=document.createElement('li'),ck=document.createElement('span');ck.className='ck';const tx=document.createElement('span');tx.className='tx';tx.textContent=cap1(b[1]);
         const tag=document.createElement('span');tag.className='mt';tag.textContent=T().missT;tag.hidden=true;tx.appendChild(tag);
         if(ingDiff&&ingS){const k=ingKey(l),lab=ingDiff.nw.has(k)?'ingNew':ingDiff.md.has(k)?'ingMod':'';if(lab){const c=document.createElement('span');c.className='chg'+(lab==='ingMod'?' mod':'');c.textContent=T()[lab];tx.appendChild(c)}}
-        li.append(ck,tx);if(ingS)li.prepend(cartBtn(b[1],String(title||'')));li.onclick=()=>{const d=li.classList.toggle('miss');ck.textContent=d?'✕':'';tag.hidden=!d;if(d)missing.add(b[1]);else missing.delete(b[1]);updBar()};
+        li.append(ck,tx);if(ingS)li.prepend(cartBtn(b[1],String(title||'')));if(ingS)ingEls.push({li,t:b[1]});li.onclick=()=>{if(li._pick&&li._pick())return;const d=li.classList.toggle('miss');ck.textContent=d?'✕':'';tag.hidden=!d;if(d)missing.add(b[1]);else missing.delete(b[1]);updBar()};
         list.appendChild(li);
       }else if(n){
         if(kind!=='n'){list=document.createElement('ol');list.className='rstep';box.appendChild(list);kind='n'}
@@ -3292,6 +3326,7 @@ function renderRecipe(el,txt,title,chat,swap,prevTxt){
         li.append(nm,tx);list.appendChild(li);
       }else{close();const p=document.createElement('p');p.className='rp';p.textContent=l;box.appendChild(p)}
     });
+    if(ingS&&ingEls.length)addSelectBar(box,ingEls,String(title||''));
     if(utS){ // utensils section: title always visible, the list opens on tap
       box.classList.add('fold');h.setAttribute('role','button');h.tabIndex=0;h.setAttribute('aria-expanded','false');
       const ar=document.createElement('span');ar.className='arr';ar.textContent='▾';ar.setAttribute('aria-hidden','true');h.appendChild(ar);
