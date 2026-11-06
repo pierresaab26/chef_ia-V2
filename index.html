@@ -313,6 +313,27 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shop-row.done .sck{background:var(--pink);border-color:var(--pink)}
 .shop-row.done .st{text-decoration:line-through;opacity:.55}
 .shop-row .sdel{flex:none;background:none;border:0;color:var(--mut);font-size:18px;padding:4px 6px;cursor:pointer}
+.lsw{position:fixed;inset:0;z-index:60}
+.lss{position:absolute;inset:0;background:rgba(20,15,25,.35)}
+.lsh{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:26px 26px 0 0;padding:10px 18px calc(22px + env(safe-area-inset-bottom,0px));max-height:80vh;overflow:auto;box-shadow:0 -8px 24px rgba(0,0,0,.18)}
+.grab{width:40px;height:5px;border-radius:3px;background:#d8d3dc;margin:0 auto 12px}
+.lsh h4{margin:0 0 4px;font-size:16px}
+.lsub{font-size:13px;color:var(--mut);margin-bottom:12px}
+.lopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px;border-radius:16px;border:1px solid var(--bd);background:var(--card);color:var(--ink);font:inherit;font-size:14px;margin-bottom:8px;cursor:pointer}
+.lopt.sel{border-color:var(--psbd);background:var(--psoft)}
+.lopt .n{flex:1}
+.lopt small{display:block;color:var(--mut);font-size:12px}
+.lopt .radio{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--mut);flex:none}
+.lopt.sel .radio{background:var(--pink);border-color:var(--pink);box-shadow:inset 0 0 0 4px #fff}
+.lnew{width:100%;padding:12px;border-radius:999px;border:1px dashed var(--psbd);background:transparent;color:var(--pink);font:inherit;font-size:14px;font-weight:600;margin:4px 0 8px;cursor:pointer}
+.lgo{width:100%;padding:13px;border-radius:999px;border:0;background:var(--psoft);color:var(--pink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.newbig{width:100%;padding:14px;border-radius:999px;border:0;background:var(--pink);color:#fff;font:inherit;font-size:15px;font-weight:700;margin-bottom:14px;cursor:pointer}
+.lcard{background:var(--card);border-radius:20px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);cursor:pointer}
+.lt{font-size:16px;font-weight:700}
+.ld{font-size:12px;color:var(--mut);margin:2px 0 10px}
+.lbar{height:6px;border-radius:3px;background:#efe6ea;overflow:hidden}
+.lbar i{display:block;height:100%;background:var(--pink);border-radius:3px}
+.lf{font-size:12px;color:var(--mut);margin-top:8px}
 .mt{display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--pink);text-decoration:none!important;vertical-align:middle}
 .swgo{display:block;width:100%;margin-top:10px;padding:12px 16px;border:1px solid var(--psbd);border-radius:14px;background:var(--psoft);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
 .swbar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.swbar .swgo,.swbar .swno{flex:1 1 140px;margin:0}.swno{display:block;padding:12px 16px;border:2px solid var(--pink);border-radius:14px;background:var(--card);color:var(--pink);font:inherit;font-weight:700;cursor:pointer;text-align:left;line-height:1.35}
@@ -437,7 +458,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   </section>
 
   <section class="view" id="shop">
-    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="sback" aria-label="Home">🏠</button><b id="shT"></b></div>
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="slb" aria-label="←" style="display:none">←</button><button class="back" id="sback" aria-label="Home">🏠</button><b id="shT"></b></div>
     <div class="scroll" id="shlist"></div>
   </section>
 
@@ -662,6 +683,7 @@ fr:{
   resumeT:"Reprends ta recette ou ta question",
   qHomeT:"Une question cuisine, demande-moi",
   shopRm:"Retirer du panier",
+  listsT:"Listes de courses",listDay:"Courses du {d}",listNew:"＋ Nouvelle liste",listPick:"Choisir la liste",listCnt:"{n} articles",listDone:"{d} sur {n} cochés",listRen:"Renommer la liste",listDel:"Supprimer la liste",listDelQ:"Supprimer cette liste et ses articles ?",listAdded:"Ajouté à {l}",listChange:"Changer",listShare:"Partager",listCreated:"Créée le {d}",listGo:"Ajouter",listCopied:"Liste copiée",listEmptyL:"Cette liste est vide.",listOld:"Ma liste",
   dShop:"Liste de courses",shopT:"Liste de courses",shopAdd:"Ajouter au panier",shopIn:"Dans le panier",shopAdded:"Ajouté à la liste de courses",shopSee:"Voir",shopEmpty:"Ta liste est vide. Ajoute des ingrédients depuis une recette.",shopDone:"Retirer les cochés",shopClear:"Tout effacer",shopClearQ:"Effacer toute la liste de courses ?",qHomeS:"Réponses courtes, sans recette",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
@@ -918,6 +940,7 @@ en:{
   resumeT:"Resume the recipe or the question",
   qHomeT:"A cooking question, ask me",
   shopRm:"Remove from the cart",
+  listsT:"Shopping lists",listDay:"Shopping for {d}",listNew:"＋ New list",listPick:"Choose the list",listCnt:"{n} items",listDone:"{d} of {n} ticked",listRen:"Rename the list",listDel:"Delete the list",listDelQ:"Delete this list and its items?",listAdded:"Added to {l}",listChange:"Change",listShare:"Share",listCreated:"Created on {d}",listGo:"Add",listCopied:"List copied",listEmptyL:"This list is empty.",listOld:"My list",
   dShop:"Shopping list",shopT:"Shopping list",shopAdd:"Add to cart",shopIn:"In the cart",shopAdded:"Added to the shopping list",shopSee:"View",shopEmpty:"Your list is empty. Add ingredients from a recipe.",shopDone:"Remove ticked",shopClear:"Clear all",shopClearQ:"Clear the whole shopping list?",qHomeS:"Short answers, no recipe",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
@@ -1174,6 +1197,7 @@ es:{
   resumeT:"Retomar la receta o la pregunta",
   qHomeT:"Una pregunta de cocina, pregúntame",
   shopRm:"Quitar del carrito",
+  listsT:"Listas de la compra",listDay:"Compra del {d}",listNew:"＋ Nueva lista",listPick:"Elige la lista",listCnt:"{n} artículos",listDone:"{d} de {n} marcados",listRen:"Renombrar la lista",listDel:"Eliminar la lista",listDelQ:"¿Eliminar esta lista y sus artículos?",listAdded:"Añadido a {l}",listChange:"Cambiar",listShare:"Compartir",listCreated:"Creada el {d}",listGo:"Añadir",listCopied:"Lista copiada",listEmptyL:"Esta lista está vacía.",listOld:"Mi lista",
   dShop:"Lista de la compra",shopT:"Lista de la compra",shopAdd:"Añadir al carrito",shopIn:"En el carrito",shopAdded:"Añadido a la lista de la compra",shopSee:"Ver",shopEmpty:"Tu lista está vacía. Añade ingredientes desde una receta.",shopDone:"Quitar marcados",shopClear:"Vaciar todo",shopClearQ:"¿Vaciar toda la lista de la compra?",qHomeS:"Respuestas breves, sin receta",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -1430,6 +1454,7 @@ de:{
   resumeT:"Rezept oder Frage fortsetzen",
   qHomeT:"Eine Kochfrage, frag mich",
   shopRm:"Aus dem Warenkorb entfernen",
+  listsT:"Einkaufslisten",listDay:"Einkauf am {d}",listNew:"＋ Neue Liste",listPick:"Liste wählen",listCnt:"{n} Artikel",listDone:"{d} von {n} abgehakt",listRen:"Liste umbenennen",listDel:"Liste löschen",listDelQ:"Diese Liste und ihre Artikel löschen?",listAdded:"Hinzugefügt zu {l}",listChange:"Ändern",listShare:"Teilen",listCreated:"Erstellt am {d}",listGo:"Hinzufügen",listCopied:"Liste kopiert",listEmptyL:"Diese Liste ist leer.",listOld:"Meine Liste",
   dShop:"Einkaufsliste",shopT:"Einkaufsliste",shopAdd:"In den Warenkorb",shopIn:"Im Warenkorb",shopAdded:"Zur Einkaufsliste hinzugefügt",shopSee:"Ansehen",shopEmpty:"Deine Liste ist leer. Füge Zutaten aus einem Rezept hinzu.",shopDone:"Markierte entfernen",shopClear:"Alles löschen",shopClearQ:"Gesamte Einkaufsliste leeren?",qHomeS:"Kurze Antworten, ohne Rezept",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
@@ -1686,6 +1711,7 @@ it:{
   resumeT:"Riprendi la ricetta o la domanda",
   qHomeT:"Una domanda di cucina, chiedimi",
   shopRm:"Rimuovi dal carrello",
+  listsT:"Liste della spesa",listDay:"Spesa del {d}",listNew:"＋ Nuova lista",listPick:"Scegli la lista",listCnt:"{n} articoli",listDone:"{d} su {n} spuntati",listRen:"Rinomina la lista",listDel:"Elimina la lista",listDelQ:"Eliminare questa lista e i suoi articoli?",listAdded:"Aggiunto a {l}",listChange:"Cambia",listShare:"Condividi",listCreated:"Creata il {d}",listGo:"Aggiungi",listCopied:"Lista copiata",listEmptyL:"Questa lista è vuota.",listOld:"La mia lista",
   dShop:"Lista della spesa",shopT:"Lista della spesa",shopAdd:"Aggiungi al carrello",shopIn:"Nel carrello",shopAdded:"Aggiunto alla lista della spesa",shopSee:"Vedi",shopEmpty:"La tua lista è vuota. Aggiungi ingredienti da una ricetta.",shopDone:"Rimuovi i spuntati",shopClear:"Svuota tutto",shopClearQ:"Svuotare tutta la lista della spesa?",qHomeS:"Risposte brevi, senza ricetta",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
@@ -1942,6 +1968,7 @@ pt:{
   resumeT:"Retomar a receita ou a pergunta",
   qHomeT:"Uma pergunta de cozinha, pergunte-me",
   shopRm:"Remover do carrinho",
+  listsT:"Listas de compras",listDay:"Compras de {d}",listNew:"＋ Nova lista",listPick:"Escolher a lista",listCnt:"{n} artigos",listDone:"{d} de {n} marcados",listRen:"Renomear a lista",listDel:"Apagar a lista",listDelQ:"Apagar esta lista e os seus artigos?",listAdded:"Adicionado a {l}",listChange:"Mudar",listShare:"Partilhar",listCreated:"Criada em {d}",listGo:"Adicionar",listCopied:"Lista copiada",listEmptyL:"Esta lista está vazia.",listOld:"A minha lista",
   dShop:"Lista de compras",shopT:"Lista de compras",shopAdd:"Adicionar ao carrinho",shopIn:"No carrinho",shopAdded:"Adicionado à lista de compras",shopSee:"Ver",shopEmpty:"A tua lista está vazia. Adiciona ingredientes a partir de uma receita.",shopDone:"Remover marcados",shopClear:"Limpar tudo",shopClearQ:"Esvaziar toda a lista de compras?",qHomeS:"Respostas curtas, sem receita",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -2426,7 +2453,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v186',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v187',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3104,45 +3131,123 @@ function ingKey(l){let s=String(l||'').replace(/^[-•*]\s+/,'').normalize('NFD'
 function ingMap(txt){const m=new Map();recipeSections(headInfo(txt).txt).forEach(sec=>{if(sec.h&&/ingr|zutat|ingred/i.test(sec.h))sec.lines.forEach(l=>{if(/^[-•*]\s+/.test(l)){const k=ingKey(l);if(k)m.set(k,{line:l.replace(/^[-•*]\s+/,'').toLowerCase().replace(/\s+/g,' ').trim(),raw:l.replace(/^[-•*]\s+/,'')})}})});return m}
 function prevVerAt(msgs,i){if(!msgs||i==null||i<1||!msgs[i])return '';const rid=msgs[i].rid;for(let j=i-1;j>=0;j--){const m=msgs[j];if(m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||!rid||m.rid===rid))return m.content}return ''}
 function prevVerOf(msgs,content){let i=-1;(msgs||[]).forEach((m,k)=>{if(m.role==='assistant'&&m.content===content)i=k});return prevVerAt(msgs,i)}
-// v182: shopping list (device only): « Ajouter au panier » next to each ingredient, list in the drawer menu
-const SHOP_KEY='chefShop';
-function loadShop(){try{const a=JSON.parse(localStorage.getItem(SHOP_KEY)||'[]');return Array.isArray(a)?a:[]}catch(x){return []}}
-function saveShop(a){try{localStorage.setItem(SHOP_KEY,JSON.stringify(a))}catch(x){toast(T().stFull)}}
-function shopHas(t){const k=t.toLowerCase();return loadShop().some(x=>String(x.t).toLowerCase()===k)}
-function shopAdd(t,from){if(shopHas(t))return;const a=loadShop();a.unshift({t,r:from||'',d:0});saveShop(a)}
-function shopRemove(t){const k=t.toLowerCase();saveShop(loadShop().filter(x=>String(x.t).toLowerCase()!==k))}
+// v187: shopping lists (device only): named lists (« Courses du samedi 24 décembre »), a 🛒 next to each ingredient
+const LISTS_KEY='chefLists';
+const LOCALES={fr:'fr-FR',en:'en-GB',es:'es-ES',de:'de-DE',it:'it-IT',pt:'pt-PT'};
+const sameTxt=(a,b)=>String(a).toLowerCase()===String(b).toLowerCase();
+function saveLists(L){try{localStorage.setItem(LISTS_KEY,JSON.stringify(L))}catch(x){toast(T().stFull)}}
+function loadLists(){
+  try{const v=JSON.parse(localStorage.getItem(LISTS_KEY)||'null');if(Array.isArray(v))return v}catch(x){}
+  // first use after v182: the flat list becomes one named list
+  let old=[];try{const a=JSON.parse(localStorage.getItem('chefShop')||'[]');if(Array.isArray(a))old=a}catch(x){}
+  const L=old.length?[{id:'l0',name:T().listOld,date:new Date().toISOString(),items:old}]:[];
+  saveLists(L);try{localStorage.removeItem('chefShop')}catch(x){}
+  return L;
+}
+function dayName(){const s=new Date().toLocaleDateString(LOCALES[lang]||'fr-FR',{weekday:'long',day:'numeric',month:'long'});return T().listDay.replace('{d}',s)}
+function fmtDate(iso){return new Date(iso).toLocaleDateString(LOCALES[lang]||'fr-FR',{day:'numeric',month:'short',year:'numeric'})}
+function newList(){const L=loadLists();const l={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:dayName(),date:new Date().toISOString(),items:[]};L.unshift(l);saveLists(L);return l.id}
+function shopHas(t){return loadLists().some(l=>l.items.some(x=>sameTxt(x.t,t)))}
+function addItem(id,t,from){const L=loadLists(),l=L.find(x=>x.id===id);if(!l)return;if(!l.items.some(x=>sameTxt(x.t,t))){l.items.unshift({t,r:from||'',d:0});saveLists(L)}}
+function removeAll(t){const L=loadLists();L.forEach(l=>{l.items=l.items.filter(x=>!sameTxt(x.t,t))});saveLists(L)}
+function refreshCarts(){document.querySelectorAll('.cartb').forEach(b=>b._st&&b._st())}
 function cartBtn(name,from){
   const t=T(),txt=cap1(name),b=document.createElement('button');
   b.type='button';b.className='cartb';
   const st=()=>{const on=shopHas(txt);b.classList.toggle('on',on);b.textContent=on?'✓':'🛒';b.title=on?t.shopRm:t.shopAdd;b.setAttribute('aria-label',on?t.shopRm:t.shopAdd)};
-  st();
-  b.onclick=ev=>{ev.stopPropagation();if(shopHas(txt)){shopRemove(txt);st();return}shopAdd(txt,from);st();toastAct(t.shopAdded,t.shopSee,()=>goTo('shop'))};
+  b._st=st;st();
+  b.onclick=ev=>{ev.stopPropagation();
+    if(shopHas(txt)){removeAll(txt);refreshCarts();return}
+    const L=loadLists();
+    if(!L.length){const id=newList();addItem(id,txt,from);refreshCarts();toastChange(id,txt,from);return}
+    if(L.length===1){addItem(L[0].id,txt,from);refreshCarts();toastChange(L[0].id,txt,from);return}
+    openSheet(txt,from);
+  };
   return b;
 }
-function drawShop(){
-  const box=$('#shlist'),t=T();
-  $('#shT').textContent=t.shopT;
+function toastChange(id,txt,from){const l=loadLists().find(x=>x.id===id);toastAct(T().listAdded.replace('{l}',l?l.name:''),T().listChange,()=>openSheet(txt,from))}
+function closeSheet(){const w=document.getElementById('lsheet');if(w)w.remove()}
+function openSheet(txt,from){
+  closeSheet();
+  const t=T(),cur=loadLists().find(l=>l.items.some(x=>sameTxt(x.t,txt)));
+  let sel=cur?cur.id:((loadLists()[0]||{}).id);
+  const w=document.createElement('div');w.id='lsheet';w.className='lsw';
+  const sc=document.createElement('div');sc.className='lss';sc.onclick=closeSheet;
+  const sh=document.createElement('div');sh.className='lsh';
+  const gr=document.createElement('div');gr.className='grab';
+  const h=document.createElement('h4');h.textContent=t.listPick;
+  const sub=document.createElement('div');sub.className='lsub';sub.textContent='« '+txt+' »';
+  const opts=document.createElement('div');
+  const draw=()=>{opts.textContent='';loadLists().forEach(l=>{
+    const o=document.createElement('button');o.type='button';o.className='lopt'+(l.id===sel?' sel':'');
+    const r=document.createElement('span');r.className='radio';
+    const n=document.createElement('span');n.className='n';n.textContent=l.name;
+    const sm=document.createElement('small');sm.textContent=t.listCnt.replace('{n}',l.items.length);n.appendChild(sm);
+    o.append(r,n);o.onclick=()=>{sel=l.id;draw()};opts.appendChild(o)})};
+  draw();
+  const nb=document.createElement('button');nb.type='button';nb.className='lnew';nb.textContent=t.listNew;
+  nb.onclick=()=>{sel=newList();draw()};
+  const go=document.createElement('button');go.type='button';go.className='lgo';go.textContent=t.listGo;
+  go.onclick=()=>{if(!sel)return;removeAll(txt);addItem(sel,txt,from);closeSheet();refreshCarts();const l=loadLists().find(x=>x.id===sel);toast(t.listAdded.replace('{l}',l?l.name:''))};
+  sh.append(gr,h,sub,opts,nb,go);
+  w.append(sc,sh);document.body.appendChild(w);
+}
+let curList=null;
+function drawShop(){curList=null;renderShop()}
+function openList(id){curList=id;renderShop()}
+function renderShop(){
+  const box=$('#shlist'),t=T(),L=loadLists();
   box.textContent='';
-  const a=loadShop();
-  if(!a.length){const p=document.createElement('p');p.className='shempty';p.textContent=t.shopEmpty;box.appendChild(p);return}
-  const act=document.createElement('div');act.className='shact';
-  const bd=document.createElement('button');bd.type='button';bd.textContent=t.shopDone;
-  bd.onclick=()=>{saveShop(loadShop().filter(x=>!x.d));drawShop()};
-  const bc=document.createElement('button');bc.type='button';bc.textContent=t.shopClear;
-  bc.onclick=async()=>{if(await ask({text:t.shopClearQ,okLabel:t.shopClear})){saveShop([]);drawShop()}};
-  act.append(bd,bc);box.appendChild(act);
-  a.forEach((x,i)=>{
+  $('#slb').style.display=curList?'':'none';
+  if(!curList){
+    $('#shT').textContent=t.listsT;
+    const nb=document.createElement('button');nb.type='button';nb.className='newbig';nb.textContent=t.listNew;
+    nb.onclick=()=>openList(newList());
+    box.appendChild(nb);
+    if(!L.length){const p=document.createElement('p');p.className='shempty';p.textContent=t.shopEmpty;box.appendChild(p);return}
+    L.forEach(l=>{
+      const c=document.createElement('div');c.className='lcard';
+      const tt=document.createElement('div');tt.className='lt';tt.textContent=l.name;
+      const d=document.createElement('div');d.className='ld';d.textContent=t.listCreated.replace('{d}',fmtDate(l.date));
+      const done=l.items.filter(x=>x.d).length,pc=l.items.length?Math.round(done/l.items.length*100):0;
+      const bar=document.createElement('div');bar.className='lbar';const bi=document.createElement('i');bi.style.width=pc+'%';bar.appendChild(bi);
+      const f=document.createElement('div');f.className='lf';f.textContent=t.listDone.replace('{d}',done).replace('{n}',l.items.length);
+      c.append(tt,d,bar,f);c.onclick=()=>openList(l.id);box.appendChild(c);
+    });
+    return;
+  }
+  const l=L.find(x=>x.id===curList);
+  if(!l){drawShop();return}
+  $('#shT').textContent=l.name;
+  const acts=document.createElement('div');acts.className='shact';
+  const rn=document.createElement('button');rn.type='button';rn.textContent=t.listRen;
+  rn.onclick=async()=>{const v=await ask({text:t.listRen,input:true,okLabel:t.listRen});if(typeof v==='string'&&v.trim()){const M=loadLists(),x=M.find(y=>y.id===l.id);if(x){x.name=v.trim();saveLists(M)}renderShop()}};
+  const dl=document.createElement('button');dl.type='button';dl.textContent=t.listDel;
+  dl.onclick=async()=>{if(await ask({text:t.listDelQ,okLabel:t.listDel})){saveLists(loadLists().filter(x=>x.id!==l.id));curList=null;refreshCarts();renderShop()}};
+  acts.append(rn,dl);box.appendChild(acts);
+  const dt=document.createElement('div');dt.className='ld';dt.style.margin='0 4px 10px';dt.textContent=t.listCreated.replace('{d}',fmtDate(l.date));box.appendChild(dt);
+  if(!l.items.length){const p=document.createElement('p');p.className='shempty';p.textContent=t.listEmptyL;box.appendChild(p)}
+  l.items.forEach((x,i)=>{
     const row=document.createElement('div');row.className='shop-row'+(x.d?' done':'');
     const ck=document.createElement('span');ck.className='sck';ck.textContent=x.d?'✓':'';
     const st=document.createElement('span');st.className='st';st.textContent=x.t;
     if(x.r){const sm=document.createElement('small');sm.textContent=x.r;st.appendChild(sm)}
     const del=document.createElement('button');del.type='button';del.className='sdel';del.textContent='✕';del.setAttribute('aria-label',t.shopClear);
-    del.onclick=ev=>{ev.stopPropagation();const L=loadShop();L.splice(i,1);saveShop(L);drawShop()};
-    row.onclick=()=>{const L=loadShop();if(L[i]){L[i].d=L[i].d?0:1;saveShop(L)}drawShop()};
+    del.onclick=ev=>{ev.stopPropagation();const M=loadLists(),y=M.find(z=>z.id===l.id);if(y){y.items.splice(i,1);saveLists(M)}refreshCarts();renderShop()};
+    row.onclick=()=>{const M=loadLists(),y=M.find(z=>z.id===l.id);if(y&&y.items[i]){y.items[i].d=y.items[i].d?0:1;saveLists(M)}renderShop()};
     row.append(ck,st,del);box.appendChild(row);
   });
+  if(l.items.length){
+    const act=document.createElement('div');act.className='shact';
+    const bd=document.createElement('button');bd.type='button';bd.textContent=t.shopDone;
+    bd.onclick=()=>{const M=loadLists(),y=M.find(z=>z.id===l.id);if(y){y.items=y.items.filter(x=>!x.d);saveLists(M)}refreshCarts();renderShop()};
+    const sh=document.createElement('button');sh.type='button';sh.textContent=t.listShare;
+    sh.onclick=()=>{const text=l.name+'\n'+l.items.map(x=>'- '+x.t).join('\n');if(navigator.share){navigator.share({title:l.name,text}).catch(()=>{})}else if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>toast(t.listCopied)).catch(()=>{})}};
+    act.append(bd,sh);box.appendChild(act);
+  }
 }
 $('#sback').onclick=()=>show('home');
+$('#slb').onclick=()=>drawShop();
 function renderRecipe(el,txt,title,chat,swap,prevTxt){
   el.classList.remove('typing');el.removeAttribute('aria-label');el.innerHTML='';
   const hd=headInfo(txt);txt=hd.txt; // health / prep / rest / cook lines are shown as bubbles, not as text lines
