@@ -301,8 +301,8 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ring .tx{flex:1;min-width:0}
 .ring li.miss .tx{text-decoration:line-through;opacity:.55}.ring li.miss .ck{background:var(--pink)}
 /* v182: shopping list (device only) */
-.cartb{flex:none;align-self:center;white-space:nowrap;font:inherit;font-size:12px;font-weight:600;line-height:1;padding:7px 11px;border-radius:999px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);cursor:pointer}
-.cartb:disabled{background:transparent;border-color:var(--bd);color:var(--mut);cursor:default}
+.cartb{flex:none;align-self:center;width:36px;height:36px;padding:0;display:grid;place-items:center;font-size:17px;line-height:1;border-radius:50%;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);cursor:pointer}
+.cartb:disabled{background:transparent;border-color:var(--bd);color:var(--pink);cursor:default}
 .shact{display:flex;gap:8px;margin:4px 0 12px}
 .shact button{flex:1;font:inherit;font-size:14px;padding:10px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);cursor:pointer}
 .shempty{color:var(--mut);text-align:center;padding:30px 10px}
@@ -2420,7 +2420,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v182',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v183',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3107,7 +3107,7 @@ function shopAdd(t,from){if(shopHas(t))return;const a=loadShop();a.unshift({t,r:
 function cartBtn(name,from){
   const t=T(),txt=cap1(name),b=document.createElement('button');
   b.type='button';b.className='cartb';
-  const st=()=>{const on=shopHas(txt);b.textContent=on?t.shopIn:'🛒 '+t.shopAdd;b.disabled=on};
+  const st=()=>{const on=shopHas(txt);b.textContent=on?'✓':'🛒';b.title=on?t.shopIn:t.shopAdd;b.setAttribute('aria-label',on?t.shopIn:t.shopAdd);b.disabled=on};
   st();
   b.onclick=ev=>{ev.stopPropagation();shopAdd(txt,from);st();toastAct(t.shopAdded,t.shopSee,()=>goTo('shop'))};
   return b;
