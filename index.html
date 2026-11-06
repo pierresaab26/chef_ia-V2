@@ -2481,7 +2481,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v197',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v198',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3175,9 +3175,15 @@ function loadLists(){
 function dayName(){const s=new Date().toLocaleDateString(LOCALES[lang]||'fr-FR',{weekday:'long',day:'numeric',month:'long'});return T().listDay.replace('{d}',s)}
 function fmtDate(iso){return new Date(iso).toLocaleDateString(LOCALES[lang]||'fr-FR',{day:'numeric',month:'short',year:'numeric'})}
 function newList(){const L=loadLists();const l={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:dayName(),date:new Date().toISOString(),items:[]};L.unshift(l);saveLists(L);return l.id}
-function shopHas(t){return loadLists().some(l=>l.items.some(x=>sameTxt(x.t,t)))}
-function addItem(id,t,from){const L=loadLists(),l=L.find(x=>x.id===id);if(!l)return;if(!l.items.some(x=>sameTxt(x.t,t))){l.items.unshift({t,r:from||'',d:0});saveLists(L)}}
-function removeAll(t){const L=loadLists();L.forEach(l=>{l.items=l.items.filter(x=>!sameTxt(x.t,t))});saveLists(L)}
+// v198: the same ingredient twice is added up when both have a quantity in the same family (g/kg, ml/cl/l)
+const QU={kg:['m',1000],g:['m',1],gr:['m',1],gramme:['m',1],grammes:['m',1],gram:['m',1],grams:['m',1],l:['v',1000],litre:['v',1000],litres:['v',1000],liter:['v',1000],liters:['v',1000],cl:['v',10],ml:['v',1]};
+function qParse(txt){const m=String(txt).trim().match(/^(\d+(?:[.,]\d+)?)\s*([a-zA-Zé]+)\b\s*(.*)$/);if(!m)return null;const u=QU[m[2].toLowerCase()];if(!u)return null;return{n:parseFloat(m[1].replace(',','.'))*u[1],g:u[0],unit:m[2],f:u[1],rest:m[3]}}
+function qKey(txt){const p=qParse(txt);const r=p?p.rest:String(txt);return r.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/^(de |d'|du |des |of |the )/,'').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim().replace(/s\b/g,'')}
+function sameItem(a,b){if(qKey(a)!==qKey(b))return false;const pa=qParse(a),pb=qParse(b);if(pa&&pb)return pa.g===pb.g;return !pa&&!pb}
+function addMerge(items,txt,from){const i=items.findIndex(x=>sameItem(x.t,txt));if(i<0){items.unshift({t:txt,r:from||'',d:0});return}const pa=qParse(items[i].t),pb=qParse(txt);if(pa&&pb){const v=Math.round((pa.n+pb.n)/pa.f*100)/100;items[i].t=v.toLocaleString(LOCALES[lang]||'fr-FR',{maximumFractionDigits:2})+' '+pa.unit+(pa.rest?' '+pa.rest:'')}}
+function shopHas(t){return loadLists().some(l=>l.items.some(x=>sameItem(x.t,t)))}
+function addItem(id,t,from){const L=loadLists(),l=L.find(x=>x.id===id);if(!l)return;addMerge(l.items,t,from);saveLists(L)}
+function removeAll(t){const L=loadLists();L.forEach(l=>{l.items=l.items.filter(x=>!sameItem(x.t,t))});saveLists(L)}
 function refreshCarts(){document.querySelectorAll('.cartb').forEach(b=>b._st&&b._st())}
 function cartBtn(name,from){
   const t=T(),txt=cap1(name),b=document.createElement('button');
@@ -3262,7 +3268,7 @@ function renderShop(){
   const ai=document.createElement('input');ai.type='text';ai.placeholder=t.listAddFree;ai.setAttribute('aria-label',t.listAddFree);
   const ab=document.createElement('button');ab.type='submit';ab.textContent=t.listAddBtn;
   af.append(ai,ab);
-  af.onsubmit=ev=>{ev.preventDefault();const v=ai.value.trim();if(!v)return;const M=loadLists(),y=M.find(z=>z.id===l.id);if(y&&!y.items.some(x=>sameTxt(x.t,v))){y.items.unshift({t:v,r:'',d:0});saveLists(M)}renderShop()};
+  af.onsubmit=ev=>{ev.preventDefault();const v=ai.value.trim();if(!v)return;const M=loadLists(),y=M.find(z=>z.id===l.id);if(y){addMerge(y.items,v,'');saveLists(M)}renderShop()};
   box.appendChild(af);
   if(!l.items.length){const p=document.createElement('p');p.className='shempty';p.textContent=t.listEmptyL;box.appendChild(p)}
   l.items.forEach((x,i)=>{
