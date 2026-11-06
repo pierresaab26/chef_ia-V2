@@ -223,6 +223,8 @@ v195 (owner: « ça ne demande pas le nom »): « ＋ Nouvelle liste » (shoppin
 
 v196 (owner's screenshot: « pas beau, la flèche »): the ← and 🏠 of the shopping-list header (`#slb`, `#sback`) are 40 px round buttons with the same card look as the other round header buttons, instead of bare text. Local only, not pushed.
 
+v197 (owner: « quand on crée une liste, il faut pouvoir ajouter des ingrédients librement »): the list detail has a free-text field « Ajouter un ingrédient… » + « Ajouter » (`.addfree`, keys `listAddFree` / `listAddBtn`, 6 languages); no duplicate by text. Local only, not pushed.
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
