@@ -2121,7 +2121,7 @@ function qaWelcomeEl(){ // welcome of the « Cooking questions » screen: exampl
   t.qaEx.split('|').forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>send(x.replace(/^\S+\s+/,''));w.appendChild(b)});
   d.append(h,p,w);return d}
 function qaUI(){const t=T();$('#chat').classList.toggle('qa',qaMode);$('#mDisc').classList.toggle('on',!qaMode);$('#mQ').classList.toggle('on',qaMode);$('#qanote').textContent=qaMode?t.qaNote:'';if(qaMode){$('#cname').textContent=t.qaT;$('#cdesc').textContent=t.qaD;$('#quick').innerHTML=''}}
-// the Discuter / Questions switch is only shown on the Questions welcome; a normal welcome shows no « Questions »
+// the Discuter / Questions switch is only shown in the Questions screen; a normal chat never shows « Questions »
 function showWelcome(){$('#modesw').hidden=!qaMode;log.appendChild(qaMode?qaWelcomeEl():welcomeEl())}
 function renderMsg(el,t){if(looksLikeRecipe(t)){el.classList.add('rich');const ti=recipeTitle(t)||'';renderRecipe(el,t,ti,true,(ings,m)=>{const src=hist.find(x=>x.role==='assistant'&&x.content===t);branchWith({id:(src&&src.rid)||currentId,text:t,title:ti||t.split('\n')[0].slice(0,60),k:chefNow?chefNow.k:-1,lang},ings,m)},prevVerOf(hist,t))}else{el.classList.remove('rich');render(el,t)}}
 function add(cls,t){const d=document.createElement('div');d.className='m '+cls;if(cls==='u')d.textContent=t;else renderMsg(d,t);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
@@ -2376,7 +2376,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v167',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v168',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3309,9 +3309,8 @@ function dishPic(b,text,rid,still){ // one picture under each recipe of the thre
   try{chatActions()}catch(x){}
   if(!still)toBottom();
 }
-let surpConv=false; // true in a « Surprends-moi » conversation (no switch there)
 function openChat(chef){
-  surpConv=false;newConv();qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
+  newConv();qaMode=false;qaComs={};qaHide=new Set();hist=[];log.innerHTML='';$('#quick').innerHTML='';chefNow=chef;currentId=null;branchFrom=null;hiddenIdx=new Set();
   persona=chef?chef.p:"";$('#cname').textContent=chefName(chef);$('#cdesc').textContent=chefDesc(chef);
   showWelcome();qaUI();
   show('chat');
@@ -3353,7 +3352,7 @@ async function completeReply(h,out){
 const errText=e=>e&&e.code==='rate_limited'?T().e429:e&&e.code==='banned'?T().eBan:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err;
 async function send(text,auto,ctx){
   text=(text||inp.value).trim();if(!text||busy)return;
-  inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();if(!surpConv)$('#modesw').hidden=false;add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});
+  inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
   const tok=convTok;
   try{
@@ -3588,7 +3587,7 @@ $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
 $('#n2').onclick=()=>{if(!log.children.length||qaMode)openChat(null);else show('chat')};
 // « Surprends-moi »: opens the chat and the chef proposes the four courses as buttons, in the conversation
-function surpChat(){const t=T();openChat(null);surpConv=true;$('#modesw').hidden=true; // a surprise conversation does not need the Discuter / Questions switch
+function surpChat(){const t=T();openChat(null); // a surprise conversation does not need the Discuter / Questions switch
   log.querySelectorAll('.welcome').forEach(x=>x.remove()); // no duplicate: the welcome block is rebuilt with the four courses
   const crs=t.crs.split('|'),crsL=t.crsL.split('|');
   const d=welcomeEl();d.classList.add('surpq');

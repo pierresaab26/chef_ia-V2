@@ -193,6 +193,8 @@ v163 (owner's request): « Surprends-moi » opens the CHAT directly (`surpChat()
 
 v164 (owner's request, the four courses duplicated the welcome suggestions): in the « Surprends-moi » conversation the welcome block is removed and replaced by the question as title and the four courses as the same neutral chips as the welcome suggestions (`.welcome.surpq` + `.wex`); the old `.surpbox` styles are gone.
 
+v168 (owner's request « enlève Questions depuis Que voulez-vous cuisiner ? »): the Discuter / Questions switch (`#modesw`) is shown ONLY in the Questions screen (`qaMode`); a normal chat never shows it, not even after the first message. `surpConv` is removed.
+
 v167 (owner's request « vas y dev »): a home card « ❓ Pose une question cuisine » (`#qHome`, keys `qHomeT` / `qHomeS`, 6 languages) under « Surprends-moi » opens the Questions screen directly (`openQA()`); the bottom bar stays at three entries.
 
 v166 (owner's request « dans que voulez-vous cuisiner, il ne doit pas y avoir Questions »): the Discuter / Questions switch (`#modesw`) is hidden on the normal welcome (`showWelcome()`: shown only on the Questions welcome) and shown again as soon as a message is sent, except in a « Surprends-moi » conversation (`surpConv`, reset by `openChat()`).
