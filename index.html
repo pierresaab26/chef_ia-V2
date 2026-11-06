@@ -630,6 +630,7 @@ fr:{
   surpT:"Surprends-moi",surpS:"Un plat tiré au hasard, à cuisiner",mDisc:"Discuter",mQ:"Questions",
   surpM:"Donne-moi une recette surprise {c}, tirée au hasard.",
   surpQ:"Quel type de plat te fait envie ?",
+  resumeT:"Reprendre la recette ou la question",
   qHomeT:"Pose une question cuisine",qHomeS:"Réponses courtes, sans recette",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
@@ -882,6 +883,7 @@ en:{
   surpT:"Surprise me",surpS:"A random dish to cook",mDisc:"Chat",mQ:"Questions",
   surpM:"Give me a surprise recipe for {c}, picked at random.",
   surpQ:"Which kind of dish do you fancy?",
+  resumeT:"Resume the recipe or the question",
   qHomeT:"Ask a cooking question",qHomeS:"Short answers, no recipe",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
@@ -1134,6 +1136,7 @@ es:{
   surpT:"Sorpréndeme",surpS:"Un plato al azar para cocinar",mDisc:"Charlar",mQ:"Preguntas",
   surpM:"Dame una receta sorpresa de {c}, elegida al azar.",
   surpQ:"¿Qué tipo de plato te apetece?",
+  resumeT:"Retomar la receta o la pregunta",
   qHomeT:"Haz una pregunta de cocina",qHomeS:"Respuestas breves, sin receta",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -1386,6 +1389,7 @@ de:{
   surpT:"Überrasch mich",surpS:"Ein zufälliges Gericht zum Kochen",mDisc:"Plaudern",mQ:"Fragen",
   surpM:"Gib mir ein überraschendes Rezept: {c}, zufällig gewählt.",
   surpQ:"Welche Art von Gericht hast du Lust auf?",
+  resumeT:"Rezept oder Frage fortsetzen",
   qHomeT:"Stell eine Kochfrage",qHomeS:"Kurze Antworten, ohne Rezept",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
@@ -1638,6 +1642,7 @@ it:{
   surpT:"Sorprendimi",surpS:"Un piatto a caso da cucinare",mDisc:"Chiacchiera",mQ:"Domande",
   surpM:"Dammi una ricetta a sorpresa: {c}, scelta a caso.",
   surpQ:"Che tipo di piatto ti va?",
+  resumeT:"Riprendi la ricetta o la domanda",
   qHomeT:"Fai una domanda di cucina",qHomeS:"Risposte brevi, senza ricetta",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
@@ -1890,6 +1895,7 @@ pt:{
   surpT:"Surpreenda-me",surpS:"Um prato ao acaso para cozinhar",mDisc:"Conversar",mQ:"Perguntas",
   surpM:"Dê-me uma receita surpresa de {c}, escolhida ao acaso.",
   surpQ:"Que tipo de prato te apetece?",
+  resumeT:"Retomar a receita ou a pergunta",
   qHomeT:"Faça uma pergunta de cozinha",qHomeS:"Respostas curtas, sem receita",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -2374,7 +2380,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v170',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v171',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3378,7 +3384,7 @@ async function send(text,auto,ctx){
 let pendingMeta=null,imp=null,impTok=0;
 function impText(){const t=T();
   $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#impT').textContent=t.imT;
-  $('#surpT').textContent=t.surpT;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.qHomeT;$('#qHomeS').textContent=t.qHomeS;
+  $('#surpT').textContent=t.surpT;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.qHomeT;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
   $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
 function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
@@ -3590,7 +3596,12 @@ $('#tofav').onclick=()=>{if(qaMode){qaFav();return}if(currentId){const z=loadH()
 $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
-$('#n2').onclick=()=>{if(!log.children.length||qaMode)openChat(null);else show('chat')};
+// 💬 « Reprendre la recette ou la question »: the last thing generated in this session (recipe or question), else the latest saved one, else a new chat
+$('#n2').onclick=()=>{
+  if(hist.length){show('chat');return}
+  const last=loadH().filter(x=>!x.arch).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0))[0];
+  if(last)openCard(last.id);else openChat(null);
+};
 // « Surprends-moi »: opens the chat and the chef proposes the four courses as buttons, in the conversation
 function surpChat(){const t=T();openChat(null); // a surprise conversation does not need the Discuter / Questions switch
   log.querySelectorAll('.welcome').forEach(x=>x.remove()); // no duplicate: the welcome block is rebuilt with the four courses
