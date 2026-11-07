@@ -322,8 +322,8 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lsub{font-size:13px;color:var(--mut);margin-bottom:12px}
 .lopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px;border-radius:16px;border:1px solid var(--bd);background:var(--card);color:var(--ink);font:inherit;font-size:14px;margin-bottom:8px;cursor:pointer}
 .lopt.sel{border-color:var(--psbd);background:var(--psoft)}
-.lopt .n{flex:1}
-.lopt small{display:block;color:var(--mut);font-size:12px}
+.lopt .n{flex:1 1 auto;min-width:0;display:block;color:var(--ink);font-size:15px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.lopt small{display:block;color:var(--mut);font-size:12px;font-weight:400}
 .lopt .radio{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--mut);flex:none}
 .lopt.sel .radio{background:var(--pink);border-color:var(--pink);box-shadow:inset 0 0 0 4px #fff}
 .lnew{width:100%;padding:12px;border-radius:999px;border:1px dashed var(--psbd);background:transparent;color:var(--pink);font:inherit;font-size:14px;font-weight:600;margin:4px 0 8px;cursor:pointer}
@@ -2505,7 +2505,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v204',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v205',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3262,11 +3262,11 @@ function openSheet(txts,from,onDone){
   const sub=document.createElement('div');sub.className='lsub';sub.textContent=txts.length===1?'« '+txts[0]+' »':t.listN.replace('{n}',txts.length);
   const opts=document.createElement('div');
   const draw=()=>{opts.textContent='';loadLists().forEach(l=>{
-    const o=document.createElement('button');o.type='button';o.className='lopt'+(l.id===sel?' sel':'');
+    const o=document.createElement('div');o.setAttribute('role','radio');o.setAttribute('aria-checked',String(l.id===sel));o.tabIndex=0;o.className='lopt'+(l.id===sel?' sel':''); // v205: a div, not a button (iOS Safari did not show the list name)
     const r=document.createElement('span');r.className='radio';
     const n=document.createElement('span');n.className='n';n.textContent=l.name;
     const sm=document.createElement('small');sm.textContent=t.listCnt.replace('{n}',l.items.length);n.appendChild(sm);
-    o.append(r,n);o.onclick=()=>{sel=l.id;draw()};opts.appendChild(o)})};
+    o.append(r,n);o.onclick=()=>{sel=l.id;draw()};o.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();sel=l.id;draw()}};opts.appendChild(o)})};
   draw();
   const nb=document.createElement('button');nb.type='button';nb.className='lnew';nb.textContent=t.listNew;
   nb.onclick=async()=>{const id=await askNewList();if(id){sel=id;draw()}};

@@ -237,6 +237,8 @@ v202–v203 (owner's request: removing works like adding): on the recipe card / 
 
 v204 (owner's request « la charte graphique partout la même »): CSS-only harmonisation. New tokens `--sh` (one card shadow, 0 2px 12px rgba(0,0,0,.06)) and `--rc` (one card radius, 22px) used by every card / row / panel; header buttons ☰ ← 🏠 are 40 px round card buttons with a thin border in every view (`.chead .back, .chead .menubtn`, chat `.rb`); soft-pink style for « + Nouvelle liste » (`.newbig`) and the dialog OK button (`.dlgok`); « Chef libre » card is a normal white card (was dark); one checkbox size (22 px, 1.5 px border, `.hchk`); no half font sizes (12.5 → 13, 13.5 → 14…), no 800 weight; hard-coded colours replaced by tokens (`.go`, toast). Solid pink kept on purpose: user bubble, ticked boxes, list progress bar, mic recording. Checked with screenshots of every view in light and dark mode.
 
+v205 (owner: on iPhone 13 the list name did not show when adding ingredients): the options of the « Choisir la liste » sheet (`openSheet()`, `.lopt`) are now `div role=radio` instead of `<button>` (iOS Safari can render the text of a flex `<button>` with no width), name in bold 15 px (`.lopt .n` block, `min-width:0`). Not reproducible in Chromium; to confirm on a real iPhone.
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
