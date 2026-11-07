@@ -173,3 +173,6 @@ Throw-away suites were used each version (22-journey Playwright QA on iPhone 13 
 
 ## Ingredient order (v227)
 Ingredients are always displayed in the same logical order (meat, fish, vegetables, fruit, flour/starch, butter/dairy, sugar, eggs, herbs/spices, oils/sauces, liquids), whatever order the chef wrote them in. The sort (`sortIng` in `index.html`) runs at display time with keyword lists in the 6 languages, is stable (unknown items keep their place), and is skipped when the block has sub-headings or fewer than 3 bullets.
+
+## Shopping list by aisle (v228)
+Like Apple Reminders' « Groceries » list, a shopping list is grouped by aisle (fruit & vegetables, meat & fish, dairy & eggs, pantry, spices/oils/sauces, drinks, other), in supermarket-walk order. The aisle comes from the same keyword lists as the ingredient order (`aisleOf` → `ingRank`), in 6 languages; unknown items go to « Other ». Empty aisles are hidden, a header tap folds the aisle (remembered in `chefAisleCol`), the header shows « left/total », ticked items sit at the bottom of their aisle. Not done yet: moving an item to another aisle by hand.
