@@ -190,3 +190,4 @@ Every Sunday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 (v240) Each suggested slot shows two visible round buttons: 🔄 « Another idea » (asks the chef for one other dish for that course, kept on this device in `chefMenuSug`) and ✏️ « Pick my own ».
 (v241) Weekly menu redesigned as plain rows (label · dish · ⋯ menu): tap the dish to generate the recipe; ⋯ = another idea / pick my own / remove (a removed suggestion is remembered in `chefMenu.hid` for that week). Filled slots show a green ✓.
 (v242) The « Others » card of the weekly menu was removed (only the 7 days remain).
+(v243) Weekly menu ergonomics: today's card is open (badge « Today »), the other days are folded (tap a day to open it; a folded day shows « ✓ n/3 »); a suggested dish ends with a pink › (tappable); the ⋯ button is 44 px; after a recipe is generated for a slot, a toast « Added to the weekly menu · See the menu ».
