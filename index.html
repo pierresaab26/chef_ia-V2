@@ -17,15 +17,15 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 #app{max-width:520px;margin:0 auto;height:100%;height:var(--appH,100%);display:flex;flex-direction:column;position:relative}
 .view{display:none;flex:1;min-height:0;flex-direction:column}
 .view.on{display:flex}
-.scroll{flex:1;overflow-y:auto;padding:16px 18px 96px}
-.top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.mascot{width:48px;height:48px;border-radius:16px;flex:none}
-.hi{color:var(--pink);font-weight:700;font-size:22px;line-height:1.1}
+.scroll{flex:1;overflow-y:auto;padding:10px 16px 96px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.mascot{width:40px;height:40px;border-radius:14px;flex:none}
+.hi{color:var(--pink);font-weight:700;font-size:19px;line-height:1.1}
 .sub{color:var(--mut);font-size:13px}
-.ask{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:6px 6px 6px 16px;margin-bottom:18px;box-shadow:var(--sh)}
+.ask{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:3px 4px 3px 14px;margin-bottom:10px;box-shadow:var(--sh)}
 .ask input{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:0;min-width:0}
-.ask button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:8px 14px}
-h2{font-size:16px;margin:18px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
+.ask button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:6px 12px;font-size:14px}
+h2{font-size:15px;margin:12px 0 8px;display:flex;justify-content:space-between;align-items:baseline}
 h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .go{width:34px;height:34px;border-radius:50%;background:var(--card);color:var(--ink);display:grid;place-items:center;font-weight:700;flex:none}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
@@ -51,12 +51,12 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .snpanel .snpvbox{margin-bottom:6px}
 .snpanel .snmore{display:block;margin:0 auto 12px;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.6);color:inherit}
 .snpanel.dk .snmore{background:rgba(255,255,255,.1)}
-.chefs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}@media (min-width:768px){.chefs{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.chef{background:var(--card);border-radius:var(--rc);padding:12px;text-align:left;box-shadow:var(--sh);border:2px solid transparent;min-width:0}
+.chefs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}@media (min-width:768px){.chefs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.chef{background:var(--card);border-radius:16px;padding:8px 10px;text-align:left;box-shadow:var(--sh);border:2px solid transparent;min-width:0}
 .chef.on{border-color:var(--pink)}
-.chef i{font-style:normal;font-size:30px;display:block}
-.chef b{display:block;font-size:14px}
-.chef span{color:var(--mut);font-size:12px}
+.chef i{font-style:normal;font-size:22px;display:block}
+.chef b{display:block;font-size:13px}
+.chef span{color:var(--mut);font-size:11px}
 .chpanel{grid-column:1/-1;background:var(--card);border-radius:var(--rc);padding:12px;box-shadow:var(--sh)}
 .chpanel .crs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}@media (min-width:768px){.chpanel .crs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .chpanel .crs button{background:var(--bg1);border:2px solid var(--pink);border-radius:999px;padding:10px 8px;font-weight:700;font-size:14px;color:var(--ink)}
@@ -163,11 +163,11 @@ input,textarea,select{font-size:16px!important}
 .ditem.on span.n{color:#fff}
 .menubtn{font-size:22px;padding:0 6px;line-height:1;flex:none}
 @media (min-width:768px){#drawer{width:320px}}
-#verpill{display:inline-flex;align-items:center;gap:7px;background:#111;color:#fff;border-radius:999px;padding:4px 12px 4px 10px;font-size:12px;font-weight:700;margin:0 0 12px;letter-spacing:.2px}
-#verpill i{width:8px;height:8px;border-radius:50%;background:#ff7a1a;box-shadow:0 0 0 3px rgba(255,122,26,.3)}
+#verpill{display:inline-flex;align-items:center;gap:4px;background:#111;color:#fff;border-radius:999px;padding:2px 7px 2px 6px;font-size:9px;font-weight:700;margin:0;letter-spacing:.1px;align-self:flex-start;flex:none;line-height:1.3}
+#verpill i{width:5px;height:5px;border-radius:50%;background:#ff7a1a;box-shadow:0 0 0 2px rgba(255,122,26,.3)}
 #verpill.pv{background:#5b5866}
 #verpill.pv i{background:#a29cb3;box-shadow:none}
-.dver{margin-top:auto;color:var(--mut);font-size:12px;padding:10px 14px}
+.dlang{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 14px}.dlang select{flex:1}.dver{color:var(--mut);font-size:12px;padding:10px 14px}
 #hsearchbox,#fsearchbox{padding:12px 18px 0}
 .fgrp .fnm{flex:1;min-width:0}.fgrp .fbtn{flex:none;margin-left:8px;font-size:13px;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;white-space:nowrap}
 .fgall{display:flex;justify-content:flex-end;margin:0 4px 2px}.fgall button{font-size:13px;color:var(--mut);padding:4px 8px;border-radius:999px;border:1px solid var(--bd);background:var(--card)}
@@ -269,13 +269,13 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #mic.on{background:var(--pink);animation:p 1s infinite}
 @keyframes p{50%{opacity:.6}}
 
-.impcard{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:var(--rc);padding:12px 16px;margin:12px 0 18px;text-align:left;box-shadow:var(--sh)}
-.impcard i{font-style:normal;font-size:28px;flex:none}
-.impcard b{display:block;font-size:15px}
+.impcard{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:var(--rc);padding:8px 14px;margin:8px 0 12px;text-align:left;box-shadow:var(--sh);border-radius:16px}
+.impcard i{font-style:normal;font-size:22px;flex:none}
+.impcard b{display:block;font-size:14px}
 .impcard span{color:var(--mut);font-size:12px}
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 4px}
-.tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;margin:0;padding:12px 6px;text-align:center}
-.tiles .impcard i{font-size:24px}.tiles .impcard b{font-size:13px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 2px}
+.tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;margin:0;padding:8px 4px;text-align:center}
+.tiles .impcard i{font-size:20px}.tiles .impcard b{font-size:13px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
 #hwrap{margin-top:10px}#menuHome{margin:14px 0 18px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
 .snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
@@ -435,9 +435,8 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <div class="top">
         <button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button>
         <svg class="mascot"><use href="#mascot"/></svg>
-        <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><select id="lang" aria-label="Language"></select>
+        <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><div id="verpill"><i></i><span></span></div>
       </div>
-      <div id="verpill"><i></i><span></span></div>
       <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
       <div class="tiles"><!-- v211: three compact tiles -->
       <button class="impcard" id="impHome"><i>📥</i><div><b id="impHomeT"></b><span id="impHomeS"></span></div></button>
@@ -529,6 +528,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     <button class="ditem" data-go="history">🕘 <span id="dHist"></span></button>
     <button class="ditem" data-go="shop">🛒 <span id="dShop"></span></button>
     <button class="ditem" data-go="favs">❤️ <span class="dtx"><span id="dFav"></span><small id="dFavS"></small></span><span class="n" id="dFavN"></span></button>
+    <div class="dlang"><span aria-hidden="true">🌐</span><select id="lang" aria-label="Language"></select></div>
     <div class="dver" id="dver"></div>
   </aside>
 
@@ -2547,7 +2547,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v212',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v213',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
