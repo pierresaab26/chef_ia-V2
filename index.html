@@ -2569,7 +2569,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v231',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v232',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3434,7 +3434,7 @@ function renderShop(){
     const hd=document.createElement('button');hd.type='button';hd.className='aisle a-'+aid+(colp[aid]?' fold':'');
     const nb=grp.filter(g=>!g.x.d).length;
     hd.innerHTML='<span class="ai"></span><span class="an"></span><span class="ac"></span><span class="ar">▾</span>';
-    hd.querySelector('.ai').textContent=aic;
+    {const ae=hd.querySelector('.ai');if(aic.startsWith('<svg'))ae.innerHTML=aic;else ae.textContent=aic}
     {const an=hd.querySelector('.an');an.textContent=albl.split('|')[LI<0?0:LI];if(colp[aid]){const s=document.createElement('small');s.textContent=grp.length+' '+(grp.length===1?AISLE_ART1:AISLE_ART)[LI<0?0:LI];an.appendChild(s)}}
     hd.querySelector('.ac').textContent=nb+'/'+grp.length;
     hd.setAttribute('aria-expanded',colp[aid]?'false':'true');
@@ -3516,8 +3516,8 @@ function sortIng(lines){const L=lines.filter(l=>l.trim());if(L.length<3||!L.ever
 const AISLES=[ // [id, emoji, ranks of ING_ORDER, labels fr|en|es|de|it|pt]
  ['veg','🥬',[2,3],'Fruits et légumes|Fruit & vegetables|Frutas y verduras|Obst & Gemüse|Frutta e verdura|Frutas e legumes'],
  ['meat','🥩',[0,1],'Viandes et poissons|Meat & fish|Carne y pescado|Fleisch & Fisch|Carne e pesce|Carnes e peixes'],
- ['dairy','🥚',[5,7],'Crémerie et œufs|Dairy & eggs|Lácteos y huevos|Milch & Eier|Latticini e uova|Laticínios e ovos'],
- ['dry','🌾',[4,6],'Épicerie|Pantry|Despensa|Vorrat|Dispensa|Mercearia'],
+ ['dairy',`<svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path d="M3 17h26l-3 10H6z" fill="#c9a77c" stroke="#8a6a3f" stroke-width="1.2" stroke-linejoin="round"/><g fill="#fffdf6" stroke="#b9a98a" stroke-width="1"><ellipse cx="9" cy="13" rx="4" ry="5.2"/><ellipse cx="16" cy="13" rx="4" ry="5.2"/><ellipse cx="23" cy="13" rx="4" ry="5.2"/></g><path d="M3 17h26" stroke="#8a6a3f" stroke-width="1.4"/><path d="M8 19.5v5M16 19.5v5M24 19.5v5" stroke="#a98757" stroke-width="1.2" stroke-linecap="round"/></svg>`,[5,7],'Crémerie et œufs|Dairy & eggs|Lácteos y huevos|Milch & Eier|Latticini e uova|Laticínios e ovos'],
+ ['dry',`<svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path d="M11 3.5h10l-1.5 5h-7z" fill="#e9d6b0" stroke="#9a8157" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 8.5C6 11 4.5 17 5.5 25c.2 2 1.5 3.5 3.5 3.5h14c2 0 3.3-1.500 3.500-3.500 1-8-.5-14-6.500-16.500z" fill="#fbf4e2" stroke="#9a8157" stroke-width="1.200" stroke-linejoin="round"/><path d="M16 13v11" stroke="#c8932f" stroke-width="1.300" stroke-linecap="round"/><g fill="#e0a93b"><ellipse cx="13.500" cy="15" rx="1.600" ry="2.800" transform="rotate(-25 13.500 15)"/><ellipse cx="18.500" cy="15" rx="1.600" ry="2.800" transform="rotate(25 18.500 15)"/><ellipse cx="13.500" cy="20" rx="1.600" ry="2.800" transform="rotate(-25 13.500 20)"/><ellipse cx="18.500" cy="20" rx="1.600" ry="2.800" transform="rotate(25 18.500 20)"/></g></svg>`,[4,6],'Épicerie|Pantry|Despensa|Vorrat|Dispensa|Mercearia'],
  ['spice','🧂',[8,9],'Épices, huiles et sauces|Spices, oils & sauces|Especias, aceites y salsas|Gewürze, Öle & Soßen|Spezie, oli e salse|Especiarias, óleos e molhos'],
  ['drink','🥤',[10],'Boissons|Drinks|Bebidas|Getränke|Bevande|Bebidas'],
  ['misc','🛍️',[],'Divers|Other|Otros|Sonstiges|Altro|Outros']];
