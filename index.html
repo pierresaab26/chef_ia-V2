@@ -273,6 +273,11 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .impcard i{font-style:normal;font-size:28px;flex:none}
 .impcard b{display:block;font-size:15px}
 .impcard span{color:var(--mut);font-size:12px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 4px}
+.tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;margin:0;padding:12px 6px;text-align:center}
+.tiles .impcard i{font-size:24px}.tiles .impcard b{font-size:13px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
+#hwrap{margin-top:10px}#menuHome{margin:14px 0 18px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
+.snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
 .imsec{background:var(--card);border-radius:var(--rc);padding:14px;margin-bottom:14px;box-shadow:var(--sh)}
 .imsec h3{margin:0 0 10px;font-size:15px}
@@ -434,19 +439,20 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       </div>
       <div id="verpill"><i></i><span></span></div>
       <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
+      <div class="tiles"><!-- v211: three compact tiles -->
       <button class="impcard" id="impHome"><i>📥</i><div><b id="impHomeT"></b><span id="impHomeS"></span></div></button>
-      <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav"></button></div>
-      <div id="hsres"></div>
       <button class="impcard" id="surpHome"><i>✨</i><div><b id="surpT"></b><span id="surpS"></span></div></button>
       <button class="impcard" id="qHome"><i>❓</i><div><b id="qHomeT"></b><span id="qHomeS"></span></div></button>
-      <div id="hwrap"><h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
-      <div id="hhome"></div></div>
-      <h2 id="menuT"></h2>
-      <div id="menuBox"></div>
-      <h2 id="snT"></h2>
-      <div id="seasonBox"></div>
+      </div>
       <h2 id="chT"></h2>
       <div class="chefs" id="chefs"></div>
+      <h2 id="snT"></h2>
+      <div id="seasonBox"></div>
+      <h2><span id="hT"></span><button class="more" id="hmore"></button></h2>
+      <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav"></button></div>
+      <div id="hsres"></div>
+      <div id="hwrap"><div id="hhome"></div></div>
+      <button class="impcard" id="menuHome"><i>🗓️</i><div><b id="menuHT"></b><span id="menuHS"></span></div><em class="mgo">›</em></button>
     </div>
   </section>
 
@@ -472,6 +478,11 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   <section class="view" id="shop">
     <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="slb" aria-label="←" style="display:none">←</button><button class="back" id="sback" aria-label="Home">🏠</button><b id="shT"></b></div>
     <div class="scroll" id="shlist"></div>
+  </section>
+
+  <section class="view" id="menu"><!-- v211: the weekly menu has its own page -->
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="mback" aria-label="Home">🏠</button><b id="menuT"></b></div>
+    <div class="scroll"><div id="menuBox"></div></div>
   </section>
 
   <section class="view" id="imp">
@@ -699,6 +710,7 @@ fr:{
   listRemSel:"Retirer de la liste",listRemQ:"Retirer {n} ingrédient(s) de la liste de courses ?",
   listNewQ:"Nom de la liste",listCreate:"Créer",
   listAddFree:"Ajouter un ingrédient…",listAddBtn:"Ajouter",
+  tileImp:"Importer",tileQ:"Question cuisine",snFold:"Recettes précédentes et idées par catégorie",menu0:"Rien de prévu pour l’instant",menu1:"1 plat prévu",menuN:"{n} plats prévus",
   listBought:"Acheté",
   listHistQN:"Les ingrédients de {r} sont dans les listes de courses {l}. Voulez-vous les retirer ?",listHistQ:"Les ingrédients de {r} sont dans la liste de courses {l}. Voulez-vous les retirer ?",listHistOk:"Retirer",listHistNo:"Garder",
   listRecs:"Recettes de la liste",listRecDel:"Retirer la recette",listRecQ:"Retirer la recette « {r} » et ses ingrédients de la liste ?",
@@ -966,6 +978,7 @@ en:{
   listRemSel:"Remove from list",listRemQ:"Remove {n} ingredient(s) from the shopping list?",
   listNewQ:"Name of the list",listCreate:"Create",
   listAddFree:"Add an ingredient…",listAddBtn:"Add",
+  tileImp:"Import",tileQ:"Cooking question",snFold:"Previous recipes and ideas by course",menu0:"Nothing planned yet",menu1:"1 dish planned",menuN:"{n} dishes planned",
   listBought:"Bought",
   listHistQN:"The ingredients of {r} are in the shopping lists {l}. Do you want to remove them?",listHistQ:"The ingredients of {r} are in the shopping list {l}. Do you want to remove them?",listHistOk:"Remove",listHistNo:"Keep",
   listRecs:"Recipes in this list",listRecDel:"Remove the recipe",listRecQ:"Remove the recipe “{r}” and its ingredients from the list?",
@@ -1233,6 +1246,7 @@ es:{
   listRemSel:"Quitar de la lista",listRemQ:"¿Quitar {n} ingrediente(s) de la lista de la compra?",
   listNewQ:"Nombre de la lista",listCreate:"Crear",
   listAddFree:"Añadir un ingrediente…",listAddBtn:"Añadir",
+  tileImp:"Importar",tileQ:"Pregunta de cocina",snFold:"Recetas anteriores e ideas por categoría",menu0:"Nada previsto por ahora",menu1:"1 plato previsto",menuN:"{n} platos previstos",
   listBought:"Comprado",
   listHistQN:"Los ingredientes de {r} están en las listas de la compra {l}. ¿Quieres quitarlos?",listHistQ:"Los ingredientes de {r} están en la lista de la compra {l}. ¿Quieres quitarlos?",listHistOk:"Quitar",listHistNo:"Conservar",
   listRecs:"Recetas de la lista",listRecDel:"Quitar la receta",listRecQ:"¿Quitar la receta «{r}» y sus ingredientes de la lista?",
@@ -1500,6 +1514,7 @@ de:{
   listRemSel:"Von der Liste entfernen",listRemQ:"{n} Zutat(en) von der Einkaufsliste entfernen?",
   listNewQ:"Name der Liste",listCreate:"Erstellen",
   listAddFree:"Zutat hinzufügen…",listAddBtn:"Hinzufügen",
+  tileImp:"Importieren",tileQ:"Kochfrage",snFold:"Frühere Rezepte und Ideen nach Gang",menu0:"Noch nichts geplant",menu1:"1 Gericht geplant",menuN:"{n} Gerichte geplant",
   listBought:"Gekauft",
   listHistQN:"Die Zutaten von {r} stehen auf den Einkaufslisten {l}. Möchtest du sie entfernen?",listHistQ:"Die Zutaten von {r} stehen auf der Einkaufsliste {l}. Möchtest du sie entfernen?",listHistOk:"Entfernen",listHistNo:"Behalten",
   listRecs:"Rezepte in der Liste",listRecDel:"Rezept entfernen",listRecQ:"Das Rezept „{r}“ und seine Zutaten von der Liste entfernen?",
@@ -1767,6 +1782,7 @@ it:{
   listRemSel:"Rimuovi dalla lista",listRemQ:"Rimuovere {n} ingrediente/i dalla lista della spesa?",
   listNewQ:"Nome della lista",listCreate:"Crea",
   listAddFree:"Aggiungi un ingrediente…",listAddBtn:"Aggiungi",
+  tileImp:"Importa",tileQ:"Domanda di cucina",snFold:"Ricette precedenti e idee per portata",menu0:"Niente in programma per ora",menu1:"1 piatto previsto",menuN:"{n} piatti previsti",
   listBought:"Comprato",
   listHistQN:"Gli ingredienti di {r} sono nelle liste della spesa {l}. Vuoi toglierli?",listHistQ:"Gli ingredienti di {r} sono nella lista della spesa {l}. Vuoi toglierli?",listHistOk:"Togli",listHistNo:"Tieni",
   listRecs:"Ricette della lista",listRecDel:"Rimuovi la ricetta",listRecQ:"Rimuovere la ricetta «{r}» e i suoi ingredienti dalla lista?",
@@ -2034,6 +2050,7 @@ pt:{
   listRemSel:"Remover da lista",listRemQ:"Remover {n} ingrediente(s) da lista de compras?",
   listNewQ:"Nome da lista",listCreate:"Criar",
   listAddFree:"Adicionar um ingrediente…",listAddBtn:"Adicionar",
+  tileImp:"Importar",tileQ:"Pergunta de cozinha",snFold:"Receitas anteriores e ideias por categoria",menu0:"Nada previsto por agora",menu1:"1 prato previsto",menuN:"{n} pratos previstos",
   listBought:"Comprado",
   listHistQN:"Os ingredientes de {r} estão nas listas de compras {l}. Quer retirá-los?",listHistQ:"Os ingredientes de {r} estão na lista de compras {l}. Quer retirá-los?",listHistOk:"Retirar",listHistNo:"Manter",
   listRecs:"Receitas da lista",listRecDel:"Remover a receita",listRecQ:"Remover a receita «{r}» e os seus ingredientes da lista?",
@@ -2227,12 +2244,8 @@ function drawChefs(){const t=T(),box=$('#chefs');box.innerHTML='';const crs=t.cr
       x.onclick=()=>{chefOpen=-1;drawChefs();openChat({...c,k,d:t.cu[k]});send(t.crsMsg.replace('{c}',crsL[j]).replace('{k}',t.cu[k]),true)};g.appendChild(x)});
     const dc=document.createElement('button');dc.type='button';dc.className='chdisc';dc.textContent=t.disc;dc.onclick=()=>{chefOpen=-1;drawChefs();openChat({...c,k,d:t.cu[k]})};
     pn.append(g,dc);const pos=CHEF_ORDER.indexOf(k),cols=innerWidth>=768?4:2,after=box.children[Math.min(CHEF_ORDER.length,(Math.floor(pos/cols)+1)*cols)-1];after.after(pn)}
-  const f=document.createElement('div');f.className='chfree';
-  const h=document.createElement('b');h.innerHTML='✨ <em></em>';h.querySelector('em').textContent=t.frN;const p=document.createElement('p');p.textContent=t.frD;
-  const fm=document.createElement('form');const q=document.createElement('textarea');q.rows=1;q.maxLength=200;q.placeholder=t.frPh;q.setAttribute('aria-label',t.frN);const gq=autoTA(q,110);q.addEventListener('keydown',ev=>{if(enterSends(ev)){ev.preventDefault();fm.requestSubmit()}});
-  const go=document.createElement('button');go.type='submit';go.textContent=t.frGo;
-  fm.onsubmit=ev=>{ev.preventDefault();const v=q.value.trim();if(!v){q.focus();return}q.value='';q.blur();openChat({free:true,k:-1,n:'',e:'✨',p:''});send(t.frMsg.replace('{q}',v),true)};
-  fm.append(q,go);f.append(h,p,fm);box.appendChild(f);gq()}
+  } // v211: « Chef libre » removed from the home (the « Que voulez-vous cuisiner ? » box does the same)
+
 function cap1(x){x=String(x||'');const m=x.match(/^([\s«“"'(¡¿]*)(\p{L})/u);return m?m[1]+m[2].toLocaleUpperCase(lang)+x.slice(m[0].length):x} // display only: first letter in upper case
 function inl(p,t){t.split(/\*\*(.+?)\*\*/).forEach((x,i)=>{if(!x)return;if(i%2){const b=document.createElement('strong');b.textContent=x;p.appendChild(b)}else p.appendChild(document.createTextNode(x))})}
 function render(el,t){
@@ -2523,9 +2536,11 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const pvBox=document.createElement('div');pvBox.className='snpvbox';pvBox.style.display='none';
   const bc=document.createElement('p');bc.className='snst';bc.textContent=t.snByC;
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
-  pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
+  const fo=document.createElement('div');fo.hidden=true;fo.append(pvBtn,pvBox,bc,g); // v211: previous recipes + ideas by course folded
+  const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
+  pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v210',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v211',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2838,6 +2853,7 @@ function drawMenu(){
   oc.appendChild(ol);
   const ab=addBtn(async()=>{const id=await pickRecipe(t.mAskReq.replace('{d}',t.mOther).replace('{c}',t.menuT));if(id){const z=readMenu();if(!z.o.includes(id))z.o.push(id);saveMenu(z);drawMenu()}});ab.style.minHeight='40px';oc.appendChild(ab);
   grid.appendChild(oc);box.appendChild(grid);
+  {let n=m.o.filter(id=>rec.has(id)).length;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));$('#menuHT').textContent=t.menuT;$('#menuHS').textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0} // v211: compact card on the home
   if(any){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[]});drawMenu()}};box.appendChild(c)}
 }
 function drawerText(){const t=T();drawMenu();
@@ -3742,7 +3758,7 @@ async function send(text,auto,ctx){
 let pendingMeta=null,imp=null,impTok=0;
 function impText(){const t=T();
   $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#impT').textContent=t.imT;
-  $('#surpT').textContent=t.surpT;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.qHomeT;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);$('#rT').textContent=t.resumeT;
+  $('#impHomeT').textContent=t.tileImp;$('#surpT').textContent=t.surpT;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.tileQ;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);$('#rT').textContent=t.resumeT;
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
   $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
 function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
@@ -3952,6 +3968,7 @@ function updTop(){
   if(window.ResizeObserver){const ro=new ResizeObserver(()=>updTop());[log,$('#quick'),$('#bar')].forEach(x=>ro.observe(x))}} // follow layout changes (new reply, filters button)
 $('#tofav').onclick=()=>{if(qaMode){qaFav();return}if(currentId){const z=loadH().find(x=>x.id===currentId),f=toggleFav(currentId,z&&!z.qa&&!famFav(z)?lastVi(z):null);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
+$('#menuHome').onclick=()=>{drawMenu();show('menu')};$('#mback').onclick=()=>show('home');
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
 // 💬 « Reprendre la recette ou la question »: the last thing generated in this session (recipe or question), else the latest saved one, else a new chat

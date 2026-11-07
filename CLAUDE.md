@@ -249,6 +249,8 @@ v209 (owner's request): deleting a recipe from the History (row ✕ or Sélectio
 
 v210 (owner's request): in a shopping list a ticked item (it already goes to the bottom since v201) shows a small soft-pink « Acheté » pill before its ✕ (`.sbt`, key `listBought`, 6 languages).
 
+v211 (owner: « est-ce qu'il y a trop de rubriques ? », then go): lighter home (≈ 2 phone screens instead of ≈ 5). Order: « Que voulez-vous cuisiner ? », a row of 3 compact tiles (`.tiles`: Importer `tileImp`, Surprends-moi, Question cuisine `tileQ`; subtitles hidden), Chefs IA, Menu de saison (the 4 ideas + Autres idées; « Recettes précédentes » and « Plus d'idées par catégorie » folded behind `.snfold`, key `snFold`), Historique with « Trouver mes recettes » under its title (`#hwrap` now only wraps `#hhome`), then a compact card « 🗓️ Menu de la semaine · N plats prévus » (`#menuHome`, keys `menu0` / `menu1` / `menuN`) that opens its own view `#menu` (☰, 🏠 `#mback`, `drawMenu()` unchanged). « Chef libre » is removed from the home (`drawChefs()`; the top box does the same; keys `frN`… kept, unused).
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.
