@@ -239,6 +239,10 @@ v204 (owner's request « la charte graphique partout la même »): CSS-only harm
 
 v205 (owner: on iPhone 13 the list name did not show when adding ingredients): the options of the « Choisir la liste » sheet (`openSheet()`, `.lopt`) are now `div role=radio` instead of `<button>` (iOS Safari can render the text of a flex `<button>` with no width), name in bold 15 px (`.lopt .n` block, `min-width:0`). Not reproducible in Chromium; to confirm on a real iPhone.
 
+v206 (owner: « harmonise »): shopping wording is « liste » everywhere, never « panier »: `shopAdd` « Ajouter à la liste », `shopRm` « Retirer de la liste », `shopIn` « Dans la liste », `listAddSel` « Ajouter à la liste » (6 languages).
+
+v207 (owner: « Voir » did not show on iPhone / Brave): every add-to-list toast has « Voir » (opens that list, `seeList()`): the list-picker sheet (`openSheet()` go) and `toastChange()` (« Voir » + « Changer »); `toastAct(msg,label,fn,label2,fn2)` takes up to two actions; the toast sits at `calc(96px + env(safe-area-inset-bottom))` above the bottom bar, wraps long list names and keeps the buttons visible. The claude.ai preview lacks the « Voir » of the sheet (its code differs there).
+
 v181 (owner: same wording in the other languages): `qHomeT` = « A cooking question, ask me » (en), « Una pregunta de cocina, pregúntame » (es), « Eine Kochfrage, frag mich » (de), « Una domanda di cucina, chiedimi » (it), « Uma pergunta de cozinha, pergunte-me » (pt). Local only, not pushed.
 
 v180 (owner's screenshot, home card): the French title of the question card (`qHomeT`) reads « Une question cuisine, demande-moi » (the other languages unchanged). Local only, not pushed.

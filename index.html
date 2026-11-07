@@ -86,9 +86,9 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .htx span{color:var(--mut);font-size:12px}
 .hdel{padding:10px 14px;color:var(--mut);font-size:16px}
 .empty{color:var(--mut);background:var(--card);border-radius:var(--rc);padding:16px;font-size:14px}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--dark);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw;text-align:center}
 #toast.on{opacity:1;transform:translateX(-50%)}
-#toast.act{pointer-events:auto;display:flex;align-items:center;gap:12px;text-align:left}#toast.act button{flex:none;background:none;border:0;color:#ff9dbd;font:inherit;font-weight:700;padding:0;cursor:pointer}
+#toast.act{pointer-events:auto;display:flex;align-items:center;gap:14px;text-align:left;border-radius:18px;width:max-content;max-width:92vw}#toast.act span{flex:1 1 auto;min-width:0}#toast.act button{flex:none;background:none;border:0;color:#ff9dbd;font:inherit;font-weight:700;padding:4px 0;cursor:pointer;white-space:nowrap;-webkit-appearance:none;appearance:none}
 .cphoto{height:clamp(210px,30vw,300px);border-radius:22px;background-size:cover;background-position:center;display:grid;place-items:center;font-size:84px;overflow:hidden}
 .credit{display:block;color:var(--mut);font-size:11px;text-align:right;margin:3px 6px 0;min-height:14px}
 .ctitle{font-size:22px;margin:6px 0 8px;line-height:1.2}
@@ -692,7 +692,7 @@ fr:{
   surpQ:"Quel type de plat te fait envie ?",
   resumeT:"Reprends ta recette ou ta question",
   qHomeT:"Une question cuisine, demande-moi",
-  shopRm:"Retirer du panier",
+  shopRm:"Retirer de la liste",
   shopRmQ:"Retirer « {i} » de la liste de courses ?",
   listRemSel:"Retirer de la liste",listRemQ:"Retirer {n} ingrédient(s) de la liste de courses ?",
   listNewQ:"Nom de la liste",listCreate:"Créer",
@@ -700,8 +700,8 @@ fr:{
   listMerge:"Vous avez « {a} » dans la liste et vous ajoutez « {b} » : {n} au total. Les additionner ? (Annuler garde les deux lignes.)",listMergeYes:"Additionner",
   listSelAll:"Tout sélectionner",listSelNone:"Tout désélectionner",
   listsT:"Listes de courses",listDay:"Courses du {d}",listNew:"＋ Nouvelle liste",listPick:"Choisir la liste",listCnt:"{n} articles",listDone:"{d} sur {n} cochés",listRen:"Renommer la liste",listDel:"Supprimer la liste",listDelQ:"Supprimer cette liste et ses articles ?",listAdded:"Ajouté à {l}",listChange:"Changer",listShare:"Partager",listCreated:"Créée le {d}",listGo:"Ajouter",listCopied:"Liste copiée",listEmptyL:"Cette liste est vide.",listOld:"Ma liste",
-  listSelect:"Sélectionner des ingrédients",listAddSel:"Ajouter à une liste",listCancel:"Annuler",listAll:"Tout",listN:"{n} sélectionné(s)",
-  dShop:"Liste de courses",shopT:"Liste de courses",shopAdd:"Ajouter au panier",shopIn:"Dans le panier",shopAdded:"Ajouté à la liste de courses",shopSee:"Voir",shopEmpty:"Ta liste est vide. Ajoute des ingrédients depuis une recette.",shopDone:"Retirer les cochés",shopClear:"Tout effacer",shopClearQ:"Effacer toute la liste de courses ?",qHomeS:"Réponses courtes, sans recette",
+  listSelect:"Sélectionner des ingrédients",listAddSel:"Ajouter à la liste",listCancel:"Annuler",listAll:"Tout",listN:"{n} sélectionné(s)",
+  dShop:"Liste de courses",shopT:"Liste de courses",shopAdd:"Ajouter à la liste",shopIn:"Dans la liste",shopAdded:"Ajouté à la liste de courses",shopSee:"Voir",shopEmpty:"Ta liste est vide. Ajoute des ingrédients depuis une recette.",shopDone:"Retirer les cochés",shopClear:"Tout effacer",shopClearQ:"Effacer toute la liste de courses ?",qHomeS:"Réponses courtes, sans recette",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
   qaHideCom:"Masquer les commentaires",
@@ -956,7 +956,7 @@ en:{
   surpQ:"Which kind of dish do you fancy?",
   resumeT:"Resume the recipe or the question",
   qHomeT:"A cooking question, ask me",
-  shopRm:"Remove from the cart",
+  shopRm:"Remove from list",
   shopRmQ:"Remove “{i}” from the shopping list?",
   listRemSel:"Remove from list",listRemQ:"Remove {n} ingredient(s) from the shopping list?",
   listNewQ:"Name of the list",listCreate:"Create",
@@ -964,8 +964,8 @@ en:{
   listMerge:"You have “{a}” in the list and you are adding “{b}”: {n} in total. Add them up? (Cancel keeps both lines.)",listMergeYes:"Add up",
   listSelAll:"Select all",listSelNone:"Deselect all",
   listsT:"Shopping lists",listDay:"Shopping for {d}",listNew:"＋ New list",listPick:"Choose the list",listCnt:"{n} items",listDone:"{d} of {n} ticked",listRen:"Rename the list",listDel:"Delete the list",listDelQ:"Delete this list and its items?",listAdded:"Added to {l}",listChange:"Change",listShare:"Share",listCreated:"Created on {d}",listGo:"Add",listCopied:"List copied",listEmptyL:"This list is empty.",listOld:"My list",
-  listSelect:"Select ingredients",listAddSel:"Add to a list",listCancel:"Cancel",listAll:"All",listN:"{n} selected",
-  dShop:"Shopping list",shopT:"Shopping list",shopAdd:"Add to cart",shopIn:"In the cart",shopAdded:"Added to the shopping list",shopSee:"View",shopEmpty:"Your list is empty. Add ingredients from a recipe.",shopDone:"Remove ticked",shopClear:"Clear all",shopClearQ:"Clear the whole shopping list?",qHomeS:"Short answers, no recipe",
+  listSelect:"Select ingredients",listAddSel:"Add to list",listCancel:"Cancel",listAll:"All",listN:"{n} selected",
+  dShop:"Shopping list",shopT:"Shopping list",shopAdd:"Add to list",shopIn:"In the list",shopAdded:"Added to the shopping list",shopSee:"View",shopEmpty:"Your list is empty. Add ingredients from a recipe.",shopDone:"Remove ticked",shopClear:"Clear all",shopClearQ:"Clear the whole shopping list?",qHomeS:"Short answers, no recipe",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
   qaHideCom:"Hide comments",
@@ -1220,7 +1220,7 @@ es:{
   surpQ:"¿Qué tipo de plato te apetece?",
   resumeT:"Retomar la receta o la pregunta",
   qHomeT:"Una pregunta de cocina, pregúntame",
-  shopRm:"Quitar del carrito",
+  shopRm:"Quitar de la lista",
   shopRmQ:"¿Quitar «{i}» de la lista de la compra?",
   listRemSel:"Quitar de la lista",listRemQ:"¿Quitar {n} ingrediente(s) de la lista de la compra?",
   listNewQ:"Nombre de la lista",listCreate:"Crear",
@@ -1228,8 +1228,8 @@ es:{
   listMerge:"Tienes «{a}» en la lista y añades «{b}»: {n} en total. ¿Sumarlos? (Cancelar mantiene las dos líneas.)",listMergeYes:"Sumar",
   listSelAll:"Seleccionar todo",listSelNone:"Deseleccionar todo",
   listsT:"Listas de la compra",listDay:"Compra del {d}",listNew:"＋ Nueva lista",listPick:"Elige la lista",listCnt:"{n} artículos",listDone:"{d} de {n} marcados",listRen:"Renombrar la lista",listDel:"Eliminar la lista",listDelQ:"¿Eliminar esta lista y sus artículos?",listAdded:"Añadido a {l}",listChange:"Cambiar",listShare:"Compartir",listCreated:"Creada el {d}",listGo:"Añadir",listCopied:"Lista copiada",listEmptyL:"Esta lista está vacía.",listOld:"Mi lista",
-  listSelect:"Seleccionar ingredientes",listAddSel:"Añadir a una lista",listCancel:"Cancelar",listAll:"Todo",listN:"{n} seleccionado(s)",
-  dShop:"Lista de la compra",shopT:"Lista de la compra",shopAdd:"Añadir al carrito",shopIn:"En el carrito",shopAdded:"Añadido a la lista de la compra",shopSee:"Ver",shopEmpty:"Tu lista está vacía. Añade ingredientes desde una receta.",shopDone:"Quitar marcados",shopClear:"Vaciar todo",shopClearQ:"¿Vaciar toda la lista de la compra?",qHomeS:"Respuestas breves, sin receta",
+  listSelect:"Seleccionar ingredientes",listAddSel:"Añadir a la lista",listCancel:"Cancelar",listAll:"Todo",listN:"{n} seleccionado(s)",
+  dShop:"Lista de la compra",shopT:"Lista de la compra",shopAdd:"Añadir a la lista",shopIn:"En la lista",shopAdded:"Añadido a la lista de la compra",shopSee:"Ver",shopEmpty:"Tu lista está vacía. Añade ingredientes desde una receta.",shopDone:"Quitar marcados",shopClear:"Vaciar todo",shopClearQ:"¿Vaciar toda la lista de la compra?",qHomeS:"Respuestas breves, sin receta",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
   qaHideCom:"Ocultar comentarios",
@@ -1484,7 +1484,7 @@ de:{
   surpQ:"Welche Art von Gericht hast du Lust auf?",
   resumeT:"Rezept oder Frage fortsetzen",
   qHomeT:"Eine Kochfrage, frag mich",
-  shopRm:"Aus dem Warenkorb entfernen",
+  shopRm:"Von der Liste entfernen",
   shopRmQ:"„{i}“ von der Einkaufsliste entfernen?",
   listRemSel:"Von der Liste entfernen",listRemQ:"{n} Zutat(en) von der Einkaufsliste entfernen?",
   listNewQ:"Name der Liste",listCreate:"Erstellen",
@@ -1492,8 +1492,8 @@ de:{
   listMerge:"Du hast „{a}“ in der Liste und fügst „{b}“ hinzu: insgesamt {n}. Zusammenzählen? (Abbrechen behält beide Zeilen.)",listMergeYes:"Zusammenzählen",
   listSelAll:"Alle auswählen",listSelNone:"Alle abwählen",
   listsT:"Einkaufslisten",listDay:"Einkauf am {d}",listNew:"＋ Neue Liste",listPick:"Liste wählen",listCnt:"{n} Artikel",listDone:"{d} von {n} abgehakt",listRen:"Liste umbenennen",listDel:"Liste löschen",listDelQ:"Diese Liste und ihre Artikel löschen?",listAdded:"Hinzugefügt zu {l}",listChange:"Ändern",listShare:"Teilen",listCreated:"Erstellt am {d}",listGo:"Hinzufügen",listCopied:"Liste kopiert",listEmptyL:"Diese Liste ist leer.",listOld:"Meine Liste",
-  listSelect:"Zutaten auswählen",listAddSel:"Zu einer Liste hinzufügen",listCancel:"Abbrechen",listAll:"Alle",listN:"{n} ausgewählt",
-  dShop:"Einkaufsliste",shopT:"Einkaufsliste",shopAdd:"In den Warenkorb",shopIn:"Im Warenkorb",shopAdded:"Zur Einkaufsliste hinzugefügt",shopSee:"Ansehen",shopEmpty:"Deine Liste ist leer. Füge Zutaten aus einem Rezept hinzu.",shopDone:"Markierte entfernen",shopClear:"Alles löschen",shopClearQ:"Gesamte Einkaufsliste leeren?",qHomeS:"Kurze Antworten, ohne Rezept",
+  listSelect:"Zutaten auswählen",listAddSel:"Zur Liste hinzufügen",listCancel:"Abbrechen",listAll:"Alle",listN:"{n} ausgewählt",
+  dShop:"Einkaufsliste",shopT:"Einkaufsliste",shopAdd:"Zur Liste hinzufügen",shopIn:"In der Liste",shopAdded:"Zur Einkaufsliste hinzugefügt",shopSee:"Ansehen",shopEmpty:"Deine Liste ist leer. Füge Zutaten aus einem Rezept hinzu.",shopDone:"Markierte entfernen",shopClear:"Alles löschen",shopClearQ:"Gesamte Einkaufsliste leeren?",qHomeS:"Kurze Antworten, ohne Rezept",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
   qaHideCom:"Kommentare ausblenden",
@@ -1748,7 +1748,7 @@ it:{
   surpQ:"Che tipo di piatto ti va?",
   resumeT:"Riprendi la ricetta o la domanda",
   qHomeT:"Una domanda di cucina, chiedimi",
-  shopRm:"Rimuovi dal carrello",
+  shopRm:"Rimuovi dalla lista",
   shopRmQ:"Rimuovere «{i}» dalla lista della spesa?",
   listRemSel:"Rimuovi dalla lista",listRemQ:"Rimuovere {n} ingrediente/i dalla lista della spesa?",
   listNewQ:"Nome della lista",listCreate:"Crea",
@@ -1756,8 +1756,8 @@ it:{
   listMerge:"Hai «{a}» nella lista e aggiungi «{b}»: {n} in totale. Sommarli? (Annulla mantiene entrambe le righe.)",listMergeYes:"Somma",
   listSelAll:"Seleziona tutto",listSelNone:"Deseleziona tutto",
   listsT:"Liste della spesa",listDay:"Spesa del {d}",listNew:"＋ Nuova lista",listPick:"Scegli la lista",listCnt:"{n} articoli",listDone:"{d} su {n} spuntati",listRen:"Rinomina la lista",listDel:"Elimina la lista",listDelQ:"Eliminare questa lista e i suoi articoli?",listAdded:"Aggiunto a {l}",listChange:"Cambia",listShare:"Condividi",listCreated:"Creata il {d}",listGo:"Aggiungi",listCopied:"Lista copiata",listEmptyL:"Questa lista è vuota.",listOld:"La mia lista",
-  listSelect:"Seleziona ingredienti",listAddSel:"Aggiungi a una lista",listCancel:"Annulla",listAll:"Tutti",listN:"{n} selezionati",
-  dShop:"Lista della spesa",shopT:"Lista della spesa",shopAdd:"Aggiungi al carrello",shopIn:"Nel carrello",shopAdded:"Aggiunto alla lista della spesa",shopSee:"Vedi",shopEmpty:"La tua lista è vuota. Aggiungi ingredienti da una ricetta.",shopDone:"Rimuovi i spuntati",shopClear:"Svuota tutto",shopClearQ:"Svuotare tutta la lista della spesa?",qHomeS:"Risposte brevi, senza ricetta",
+  listSelect:"Seleziona ingredienti",listAddSel:"Aggiungi alla lista",listCancel:"Annulla",listAll:"Tutti",listN:"{n} selezionati",
+  dShop:"Lista della spesa",shopT:"Lista della spesa",shopAdd:"Aggiungi alla lista",shopIn:"Nella lista",shopAdded:"Aggiunto alla lista della spesa",shopSee:"Vedi",shopEmpty:"La tua lista è vuota. Aggiungi ingredienti da una ricetta.",shopDone:"Rimuovi i spuntati",shopClear:"Svuota tutto",shopClearQ:"Svuotare tutta la lista della spesa?",qHomeS:"Risposte brevi, senza ricetta",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
   qaHideCom:"Nascondi i commenti",
@@ -2012,7 +2012,7 @@ pt:{
   surpQ:"Que tipo de prato te apetece?",
   resumeT:"Retomar a receita ou a pergunta",
   qHomeT:"Uma pergunta de cozinha, pergunte-me",
-  shopRm:"Remover do carrinho",
+  shopRm:"Remover da lista",
   shopRmQ:"Remover «{i}» da lista de compras?",
   listRemSel:"Remover da lista",listRemQ:"Remover {n} ingrediente(s) da lista de compras?",
   listNewQ:"Nome da lista",listCreate:"Criar",
@@ -2020,8 +2020,8 @@ pt:{
   listMerge:"Tens «{a}» na lista e adicionas «{b}»: {n} no total. Somá-los? (Cancelar mantém as duas linhas.)",listMergeYes:"Somar",
   listSelAll:"Selecionar tudo",listSelNone:"Desselecionar tudo",
   listsT:"Listas de compras",listDay:"Compras de {d}",listNew:"＋ Nova lista",listPick:"Escolher a lista",listCnt:"{n} artigos",listDone:"{d} de {n} marcados",listRen:"Renomear a lista",listDel:"Apagar a lista",listDelQ:"Apagar esta lista e os seus artigos?",listAdded:"Adicionado a {l}",listChange:"Mudar",listShare:"Partilhar",listCreated:"Criada em {d}",listGo:"Adicionar",listCopied:"Lista copiada",listEmptyL:"Esta lista está vazia.",listOld:"A minha lista",
-  listSelect:"Selecionar ingredientes",listAddSel:"Adicionar a uma lista",listCancel:"Cancelar",listAll:"Todos",listN:"{n} selecionados",
-  dShop:"Lista de compras",shopT:"Lista de compras",shopAdd:"Adicionar ao carrinho",shopIn:"No carrinho",shopAdded:"Adicionado à lista de compras",shopSee:"Ver",shopEmpty:"A tua lista está vazia. Adiciona ingredientes a partir de uma receita.",shopDone:"Remover marcados",shopClear:"Limpar tudo",shopClearQ:"Esvaziar toda a lista de compras?",qHomeS:"Respostas curtas, sem receita",
+  listSelect:"Selecionar ingredientes",listAddSel:"Adicionar à lista",listCancel:"Cancelar",listAll:"Todos",listN:"{n} selecionados",
+  dShop:"Lista de compras",shopT:"Lista de compras",shopAdd:"Adicionar à lista",shopIn:"Na lista",shopAdded:"Adicionado à lista de compras",shopSee:"Ver",shopEmpty:"A tua lista está vazia. Adiciona ingredientes a partir de uma receita.",shopDone:"Remover marcados",shopClear:"Limpar tudo",shopClearQ:"Esvaziar toda a lista de compras?",qHomeS:"Respostas curtas, sem receita",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
   qaHideCom:"Ocultar comentários",
@@ -2505,7 +2505,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v205',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v207',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3138,7 +3138,9 @@ async function shareRecipe(e){
   toast(ok?T().copied:T().err);
 }
 let toastT=null;
-function toastAct(msg,label,fn){let d=$('#toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent='';const sp=document.createElement('span');sp.textContent=msg;const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>{d.classList.remove('on');clearTimeout(toastT);fn()};d.append(sp,b);d.classList.add('on','act');clearTimeout(toastT);toastT=setTimeout(()=>{d.classList.remove('on','act')},6000)}
+function toastAct(msg,label,fn,label2,fn2){let d=$('#toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent='';const sp=document.createElement('span');sp.textContent=msg;d.appendChild(sp);
+  [[label,fn],[label2,fn2]].forEach(([lb,f])=>{if(!lb||!f)return;const b=document.createElement('button');b.type='button';b.textContent=lb;b.onclick=()=>{d.classList.remove('on','act');clearTimeout(toastT);f()};d.appendChild(b)}); // v207: up to two actions (« Voir », « Changer »)
+  d.classList.add('on','act');clearTimeout(toastT);toastT=setTimeout(()=>{d.classList.remove('on','act')},6000)}
 function toast(t){let d=$('#toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent=t;d.classList.remove('act');d.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>d.classList.remove('on'),2200)}
 // ---------- Recipe formatting (card and import preview) ----------
 const UT_RE=/ustensil|utensil|equip|équip|gerät|attrezz/i; // utensils section heading (fr/en/es/de/it/pt)
@@ -3247,7 +3249,8 @@ function cartBtn(name,from){
   };
   return b;
 }
-function toastChange(id,txt,from){const l=loadLists().find(x=>x.id===id);toastAct(T().listAdded.replace('{l}',l?l.name:''),T().listChange,()=>openSheet([txt],from))}
+function seeList(id){closeSheet();goTo('shop');openList(id)}
+function toastChange(id,txt,from){const l=loadLists().find(x=>x.id===id);toastAct(T().listAdded.replace('{l}',l?l.name:''),T().shopSee,()=>seeList(id),T().listChange,()=>openSheet([txt],from))}
 function closeSheet(){const w=document.getElementById('lsheet');if(w)w.remove()}
 function openSheet(txts,from,onDone){
   closeSheet();
@@ -3271,7 +3274,7 @@ function openSheet(txts,from,onDone){
   const nb=document.createElement('button');nb.type='button';nb.className='lnew';nb.textContent=t.listNew;
   nb.onclick=async()=>{const id=await askNewList();if(id){sel=id;draw()}};
   const go=document.createElement('button');go.type='button';go.className='lgo';go.textContent=t.listGo;
-  go.onclick=()=>{if(!sel)return;if(txts.length===1)removeAll(txts[0]);txts.forEach(x=>addItem(sel,x,from));closeSheet();refreshCarts();onDone&&onDone();const l=loadLists().find(x=>x.id===sel);toast(t.listAdded.replace('{l}',l?l.name:''))};
+  go.onclick=()=>{if(!sel)return;if(txts.length===1)removeAll(txts[0]);txts.forEach(x=>addItem(sel,x,from));closeSheet();refreshCarts();onDone&&onDone();const l=loadLists().find(x=>x.id===sel),sid=sel;toastAct(t.listAdded.replace('{l}',l?l.name:''),t.shopSee,()=>seeList(sid))};
   sh.append(gr,h,sub,opts,nb,go);
   w.append(sc,sh);document.body.appendChild(w);
 }
