@@ -276,7 +276,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .impcard span{color:var(--mut);font-size:12px}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 2px}
 .tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;margin:0;padding:8px 4px;text-align:center}
-.tiles .impcard i{font-size:20px}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
+.tiles .impcard i{font-size:20px}.tiles .impcard i.five5{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px;line-height:1}.tiles #fiveHome span{display:block;font-size:10.5px;line-height:1.2}.askico{font-size:17px;flex:none;line-height:1}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
 #hwrap{margin-top:10px}#menuHome{margin:14px 0 18px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
 .snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
@@ -438,12 +438,12 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         <svg class="mascot"><use href="#mascot"/></svg>
         <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><div id="verpill"><i></i><span></span></div>
       </div>
-      <div class="ask"><input id="hq"><button id="hgo">Go</button></div>
+      <div class="ask"><span class="askico" aria-hidden="true">🧑‍🍳</span><input id="hq"><button id="hgo">Go</button></div>
       <div class="tiles"><!-- v211: three compact tiles -->
       <button class="impcard" id="impHome"><i>📥</i><div><b id="impHomeT"></b><span id="impHomeS"></span></div></button>
-      <button class="impcard" id="surpHome"><i>✨</i><div><b id="surpT"></b><span id="surpS"></span></div></button>
-      <button class="impcard" id="fiveHome"><i>🖐️</i><div><b id="fiveHT"></b></div></button>
-      <button class="impcard" id="qHome"><i>❓</i><div><b id="qHomeT"></b><span id="qHomeS"></span></div></button>
+      <button class="impcard" id="surpHome"><i>🎲</i><div><b id="surpT"></b><span id="surpS"></span></div></button>
+      <button class="impcard" id="fiveHome"><i class="five5">5</i><div><b id="fiveHT"></b><span id="fiveHS"></span></div></button>
+      <button class="impcard" id="qHome"><i>💬</i><div><b id="qHomeT"></b><span id="qHomeS"></span></div></button>
       </div>
       <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav" hidden></button></div>
       <div class="hsbtns" id="hsbtns"><button type="button" id="hsHist"></button><button type="button" id="hsFavs"></button></div><!-- v212: Historique / Favoris under the search box -->
@@ -703,9 +703,9 @@ fr:{
   qaS:"Posez une question rapide sur la cuisine : associations, conservation, congélation, techniques.",
   qaEx:"🍊 Je peux mélanger orange et chocolat ?|🧅 Je peux congeler mon oignon ?|🥚 Combien de temps garder des œufs durs ?|🍚 Comment rattraper un riz trop cuit ?",
   qaNote:"ℹ️ Réponses données à titre informatif. Elles n’engagent pas la responsabilité du chef.",
-  surpT:"Surprends-moi",surpS:"Un plat tiré au hasard, à cuisiner",mDisc:"Discuter",mQ:"Questions",
+  surpT:"Surprise",surpS:"Un plat tiré au hasard, à cuisiner",mDisc:"Discuter",mQ:"Questions",
   surpM:"Donne-moi une recette surprise {c}, tirée au hasard.",
-  fiveM:"Donne-moi une recette {c} avec 5 ingrédients maximum, prête en 30 minutes maximum. Sel, poivre, huile et eau ne comptent pas dans les 5 : liste-les normalement, sans aucune mention « non compté ».",fiveT:"5 ingrédients",fiveQ:"5 ingrédients max, 30 min max",
+  fiveM:"Donne-moi une recette {c} avec 5 ingrédients maximum, prête en 30 minutes maximum. Sel, poivre, huile et eau ne comptent pas dans les 5 : liste-les normalement, sans aucune mention « non compté ».",fiveT:"ingrédients",fiveS:"30 min max",fiveQ:"5 ingrédients max, 30 min max",
   surpQ:"Quel type de plat te fait envie ?",
   resumeT:"Reprends ta recette ou ta question",
   qHomeT:"Une question cuisine, demande-moi",
@@ -975,7 +975,7 @@ en:{
   qaNote:"ℹ️ Answers are for information only and do not engage the chef’s liability.",
   surpT:"Surprise me",surpS:"A random dish to cook",mDisc:"Chat",mQ:"Questions",
   surpM:"Give me a surprise recipe for {c}, picked at random.",
-  fiveM:"Give me a recipe for {c} with 5 ingredients at most, ready in 30 minutes or less. Salt, pepper, oil and water don’t count towards the 5: list them normally, with no “not counted” note.",fiveT:"5 ingredients",fiveQ:"5 ingredients max, 30 min max",
+  fiveM:"Give me a recipe for {c} with 5 ingredients at most, ready in 30 minutes or less. Salt, pepper, oil and water don’t count towards the 5: list them normally, with no “not counted” note.",fiveT:"ingredients",fiveS:"30 min max",fiveQ:"5 ingredients max, 30 min max",
   surpQ:"Which kind of dish do you fancy?",
   resumeT:"Resume the recipe or the question",
   qHomeT:"A cooking question, ask me",
@@ -1245,7 +1245,7 @@ es:{
   qaNote:"ℹ️ Las respuestas son meramente informativas y no comprometen la responsabilidad del chef.",
   surpT:"Sorpréndeme",surpS:"Un plato al azar para cocinar",mDisc:"Charlar",mQ:"Preguntas",
   surpM:"Dame una receta sorpresa de {c}, elegida al azar.",
-  fiveM:"Dame una receta de {c} con 5 ingredientes como máximo, lista en 30 minutos o menos. Sal, pimienta, aceite y agua no cuentan entre los 5: enuméralos con normalidad, sin ninguna nota de «no cuenta».",fiveT:"5 ingredientes",fiveQ:"5 ingredientes máx., 30 min máx.",
+  fiveM:"Dame una receta de {c} con 5 ingredientes como máximo, lista en 30 minutos o menos. Sal, pimienta, aceite y agua no cuentan entre los 5: enuméralos con normalidad, sin ninguna nota de «no cuenta».",fiveT:"ingredientes",fiveS:"30 min máx.",fiveQ:"5 ingredientes máx., 30 min máx.",
   surpQ:"¿Qué tipo de plato te apetece?",
   resumeT:"Retomar la receta o la pregunta",
   qHomeT:"Una pregunta de cocina, pregúntame",
@@ -1515,7 +1515,7 @@ de:{
   qaNote:"ℹ️ Die Antworten dienen nur zur Information und begründen keine Haftung des Kochs.",
   surpT:"Überrasch mich",surpS:"Ein zufälliges Gericht zum Kochen",mDisc:"Plaudern",mQ:"Fragen",
   surpM:"Gib mir ein überraschendes Rezept: {c}, zufällig gewählt.",
-  fiveM:"Gib mir ein Rezept: {c}, mit höchstens 5 Zutaten, fertig in maximal 30 Minuten. Salz, Pfeffer, Öl und Wasser zählen nicht zu den 5: liste sie normal auf, ohne Hinweis wie „nicht mitgezählt“.",fiveT:"5 Zutaten",fiveQ:"Max. 5 Zutaten, max. 30 Min.",
+  fiveM:"Gib mir ein Rezept: {c}, mit höchstens 5 Zutaten, fertig in maximal 30 Minuten. Salz, Pfeffer, Öl und Wasser zählen nicht zu den 5: liste sie normal auf, ohne Hinweis wie „nicht mitgezählt“.",fiveT:"Zutaten",fiveS:"30 Min. max.",fiveQ:"Max. 5 Zutaten, max. 30 Min.",
   surpQ:"Welche Art von Gericht hast du Lust auf?",
   resumeT:"Rezept oder Frage fortsetzen",
   qHomeT:"Eine Kochfrage, frag mich",
@@ -1785,7 +1785,7 @@ it:{
   qaNote:"ℹ️ Le risposte sono solo a scopo informativo e non impegnano la responsabilità dello chef.",
   surpT:"Sorprendimi",surpS:"Un piatto a caso da cucinare",mDisc:"Chiacchiera",mQ:"Domande",
   surpM:"Dammi una ricetta a sorpresa: {c}, scelta a caso.",
-  fiveM:"Dammi una ricetta: {c}, con al massimo 5 ingredienti, pronta in 30 minuti al massimo. Sale, pepe, olio e acqua non rientrano nei 5: elencali normalmente, senza alcuna nota «non conteggiato».",fiveT:"5 ingredienti",fiveQ:"Max 5 ingredienti, max 30 min",
+  fiveM:"Dammi una ricetta: {c}, con al massimo 5 ingredienti, pronta in 30 minuti al massimo. Sale, pepe, olio e acqua non rientrano nei 5: elencali normalmente, senza alcuna nota «non conteggiato».",fiveT:"ingredienti",fiveS:"30 min max",fiveQ:"Max 5 ingredienti, max 30 min",
   surpQ:"Che tipo di piatto ti va?",
   resumeT:"Riprendi la ricetta o la domanda",
   qHomeT:"Una domanda di cucina, chiedimi",
@@ -2053,9 +2053,9 @@ pt:{
   qaS:"Faz uma pergunta rápida sobre cozinha: combinações, conservação, congelação, técnicas.",
   qaEx:"🍊 Posso misturar laranja e chocolate?|🧅 Posso congelar a cebola?|🥚 Quanto tempo duram ovos cozidos?|🍚 Como salvar um arroz papa?",
   qaNote:"ℹ️ As respostas são meramente informativas e não implicam a responsabilidade do chef.",
-  surpT:"Surpreenda-me",surpS:"Um prato ao acaso para cozinhar",mDisc:"Conversar",mQ:"Perguntas",
+  surpT:"Surpresa",surpS:"Um prato ao acaso para cozinhar",mDisc:"Conversar",mQ:"Perguntas",
   surpM:"Dê-me uma receita surpresa de {c}, escolhida ao acaso.",
-  fiveM:"Dê-me uma receita de {c} com no máximo 5 ingredientes, pronta em 30 minutos ou menos. Sal, pimenta, azeite e água não contam para os 5: liste-os normalmente, sem nenhuma nota de «não contado».",fiveT:"5 ingredientes",fiveQ:"Máx. 5 ingredientes, máx. 30 min",
+  fiveM:"Dê-me uma receita de {c} com no máximo 5 ingredientes, pronta em 30 minutos ou menos. Sal, pimenta, azeite e água não contam para os 5: liste-os normalmente, sem nenhuma nota de «não contado».",fiveT:"ingredientes",fiveS:"30 min máx.",fiveQ:"Máx. 5 ingredientes, máx. 30 min",
   surpQ:"Que tipo de prato te apetece?",
   resumeT:"Retomar a receita ou a pergunta",
   qHomeT:"Uma pergunta de cozinha, pergunte-me",
@@ -2555,7 +2555,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v220',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v221',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3773,7 +3773,7 @@ async function send(text,auto,ctx){
 let pendingMeta=null,imp=null,impTok=0;
 function impText(){const t=T();
   $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#impT').textContent=t.imT;
-  $('#impHomeT').textContent=t.tileImp;$('#surpT').textContent=t.surpT;$('#fiveHT').textContent=t.fiveT;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.tileQ;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);$('#rT').textContent=t.resumeT;
+  $('#impHomeT').textContent=t.tileImp;$('#surpT').textContent=t.surpT;$('#fiveHT').textContent=t.fiveT;$('#fiveHS').textContent=t.fiveS;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.tileQ;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);$('#rT').textContent=t.resumeT;
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
   $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
 function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
