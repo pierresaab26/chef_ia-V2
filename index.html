@@ -186,12 +186,16 @@ input,textarea,select{font-size:16px!important}
 
 #homesearch{margin:10px 0 0;position:relative}.hsico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}#homesearch input{width:100%;font:inherit;padding:10px 14px 10px 40px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsfav{position:absolute;right:7px;top:50%;transform:translateY(-50%);padding:5px 11px;font-size:13px}#homesearch{margin-top:18px}.hsbtns{display:flex;gap:8px;margin-top:8px}.hsbtns button{flex:1;padding:9px 10px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-size:14px;font-weight:600}.hscnt{font-size:13px;color:var(--mut);margin:2px 4px 8px}#hsres:empty{display:none}#hsres{margin-top:10px}
 #hsearch,#fsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
-.mghost .mgen{min-height:50px}.mact{display:flex;justify-content:flex-end;gap:6px;margin-top:5px}.mab{width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:var(--card);font-size:15px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}.mab.spin{animation:wkspin .9s linear infinite;opacity:.6}@keyframes wkspin{to{transform:rotate(360deg)}}
+.mrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}.mrow:first-child{border-top:0}
+.mlb{flex:none;width:64px;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--mut)}
+.mtit{flex:1;min-width:0;background:none;border:0;padding:6px 0;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer;line-height:1.3;border-radius:8px}
+.mtit.mghost{color:#6b6168}.mtit.mdone{font-weight:600}.mtit.mdone::before{content:'✓ ';color:#2e9e5b;font-weight:800}.mtit.mempty{color:var(--mut);font-size:14px}
+.mmore{flex:none;width:36px;height:36px;border-radius:50%;border:0;background:none;color:var(--mut);font-size:22px;font-weight:800;line-height:1;cursor:pointer;display:grid;place-items:center}
 .mauto{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 10px;font-size:12.5px;color:var(--mut)}
 .mgen{border-style:dashed;border-color:var(--psbd);background:var(--psoft);font-size:12.5px;cursor:pointer}.mgen b{font-weight:600}.mown{color:var(--pink);font-size:12px}
 .mgrid{display:grid;gap:10px}@media(min-width:768px){.mgrid{grid-template-columns:1fr 1fr}}
 .mday{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);padding:10px 12px;box-shadow:var(--sh)}.mday h4{margin:0 0 8px;font-size:15px;color:var(--pink)}
-.mslots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.mcell{min-width:0}.mcell small{display:block;font-size:11px;color:var(--mut);margin:0 0 3px;text-transform:uppercase;letter-spacing:.02em}
+.mslots{display:flex;flex-direction:column}.mcell{min-width:0}.mcell small{display:block;font-size:11px;color:var(--mut);margin:0 0 3px;text-transform:uppercase;letter-spacing:.02em}
 .madd,.mset{width:100%;min-height:44px;border-radius:12px;font:inherit;font-size:13px;text-align:left;padding:6px 8px}.madd{border:1.5px dashed var(--bd);background:transparent;color:var(--mut);text-align:center;font-size:18px}
 .mset{border:1px solid var(--bd);background:var(--bg1);color:var(--ink);display:block;word-break:break-word;line-height:1.25}.mfill{position:relative}.mrm{position:absolute;top:-6px;right:-4px;width:22px;height:22px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--mut);font-size:11px;line-height:1;padding:0}
 .mother{grid-column:1/-1}.mol{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}.mor{display:flex;gap:6px;align-items:center}.mor .mset{flex:1;min-height:38px}.mor .mrm{position:static;flex:none}
@@ -2614,7 +2618,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v240',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v241',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2886,7 +2890,7 @@ let cardId=null,hfav=false,cardFrom=null,hScroll=0; // cardFrom = 'history' when
 const MENU_KEY='chefMenu';
 function readMenu(){let m=null;try{m=JSON.parse(localStorage.getItem(MENU_KEY)||'null')}catch(e){}
   if(!m||!Array.isArray(m.d)||m.d.length!==7)m={d:Array.from({length:7},()=>[null,null,null]),o:[]};
-  m.d=m.d.map(r=>Array.isArray(r)&&r.length===3?r:[null,null,null]);if(!Array.isArray(m.o))m.o=[];if(typeof m.auto!=='boolean')m.auto=true;return m}
+  m.d=m.d.map(r=>Array.isArray(r)&&r.length===3?r:[null,null,null]);if(!Array.isArray(m.o))m.o=[];if(typeof m.auto!=='boolean')m.auto=true;if(!m.hid||typeof m.hid!=='object')m.hid={};return m}
 function saveMenu(m){try{localStorage.setItem(MENU_KEY,JSON.stringify(m))}catch(e){}}
 function pickRecipe(askText){ // dialog: pick a saved recipe (search) or ask the chef; resolves to a recipe id, or null
   return new Promise(done=>{
@@ -2924,6 +2928,10 @@ async function wkRegen(i,j){const s=wkRead();if(!s)return;const cur=s.items[i*3+
   if(!res.ok)throw new Error('regen');const it=snParse((await res.json()).text)[0];if(!it||snNorm(it[0])===snNorm(cur))throw new Error('regen');
   const z=wkRead();if(!z)return;z.items[i*3+j]=it;try{localStorage.setItem('chefMenuSug',JSON.stringify(z))}catch(e){}}
 const snNorm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+function rowMenu(title,items){const w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg lmenu';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
+  const hd=document.createElement('p');hd.textContent=title;d.appendChild(hd);const close=()=>w.remove();
+  items.forEach(([ic,lb,fn,danger])=>{const b=document.createElement('button');b.type='button';b.className='lmb'+(danger?' danger':'');const a=document.createElement('span');a.textContent=ic;const s=document.createElement('span');s.textContent=lb;b.append(a,s);b.onclick=()=>{close();fn()};d.appendChild(b)});
+  w.onclick=e=>{if(e.target===w)close()};w.appendChild(d);document.body.appendChild(w)}
 function menuAssign(id){if(!menuPend)return;const p=menuPend;menuPend=null;if(Date.now()-p.at>10*60e3)return;const z=readMenu();if(!z.d[p.i][p.j]){z.d[p.i][p.j]=id;saveMenu(z)}}
 function drawMenu(){
   const t=T(),box=$('#menuBox');box.innerHTML='';$('#menuT').textContent=t.menuT;
@@ -2937,24 +2945,23 @@ function drawMenu(){
     cb.onchange=()=>{const z=readMenu();z.auto=cb.checked;saveMenu(z);drawMenu()};const sp=document.createElement('span');sp.textContent=t.mAutoT;row.append(cb,sp);box.appendChild(row);
     const fm=x=>new Date(x+'T12:00:00Z').toLocaleDateString(lang,{day:'numeric',month:'short',timeZone:'UTC'});
     if(m.auto){const n=document.createElement('p');n.className='mweek';n.textContent=sug?t.mWeekOf.replace('{a}',fm(sug.from)).replace('{b}',fm(sug.to)):t.mSugLoad;box.appendChild(n)}}
-  const ghost=(i,j,dn,cn)=>{const [nm,ds]=sug.items[i*3+j],wrap=document.createElement('div');wrap.className='mghost';
-    const b=document.createElement('button');b.type='button';b.className='mset mgen';b.title=t.mGenTip;const bb=document.createElement('b');bb.textContent=nm;b.append('✨ ',bb);
-    b.onclick=()=>{menuPend={i,j,at:Date.now()};openChat(null);send(t.idGen.replace('{x}',nm),true)};
-    const ac=document.createElement('div');ac.className='mact';
-    const rg=document.createElement('button');rg.type='button';rg.className='mab';rg.textContent='🔄';rg.title=t.mRegen;rg.setAttribute('aria-label',t.mRegen);
-    rg.onclick=async ev=>{ev.stopPropagation();rg.disabled=true;rg.classList.add('spin');try{await wkRegen(i,j)}catch(e){toast(t.err)}drawMenu()};
-    const own=document.createElement('button');own.type='button';own.className='mab';own.textContent='✏️';own.setAttribute('aria-label',t.mOwn);own.title=t.mOwn;
-    own.onclick=async ev=>{ev.stopPropagation();const id=await pickRecipe(t.mAskReq.replace('{d}',dn).replace('{c}',cn));if(id){const z=readMenu();z.d[i][j]=id;saveMenu(z);drawMenu()}};
-    ac.append(rg,own);wrap.append(b,ac);return wrap};
   const grid=document.createElement('div');grid.className='mgrid';let any=false;
   days.forEach((dn,i)=>{const card=document.createElement('div');card.className='mday';const h=document.createElement('h4');h.textContent=dn;card.appendChild(h);
     const sl=document.createElement('div');sl.className='mslots';
-    cs.forEach((cn,j)=>{const cell=document.createElement('div');cell.className='mcell';const lb=document.createElement('small');lb.textContent=cn;cell.appendChild(lb);
-      const e=m.d[i][j]&&rec.get(m.d[i][j]);
-      if(e){any=true;const wrap=document.createElement('div');wrap.className='mfill';wrap.append(filled(e),rm(()=>{const z=readMenu();z.d[i][j]=null;saveMenu(z);drawMenu()}));cell.appendChild(wrap)}
-      else if(sug)cell.appendChild(ghost(i,j,dn,cn));
-      else cell.appendChild(addBtn(async()=>{const id=await pickRecipe(t.mAskReq.replace('{d}',dn).replace('{c}',cn));if(id){const z=readMenu();z.d[i][j]=id;saveMenu(z);drawMenu()}}));
-      sl.appendChild(cell)});
+    cs.forEach((cn,j)=>{ // v241: one plain row per course: label · dish · ⋯ menu
+      const row=document.createElement('div');row.className='mrow';const lb=document.createElement('span');lb.className='mlb';lb.textContent=cn;
+      const e=m.d[i][j]&&rec.get(m.d[i][j]),hk=sug?sug.from+'|'+i+'|'+j:'',hidden=!!(m.hid&&m.hid[hk]);
+      const main=document.createElement('button');main.type='button';main.className='mtit';let items=null;
+      const own=async()=>{const id=await pickRecipe(t.mAskReq.replace('{d}',dn).replace('{c}',cn));if(id){const z=readMenu();z.d[i][j]=id;saveMenu(z);drawMenu()}};
+      const clear=()=>{const z=readMenu();z.d[i][j]=null;saveMenu(z);drawMenu()};
+      if(e){any=true;main.classList.add('mdone');main.textContent=e.title;main.onclick=()=>openCard(e.id);items=[['✏️',t.mOwn,own],['🗑️',t.mRm,clear,1]]}
+      else if(sug&&!hidden){const nm=sug.items[i*3+j][0];main.classList.add('mghost');main.textContent=nm;main.title=t.mGenTip;
+        main.onclick=()=>{menuPend={i,j,at:Date.now()};openChat(null);send(t.idGen.replace('{x}',nm),true)};
+        items=[['🔄',t.mRegen,async()=>{main.textContent='…';main.disabled=true;try{await wkRegen(i,j)}catch(x){toast(t.err)}drawMenu()}],['✏️',t.mOwn,own],['🗑️',t.mRm,()=>{const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);drawMenu()},1]]}
+      else{main.classList.add('mempty');main.textContent='+ '+t.mAdd;main.onclick=own}
+      row.append(lb,main);
+      if(items){const mb=document.createElement('button');mb.type='button';mb.className='mmore';mb.textContent='⋯';mb.setAttribute('aria-label',t.lsMore);mb.onclick=()=>rowMenu(e?e.title:main.textContent,items);row.appendChild(mb)}
+      sl.appendChild(row)});
     card.appendChild(sl);grid.appendChild(card)});
   const oc=document.createElement('div');oc.className='mday mother';const oh=document.createElement('h4');oh.textContent=t.mOther;oc.appendChild(oh);
   const ol=document.createElement('div');ol.className='mol';
