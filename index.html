@@ -320,14 +320,14 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shop-row.done .sck{background:var(--pink);border-color:var(--pink)}
 .shop-row.done .st{text-decoration:line-through;opacity:.55}
 .shop-row .sbt{flex:none;font-size:12px;font-weight:600;line-height:1;padding:5px 9px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd)}
-.aisle{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);border:0;border-radius:var(--rc);padding:8px 10px;margin:14px 0 8px;font:inherit;color:var(--txt,#2b2420);cursor:pointer;text-align:left;box-shadow:var(--sh);-webkit-tap-highlight-color:transparent}
-.aisle .ai{width:32px;height:32px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:18px;line-height:1;background:#eee}
-.aisle .an{flex:1;min-width:0;font-size:14px;font-weight:700}.aisle .an small{display:block;font-size:12px;font-weight:500;color:var(--mut);margin-top:1px}
-.aisle .ac{font-size:12px;font-weight:700;background:rgba(0,0,0,.07);border-radius:99px;padding:3px 9px}
-.aisle .ar{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--pink-l,#fde6ee);color:var(--pink);font-size:16px;font-weight:700;transition:transform .15s}
+.aisle{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:0;border-radius:var(--rc);padding:10px 12px;margin:14px 0 8px;font:inherit;color:var(--txt,#2b2420);cursor:pointer;text-align:left;box-shadow:var(--sh);-webkit-tap-highlight-color:transparent}
+.aisle .ai{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:28px;line-height:1;background:#eee}
+.aisle .an{flex:1;min-width:0;font-size:16.5px;font-weight:700}.aisle .an small{display:block;font-size:13px;font-weight:500;color:var(--mut);margin-top:1px}
+.aisle .ac{font-size:13.5px;font-weight:700;background:rgba(0,0,0,.07);border-radius:99px;padding:4px 11px}
+.aisle .ar{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--pink-l,#fde6ee);color:var(--pink);font-size:20px;font-weight:700;transition:transform .15s}
 .aisle.fold .ar{transform:rotate(-90deg)}
 .a-veg .ai{background:#dff3d4}.a-meat .ai{background:#fbd9d4}.a-dairy .ai{background:#fdf0c4}.a-dry .ai{background:#f3e3c8}.a-spice .ai{background:#fbdcc2}.a-drink .ai{background:#d6e8fb}.a-misc .ai{background:#e6e1ee}
-.aihint{font-size:12.5px;color:var(--mut);margin:12px 4px -4px}
+.aihint{font-size:13.5px;color:var(--mut);margin:12px 4px -4px}
 .lrh{font-size:13px;font-weight:700;color:var(--mut);margin:14px 4px 8px}.lrecs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}.lrec{display:inline-flex;align-items:center;gap:2px;max-width:100%;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:3px 3px 3px 12px;font-size:13px;font-weight:600}.lrec>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lrec button{flex:none;width:28px;height:28px;border-radius:50%;color:var(--mut);font-size:13px}
 .shop-row .sdel{flex:none;background:none;border:0;color:var(--mut);font-size:18px;padding:4px 6px;cursor:pointer}
 .lsw{position:fixed;inset:0;z-index:60}
@@ -2569,7 +2569,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v229',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v230',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
