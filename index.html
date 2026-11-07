@@ -349,7 +349,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lcard.sel{padding-left:56px}.lcard.sel.on{outline:2px solid var(--pink)}
 .lck{position:absolute;left:14px;top:50%;margin-top:-14px;width:28px;height:28px;border-radius:50%;border:2px solid var(--mut);display:grid;place-items:center;color:#fff;font-size:16px;font-weight:800}.lcard.on .lck{background:var(--pink);border-color:var(--pink)}
 .ledit{display:block;margin:0 0 12px auto;padding:9px 16px;border-radius:999px;border:1px solid var(--psbd);background:var(--card);color:var(--pink);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
-.lacts{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px}.lacts button{padding:9px 14px;border-radius:999px;border:1px solid var(--psbd);background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer}.lacts button:disabled{opacity:.4}.lacts .danger,.lmb.danger{color:#c0264b}.lsn{flex-basis:100%;font-size:13px;color:var(--mut)}
+.lacts{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px}.lacts button{padding:9px 14px;border-radius:999px;border:1px solid var(--psbd);background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer}.lacts button:disabled{opacity:.4}.lacts .danger,.lmb.danger{color:#c0264b}.lmb small{display:block;font-size:12.5px;font-weight:500;color:var(--mut)}.lmb .rd{font-size:20px;color:var(--pink);width:22px;text-align:center}.lmb.on{background:var(--psoft);outline:2px solid var(--pink)}.lmenu .dlgb{margin-top:8px}.lsn{flex-basis:100%;font-size:13px;color:var(--mut)}
 .lmenu{display:flex;flex-direction:column;gap:6px}.lmenu p{font-weight:700;margin:0 0 6px;text-align:center}.lmb{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border-radius:14px;border:0;background:rgba(0,0,0,.05);font:inherit;font-size:16px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left}
 .newbig{width:100%;padding:14px;border-radius:999px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);font:inherit;font-size:15px;font-weight:700;margin-bottom:14px;cursor:pointer}
 .lcard{background:var(--card);border-radius:var(--rc);padding:14px 16px;margin-bottom:12px;box-shadow:var(--sh);cursor:pointer}
@@ -737,6 +737,7 @@ fr:{
   listRecs:"Recettes de la liste",listRecDel:"Retirer la recette",listRecQ:"Retirer la recette « {r} » et ses ingrédients de la liste ?",
   listMerge:"Vous avez « {a} » dans la liste et vous ajoutez « {b} » : {n} au total. Les additionner ? (Annuler garde les deux lignes.)",listMergeYes:"Additionner",
   listSelAll:"Tout sélectionner",listSelNone:"Tout désélectionner",
+  lsJoinW:"Fusionner dans quelle liste ?",
   lsEdit:"Modifier",lsDone:"Terminé",lsJoin:"Fusionner",lsDup:"Dupliquer",lsMore:"Options de la liste",lsDelN:"Supprimer {n} liste(s) et leurs articles ?",lsDeleted:"{n} liste(s) supprimée(s)",lsUndo:"Annuler",lsJoinQ:"Fusionner {n} listes dans « {l} » ? Les articles identiques s’additionnent (les articles déjà cochés ne sont pas repris).",lsJoined:"Listes fusionnées",lsCopy:" (copie)",lsSelN:"{n} sélectionnée(s)",
   listsT:"Listes de courses",listDay:"Courses du {d}",listNew:"＋ Nouvelle liste",listPick:"Choisir la liste",listCnt:"{n} articles",listDone:"{d} sur {n} cochés",listRen:"Renommer la liste",listDel:"Supprimer la liste",listDelQ:"Supprimer cette liste et ses articles ?",listAdded:"Ajouté à {l}",listChange:"Changer",listShare:"Partager",listCreated:"Créée le {d}",listGo:"Ajouter",listCopied:"Liste copiée",listEmptyL:"Cette liste est vide.",listOld:"Ma liste",
   listSelect:"Sélectionner des ingrédients",listAddSel:"Ajouter à la liste",listCancel:"Annuler",listAll:"Tout",listN:"{n} sélectionné(s)",
@@ -1009,6 +1010,7 @@ en:{
   listRecs:"Recipes in this list",listRecDel:"Remove the recipe",listRecQ:"Remove the recipe “{r}” and its ingredients from the list?",
   listMerge:"You have “{a}” in the list and you are adding “{b}”: {n} in total. Add them up? (Cancel keeps both lines.)",listMergeYes:"Add up",
   listSelAll:"Select all",listSelNone:"Deselect all",
+  lsJoinW:"Merge into which list?",
   lsEdit:"Edit",lsDone:"Done",lsJoin:"Merge",lsDup:"Duplicate",lsMore:"List options",lsDelN:"Delete {n} list(s) and their items?",lsDeleted:"{n} list(s) deleted",lsUndo:"Undo",lsJoinQ:"Merge {n} lists into “{l}”? Identical items are added together (items already ticked are not carried over).",lsJoined:"Lists merged",lsCopy:" (copy)",lsSelN:"{n} selected",
   listsT:"Shopping lists",listDay:"Shopping for {d}",listNew:"＋ New list",listPick:"Choose the list",listCnt:"{n} items",listDone:"{d} of {n} ticked",listRen:"Rename the list",listDel:"Delete the list",listDelQ:"Delete this list and its items?",listAdded:"Added to {l}",listChange:"Change",listShare:"Share",listCreated:"Created on {d}",listGo:"Add",listCopied:"List copied",listEmptyL:"This list is empty.",listOld:"My list",
   listSelect:"Select ingredients",listAddSel:"Add to list",listCancel:"Cancel",listAll:"All",listN:"{n} selected",
@@ -1281,6 +1283,7 @@ es:{
   listRecs:"Recetas de la lista",listRecDel:"Quitar la receta",listRecQ:"¿Quitar la receta «{r}» y sus ingredientes de la lista?",
   listMerge:"Tienes «{a}» en la lista y añades «{b}»: {n} en total. ¿Sumarlos? (Cancelar mantiene las dos líneas.)",listMergeYes:"Sumar",
   listSelAll:"Seleccionar todo",listSelNone:"Deseleccionar todo",
+  lsJoinW:"¿En qué lista combinar?",
   lsEdit:"Editar",lsDone:"Hecho",lsJoin:"Combinar",lsDup:"Duplicar",lsMore:"Opciones de la lista",lsDelN:"¿Eliminar {n} lista(s) y sus artículos?",lsDeleted:"{n} lista(s) eliminada(s)",lsUndo:"Deshacer",lsJoinQ:"¿Combinar {n} listas en «{l}»? Los artículos idénticos se suman (los ya marcados no se incluyen).",lsJoined:"Listas combinadas",lsCopy:" (copia)",lsSelN:"{n} seleccionada(s)",
   listsT:"Listas de la compra",listDay:"Compra del {d}",listNew:"＋ Nueva lista",listPick:"Elige la lista",listCnt:"{n} artículos",listDone:"{d} de {n} marcados",listRen:"Renombrar la lista",listDel:"Eliminar la lista",listDelQ:"¿Eliminar esta lista y sus artículos?",listAdded:"Añadido a {l}",listChange:"Cambiar",listShare:"Compartir",listCreated:"Creada el {d}",listGo:"Añadir",listCopied:"Lista copiada",listEmptyL:"Esta lista está vacía.",listOld:"Mi lista",
   listSelect:"Seleccionar ingredientes",listAddSel:"Añadir a la lista",listCancel:"Cancelar",listAll:"Todo",listN:"{n} seleccionado(s)",
@@ -1553,6 +1556,7 @@ de:{
   listRecs:"Rezepte in der Liste",listRecDel:"Rezept entfernen",listRecQ:"Das Rezept „{r}“ und seine Zutaten von der Liste entfernen?",
   listMerge:"Du hast „{a}“ in der Liste und fügst „{b}“ hinzu: insgesamt {n}. Zusammenzählen? (Abbrechen behält beide Zeilen.)",listMergeYes:"Zusammenzählen",
   listSelAll:"Alle auswählen",listSelNone:"Alle abwählen",
+  lsJoinW:"In welche Liste zusammenführen?",
   lsEdit:"Bearbeiten",lsDone:"Fertig",lsJoin:"Zusammenführen",lsDup:"Duplizieren",lsMore:"Listenoptionen",lsDelN:"{n} Liste(n) mit allen Artikeln löschen?",lsDeleted:"{n} Liste(n) gelöscht",lsUndo:"Rückgängig",lsJoinQ:"{n} Listen in „{l}“ zusammenführen? Gleiche Artikel werden addiert (bereits abgehakte werden nicht übernommen).",lsJoined:"Listen zusammengeführt",lsCopy:" (Kopie)",lsSelN:"{n} ausgewählt",
   listsT:"Einkaufslisten",listDay:"Einkauf am {d}",listNew:"＋ Neue Liste",listPick:"Liste wählen",listCnt:"{n} Artikel",listDone:"{d} von {n} abgehakt",listRen:"Liste umbenennen",listDel:"Liste löschen",listDelQ:"Diese Liste und ihre Artikel löschen?",listAdded:"Hinzugefügt zu {l}",listChange:"Ändern",listShare:"Teilen",listCreated:"Erstellt am {d}",listGo:"Hinzufügen",listCopied:"Liste kopiert",listEmptyL:"Diese Liste ist leer.",listOld:"Meine Liste",
   listSelect:"Zutaten auswählen",listAddSel:"Zur Liste hinzufügen",listCancel:"Abbrechen",listAll:"Alle",listN:"{n} ausgewählt",
@@ -1825,6 +1829,7 @@ it:{
   listRecs:"Ricette della lista",listRecDel:"Rimuovi la ricetta",listRecQ:"Rimuovere la ricetta «{r}» e i suoi ingredienti dalla lista?",
   listMerge:"Hai «{a}» nella lista e aggiungi «{b}»: {n} in totale. Sommarli? (Annulla mantiene entrambe le righe.)",listMergeYes:"Somma",
   listSelAll:"Seleziona tutto",listSelNone:"Deseleziona tutto",
+  lsJoinW:"In quale lista unire?",
   lsEdit:"Modifica",lsDone:"Fine",lsJoin:"Unisci",lsDup:"Duplica",lsMore:"Opzioni della lista",lsDelN:"Eliminare {n} lista/e e i loro articoli?",lsDeleted:"{n} lista/e eliminata/e",lsUndo:"Annulla",lsJoinQ:"Unire {n} liste in «{l}»? Gli articoli uguali si sommano (quelli già spuntati non vengono riportati).",lsJoined:"Liste unite",lsCopy:" (copia)",lsSelN:"{n} selezionata/e",
   listsT:"Liste della spesa",listDay:"Spesa del {d}",listNew:"＋ Nuova lista",listPick:"Scegli la lista",listCnt:"{n} articoli",listDone:"{d} su {n} spuntati",listRen:"Rinomina la lista",listDel:"Elimina la lista",listDelQ:"Eliminare questa lista e i suoi articoli?",listAdded:"Aggiunto a {l}",listChange:"Cambia",listShare:"Condividi",listCreated:"Creata il {d}",listGo:"Aggiungi",listCopied:"Lista copiata",listEmptyL:"Questa lista è vuota.",listOld:"La mia lista",
   listSelect:"Seleziona ingredienti",listAddSel:"Aggiungi alla lista",listCancel:"Annulla",listAll:"Tutti",listN:"{n} selezionati",
@@ -2097,6 +2102,7 @@ pt:{
   listRecs:"Receitas da lista",listRecDel:"Remover a receita",listRecQ:"Remover a receita «{r}» e os seus ingredientes da lista?",
   listMerge:"Tens «{a}» na lista e adicionas «{b}»: {n} no total. Somá-los? (Cancelar mantém as duas linhas.)",listMergeYes:"Somar",
   listSelAll:"Selecionar tudo",listSelNone:"Desselecionar tudo",
+  lsJoinW:"Juntar em qual lista?",
   lsEdit:"Editar",lsDone:"Concluído",lsJoin:"Juntar",lsDup:"Duplicar",lsMore:"Opções da lista",lsDelN:"Eliminar {n} lista(s) e os seus artigos?",lsDeleted:"{n} lista(s) eliminada(s)",lsUndo:"Anular",lsJoinQ:"Juntar {n} listas em «{l}»? Os artigos iguais somam-se (os já marcados não são incluídos).",lsJoined:"Listas juntadas",lsCopy:" (cópia)",lsSelN:"{n} selecionada(s)",
   listsT:"Listas de compras",listDay:"Compras de {d}",listNew:"＋ Nova lista",listPick:"Escolher a lista",listCnt:"{n} artigos",listDone:"{d} de {n} marcados",listRen:"Renomear a lista",listDel:"Apagar a lista",listDelQ:"Apagar esta lista e os seus artigos?",listAdded:"Adicionado a {l}",listChange:"Mudar",listShare:"Partilhar",listCreated:"Criada em {d}",listGo:"Adicionar",listCopied:"Lista copiada",listEmptyL:"Esta lista está vazia.",listOld:"A minha lista",
   listSelect:"Selecionar ingredientes",listAddSel:"Adicionar à lista",listCancel:"Cancelar",listAll:"Todos",listN:"{n} selecionados",
@@ -2582,7 +2588,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v233',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v234',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3397,9 +3403,22 @@ function dupList(l){const t=T(),M=loadLists(),i=M.findIndex(x=>x.id===l.id);if(i
 async function delLists(ids){const t=T();if(!ids.length)return;if(!await ask({text:t.lsDelN.replace('{n}',ids.length),okLabel:t.listDel}))return;
   const bak=loadLists();saveLists(bak.filter(x=>!ids.includes(x.id)));listsSel.clear();refreshCarts();renderShop();
   toastAct(t.lsDeleted.replace('{n}',ids.length),t.lsUndo,()=>{saveLists(bak);refreshCarts();renderShop()})}
-async function joinLists(ids){const t=T(),bak=loadLists(),src=bak.filter(x=>ids.includes(x.id));if(src.length<2)return;const M=JSON.parse(JSON.stringify(bak)),tg=M.find(x=>x.id===src[0].id);
-  if(!await ask({text:t.lsJoinQ.replace('{n}',src.length).replace('{l}',tg.name),okLabel:t.lsJoin}))return;
-  src.slice(1).forEach(s=>s.items.filter(x=>!x.d).reverse().forEach(x=>contribs(x).forEach(c=>addMerge(tg.items,c.t||x.t,c.r||''))));
+// v234: the user chooses the primary list (the one that receives the others); preselected = the list with the most items
+function pickPrimary(src){const t=T();return new Promise(done=>{
+  let sel=src.reduce((a,b)=>b.items.length>a.items.length?b:a,src[0]).id;
+  const w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg lmenu';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
+  const p=document.createElement('p');p.textContent=t.lsJoinW;d.appendChild(p);const bs=[];
+  const paint=()=>bs.forEach(([b,id])=>{b.classList.toggle('on',id===sel);b.querySelector('.rd').textContent=id===sel?'●':'○'});
+  src.forEach(l=>{const b=document.createElement('button');b.type='button';b.className='lmb';const r=document.createElement('span');r.className='rd';const s=document.createElement('span');s.textContent=l.name;const n=document.createElement('small');n.textContent=t.listCnt.replace('{n}',l.items.length);
+    s.appendChild(n);b.append(r,s);b.onclick=()=>{sel=l.id;paint()};bs.push([b,l.id]);d.appendChild(b)});
+  paint();
+  const row=document.createElement('div');row.className='dlgb';const no=document.createElement('button');no.type='button';no.className='cbtn';no.textContent=t.imCancel;
+  const yes=document.createElement('button');yes.type='button';yes.className='cbtn dlgok';yes.textContent=t.lsJoin;row.append(no,yes);d.appendChild(row);
+  const end=v=>{w.remove();done(v)};no.onclick=()=>end(null);yes.onclick=()=>end(sel);w.onclick=e=>{if(e.target===w)end(null)};w.appendChild(d);document.body.appendChild(w)})}
+async function joinLists(ids){const t=T(),bak=loadLists(),src=bak.filter(x=>ids.includes(x.id));if(src.length<2)return;
+  const pid=await pickPrimary(src);if(!pid)return;
+  const M=JSON.parse(JSON.stringify(bak)),tg=M.find(x=>x.id===pid);
+  src.filter(s=>s.id!==pid).forEach(s0=>{const s=M.find(x=>x.id===s0.id);s.items.filter(x=>!x.d).reverse().forEach(x=>contribs(x).forEach(c=>addMerge(tg.items,c.t||x.t,c.r||'')))});
   saveLists(M.filter(x=>x.id===tg.id||!ids.includes(x.id)));listsSel.clear();refreshCarts();renderShop();
   toastAct(t.lsJoined,t.lsUndo,()=>{saveLists(bak);refreshCarts();renderShop()})}
 function listMenu(l){const t=T(),w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg lmenu';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
