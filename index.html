@@ -2561,7 +2561,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v224',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v225',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3273,7 +3273,7 @@ function mergeText(a,b){const pa=qParse(a),pb=qParse(b),v=Math.round((pa.n+pb.n)
 // v201: the same wording is added up silently; a NEAR match (« 5 jaunes d'œuf » + « 3 œufs ») is added as a pending line and the owner is asked when the list opens (resolveMerges)
 // v208: every line keeps the part of each recipe (x.c=[{r:recipe,t:text}]) so a recipe can be taken out of the list again
 function contribs(x){return x.c||[{r:x.r||'',t:x.t,old:1}]}
-function addMerge(items,txt,from){const i=items.findIndex(x=>sameItem(x.t,txt)),me={r:from||'',t:txt};if(i<0){items.unshift({t:txt,r:from||'',d:0,c:[me]});return}
+function addMerge(items,txt,from){let i=items.findIndex(x=>sameItem(x.t,txt));if(i>=0&&items[i].d){items.splice(i,1);i=items.findIndex(x=>sameItem(x.t,txt))} /* v225: a line already bought is replaced, the ingredient has to be bought again */ const me={r:from||'',t:txt};if(i<0){items.unshift({t:txt,r:from||'',d:0,c:[me]});return}
   const pa=qParse(items[i].t),pb=qParse(txt);if(!pa||!pb){items[i].c=contribs(items[i]).concat(me);return}
   if(qWord(pa.rest)===qWord(pb.rest)){items[i].c=contribs(items[i]).concat(me);items[i].t=mergeText(items[i].t,txt).t;return}
   if(!items[i].id)items[i].id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -3291,6 +3291,8 @@ async function resolveMerges(id){if(merging)return;merging=true;
   finally{merging=false}
   refreshCarts();if(curList===id)renderShop()}
 function shopHas(t){return loadLists().some(l=>l.items.some(x=>sameItem(x.t,t)))}
+// v225: the ✓ of an ingredient means « in a list FOR THIS RECIPE and not bought yet » (it used to light up as soon as ANY list held the same ingredient)
+function shopHasFor(t,from){return loadLists().some(l=>l.items.some(x=>!x.d&&sameItem(x.t,t)&&contribs(x).some(c=>c.old||(c.r||'')===(from||''))))}
 function addItem(id,t,from){const L=loadLists(),l=L.find(x=>x.id===id);if(!l)return;addMerge(l.items,t,from);saveLists(L)}
 function recipesOf(l){const out=[];l.items.forEach(x=>contribs(x).forEach(c=>{if(c.r&&!out.includes(c.r))out.push(c.r)}));return out}
 function removeRecipe(listId,title){const L=loadLists(),l=L.find(z=>z.id===listId);if(!l)return;
@@ -3305,14 +3307,19 @@ function offerListCleanup(es){ // v209: a recipe deleted from the history whose 
   const t=T(),q=a=>a.map(x=>'« '+x+' »').join(', '),rn=[...new Set(hit.flatMap(h=>h.rs))];
   ask({text:(hit.length>1?t.listHistQN:t.listHistQ).replace('{r}',q(rn)).replace('{l}',q(hit.map(h=>h.name))),okLabel:t.listHistOk,noLabel:t.listHistNo}).then(ok=>{if(!ok)return;hit.forEach(h=>h.rs.forEach(r=>removeRecipe(h.id,r)));refreshCarts();try{if(curList)renderShop()}catch(x){}})}
 function removeAll(t){const L=loadLists();L.forEach(l=>{l.items=l.items.filter(x=>!sameItem(x.t,t))});saveLists(L)}
+// v225: takes out only what THIS recipe added (the same ingredient wanted by another recipe stays in the list)
+function removeFor(t,from){const L=loadLists();L.forEach(l=>{l.items=l.items.filter(x=>{if(!sameItem(x.t,t))return true;const all=contribs(x);if(all.some(c=>c.old)&&!x.c)return false;
+  const keep=all.filter(c=>(c.r||'')!==(from||''));if(keep.length===all.length)return true;if(!keep.length)return false;
+  let tx=keep[0].t;for(let k=1;k<keep.length;k++){const a=qParse(tx),b=qParse(keep[k].t);if(a&&b&&a.g===b.g)tx=mergeText(tx,keep[k].t).t}
+  x.t=tx;x.c=keep;x.r=keep[0].r;return true})});saveLists(L)}
 function refreshCarts(){document.querySelectorAll('.cartb').forEach(b=>b._st&&b._st())}
 function cartBtn(name,from){
   const t=T(),txt=cap1(name),b=document.createElement('button');
   b.type='button';b.className='cartb';
-  const st=()=>{const on=shopHas(txt);b.classList.toggle('on',on);b.textContent=on?'✓':'🛒';b.title=on?t.shopRm:t.shopAdd;b.setAttribute('aria-label',on?t.shopRm:t.shopAdd)};
+  const st=()=>{const on=shopHasFor(txt,from);b.classList.toggle('on',on);b.textContent=on?'✓':'🛒';b.title=on?t.shopRm:t.shopAdd;b.setAttribute('aria-label',on?t.shopRm:t.shopAdd)};
   b._st=st;st();
   b.onclick=ev=>{ev.stopPropagation();
-    if(shopHas(txt)){ask({text:t.shopRmQ.replace('{i}',txt),okLabel:t.shopRm}).then(ok=>{if(ok){removeAll(txt);refreshCarts()}});return} // v202: untick asks first
+    if(shopHasFor(txt,from)){ask({text:t.shopRmQ.replace('{i}',txt),okLabel:t.shopRm}).then(ok=>{if(ok){removeFor(txt,from);refreshCarts()}});return} // v202: untick asks first
     const L=loadLists();
     if(!L.length){const id=newList();addItem(id,txt,from);refreshCarts();toastChange(id,txt,from);return}
     if(L.length===1){addItem(L[0].id,txt,from);refreshCarts();toastChange(L[0].id,txt,from);return}
@@ -3345,7 +3352,7 @@ function openSheet(txts,from,onDone){
   const nb=document.createElement('button');nb.type='button';nb.className='lnew';nb.textContent=t.listNew;
   nb.onclick=async()=>{const id=await askNewList();if(id){sel=id;draw()}};
   const go=document.createElement('button');go.type='button';go.className='lgo';go.textContent=t.listGo;
-  go.onclick=()=>{if(!sel)return;if(txts.length===1)removeAll(txts[0]);txts.forEach(x=>addItem(sel,x,from));closeSheet();refreshCarts();onDone&&onDone();const l=loadLists().find(x=>x.id===sel),sid=sel;toastAct(t.listAdded.replace('{l}',l?l.name:''),t.shopSee,()=>seeList(sid))};
+  go.onclick=()=>{if(!sel)return;if(txts.length===1)removeFor(txts[0],from);txts.forEach(x=>addItem(sel,x,from));closeSheet();refreshCarts();onDone&&onDone();const l=loadLists().find(x=>x.id===sel),sid=sel;toastAct(t.listAdded.replace('{l}',l?l.name:''),t.shopSee,()=>seeList(sid))};
   sh.append(gr,h,sub,opts,nb,go);
   w.append(sc,sh);document.body.appendChild(w);
 }
@@ -3440,7 +3447,7 @@ function addSelectBar(box,items,from){
   const rm=document.createElement('button');rm.type='button';rm.className='selgo selrm';rm.textContent=t.listRemSel; // v203: same selection, « Retirer de la liste »
   bar.append(cnt,all,cancel,go,rm);
   const picked=new Set();let on=false;
-  const paint=()=>{items.forEach(it=>it.li.classList.toggle('picked',picked.has(it)));cnt.textContent=t.listN.replace('{n}',picked.size);const pk=items.filter(it=>picked.has(it)),inL=pk.filter(it=>shopHas(it.t)).length;go.disabled=!(pk.length-inL);rm.disabled=!inL;bar.hidden=!picked.size};
+  const paint=()=>{items.forEach(it=>it.li.classList.toggle('picked',picked.has(it)));cnt.textContent=t.listN.replace('{n}',picked.size);const pk=items.filter(it=>picked.has(it)),inL=pk.filter(it=>shopHasFor(it.t,from)).length;go.disabled=!(pk.length-inL);rm.disabled=!inL;bar.hidden=!picked.size};
   const exit=()=>{on=false;bar.hidden=true;picked.clear();paint()};
   items.forEach(it=>{it.li._pick=()=>{if(!on)return false;picked.has(it)?picked.delete(it):picked.add(it);paint();return true};
     // outside selection, the cart opens the selection bar with this ingredient picked (not the list sheet); an ingredient already in a list is still removed by the cart
@@ -3448,8 +3455,8 @@ function addSelectBar(box,items,from){
   sb.onclick=()=>{if(on){exit();return}on=true;paint()};
   all.onclick=()=>{items.forEach(it=>picked.add(it));paint()};
   cancel.onclick=exit;
-  go.onclick=()=>{const list=items.filter(it=>picked.has(it)&&!shopHas(it.t)).map(it=>it.t);if(list.length)openSheet(list,from,exit)};
-  rm.onclick=async()=>{const list=items.filter(it=>picked.has(it)&&shopHas(it.t)).map(it=>it.t);if(!list.length)return;if(await ask({text:t.listRemQ.replace('{n}',list.length),okLabel:t.shopRm})){list.forEach(removeAll);refreshCarts();exit()}};
+  go.onclick=()=>{const list=items.filter(it=>picked.has(it)&&!shopHasFor(it.t,from)).map(it=>it.t);if(list.length)openSheet(list,from,exit)};
+  rm.onclick=async()=>{const list=items.filter(it=>picked.has(it)&&shopHasFor(it.t,from)).map(it=>it.t);if(!list.length)return;if(await ask({text:t.listRemQ.replace('{n}',list.length),okLabel:t.shopRm})){list.forEach(x=>removeFor(x,from));refreshCarts();exit()}};
   box.append(sb,bar);
 }
 function renderRecipe(el,txt,title,chat,swap,prevTxt){
