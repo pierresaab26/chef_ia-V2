@@ -181,3 +181,4 @@ Like Apple Reminders' « Groceries » list, a shopping list is grouped by aisle 
 ## Lists screen (v233)
 Each list card has a ⋯ menu (rename, duplicate, share, delete). « Edit » switches to selection mode: tick several lists, then « Select all », « Merge » (the other lists go into the first selected one; identical items add up, already-ticked items are not carried over) or « Delete ». Deleting or merging asks for confirmation and then offers « Undo » in the toast.
 (v234) « Merge » now asks which list is the primary one (the others are merged into it); the list with the most items is preselected.
+(v235) « Choose the list » sheet: 3 lists shown (the chosen one always visible), the others in a drop-down « Other lists (n)… », and a ✕ on each row to delete a list from there (confirmation + undo).
