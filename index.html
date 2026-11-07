@@ -446,12 +446,12 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav" hidden></button></div>
       <div class="hsbtns" id="hsbtns"><button type="button" id="hsHist"></button><button type="button" id="hsFavs"></button></div><!-- v212: Historique / Favoris under the search box -->
       <div id="hsres"></div>
+      <div id="hwrap"><div id="hhome"></div></div>
       <h2 id="chT"></h2>
       <div class="chefs" id="chefs"></div>
       <h2 id="snT"></h2>
       <div id="seasonBox"></div>
       <h2 style="display:none"><span id="hT"></span><button class="more" id="hmore"></button></h2>
-      <div id="hwrap"><div id="hhome"></div></div>
       <button class="impcard" id="menuHome"><i>🗓️</i><div><b id="menuHT"></b><span id="menuHS"></span></div><em class="mgo">›</em></button>
     </div>
   </section>
@@ -2547,7 +2547,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v215',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v216',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
