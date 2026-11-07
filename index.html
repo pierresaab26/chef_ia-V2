@@ -2618,7 +2618,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v241',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v242',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2963,14 +2963,10 @@ function drawMenu(){
       if(items){const mb=document.createElement('button');mb.type='button';mb.className='mmore';mb.textContent='⋯';mb.setAttribute('aria-label',t.lsMore);mb.onclick=()=>rowMenu(e?e.title:main.textContent,items);row.appendChild(mb)}
       sl.appendChild(row)});
     card.appendChild(sl);grid.appendChild(card)});
-  const oc=document.createElement('div');oc.className='mday mother';const oh=document.createElement('h4');oh.textContent=t.mOther;oc.appendChild(oh);
-  const ol=document.createElement('div');ol.className='mol';
-  m.o.filter(id=>rec.has(id)).forEach(id=>{any=true;const r=document.createElement('div');r.className='mor';r.append(filled(rec.get(id)),rm(()=>{const z=readMenu();z.o=z.o.filter(x=>x!==id);saveMenu(z);drawMenu()}));ol.appendChild(r)});
-  oc.appendChild(ol);
-  const ab=addBtn(async()=>{const id=await pickRecipe(t.mAskReq.replace('{d}',t.mOther).replace('{c}',t.menuT));if(id){const z=readMenu();if(!z.o.includes(id))z.o.push(id);saveMenu(z);drawMenu()}});ab.style.minHeight='40px';oc.appendChild(ab);
-  grid.appendChild(oc);box.appendChild(grid);
-  {let n=m.o.filter(id=>rec.has(id)).length;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));$('#menuHT').textContent=t.menuT;$('#menuHS').textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0} // v211: compact card on the home
-  if(any){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[]});drawMenu()}};box.appendChild(c)}
+  box.appendChild(grid); // v242: the « Others » card was removed
+
+  {let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));$('#menuHT').textContent=t.menuT;$('#menuHS').textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0} // v211: compact card on the home
+  if(any){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[],auto:readMenu().auto});drawMenu()}};box.appendChild(c)}
 }
 function drawerText(){const t=T();drawMenu();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;

@@ -189,3 +189,4 @@ Every Sunday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 (v239) The chef's requests for the weekly menu and the seasonal ideas now say explicitly in which language to write (`langRule` in api/_season.js); the weekly menu keys moved to `wm2:` and the app cache to v2 so English menus are regenerated.
 (v240) Each suggested slot shows two visible round buttons: 🔄 « Another idea » (asks the chef for one other dish for that course, kept on this device in `chefMenuSug`) and ✏️ « Pick my own ».
 (v241) Weekly menu redesigned as plain rows (label · dish · ⋯ menu): tap the dish to generate the recipe; ⋯ = another idea / pick my own / remove (a removed suggestion is remembered in `chefMenu.hid` for that week). Filled slots show a green ✓.
+(v242) The « Others » card of the weekly menu was removed (only the 7 days remain).
