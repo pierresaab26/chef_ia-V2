@@ -105,7 +105,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .cdate{color:var(--mut);font-size:13px;margin:0 2px 8px}
 .cchips span{background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--mut)}
 .hs i{font-style:normal}.tb .ls{display:none}@media (max-width:480px){.hs .hl{display:none}.tb .lf{display:none}.tb .ls{display:inline}.cchips span{padding:4px 9px;font-size:12px}.cchips{gap:5px}}@media (max-width:380px){.tb .ls{display:none}} /* very small phones: icon + value only (🔪 15 min), always on one line */.hs i.off{opacity:.22;filter:grayscale(1)}.cchips+.cchips{margin-top:-4px}.m .cchips{margin:2px 0 8px}.m .cchips span{background:var(--bg1)}
-.cact{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}@media(max-width:520px){.cact .shr .shl{display:none}}@media(max-width:360px){.cact{gap:6px}.cact .rate{padding:3px 7px}.cact .stars button{font-size:16px;padding:2px 0}.cact .cbtn{padding:8px 12px}}
+.cact{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}@media(max-width:350px){.cact .shr .shl{display:none}}@media(max-width:360px){.cact{gap:6px}.cact .rate{padding:3px 7px}.cact .stars button{font-size:16px;padding:2px 0}.cact .cbtn{padding:8px 12px}}
 .cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:var(--sh)}
 .rate{display:inline-flex;align-items:center;gap:4px;flex:none;margin:0;padding:3px 10px;background:var(--card);border:1px solid var(--bd);border-radius:999px;box-shadow:var(--sh)}.rate .rl{display:none}
 #totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.12);padding:0}#totop.on{display:grid}
@@ -2554,7 +2554,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v217',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v218',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
