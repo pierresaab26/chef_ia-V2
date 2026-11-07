@@ -186,6 +186,7 @@ input,textarea,select{font-size:16px!important}
 
 #homesearch{margin:10px 0 0;position:relative}.hsico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}#homesearch input{width:100%;font:inherit;padding:10px 14px 10px 40px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsfav{position:absolute;right:7px;top:50%;transform:translateY(-50%);padding:5px 11px;font-size:13px}#homesearch{margin-top:18px}.hsbtns{display:flex;gap:8px;margin-top:8px}.hsbtns button{flex:1;padding:9px 10px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-size:14px;font-weight:600}.hscnt{font-size:13px;color:var(--mut);margin:2px 4px 8px}#hsres:empty{display:none}#hsres{margin-top:10px}
 #hsearch,#fsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
+.mghost .mgen{min-height:50px}.mact{display:flex;justify-content:flex-end;gap:6px;margin-top:5px}.mab{width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:var(--card);font-size:15px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}.mab.spin{animation:wkspin .9s linear infinite;opacity:.6}@keyframes wkspin{to{transform:rotate(360deg)}}
 .mauto{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 10px;font-size:12.5px;color:var(--mut)}
 .mgen{border-style:dashed;border-color:var(--psbd);background:var(--psoft);font-size:12.5px;cursor:pointer}.mgen b{font-weight:600}.mown{color:var(--pink);font-size:12px}
 .mgrid{display:grid;gap:10px}@media(min-width:768px){.mgrid{grid-template-columns:1fr 1fr}}
@@ -709,6 +710,7 @@ fr:{
   resN:"résultats",
   res1:"résultat",
   nokey:"Le chef n’est pas encore connecté : ajoutez la clé API (ANTHROPIC_API_KEY) dans Vercel, puis redéployez.",
+  mRegen:"Autre idée",
   mAutoT:"Le chef propose le menu de la semaine",mWeekOf:"Propositions du {a} au {b} · touche un plat pour obtenir la recette",mOwn:"Choisir moi-même",mSugLoad:"Le chef prépare le menu…",mGenTip:"Générer la recette",
   menuT:"Menu de la semaine",
   mDays:"Lundi|Mardi|Mercredi|Jeudi|Vendredi|Samedi|Dimanche",
@@ -984,6 +986,7 @@ en:{
   resN:"results",
   res1:"result",
   nokey:"The chef isn’t connected yet: add the API key (ANTHROPIC_API_KEY) in Vercel, then redeploy.",
+  mRegen:"Another idea",
   mAutoT:"The chef suggests the weekly menu",mWeekOf:"Suggestions for {a} to {b} · tap a dish to get the recipe",mOwn:"Pick my own",mSugLoad:"The chef is preparing the menu…",mGenTip:"Generate the recipe",
   menuT:"Weekly menu",
   mDays:"Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday",
@@ -1259,6 +1262,7 @@ es:{
   resN:"resultados",
   res1:"resultado",
   nokey:"El chef aún no está conectado: añade la clave API (ANTHROPIC_API_KEY) en Vercel y vuelve a desplegar.",
+  mRegen:"Otra idea",
   mAutoT:"El chef propone el menú de la semana",mWeekOf:"Propuestas del {a} al {b} · toca un plato para ver la receta",mOwn:"Elegir yo mismo",mSugLoad:"El chef prepara el menú…",mGenTip:"Generar la receta",
   menuT:"Menú de la semana",
   mDays:"Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo",
@@ -1534,6 +1538,7 @@ de:{
   resN:"Ergebnisse",
   res1:"Ergebnis",
   nokey:"Der Koch ist noch nicht verbunden: API-Schlüssel (ANTHROPIC_API_KEY) in Vercel hinzufügen und neu deployen.",
+  mRegen:"Andere Idee",
   mAutoT:"Der Koch schlägt das Wochenmenü vor",mWeekOf:"Vorschläge vom {a} bis {b} · tippe ein Gericht an, um das Rezept zu erhalten",mOwn:"Selbst wählen",mSugLoad:"Der Koch bereitet das Menü vor…",mGenTip:"Rezept erstellen",
   menuT:"Wochenmenü",
   mDays:"Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag",
@@ -1809,6 +1814,7 @@ it:{
   resN:"risultati",
   res1:"risultato",
   nokey:"Lo chef non è ancora collegato: aggiungi la chiave API (ANTHROPIC_API_KEY) su Vercel e rifai il deploy.",
+  mRegen:"Altra idea",
   mAutoT:"Lo chef propone il menu della settimana",mWeekOf:"Proposte dal {a} al {b} · tocca un piatto per avere la ricetta",mOwn:"Scegliere io",mSugLoad:"Lo chef prepara il menu…",mGenTip:"Genera la ricetta",
   menuT:"Menu della settimana",
   mDays:"Lunedì|Martedì|Mercoledì|Giovedì|Venerdì|Sabato|Domenica",
@@ -2084,6 +2090,7 @@ pt:{
   resN:"resultados",
   res1:"resultado",
   nokey:"O chef ainda não está ligado: adicione a chave API (ANTHROPIC_API_KEY) na Vercel e volte a publicar.",
+  mRegen:"Outra ideia",
   mAutoT:"O chef propõe o menu da semana",mWeekOf:"Sugestões de {a} a {b} · toque num prato para obter a receita",mOwn:"Escolher eu mesmo",mSugLoad:"O chef está a preparar o menu…",mGenTip:"Gerar a receita",
   menuT:"Menu da semana",
   mDays:"Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo",
@@ -2607,7 +2614,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v239',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v240',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2910,6 +2917,13 @@ async function wkLoad(){if(wkBusy||wkRead()||Date.now()-wkOff<12e4)return;wkBusy
     if(d&&d.week&&Array.isArray(d.items)&&d.items.length===21){try{localStorage.setItem('chefMenuSug',JSON.stringify({v:2,lang,from:d.week.from,to:d.week.to,until:d.week.until,items:d.items}))}catch(e){}wkOff=0}else wkOff=Date.now()}
   catch(e){wkOff=Date.now()}finally{wkBusy=false}
   if(document.getElementById('menuBox'))drawMenu()}
+const WK_LN={fr:'French',en:'English',es:'Spanish',de:'German',it:'Italian',pt:'Portuguese'};
+async function wkRegen(i,j){const s=wkRead();if(!s)return;const cur=s.items[i*3+j][0],course=['starter','main course','dessert'][j];
+  const msg='[UI] Suggest 1 different '+course+' for a weekly menu, fitting this time of year, realistic home cooking. It must not be one of these: '+s.items.map(x=>x[0]).join(', ')+'. Answer with exactly one line written « - Dish name: one appetizing sentence » (the dish name is 1 to 5 words) and nothing else. Write the dish name and the sentence in '+WK_LN[lang]+' (the usual '+WK_LN[lang]+' name of the dish, never English unless that is the language).';
+  const res=await fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()},body:JSON.stringify({messages:[{role:'user',content:msg}],lang})},60000);
+  if(!res.ok)throw new Error('regen');const it=snParse((await res.json()).text)[0];if(!it||snNorm(it[0])===snNorm(cur))throw new Error('regen');
+  const z=wkRead();if(!z)return;z.items[i*3+j]=it;try{localStorage.setItem('chefMenuSug',JSON.stringify(z))}catch(e){}}
+const snNorm=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
 function menuAssign(id){if(!menuPend)return;const p=menuPend;menuPend=null;if(Date.now()-p.at>10*60e3)return;const z=readMenu();if(!z.d[p.i][p.j]){z.d[p.i][p.j]=id;saveMenu(z)}}
 function drawMenu(){
   const t=T(),box=$('#menuBox');box.innerHTML='';$('#menuT').textContent=t.menuT;
@@ -2923,12 +2937,15 @@ function drawMenu(){
     cb.onchange=()=>{const z=readMenu();z.auto=cb.checked;saveMenu(z);drawMenu()};const sp=document.createElement('span');sp.textContent=t.mAutoT;row.append(cb,sp);box.appendChild(row);
     const fm=x=>new Date(x+'T12:00:00Z').toLocaleDateString(lang,{day:'numeric',month:'short',timeZone:'UTC'});
     if(m.auto){const n=document.createElement('p');n.className='mweek';n.textContent=sug?t.mWeekOf.replace('{a}',fm(sug.from)).replace('{b}',fm(sug.to)):t.mSugLoad;box.appendChild(n)}}
-  const ghost=(i,j,dn,cn)=>{const [nm,ds]=sug.items[i*3+j],wrap=document.createElement('div');wrap.className='mfill mghost';
+  const ghost=(i,j,dn,cn)=>{const [nm,ds]=sug.items[i*3+j],wrap=document.createElement('div');wrap.className='mghost';
     const b=document.createElement('button');b.type='button';b.className='mset mgen';b.title=t.mGenTip;const bb=document.createElement('b');bb.textContent=nm;b.append('✨ ',bb);
     b.onclick=()=>{menuPend={i,j,at:Date.now()};openChat(null);send(t.idGen.replace('{x}',nm),true)};
-    const own=document.createElement('button');own.type='button';own.className='mrm mown';own.textContent='✎';own.setAttribute('aria-label',t.mOwn);own.title=t.mOwn;
+    const ac=document.createElement('div');ac.className='mact';
+    const rg=document.createElement('button');rg.type='button';rg.className='mab';rg.textContent='🔄';rg.title=t.mRegen;rg.setAttribute('aria-label',t.mRegen);
+    rg.onclick=async ev=>{ev.stopPropagation();rg.disabled=true;rg.classList.add('spin');try{await wkRegen(i,j)}catch(e){toast(t.err)}drawMenu()};
+    const own=document.createElement('button');own.type='button';own.className='mab';own.textContent='✏️';own.setAttribute('aria-label',t.mOwn);own.title=t.mOwn;
     own.onclick=async ev=>{ev.stopPropagation();const id=await pickRecipe(t.mAskReq.replace('{d}',dn).replace('{c}',cn));if(id){const z=readMenu();z.d[i][j]=id;saveMenu(z);drawMenu()}};
-    wrap.append(b,own);return wrap};
+    ac.append(rg,own);wrap.append(b,ac);return wrap};
   const grid=document.createElement('div');grid.className='mgrid';let any=false;
   days.forEach((dn,i)=>{const card=document.createElement('div');card.className='mday';const h=document.createElement('h4');h.textContent=dn;card.appendChild(h);
     const sl=document.createElement('div');sl.className='mslots';
