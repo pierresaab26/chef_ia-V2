@@ -276,7 +276,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .impcard span{color:var(--mut);font-size:12px}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 2px}
 .tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;margin:0;padding:8px 4px;text-align:center}
-.tiles .impcard i{font-size:20px}.tiles .impcard i.five5{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px;line-height:1}.tiles #fiveHome span{display:block;font-size:10.5px;line-height:1.2}.askico{font-size:17px;flex:none;line-height:1}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
+.tiles .impcard i{font-size:20px;height:26px;width:100%;display:grid;place-items:center;line-height:1}.tiles .impcard i.five5{width:24px;height:24px;margin:1px auto;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px}.tiles .impcard>div{width:100%}.tiles #fiveHome span{display:block;font-size:10.5px;line-height:1.2}.askico{font-size:17px;flex:none;line-height:1}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
 #hwrap{margin-top:10px}#menuHome{margin:14px 0 18px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
 .snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
@@ -2555,7 +2555,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v221',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v222',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
