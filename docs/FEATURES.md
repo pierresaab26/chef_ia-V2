@@ -176,3 +176,4 @@ Ingredients are always displayed in the same logical order (meat, fish, vegetabl
 
 ## Shopping list by aisle (v228)
 Like Apple Reminders' « Groceries » list, a shopping list is grouped by aisle (fruit & vegetables, meat & fish, dairy & eggs, pantry, spices/oils/sauces, drinks, other), in supermarket-walk order. The aisle comes from the same keyword lists as the ingredient order (`aisleOf` → `ingRank`), in 6 languages; unknown items go to « Other ». Empty aisles are hidden, a header tap folds the aisle (remembered in `chefAisleCol`), the header shows « left/total », ticked items sit at the bottom of their aisle. Not done yet: moving an item to another aisle by hand.
+(v229) Aisle headers are now cards with a coloured round icon, a « left/total » pill and a round chevron button; a folded aisle shows « N items »; a one-time hint « Tap an aisle to fold or unfold it » disappears after the first tap (`chefAisleHint`).
