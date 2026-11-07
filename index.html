@@ -313,6 +313,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shop-row .sck{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--mut);flex:none;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
 .shop-row.done .sck{background:var(--pink);border-color:var(--pink)}
 .shop-row.done .st{text-decoration:line-through;opacity:.55}
+.shop-row .sbt{flex:none;font-size:12px;font-weight:600;line-height:1;padding:5px 9px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd)}
 .lrh{font-size:13px;font-weight:700;color:var(--mut);margin:14px 4px 8px}.lrecs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}.lrec{display:inline-flex;align-items:center;gap:2px;max-width:100%;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:3px 3px 3px 12px;font-size:13px;font-weight:600}.lrec>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lrec button{flex:none;width:28px;height:28px;border-radius:50%;color:var(--mut);font-size:13px}
 .shop-row .sdel{flex:none;background:none;border:0;color:var(--mut);font-size:18px;padding:4px 6px;cursor:pointer}
 .lsw{position:fixed;inset:0;z-index:60}
@@ -698,6 +699,7 @@ fr:{
   listRemSel:"Retirer de la liste",listRemQ:"Retirer {n} ingrédient(s) de la liste de courses ?",
   listNewQ:"Nom de la liste",listCreate:"Créer",
   listAddFree:"Ajouter un ingrédient…",listAddBtn:"Ajouter",
+  listBought:"Acheté",
   listHistQN:"Les ingrédients de {r} sont dans les listes de courses {l}. Voulez-vous les retirer ?",listHistQ:"Les ingrédients de {r} sont dans la liste de courses {l}. Voulez-vous les retirer ?",listHistOk:"Retirer",listHistNo:"Garder",
   listRecs:"Recettes de la liste",listRecDel:"Retirer la recette",listRecQ:"Retirer la recette « {r} » et ses ingrédients de la liste ?",
   listMerge:"Vous avez « {a} » dans la liste et vous ajoutez « {b} » : {n} au total. Les additionner ? (Annuler garde les deux lignes.)",listMergeYes:"Additionner",
@@ -964,6 +966,7 @@ en:{
   listRemSel:"Remove from list",listRemQ:"Remove {n} ingredient(s) from the shopping list?",
   listNewQ:"Name of the list",listCreate:"Create",
   listAddFree:"Add an ingredient…",listAddBtn:"Add",
+  listBought:"Bought",
   listHistQN:"The ingredients of {r} are in the shopping lists {l}. Do you want to remove them?",listHistQ:"The ingredients of {r} are in the shopping list {l}. Do you want to remove them?",listHistOk:"Remove",listHistNo:"Keep",
   listRecs:"Recipes in this list",listRecDel:"Remove the recipe",listRecQ:"Remove the recipe “{r}” and its ingredients from the list?",
   listMerge:"You have “{a}” in the list and you are adding “{b}”: {n} in total. Add them up? (Cancel keeps both lines.)",listMergeYes:"Add up",
@@ -1230,6 +1233,7 @@ es:{
   listRemSel:"Quitar de la lista",listRemQ:"¿Quitar {n} ingrediente(s) de la lista de la compra?",
   listNewQ:"Nombre de la lista",listCreate:"Crear",
   listAddFree:"Añadir un ingrediente…",listAddBtn:"Añadir",
+  listBought:"Comprado",
   listHistQN:"Los ingredientes de {r} están en las listas de la compra {l}. ¿Quieres quitarlos?",listHistQ:"Los ingredientes de {r} están en la lista de la compra {l}. ¿Quieres quitarlos?",listHistOk:"Quitar",listHistNo:"Conservar",
   listRecs:"Recetas de la lista",listRecDel:"Quitar la receta",listRecQ:"¿Quitar la receta «{r}» y sus ingredientes de la lista?",
   listMerge:"Tienes «{a}» en la lista y añades «{b}»: {n} en total. ¿Sumarlos? (Cancelar mantiene las dos líneas.)",listMergeYes:"Sumar",
@@ -1496,6 +1500,7 @@ de:{
   listRemSel:"Von der Liste entfernen",listRemQ:"{n} Zutat(en) von der Einkaufsliste entfernen?",
   listNewQ:"Name der Liste",listCreate:"Erstellen",
   listAddFree:"Zutat hinzufügen…",listAddBtn:"Hinzufügen",
+  listBought:"Gekauft",
   listHistQN:"Die Zutaten von {r} stehen auf den Einkaufslisten {l}. Möchtest du sie entfernen?",listHistQ:"Die Zutaten von {r} stehen auf der Einkaufsliste {l}. Möchtest du sie entfernen?",listHistOk:"Entfernen",listHistNo:"Behalten",
   listRecs:"Rezepte in der Liste",listRecDel:"Rezept entfernen",listRecQ:"Das Rezept „{r}“ und seine Zutaten von der Liste entfernen?",
   listMerge:"Du hast „{a}“ in der Liste und fügst „{b}“ hinzu: insgesamt {n}. Zusammenzählen? (Abbrechen behält beide Zeilen.)",listMergeYes:"Zusammenzählen",
@@ -1762,6 +1767,7 @@ it:{
   listRemSel:"Rimuovi dalla lista",listRemQ:"Rimuovere {n} ingrediente/i dalla lista della spesa?",
   listNewQ:"Nome della lista",listCreate:"Crea",
   listAddFree:"Aggiungi un ingrediente…",listAddBtn:"Aggiungi",
+  listBought:"Comprato",
   listHistQN:"Gli ingredienti di {r} sono nelle liste della spesa {l}. Vuoi toglierli?",listHistQ:"Gli ingredienti di {r} sono nella lista della spesa {l}. Vuoi toglierli?",listHistOk:"Togli",listHistNo:"Tieni",
   listRecs:"Ricette della lista",listRecDel:"Rimuovi la ricetta",listRecQ:"Rimuovere la ricetta «{r}» e i suoi ingredienti dalla lista?",
   listMerge:"Hai «{a}» nella lista e aggiungi «{b}»: {n} in totale. Sommarli? (Annulla mantiene entrambe le righe.)",listMergeYes:"Somma",
@@ -2028,6 +2034,7 @@ pt:{
   listRemSel:"Remover da lista",listRemQ:"Remover {n} ingrediente(s) da lista de compras?",
   listNewQ:"Nome da lista",listCreate:"Criar",
   listAddFree:"Adicionar um ingrediente…",listAddBtn:"Adicionar",
+  listBought:"Comprado",
   listHistQN:"Os ingredientes de {r} estão nas listas de compras {l}. Quer retirá-los?",listHistQ:"Os ingredientes de {r} estão na lista de compras {l}. Quer retirá-los?",listHistOk:"Retirar",listHistNo:"Manter",
   listRecs:"Receitas da lista",listRecDel:"Remover a receita",listRecQ:"Remover a receita «{r}» e os seus ingredientes da lista?",
   listMerge:"Tens «{a}» na lista e adicionas «{b}»: {n} no total. Somá-los? (Cancelar mantém as duas linhas.)",listMergeYes:"Somar",
@@ -2518,7 +2525,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v209',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v210',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3369,7 +3376,8 @@ function renderShop(){
     const del=document.createElement('button');del.type='button';del.className='sdel';del.textContent='✕';del.setAttribute('aria-label',t.shopClear);
     del.onclick=ev=>{ev.stopPropagation();const M=loadLists(),y=M.find(z=>z.id===l.id);if(y){y.items.splice(i,1);saveLists(M)}refreshCarts();renderShop()};
     row.onclick=()=>{const M=loadLists(),y=M.find(z=>z.id===l.id);if(y&&y.items[i]){y.items[i].d=y.items[i].d?0:1;saveLists(M)}renderShop()};
-    row.append(ck,st,del);box.appendChild(row);
+    row.append(ck,st);if(x.d){const bt=document.createElement('span');bt.className='sbt';bt.textContent=t.listBought;row.appendChild(bt)} // v210: small « Acheté » label on ticked items
+    row.append(del);box.appendChild(row);
   });
   if(l.items.length){
     const act=document.createElement('div');act.className='shact';
