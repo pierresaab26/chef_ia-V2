@@ -43,7 +43,7 @@ async function generate(lang, occ, avoid, banned) {
       model: process.env.MODEL || "claude-haiku-5-5",
       max_tokens: 700,
       system: systemFor(PARTS, { lang }),
-      messages: [{ role: "user", content: ideasPrompt(occ, asked) }],
+      messages: [{ role: "user", content: ideasPrompt(occ, asked, lang) }],
     });
     parseIdeas(text).forEach((it, i) => {
       const k = norm(it[0]);

@@ -10,7 +10,7 @@ import { weekOf, parseMenu, menuPrompt } from "./_week.js";
 // Redis: wm:<lang>:<week> = {items, at}, kept 20 days. The previous week's dishes are sent to the chef as « Not these ». No Redis → 501 (the app then shows no suggestion).
 
 const TTL = 20 * 86400;
-const key = (lang, id) => `wm:${lang}:${id}`;
+const key = (lang, id) => `wm2:${lang}:${id}`; // wm2: v238 first menus were written in English (no language rule): new keys regenerate them
 
 async function read(lang, id) {
   const [s] = await redis([["GET", key(lang, id)]]);
@@ -23,7 +23,7 @@ async function generate(lang, avoid) {
       model: process.env.MODEL || "claude-haiku-5-5",
       max_tokens: 2200,
       system: systemFor(PARTS, { lang }),
-      messages: [{ role: "user", content: menuPrompt(avoid) }],
+      messages: [{ role: "user", content: menuPrompt(avoid, lang) }],
     });
     const items = parseMenu(text);
     if (items.length === 21 && new Set(items.map((x) => norm(x[0]))).size >= 19) return items;

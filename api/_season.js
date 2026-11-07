@@ -4,6 +4,9 @@
 // The "_" prefix tells Vercel this file is not a route.
 
 export const LANGS = ["fr", "en", "es", "de", "it", "pt"];
+// Language names for the request sent to the chef (he must write the names and sentences in the interface language).
+export const LANG_NAME = { fr: "French", en: "English", es: "Spanish", de: "German", it: "Italian", pt: "Portuguese" };
+export const langRule = (lang) => LANG_NAME[lang] ? ` Write EVERY dish name and EVERY sentence in ${LANG_NAME[lang]} (use the usual ${LANG_NAME[lang]} name of each dish, never English unless that is the language).` : "";
 
 // Occasion key → [kind, English name]. Keys are the `SN` keys of index.html (kind: "s" season, "f" holiday or festival).
 export const OCC = {
@@ -84,7 +87,7 @@ export function parseIdeas(text) {
 export const norm = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 
 // English request sent to the chef (the « [UI] » prefix makes him answer in the interface language, see api/chat.js).
-export function ideasPrompt(occ, avoid = []) {
+export function ideasPrompt(occ, avoid = [], lang = "") {
   const [kind, name] = OCC[occ];
   const course = " One starter, one main course, one dessert and one drink, in that order.";
   const season = " Everything must fit this exact time of year: nothing that belongs to another season (for example no hot mulled wine or heavy stews in summer, no ice cream or cold fresh salads in winter).";
@@ -92,5 +95,5 @@ export function ideasPrompt(occ, avoid = []) {
     ? `[UI] Suggest 4 recipe ideas for the period « ${name} »: dishes and drinks typical of this season (the ones people crave at this time of year) and/or that showcase its seasonal produce, drawing on the cuisines of several countries.` + course + season
     : `[UI] Suggest 4 traditional recipe ideas for « ${name} », drawing on the specialities of several countries and using seasonal produce.` + course + season;
   if (avoid.length) msg += ` Not these: ${avoid.join(", ")}.`;
-  return msg;
+  return msg + langRule(lang);
 }

@@ -2,7 +2,7 @@
 // and copied as-is (import/export removed) into the claude.ai preview bridge.
 // A « week » starts on a Sunday at 9:00 Paris time and lasts 7 days; week 0 starts on the anchor Sunday. The menu has 21 dishes:
 // Monday … Sunday × starter, main course, dessert (index = day * 3 + course).
-import { parisParts, parisToEpoch, OCC, occasionNowFR } from "./_season.js";
+import { parisParts, parisToEpoch, OCC, occasionNowFR, langRule } from "./_season.js";
 
 const WK_ANCHOR = Date.UTC(2026, 10, 8) / 864e5; // day number of Sunday 8 Nov 2026
 const WK_HOUR = 9; // Paris time
@@ -33,10 +33,10 @@ export function parseMenu(text) {
 }
 
 // English request sent to the chef (the « [UI] » prefix makes him answer in the interface language, see api/chat.js).
-export function menuPrompt(avoid = [], now = new Date()) {
+export function menuPrompt(avoid = [], lang = "", now = new Date()) {
   const occ = OCC[occasionNowFR(now)];
   let msg = "[UI] Plan a menu for the 7 days of the coming week, Monday to Sunday. For each day, give exactly 3 lines in this order: one starter, one main course, one dessert. That makes exactly 21 lines in total, and nothing else (no introduction, no day names, no headings, no closing sentence). Each line is written « - Dish name: one appetizing sentence » (the dish name is 1 to 5 words)."
     + ` Everything must fit this time of year (${occ[1]}): nothing that belongs to another season. Vary the week: different main ingredients each day, at most 2 fish or seafood mains, 1 or 2 vegetarian mains, cuisines from several countries, realistic home cooking, a lighter dish after a rich one, and a more festive Sunday. No dish may appear twice.`;
   if (avoid.length) msg += ` Not these: ${avoid.join(", ")}.`;
-  return msg;
+  return msg + langRule(lang);
 }
