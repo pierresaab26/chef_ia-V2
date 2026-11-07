@@ -2569,7 +2569,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v230',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v231',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3516,7 +3516,7 @@ function sortIng(lines){const L=lines.filter(l=>l.trim());if(L.length<3||!L.ever
 const AISLES=[ // [id, emoji, ranks of ING_ORDER, labels fr|en|es|de|it|pt]
  ['veg','🥬',[2,3],'Fruits et légumes|Fruit & vegetables|Frutas y verduras|Obst & Gemüse|Frutta e verdura|Frutas e legumes'],
  ['meat','🥩',[0,1],'Viandes et poissons|Meat & fish|Carne y pescado|Fleisch & Fisch|Carne e pesce|Carnes e peixes'],
- ['dairy','🧈',[5,7],'Crémerie et œufs|Dairy & eggs|Lácteos y huevos|Milch & Eier|Latticini e uova|Laticínios e ovos'],
+ ['dairy','🥚',[5,7],'Crémerie et œufs|Dairy & eggs|Lácteos y huevos|Milch & Eier|Latticini e uova|Laticínios e ovos'],
  ['dry','🌾',[4,6],'Épicerie|Pantry|Despensa|Vorrat|Dispensa|Mercearia'],
  ['spice','🧂',[8,9],'Épices, huiles et sauces|Spices, oils & sauces|Especias, aceites y salsas|Gewürze, Öle & Soßen|Spezie, oli e salse|Especiarias, óleos e molhos'],
  ['drink','🥤',[10],'Boissons|Drinks|Bebidas|Getränke|Bevande|Bebidas'],
