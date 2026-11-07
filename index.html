@@ -698,6 +698,7 @@ fr:{
   listRemSel:"Retirer de la liste",listRemQ:"Retirer {n} ingrédient(s) de la liste de courses ?",
   listNewQ:"Nom de la liste",listCreate:"Créer",
   listAddFree:"Ajouter un ingrédient…",listAddBtn:"Ajouter",
+  listHistQN:"Les ingrédients de {r} sont dans les listes de courses {l}. Voulez-vous les retirer ?",listHistQ:"Les ingrédients de {r} sont dans la liste de courses {l}. Voulez-vous les retirer ?",listHistOk:"Retirer",listHistNo:"Garder",
   listRecs:"Recettes de la liste",listRecDel:"Retirer la recette",listRecQ:"Retirer la recette « {r} » et ses ingrédients de la liste ?",
   listMerge:"Vous avez « {a} » dans la liste et vous ajoutez « {b} » : {n} au total. Les additionner ? (Annuler garde les deux lignes.)",listMergeYes:"Additionner",
   listSelAll:"Tout sélectionner",listSelNone:"Tout désélectionner",
@@ -963,6 +964,7 @@ en:{
   listRemSel:"Remove from list",listRemQ:"Remove {n} ingredient(s) from the shopping list?",
   listNewQ:"Name of the list",listCreate:"Create",
   listAddFree:"Add an ingredient…",listAddBtn:"Add",
+  listHistQN:"The ingredients of {r} are in the shopping lists {l}. Do you want to remove them?",listHistQ:"The ingredients of {r} are in the shopping list {l}. Do you want to remove them?",listHistOk:"Remove",listHistNo:"Keep",
   listRecs:"Recipes in this list",listRecDel:"Remove the recipe",listRecQ:"Remove the recipe “{r}” and its ingredients from the list?",
   listMerge:"You have “{a}” in the list and you are adding “{b}”: {n} in total. Add them up? (Cancel keeps both lines.)",listMergeYes:"Add up",
   listSelAll:"Select all",listSelNone:"Deselect all",
@@ -1228,6 +1230,7 @@ es:{
   listRemSel:"Quitar de la lista",listRemQ:"¿Quitar {n} ingrediente(s) de la lista de la compra?",
   listNewQ:"Nombre de la lista",listCreate:"Crear",
   listAddFree:"Añadir un ingrediente…",listAddBtn:"Añadir",
+  listHistQN:"Los ingredientes de {r} están en las listas de la compra {l}. ¿Quieres quitarlos?",listHistQ:"Los ingredientes de {r} están en la lista de la compra {l}. ¿Quieres quitarlos?",listHistOk:"Quitar",listHistNo:"Conservar",
   listRecs:"Recetas de la lista",listRecDel:"Quitar la receta",listRecQ:"¿Quitar la receta «{r}» y sus ingredientes de la lista?",
   listMerge:"Tienes «{a}» en la lista y añades «{b}»: {n} en total. ¿Sumarlos? (Cancelar mantiene las dos líneas.)",listMergeYes:"Sumar",
   listSelAll:"Seleccionar todo",listSelNone:"Deseleccionar todo",
@@ -1493,6 +1496,7 @@ de:{
   listRemSel:"Von der Liste entfernen",listRemQ:"{n} Zutat(en) von der Einkaufsliste entfernen?",
   listNewQ:"Name der Liste",listCreate:"Erstellen",
   listAddFree:"Zutat hinzufügen…",listAddBtn:"Hinzufügen",
+  listHistQN:"Die Zutaten von {r} stehen auf den Einkaufslisten {l}. Möchtest du sie entfernen?",listHistQ:"Die Zutaten von {r} stehen auf der Einkaufsliste {l}. Möchtest du sie entfernen?",listHistOk:"Entfernen",listHistNo:"Behalten",
   listRecs:"Rezepte in der Liste",listRecDel:"Rezept entfernen",listRecQ:"Das Rezept „{r}“ und seine Zutaten von der Liste entfernen?",
   listMerge:"Du hast „{a}“ in der Liste und fügst „{b}“ hinzu: insgesamt {n}. Zusammenzählen? (Abbrechen behält beide Zeilen.)",listMergeYes:"Zusammenzählen",
   listSelAll:"Alle auswählen",listSelNone:"Alle abwählen",
@@ -1758,6 +1762,7 @@ it:{
   listRemSel:"Rimuovi dalla lista",listRemQ:"Rimuovere {n} ingrediente/i dalla lista della spesa?",
   listNewQ:"Nome della lista",listCreate:"Crea",
   listAddFree:"Aggiungi un ingrediente…",listAddBtn:"Aggiungi",
+  listHistQN:"Gli ingredienti di {r} sono nelle liste della spesa {l}. Vuoi toglierli?",listHistQ:"Gli ingredienti di {r} sono nella lista della spesa {l}. Vuoi toglierli?",listHistOk:"Togli",listHistNo:"Tieni",
   listRecs:"Ricette della lista",listRecDel:"Rimuovi la ricetta",listRecQ:"Rimuovere la ricetta «{r}» e i suoi ingredienti dalla lista?",
   listMerge:"Hai «{a}» nella lista e aggiungi «{b}»: {n} in totale. Sommarli? (Annulla mantiene entrambe le righe.)",listMergeYes:"Somma",
   listSelAll:"Seleziona tutto",listSelNone:"Deseleziona tutto",
@@ -2023,6 +2028,7 @@ pt:{
   listRemSel:"Remover da lista",listRemQ:"Remover {n} ingrediente(s) da lista de compras?",
   listNewQ:"Nome da lista",listCreate:"Criar",
   listAddFree:"Adicionar um ingrediente…",listAddBtn:"Adicionar",
+  listHistQN:"Os ingredientes de {r} estão nas listas de compras {l}. Quer retirá-los?",listHistQ:"Os ingredientes de {r} estão na lista de compras {l}. Quer retirá-los?",listHistOk:"Retirar",listHistNo:"Manter",
   listRecs:"Receitas da lista",listRecDel:"Remover a receita",listRecQ:"Remover a receita «{r}» e os seus ingredientes da lista?",
   listMerge:"Tens «{a}» na lista e adicionas «{b}»: {n} no total. Somá-los? (Cancelar mantém as duas linhas.)",listMergeYes:"Somar",
   listSelAll:"Selecionar tudo",listSelNone:"Desselecionar tudo",
@@ -2165,14 +2171,14 @@ function fetchT(url,opts,ms){const c=new AbortController(),tm=setTimeout(()=>c.a
 function newConv(){convTok++;oldHidden=new Set();busy=false;try{sendB.disabled=false}catch(e){}stickEl=null;qOpen=true;cardAfter=false}
 // In-app dialog (replaces the browser's prompt() and confirm(), which look out of place on phones and are blocked in some views).
 // ask({text, input, okLabel}) resolves to the typed text (input), true (confirm) or null (cancelled).
-function ask({text,input=false,okLabel}){
+function ask({text,input=false,okLabel,noLabel}){
   return new Promise(done=>{
     const w=document.createElement('div');w.className='dlgw';
     const d=document.createElement('div');d.className='dlg';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
     const p=document.createElement('p');p.textContent=text;d.appendChild(p);
     let f=null;if(input){f=document.createElement('input');f.type='text';f.autocomplete='off';f.setAttribute('autocapitalize','off');f.spellcheck=false;d.appendChild(f)}
     const row=document.createElement('div');row.className='dlgb';
-    const no=document.createElement('button');no.type='button';no.className='cbtn';no.textContent=T().imCancel;
+    const no=document.createElement('button');no.type='button';no.className='cbtn';no.textContent=noLabel||T().imCancel;
     const yes=document.createElement('button');yes.type='button';yes.className='cbtn dlgok';yes.textContent=okLabel||T().ok;
     row.append(no,yes);d.appendChild(row);w.appendChild(d);document.body.appendChild(w);
     const end=v=>{w.remove();document.removeEventListener('keydown',key);done(v)};
@@ -2512,7 +2518,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v208',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v209',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2673,7 +2679,7 @@ function rowFor(e,del,heart,sc,unarch){
     const u=document.createElement('button');u.type='button';u.className='hunar';u.textContent='↩ '+T().hUnarchB;u.setAttribute('aria-label',T().hUnarchB+' – '+e.title);
     u.onclick=()=>{const a=loadH(),z=a.find(x=>x.id===e.id);if(!z)return;delete z.arch;if(!saveH(a))toast(T().stFull);else toast(T().hUnarchD.replace('{n}',1));if(hsel)hsel.delete(e.id);refreshAll()};r.appendChild(u)}
   if(del){const k=document.createElement('button');k.className='hdel';k.textContent='✕';k.setAttribute('aria-label',T().del);
-    k.onclick=async()=>{if(await ask({text:T().delq,okLabel:T().del})){wipeKeys(keysOf(e));saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{drawMenu()}catch(x){}}};r.appendChild(k)}
+    k.onclick=async()=>{if(await ask({text:T().delq,okLabel:T().del})){wipeKeys(keysOf(e));offerListCleanup([e]);saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{drawMenu()}catch(x){}}};r.appendChild(k)}
   return r;
 }
 var hsel=null,harch=false,hshown=[],hfold=(()=>{try{return new Set(JSON.parse(localStorage.getItem('hFold')||'[]'))}catch(e){return new Set()}})(); // hfold = category indexes folded in the « Favoris » tab (kept on the device)
@@ -2730,7 +2736,7 @@ function selBar(){
 }
 async function selDelete(){
   const S=new Set(hsel);if(!S.size||!await ask({text:T().hDelN.replace('{n}',S.size),okLabel:T().del}))return;
-  wipeKeys(loadH().filter(z=>S.has(z.id)).flatMap(z=>keysOf(z)));
+  const gone=loadH().filter(z=>S.has(z.id));wipeKeys(gone.flatMap(z=>keysOf(z)));offerListCleanup(gone);
   if(!saveH(loadH().filter(z=>!S.has(z.id))))toast(T().stFull);
   if(S.has(currentId)){currentId=null;try{syncCardBtn()}catch(x){}}
   hsel=null;refreshAll();
@@ -3249,6 +3255,11 @@ function removeRecipe(listId,title){const L=loadLists(),l=L.find(z=>z.id===listI
     let t=keep[0].t;for(let k=1;k<keep.length;k++){const a=qParse(t),b=qParse(keep[k].t);if(a&&b&&a.g===b.g)t=mergeText(t,keep[k].t).t}
     x.t=t;x.c=keep;x.r=keep[0].r;return true});
   saveLists(L)}
+function offerListCleanup(es){ // v209: a recipe deleted from the history whose ingredients are in a shopping list → offer to remove them
+  const ti=new Set();es.forEach(e=>{if(e.title)ti.add(e.title);(e.messages||[]).forEach(m=>{if(m.role==='assistant'){const x=recipeTitle(m.content);if(x)ti.add(x)}})});
+  const hit=[];loadLists().forEach(l=>{const rs=recipesOf(l).filter(r=>ti.has(r));if(rs.length)hit.push({id:l.id,name:l.name,rs})});if(!hit.length)return;
+  const t=T(),q=a=>a.map(x=>'« '+x+' »').join(', '),rn=[...new Set(hit.flatMap(h=>h.rs))];
+  ask({text:(hit.length>1?t.listHistQN:t.listHistQ).replace('{r}',q(rn)).replace('{l}',q(hit.map(h=>h.name))),okLabel:t.listHistOk,noLabel:t.listHistNo}).then(ok=>{if(!ok)return;hit.forEach(h=>h.rs.forEach(r=>removeRecipe(h.id,r)));refreshCarts();try{if(curList)renderShop()}catch(x){}})}
 function removeAll(t){const L=loadLists();L.forEach(l=>{l.items=l.items.filter(x=>!sameItem(x.t,t))});saveLists(L)}
 function refreshCarts(){document.querySelectorAll('.cartb').forEach(b=>b._st&&b._st())}
 function cartBtn(name,from){
