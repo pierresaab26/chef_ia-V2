@@ -313,6 +313,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shop-row .sck{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--mut);flex:none;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
 .shop-row.done .sck{background:var(--pink);border-color:var(--pink)}
 .shop-row.done .st{text-decoration:line-through;opacity:.55}
+.lrh{font-size:13px;font-weight:700;color:var(--mut);margin:14px 4px 8px}.lrecs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}.lrec{display:inline-flex;align-items:center;gap:2px;max-width:100%;background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:3px 3px 3px 12px;font-size:13px;font-weight:600}.lrec>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lrec button{flex:none;width:28px;height:28px;border-radius:50%;color:var(--mut);font-size:13px}
 .shop-row .sdel{flex:none;background:none;border:0;color:var(--mut);font-size:18px;padding:4px 6px;cursor:pointer}
 .lsw{position:fixed;inset:0;z-index:60}
 .lss{position:absolute;inset:0;background:rgba(20,15,25,.35)}
@@ -697,6 +698,7 @@ fr:{
   listRemSel:"Retirer de la liste",listRemQ:"Retirer {n} ingrédient(s) de la liste de courses ?",
   listNewQ:"Nom de la liste",listCreate:"Créer",
   listAddFree:"Ajouter un ingrédient…",listAddBtn:"Ajouter",
+  listRecs:"Recettes de la liste",listRecDel:"Retirer la recette",listRecQ:"Retirer la recette « {r} » et ses ingrédients de la liste ?",
   listMerge:"Vous avez « {a} » dans la liste et vous ajoutez « {b} » : {n} au total. Les additionner ? (Annuler garde les deux lignes.)",listMergeYes:"Additionner",
   listSelAll:"Tout sélectionner",listSelNone:"Tout désélectionner",
   listsT:"Listes de courses",listDay:"Courses du {d}",listNew:"＋ Nouvelle liste",listPick:"Choisir la liste",listCnt:"{n} articles",listDone:"{d} sur {n} cochés",listRen:"Renommer la liste",listDel:"Supprimer la liste",listDelQ:"Supprimer cette liste et ses articles ?",listAdded:"Ajouté à {l}",listChange:"Changer",listShare:"Partager",listCreated:"Créée le {d}",listGo:"Ajouter",listCopied:"Liste copiée",listEmptyL:"Cette liste est vide.",listOld:"Ma liste",
@@ -961,6 +963,7 @@ en:{
   listRemSel:"Remove from list",listRemQ:"Remove {n} ingredient(s) from the shopping list?",
   listNewQ:"Name of the list",listCreate:"Create",
   listAddFree:"Add an ingredient…",listAddBtn:"Add",
+  listRecs:"Recipes in this list",listRecDel:"Remove the recipe",listRecQ:"Remove the recipe “{r}” and its ingredients from the list?",
   listMerge:"You have “{a}” in the list and you are adding “{b}”: {n} in total. Add them up? (Cancel keeps both lines.)",listMergeYes:"Add up",
   listSelAll:"Select all",listSelNone:"Deselect all",
   listsT:"Shopping lists",listDay:"Shopping for {d}",listNew:"＋ New list",listPick:"Choose the list",listCnt:"{n} items",listDone:"{d} of {n} ticked",listRen:"Rename the list",listDel:"Delete the list",listDelQ:"Delete this list and its items?",listAdded:"Added to {l}",listChange:"Change",listShare:"Share",listCreated:"Created on {d}",listGo:"Add",listCopied:"List copied",listEmptyL:"This list is empty.",listOld:"My list",
@@ -1225,6 +1228,7 @@ es:{
   listRemSel:"Quitar de la lista",listRemQ:"¿Quitar {n} ingrediente(s) de la lista de la compra?",
   listNewQ:"Nombre de la lista",listCreate:"Crear",
   listAddFree:"Añadir un ingrediente…",listAddBtn:"Añadir",
+  listRecs:"Recetas de la lista",listRecDel:"Quitar la receta",listRecQ:"¿Quitar la receta «{r}» y sus ingredientes de la lista?",
   listMerge:"Tienes «{a}» en la lista y añades «{b}»: {n} en total. ¿Sumarlos? (Cancelar mantiene las dos líneas.)",listMergeYes:"Sumar",
   listSelAll:"Seleccionar todo",listSelNone:"Deseleccionar todo",
   listsT:"Listas de la compra",listDay:"Compra del {d}",listNew:"＋ Nueva lista",listPick:"Elige la lista",listCnt:"{n} artículos",listDone:"{d} de {n} marcados",listRen:"Renombrar la lista",listDel:"Eliminar la lista",listDelQ:"¿Eliminar esta lista y sus artículos?",listAdded:"Añadido a {l}",listChange:"Cambiar",listShare:"Compartir",listCreated:"Creada el {d}",listGo:"Añadir",listCopied:"Lista copiada",listEmptyL:"Esta lista está vacía.",listOld:"Mi lista",
@@ -1489,6 +1493,7 @@ de:{
   listRemSel:"Von der Liste entfernen",listRemQ:"{n} Zutat(en) von der Einkaufsliste entfernen?",
   listNewQ:"Name der Liste",listCreate:"Erstellen",
   listAddFree:"Zutat hinzufügen…",listAddBtn:"Hinzufügen",
+  listRecs:"Rezepte in der Liste",listRecDel:"Rezept entfernen",listRecQ:"Das Rezept „{r}“ und seine Zutaten von der Liste entfernen?",
   listMerge:"Du hast „{a}“ in der Liste und fügst „{b}“ hinzu: insgesamt {n}. Zusammenzählen? (Abbrechen behält beide Zeilen.)",listMergeYes:"Zusammenzählen",
   listSelAll:"Alle auswählen",listSelNone:"Alle abwählen",
   listsT:"Einkaufslisten",listDay:"Einkauf am {d}",listNew:"＋ Neue Liste",listPick:"Liste wählen",listCnt:"{n} Artikel",listDone:"{d} von {n} abgehakt",listRen:"Liste umbenennen",listDel:"Liste löschen",listDelQ:"Diese Liste und ihre Artikel löschen?",listAdded:"Hinzugefügt zu {l}",listChange:"Ändern",listShare:"Teilen",listCreated:"Erstellt am {d}",listGo:"Hinzufügen",listCopied:"Liste kopiert",listEmptyL:"Diese Liste ist leer.",listOld:"Meine Liste",
@@ -1753,6 +1758,7 @@ it:{
   listRemSel:"Rimuovi dalla lista",listRemQ:"Rimuovere {n} ingrediente/i dalla lista della spesa?",
   listNewQ:"Nome della lista",listCreate:"Crea",
   listAddFree:"Aggiungi un ingrediente…",listAddBtn:"Aggiungi",
+  listRecs:"Ricette della lista",listRecDel:"Rimuovi la ricetta",listRecQ:"Rimuovere la ricetta «{r}» e i suoi ingredienti dalla lista?",
   listMerge:"Hai «{a}» nella lista e aggiungi «{b}»: {n} in totale. Sommarli? (Annulla mantiene entrambe le righe.)",listMergeYes:"Somma",
   listSelAll:"Seleziona tutto",listSelNone:"Deseleziona tutto",
   listsT:"Liste della spesa",listDay:"Spesa del {d}",listNew:"＋ Nuova lista",listPick:"Scegli la lista",listCnt:"{n} articoli",listDone:"{d} su {n} spuntati",listRen:"Rinomina la lista",listDel:"Elimina la lista",listDelQ:"Eliminare questa lista e i suoi articoli?",listAdded:"Aggiunto a {l}",listChange:"Cambia",listShare:"Condividi",listCreated:"Creata il {d}",listGo:"Aggiungi",listCopied:"Lista copiata",listEmptyL:"Questa lista è vuota.",listOld:"La mia lista",
@@ -2017,6 +2023,7 @@ pt:{
   listRemSel:"Remover da lista",listRemQ:"Remover {n} ingrediente(s) da lista de compras?",
   listNewQ:"Nome da lista",listCreate:"Criar",
   listAddFree:"Adicionar um ingrediente…",listAddBtn:"Adicionar",
+  listRecs:"Receitas da lista",listRecDel:"Remover a receita",listRecQ:"Remover a receita «{r}» e os seus ingredientes da lista?",
   listMerge:"Tens «{a}» na lista e adicionas «{b}»: {n} no total. Somá-los? (Cancelar mantém as duas linhas.)",listMergeYes:"Somar",
   listSelAll:"Selecionar tudo",listSelNone:"Desselecionar tudo",
   listsT:"Listas de compras",listDay:"Compras de {d}",listNew:"＋ Nova lista",listPick:"Escolher a lista",listCnt:"{n} artigos",listDone:"{d} de {n} marcados",listRen:"Renomear a lista",listDel:"Apagar a lista",listDelQ:"Apagar esta lista e os seus artigos?",listAdded:"Adicionado a {l}",listChange:"Mudar",listShare:"Partilhar",listCreated:"Criada em {d}",listGo:"Adicionar",listCopied:"Lista copiada",listEmptyL:"Esta lista está vazia.",listOld:"A minha lista",
@@ -2505,7 +2512,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   snFill(sg,more,{k,o:names[i],season:x[1]==='s',color:x[5]},{st,ex,pvBtn,pvBox});
   pn.append(h,st,sg,more,ex,pvBtn,pvBox,bc,g);box.appendChild(pn);
 }
-const APP_VERSION='v207',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v208',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3214,11 +3221,13 @@ function mergeText(a,b){const pa=qParse(a),pb=qParse(b),v=Math.round((pa.n+pb.n)
   const yk=x=>/^jaunes?\b/i.test(String(x).replace(/^(de |d')/i,'')),nr=pa.count&&yk(pa.rest)&&!yk(pb.rest)?pb.rest:pa.rest; // egg yolks + whole eggs → « œufs »
   return {num:pa.count?num:num+' '+pa.unit,t:pa.count?num+' '+qNoun(nr):num+' '+pa.unit+(qNoun(pa.rest)?' '+qNoun(pa.rest):'')}}
 // v201: the same wording is added up silently; a NEAR match (« 5 jaunes d'œuf » + « 3 œufs ») is added as a pending line and the owner is asked when the list opens (resolveMerges)
-function addMerge(items,txt,from){const i=items.findIndex(x=>sameItem(x.t,txt));if(i<0){items.unshift({t:txt,r:from||'',d:0});return}
-  const pa=qParse(items[i].t),pb=qParse(txt);if(!pa||!pb)return;
-  if(qWord(pa.rest)===qWord(pb.rest)){items[i].t=mergeText(items[i].t,txt).t;return}
+// v208: every line keeps the part of each recipe (x.c=[{r:recipe,t:text}]) so a recipe can be taken out of the list again
+function contribs(x){return x.c||[{r:x.r||'',t:x.t,old:1}]}
+function addMerge(items,txt,from){const i=items.findIndex(x=>sameItem(x.t,txt)),me={r:from||'',t:txt};if(i<0){items.unshift({t:txt,r:from||'',d:0,c:[me]});return}
+  const pa=qParse(items[i].t),pb=qParse(txt);if(!pa||!pb){items[i].c=contribs(items[i]).concat(me);return}
+  if(qWord(pa.rest)===qWord(pb.rest)){items[i].c=contribs(items[i]).concat(me);items[i].t=mergeText(items[i].t,txt).t;return}
   if(!items[i].id)items[i].id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-  items.unshift({t:txt,r:from||'',d:0,m:items[i].id})}
+  items.unshift({t:txt,r:from||'',d:0,m:items[i].id,c:[me]})}
 let merging=false;
 async function resolveMerges(id){if(merging)return;merging=true;
   try{for(let g=0;g<60;g++){const L=loadLists(),l=L.find(z=>z.id===id);if(!l)break;
@@ -3227,12 +3236,19 @@ async function resolveMerges(id){if(merging)return;merging=true;
     const r=mergeText(tg.t,it.t),at=tg.t,bt=it.t;
     const ok=await ask({text:T().listMerge.replace('{a}',at).replace('{b}',bt).replace('{n}',r.num),okLabel:T().listMergeYes});
     const M=loadLists(),y=M.find(z=>z.id===id);if(!y)break;const p=y.items.find(x=>x.m&&x.t===bt),q=y.items.find(x=>x.id===(p&&p.m));
-    if(p){if(ok&&q){q.t=r.t;y.items.splice(y.items.indexOf(p),1)}else delete p.m}
+    if(p){if(ok&&q){q.t=r.t;q.c=contribs(q).concat(contribs(p));y.items.splice(y.items.indexOf(p),1)}else delete p.m}
     saveLists(M)}}
   finally{merging=false}
   refreshCarts();if(curList===id)renderShop()}
 function shopHas(t){return loadLists().some(l=>l.items.some(x=>sameItem(x.t,t)))}
 function addItem(id,t,from){const L=loadLists(),l=L.find(x=>x.id===id);if(!l)return;addMerge(l.items,t,from);saveLists(L)}
+function recipesOf(l){const out=[];l.items.forEach(x=>contribs(x).forEach(c=>{if(c.r&&!out.includes(c.r))out.push(c.r)}));return out}
+function removeRecipe(listId,title){const L=loadLists(),l=L.find(z=>z.id===listId);if(!l)return;
+  l.items=l.items.filter(x=>{const all=contribs(x),keep=all.filter(c=>c.r!==title);if(keep.length===all.length)return true;if(!keep.length)return false;
+    if(all.some(c=>c.old)&&!x.c)return true; // line saved before v208: its parts are unknown, kept as it is
+    let t=keep[0].t;for(let k=1;k<keep.length;k++){const a=qParse(t),b=qParse(keep[k].t);if(a&&b&&a.g===b.g)t=mergeText(t,keep[k].t).t}
+    x.t=t;x.c=keep;x.r=keep[0].r;return true});
+  saveLists(L)}
 function removeAll(t){const L=loadLists();L.forEach(l=>{l.items=l.items.filter(x=>!sameItem(x.t,t))});saveLists(L)}
 function refreshCarts(){document.querySelectorAll('.cartb').forEach(b=>b._st&&b._st())}
 function cartBtn(name,from){
@@ -3321,6 +3337,9 @@ function renderShop(){
   af.append(ai,ab);
   af.onsubmit=ev=>{ev.preventDefault();const v=ai.value.trim();if(!v)return;const M=loadLists(),y=M.find(z=>z.id===l.id);if(y){addMerge(y.items,v,'');saveLists(M)}renderShop()};
   box.appendChild(af);
+  {const rs=recipesOf(l);if(rs.length){const h=document.createElement('div');h.className='lrh';h.textContent=t.listRecs;box.appendChild(h);const w=document.createElement('div');w.className='lrecs';
+    rs.forEach(r=>{const c=document.createElement('span');c.className='lrec';const n=document.createElement('span');n.textContent=r;const x=document.createElement('button');x.type='button';x.textContent='✕';x.setAttribute('aria-label',t.listRecDel);
+      x.onclick=async()=>{if(await ask({text:t.listRecQ.replace('{r}',r),okLabel:t.listRecDel})){removeRecipe(l.id,r);refreshCarts();renderShop()}};c.append(n,x);w.appendChild(c)});box.appendChild(w)}} // v208: the recipes of the list, each can be taken out with its ingredients
   // v200: select / deselect every line of the list at once
   if(l.items.length){
     const sa=document.createElement('div');sa.className='shact';
@@ -3335,7 +3354,7 @@ function renderShop(){
     const row=document.createElement('div');row.className='shop-row'+(x.d?' done':'');
     const ck=document.createElement('span');ck.className='sck';ck.textContent=x.d?'✓':'';
     const st=document.createElement('span');st.className='st';st.textContent=x.t;
-    if(x.r){const sm=document.createElement('small');sm.textContent=x.r;st.appendChild(sm)}
+    {const rn=[...new Set(contribs(x).map(c=>c.r).filter(Boolean))].join(' · ');if(rn){const sm=document.createElement('small');sm.textContent=rn;st.appendChild(sm)}}
     const del=document.createElement('button');del.type='button';del.className='sdel';del.textContent='✕';del.setAttribute('aria-label',t.shopClear);
     del.onclick=ev=>{ev.stopPropagation();const M=loadLists(),y=M.find(z=>z.id===l.id);if(y){y.items.splice(i,1);saveLists(M)}refreshCarts();renderShop()};
     row.onclick=()=>{const M=loadLists(),y=M.find(z=>z.id===l.id);if(y&&y.items[i]){y.items[i].d=y.items[i].d?0:1;saveLists(M)}renderShop()};
