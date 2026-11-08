@@ -42,7 +42,7 @@ export async function callClaude({ system, content, messages, model, max_tokens 
     const code = r.status === 401 || r.status === 403 ? "badkey"
       : /credit balance|billing|spend limit|usage limit/i.test(msg) ? "credit"
       : r.status === 404 ? "model" : r.status === 429 ? "rate" : "upstream";
-    throw Object.assign(new Error(code), { code });
+    throw Object.assign(new Error(code), { code, status: r.status, detail: msg.slice(0, 160) });
   }
   const data = await r.json();
   const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");

@@ -208,3 +208,7 @@ Every Sunday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 ### v249 — Weekly menu reset
 - New Redis key `wm4:` and client cache `v:4`: the week of 8 Nov 2026 is generated again for everybody.
 - The error line shows the code returned by the server (e.g. « 502 upstream », « timeout »), to find the cause from a screenshot.
+
+### v250 — Weekly menu diagnostics
+- On failure the server returns `detail` (each attempt: « api <status> <message> » or « parse <n> « start of the answer » »), shown in the menu error line.
+- `parseMenuJ` reads any JSON shape (menu array, days object, nested courses, keys n/name/dish and s/sentence/description).

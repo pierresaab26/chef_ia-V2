@@ -74,16 +74,25 @@ export function menuPromptJ(avoid = [], lang = "", picks = [], now = new Date())
 export function parseMenuJ(text, picks = []) {
   const raw = String(text || "");
   let arr = null;
-  try {
-    const a = raw.indexOf("{"), b = raw.lastIndexOf("}");
-    if (a >= 0 && b > a) { const o = JSON.parse(raw.slice(a, b + 1)); arr = Array.isArray(o) ? o : o && Array.isArray(o.menu) ? o.menu : null; }
-  } catch {}
+  // every object that looks like a dish, in reading order, whatever the nesting (menu array, days object, courses…)
+  const dishes = (o, out = []) => {
+    if (Array.isArray(o)) o.forEach((x) => dishes(x, out));
+    else if (o && typeof o === "object") {
+      if (typeof (o.n ?? o.name ?? o.dish) === "string") out.push(o);
+      else Object.values(o).forEach((x) => dishes(x, out));
+    }
+    return out;
+  };
+  for (const [a, b] of [[raw.indexOf("{"), raw.lastIndexOf("}")], [raw.indexOf("["), raw.lastIndexOf("]")]]) {
+    if (arr || a < 0 || b <= a) continue;
+    try { const d = dishes(JSON.parse(raw.slice(a, b + 1))); if (d.length) arr = d; } catch {}
+  }
   if (!arr) return parseMenu(raw);
   const byId = new Map(picks.map((p) => [p.id, p])), used = new Set(), out = [];
   for (const x of arr) {
     if (out.length >= 21) break;
     if (!x || typeof x !== "object") { out.push(null); continue; }
-    const n = String(x.n || x.name || "").replace(/\*\*/g, "").trim().slice(0, 80), sn = String(x.s || x.sentence || "").trim().slice(0, 240);
+    const n = String(x.n || x.name || x.dish || "").replace(/\*\*/g, "").trim().slice(0, 80), sn = String(x.s || x.sentence || x.description || "").trim().slice(0, 240);
     const p = byId.get(String(x.c || "").trim().toUpperCase());
     if (p && !used.has(p.id)) { used.add(p.id); out.push([p.t, sn || n, p.sid, Math.round(p.a * 10) / 10]); continue; }
     out.push(n && sn ? [n, sn] : null);

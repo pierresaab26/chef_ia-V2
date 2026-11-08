@@ -65,6 +65,7 @@ export async function community(lang, max = 12) {
 async function generate(lang, avoid) {
   const t0 = Date.now(), picks = await community(lang);
   let best = [];
+  const why = []; // v250: returned with the error, so a screenshot tells the cause
   for (let attempt = 0; attempt < 3; attempt++) {
     const left = 45000 - (Date.now() - t0);
     if (left < 12000) break; // the function is stopped at 60 s: never start a call that cannot finish
@@ -77,13 +78,14 @@ async function generate(lang, avoid) {
         system: MENU_SYS,
         messages: [{ role: "user", content: menuPromptJ(avoid, lang, picks) }],
       }));
-    } catch (e) { console.error("week-menu: chef call failed", attempt, e && e.code); if (!best.length && (e.code === "badkey" || e.code === "credit" || e.code === "nokey" || e.code === "model")) throw e; continue; }
+    } catch (e) { why.push("api " + (e && (e.status || e.code)) + (e && e.detail ? " " + e.detail : "")); console.error("week-menu: chef call failed", attempt, e && e.code, e && e.status, e && e.detail); if (!best.length && (e.code === "badkey" || e.code === "credit" || e.code === "nokey" || e.code === "model")) throw e; continue; }
     const items = parseMenuJ(text, picks), ok = items.filter(Boolean).length;
     if (ok > best.filter(Boolean).length) best = items;
     if (ok >= 21) break;
+    why.push("parse " + ok + " « " + String(text).replace(/\s+/g, " ").slice(0, 60) + " »");
     console.error("week-menu: only", ok, "dishes parsed; start of the answer:", JSON.stringify(String(text).slice(0, 300)));
   }
-  if (best.filter(Boolean).length < MIN_OK) throw Object.assign(new Error("upstream"), { code: "upstream" });
+  if (best.filter(Boolean).length < MIN_OK) throw Object.assign(new Error("upstream"), { code: "upstream", why: why.join(" | ") || "no attempt" });
   best = best.slice(0, 21);
   while (best.length < 21) best.push(null);
   console.log("week-menu:", lang, best.filter((x) => x && x[2]).length, "community recipes of", picks.length, "candidates");
@@ -112,7 +114,8 @@ export default async function handler(req, res) {
   try {
     return res.status(200).json(await getWeek(lang));
   } catch (e) {
-    if (e && e.code) return fail(res, e.code);
-    return res.status(502).json({ error: "storage" });
+    console.error("week-menu: failed", e && e.code, e && e.message, e && e.why);
+    if (e && e.code) return res.status(e.code === "timeout" ? 504 : e.code === "rate" ? 429 : 502).json({ error: e.code, detail: String(e.why || e.detail || "").slice(0, 300) });
+    return res.status(502).json({ error: "storage", detail: String((e && e.message) || "").slice(0, 160) });
   }
 }
