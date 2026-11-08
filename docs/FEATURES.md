@@ -204,3 +204,7 @@ Every Sunday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 - Tap on a dish: already in my recipes → opened; a favourite → its shared copy is opened as it is; a dish somebody already generated this week (`w-<lang>-<week>-<slot>`) → opened as it is; otherwise the chef writes it and it is published under that id (first writer wins). 🔄 makes a personal idea (slot no longer shared).
 - Server: dedicated short instructions + JSON answer (`MENU_SYS`, `menuPromptJ`, `parseMenuJ`), 45 s budget, key `wm3:`. `api/shared.js` keeps an index `s:ck` and counts real shares (`POST {sid, hit:1}` → `s:pop`); older shares indexed once by SCAN (`s:bf`).
 - Fix: the 🔄 button (lost in v247) works again.
+
+### v249 — Weekly menu reset
+- New Redis key `wm4:` and client cache `v:4`: the week of 8 Nov 2026 is generated again for everybody.
+- The error line shows the code returned by the server (e.g. « 502 upstream », « timeout »), to find the cause from a screenshot.

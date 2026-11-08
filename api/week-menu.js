@@ -11,7 +11,7 @@ import { weekOf, MENU_SYS, menuPromptJ, parseMenuJ } from "./_week.js";
 // Redis: wm3:<lang>:<week> = {items, at}, kept 20 days. The previous week's dishes are sent to the chef as « Not these ». No Redis → 501 (the app then shows no suggestion).
 
 const TTL = 20 * 86400;
-const key = (lang, id) => `wm3:${lang}:${id}`; // wm3 (v248): items may carry a community recipe; wm2 menus were written by the recipe instructions
+const key = (lang, id) => `wm4:${lang}:${id}`; // wm4 (v249): reset of the week of 8 Nov 2026 (wm3: v248, wm2: menus written by the recipe instructions)
 
 const MIN_OK = 18; // dishes needed to publish a menu; the missing ones (null) stay empty slots in the app
 

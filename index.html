@@ -2659,7 +2659,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v248',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v249',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2954,14 +2954,14 @@ function pickRecipe(askText){ // dialog: pick a saved recipe (search) or ask the
 // v238: the chef's weekly menu, the same for everybody (GET /api/week-menu, see api/week-menu.js): only the 21 dish NAMES; the full recipe is
 // generated when the user taps a dish, and the new recipe then fills that slot. The toggle « The chef suggests the weekly menu » (m.auto, default on)
 // hides the suggestions; a slot the user filled himself is never replaced. Kept in localStorage `chefMenuSug` until the next Sunday 9:00 (Paris).
-let wkBusy=false,wkOff=0,wkFail=false,menuPend=null;const mdOpen={}; // v243: day cards of the weekly menu: today open, the others folded (tap a day to change)
+let wkBusy=false,wkOff=0,wkFail=false,wkErr='',menuPend=null;const mdOpen={}; // v243: day cards of the weekly menu: today open, the others folded (tap a day to change)
 const todayIdx=(new Date().getDay()+6)%7;
-function wkRead(){try{const s=JSON.parse(localStorage.getItem('chefMenuSug')||'null');return s&&s.v===3&&s.lang===lang&&Array.isArray(s.items)&&s.items.length===21&&s.items.filter(Boolean).length>=18&&s.until>Date.now()?s:null}catch(e){return null}}
+function wkRead(){try{const s=JSON.parse(localStorage.getItem('chefMenuSug')||'null');return s&&s.v===4&&s.lang===lang&&Array.isArray(s.items)&&s.items.length===21&&s.items.filter(Boolean).length>=18&&s.until>Date.now()?s:null}catch(e){return null}}
 async function wkLoad(){if(wkBusy||wkRead()||Date.now()-wkOff<12e4)return;wkBusy=true;wkFail=false;
   try{const res=await fetchT('/api/week-menu?lang='+lang,{headers:{'x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()}},70000);
-    if(!res.ok){wkOff=Date.now();wkFail=true;return}const d=await res.json();
-    if(d&&d.week&&Array.isArray(d.items)&&d.items.length===21&&d.items.filter(Boolean).length>=18){try{localStorage.setItem('chefMenuSug',JSON.stringify({v:3,lang,id:d.week.id,from:d.week.from,to:d.week.to,until:d.week.until,items:d.items}))}catch(e){}wkOff=0}else{wkOff=Date.now();wkFail=true}}
-  catch(e){wkOff=Date.now();wkFail=true}finally{wkBusy=false}
+    if(!res.ok){wkOff=Date.now();wkFail=true;let c='';try{c=(await res.json()).error||''}catch(x){}wkErr=res.status+(c?' '+c:'');return}const d=await res.json();
+    if(d&&d.week&&Array.isArray(d.items)&&d.items.length===21&&d.items.filter(Boolean).length>=18){try{localStorage.setItem('chefMenuSug',JSON.stringify({v:4,lang,id:d.week.id,from:d.week.from,to:d.week.to,until:d.week.until,items:d.items}))}catch(e){}wkOff=0}else{wkOff=Date.now();wkFail=true;wkErr='format'}}
+  catch(e){wkOff=Date.now();wkFail=true;wkErr=e&&e.name==='AbortError'?'timeout':'network'}finally{wkBusy=false}
   if(document.getElementById('menuBox'))drawMenu()}
 const WK_LN={fr:'French',en:'English',es:'Spanish',de:'German',it:'Italian',pt:'Portuguese'};
 const snNorm=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
@@ -3036,7 +3036,7 @@ function drawMenu(){
     const fm=x=>new Date(x+'T12:00:00Z').toLocaleDateString(lang,{day:'numeric',month:'short',timeZone:'UTC'});
     if(m.auto){const n=document.createElement('p');n.className='mweek';
       if(sug)n.textContent=t.mWeekOf.replace('{a}',fm(sug.from)).replace('{b}',fm(sug.to));
-      else if(wkFail&&!wkBusy){n.textContent=t.mSugErr+' ';const rb=document.createElement('button');rb.type='button';rb.className='mretry';rb.textContent=t.mRetry;rb.onclick=()=>{wkOff=0;wkFail=false;wkLoad();drawMenu()};n.appendChild(rb)}
+      else if(wkFail&&!wkBusy){n.textContent=t.mSugErr+(wkErr?' ('+wkErr+')':'')+' ';const rb=document.createElement('button');rb.type='button';rb.className='mretry';rb.textContent=t.mRetry;rb.onclick=()=>{wkOff=0;wkFail=false;wkLoad();drawMenu()};n.appendChild(rb)}
       else n.textContent=t.mSugLoad;box.appendChild(n)}}
   let any=false;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))any=true}));
   { // week strip: Sunday … Saturday, dates from the suggestion week (else the last Sunday)
