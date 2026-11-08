@@ -198,7 +198,7 @@ input,textarea,select{font-size:16px!important}
 .mph{width:92px;height:68px;border-radius:14px;flex:none;background:#f3e6d8 center/cover no-repeat;display:grid;place-items:center;font-size:24px;opacity:.95}
 .mbody{flex:1;min-width:0}.mlb2{display:block;font-size:11.5px;font-weight:800;letter-spacing:.05em;color:var(--pink);text-transform:uppercase;margin-bottom:1px}
 .mrow2 .mtit{display:block;width:100%;padding:2px 0;font-size:16.5px;font-weight:700;line-height:1.25}.mrow2 .mtit.mghost::after{content:none}
-.mretry{margin-left:6px;padding:5px 12px;border-radius:99px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.mcred{margin:6px 0 0;font-size:11px;color:var(--mut);text-align:right}.mcred a{color:inherit}
+.mcom{text-transform:none;letter-spacing:0;font-weight:700;color:var(--mut)}.mretry{margin-left:6px;padding:5px 12px;border-radius:99px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.mcred{margin:6px 0 0;font-size:11px;color:var(--mut);text-align:right}.mcred a{color:inherit}
 .mdh{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:2px 0 4px;font:inherit;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
 .mdn{font-size:15px;font-weight:700;color:var(--pink)}.mtd{font-size:11px;font-weight:700;color:#fff;background:var(--pink);border-radius:99px;padding:2px 8px}.mdc{font-size:12px;color:#2e9e5b;font-weight:700}
 .mdar{margin-left:auto;color:var(--mut);font-size:16px;transition:transform .15s;transform:rotate(-90deg)}.mdh.open .mdar{transform:none}
@@ -735,6 +735,7 @@ fr:{
   mToday:"Aujourd’hui",mAdded:"Ajouté au menu de la semaine",mSee:"Voir le menu",
   mSub:"{r} · {n} menus proposés",mPhotos:"Photos :",
   mSugErr:"Le chef n’a pas pu préparer le menu pour le moment.",mRetry:"Réessayer",
+  mCom:"Recette de la communauté",
   mAutoT:"Le chef propose le menu de la semaine",mWeekOf:"Propositions du {a} au {b} · touche un plat pour obtenir la recette",mOwn:"Choisir moi-même",mSugLoad:"Le chef prépare le menu…",mGenTip:"Générer la recette",
   menuT:"Menu de la semaine",
   mDays:"Lundi|Mardi|Mercredi|Jeudi|Vendredi|Samedi|Dimanche",
@@ -1014,6 +1015,7 @@ en:{
   mToday:"Today",mAdded:"Added to the weekly menu",mSee:"See the menu",
   mSub:"{r} · {n} menus suggested",mPhotos:"Photos:",
   mSugErr:"The chef could not prepare the menu right now.",mRetry:"Retry",
+  mCom:"Community recipe",
   mAutoT:"The chef suggests the weekly menu",mWeekOf:"Suggestions for {a} to {b} · tap a dish to get the recipe",mOwn:"Pick my own",mSugLoad:"The chef is preparing the menu…",mGenTip:"Generate the recipe",
   menuT:"Weekly menu",
   mDays:"Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday",
@@ -1293,6 +1295,7 @@ es:{
   mToday:"Hoy",mAdded:"Añadido al menú de la semana",mSee:"Ver el menú",
   mSub:"{r} · {n} menús propuestos",mPhotos:"Fotos:",
   mSugErr:"El chef no ha podido preparar el menú ahora mismo.",mRetry:"Reintentar",
+  mCom:"Receta de la comunidad",
   mAutoT:"El chef propone el menú de la semana",mWeekOf:"Propuestas del {a} al {b} · toca un plato para ver la receta",mOwn:"Elegir yo mismo",mSugLoad:"El chef prepara el menú…",mGenTip:"Generar la receta",
   menuT:"Menú de la semana",
   mDays:"Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo",
@@ -1572,6 +1575,7 @@ de:{
   mToday:"Heute",mAdded:"Zum Wochenmenü hinzugefügt",mSee:"Menü ansehen",
   mSub:"{r} · {n} Menüs vorgeschlagen",mPhotos:"Fotos:",
   mSugErr:"Der Koch konnte das Menü gerade nicht vorbereiten.",mRetry:"Erneut versuchen",
+  mCom:"Rezept der Community",
   mAutoT:"Der Koch schlägt das Wochenmenü vor",mWeekOf:"Vorschläge vom {a} bis {b} · tippe ein Gericht an, um das Rezept zu erhalten",mOwn:"Selbst wählen",mSugLoad:"Der Koch bereitet das Menü vor…",mGenTip:"Rezept erstellen",
   menuT:"Wochenmenü",
   mDays:"Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag",
@@ -1851,6 +1855,7 @@ it:{
   mToday:"Oggi",mAdded:"Aggiunto al menu della settimana",mSee:"Vedi il menu",
   mSub:"{r} · {n} menu proposti",mPhotos:"Foto:",
   mSugErr:"Lo chef non è riuscito a preparare il menu in questo momento.",mRetry:"Riprova",
+  mCom:"Ricetta della community",
   mAutoT:"Lo chef propone il menu della settimana",mWeekOf:"Proposte dal {a} al {b} · tocca un piatto per avere la ricetta",mOwn:"Scegliere io",mSugLoad:"Lo chef prepara il menu…",mGenTip:"Genera la ricetta",
   menuT:"Menu della settimana",
   mDays:"Lunedì|Martedì|Mercoledì|Giovedì|Venerdì|Sabato|Domenica",
@@ -2130,6 +2135,7 @@ pt:{
   mToday:"Hoje",mAdded:"Adicionado ao menu da semana",mSee:"Ver o menu",
   mSub:"{r} · {n} menus propostos",mPhotos:"Fotos:",
   mSugErr:"O chef não conseguiu preparar o menu neste momento.",mRetry:"Tentar de novo",
+  mCom:"Receita da comunidade",
   mAutoT:"O chef propõe o menu da semana",mWeekOf:"Sugestões de {a} a {b} · toque num prato para obter a receita",mOwn:"Escolher eu mesmo",mSugLoad:"O chef está a preparar o menu…",mGenTip:"Gerar a receita",
   menuT:"Menu da semana",
   mDays:"Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo",
@@ -2653,7 +2659,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v247',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v248',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2950,18 +2956,40 @@ function pickRecipe(askText){ // dialog: pick a saved recipe (search) or ask the
 // hides the suggestions; a slot the user filled himself is never replaced. Kept in localStorage `chefMenuSug` until the next Sunday 9:00 (Paris).
 let wkBusy=false,wkOff=0,wkFail=false,menuPend=null;const mdOpen={}; // v243: day cards of the weekly menu: today open, the others folded (tap a day to change)
 const todayIdx=(new Date().getDay()+6)%7;
-function wkRead(){try{const s=JSON.parse(localStorage.getItem('chefMenuSug')||'null');return s&&s.v===2&&s.lang===lang&&Array.isArray(s.items)&&s.items.length===21&&s.items.filter(Boolean).length>=18&&s.until>Date.now()?s:null}catch(e){return null}}
+function wkRead(){try{const s=JSON.parse(localStorage.getItem('chefMenuSug')||'null');return s&&s.v===3&&s.lang===lang&&Array.isArray(s.items)&&s.items.length===21&&s.items.filter(Boolean).length>=18&&s.until>Date.now()?s:null}catch(e){return null}}
 async function wkLoad(){if(wkBusy||wkRead()||Date.now()-wkOff<12e4)return;wkBusy=true;wkFail=false;
   try{const res=await fetchT('/api/week-menu?lang='+lang,{headers:{'x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()}},70000);
     if(!res.ok){wkOff=Date.now();wkFail=true;return}const d=await res.json();
-    if(d&&d.week&&Array.isArray(d.items)&&d.items.length===21&&d.items.filter(Boolean).length>=18){try{localStorage.setItem('chefMenuSug',JSON.stringify({v:2,lang,from:d.week.from,to:d.week.to,until:d.week.until,items:d.items}))}catch(e){}wkOff=0}else{wkOff=Date.now();wkFail=true}}
+    if(d&&d.week&&Array.isArray(d.items)&&d.items.length===21&&d.items.filter(Boolean).length>=18){try{localStorage.setItem('chefMenuSug',JSON.stringify({v:3,lang,id:d.week.id,from:d.week.from,to:d.week.to,until:d.week.until,items:d.items}))}catch(e){}wkOff=0}else{wkOff=Date.now();wkFail=true}}
   catch(e){wkOff=Date.now();wkFail=true}finally{wkBusy=false}
   if(document.getElementById('menuBox'))drawMenu()}
+const WK_LN={fr:'French',en:'English',es:'Spanish',de:'German',it:'Italian',pt:'Portuguese'};
+const snNorm=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+// 🔄 on one dish: a new idea for this user only (s.loc marks the slot, so its shared copy « w-… » is no longer used)
+async function wkRegen(i,j){const s=wkRead();if(!s)return;const cur=(s.items[i*3+j]||[''])[0],course=['starter','main course','dessert'][j];
+  const msg='[UI] Suggest 1 different '+course+' for a weekly menu, fitting this time of year, realistic home cooking. It must not be one of these: '+s.items.filter(Boolean).map(x=>x[0]).join(', ')+'. Answer with exactly one line written « - Dish name: one appetizing sentence » (the dish name is 1 to 5 words) and nothing else. Write the dish name and the sentence in '+WK_LN[lang]+' (the usual '+WK_LN[lang]+' name of the dish, never English unless that is the language).';
+  const res=await fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()},body:JSON.stringify({messages:[{role:'user',content:msg}],lang})},60000);
+  if(!res.ok)throw new Error('regen');const it=snParse((await res.json()).text)[0];if(!it||snNorm(it[0])===snNorm(cur))throw new Error('regen');
+  const z=wkRead();if(!z)return;z.items[i*3+j]=it;z.loc=z.loc||{};z.loc[i*3+j]=1;try{localStorage.setItem('chefMenuSug',JSON.stringify(z))}catch(e){}}
+// v248: tap on a suggested dish. Same recipe for everybody, never generated twice:
+// 1) already in my recipes (same title) → opened; 2) a shared copy exists (a users' favourite, or the slot's recipe that somebody
+// already generated this week, « w-<lang>-<week>-<slot> ») → added to my recipes and opened as it is; 3) otherwise the chef writes it,
+// and the new recipe is published under the slot's id for the next users (first writer wins, see api/shared.js).
+let wkOpening=false;
+async function menuOpen(i,j,it){if(wkOpening)return;const t=T(),s=wkRead(),idx=i*3+j;
+  const set=id=>{const z=readMenu();if(!z.d[i][j]){z.d[i][j]=id;saveMenu(z)}mdOpen[i]=true};
+  const mine=loadH().find(x=>!x.qa&&snNorm(x.title)===snNorm(it[0]));
+  if(mine){set(mine.id);openCard(mine.id);return}
+  const slot=s&&s.id!=null&&!(s.loc&&s.loc[idx])?'w-'+lang+'-'+s.id+'-'+idx:'';
+  const sid=it[2]||slot;
+  if(sid){wkOpening=true;try{const r=await capi('GET','?sid='+sid,null,'/api/shared',true);if(r.ok){const e=addShared(await r.json());set(e.id);drawHistory();openCard(e.id);return}}catch(x){}finally{wkOpening=false}}
+  menuPend={i,j,at:Date.now(),sid:it[2]?'':slot};openChat(null);send(t.idGen.replace('{x}',it[0]),true)}
 function rowMenu(title,items){const w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg lmenu';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
   const hd=document.createElement('p');hd.textContent=title;d.appendChild(hd);const close=()=>w.remove();
   items.forEach(([ic,lb,fn,danger])=>{const b=document.createElement('button');b.type='button';b.className='lmb'+(danger?' danger':'');const a=document.createElement('span');a.textContent=ic;const s=document.createElement('span');s.textContent=lb;b.append(a,s);b.onclick=()=>{close();fn()};d.appendChild(b)});
   w.onclick=e=>{if(e.target===w)close()};w.appendChild(d);document.body.appendChild(w)}
-function menuAssign(id){if(!menuPend)return;const p=menuPend;menuPend=null;if(Date.now()-p.at>10*60e3)return;const z=readMenu();if(!z.d[p.i][p.j]){z.d[p.i][p.j]=id;saveMenu(z);mdOpen[p.i]=true;const t=T();toastAct(t.mAdded,t.mSee,()=>{drawMenu();show('menu')})}}
+function menuAssign(id){if(!menuPend)return;const p=menuPend;menuPend=null;if(Date.now()-p.at>10*60e3)return;const z=readMenu();if(!z.d[p.i][p.j]){z.d[p.i][p.j]=id;saveMenu(z);mdOpen[p.i]=true;const t=T();toastAct(t.mAdded,t.mSee,()=>{drawMenu();show('menu')})}
+  if(p.sid){const e=loadH().find(x=>x.id===id),tx=e&&recipeText(e);if(tx&&looksLikeRecipe(tx))capi('POST','',{sid:p.sid,ck:vKey(e),title:e.title,text:tx,lang:e.lang||lang},'/api/shared',true).catch(()=>{})}}
 // v246: weekly menu = week strip (Sun…Sat, like a calendar) + the selected day with a photo per dish.
 let menuSel=null;const mdUsed=new Set(); // menuSel: displayed day (0 = Sunday); mdUsed: photos already on screen
 function mphKey(nm){return lang+'|'+String(nm).toLowerCase()}
@@ -2987,7 +3015,8 @@ function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map
       const clear=()=>{const z=readMenu();z.d[i][j]=null;saveMenu(z);onChange()};
       if(e){main.classList.add('mdone');main.textContent=e.title;main.onclick=()=>{openCard(e.id)};items=[['✏️',t.mOwn,own],['🗑️',t.mRm,clear,1]]}
       else if(sug&&!hidden&&sug.items[i*3+j]){const nm=sug.items[i*3+j]&&sug.items[i*3+j][0];main.classList.add('mghost');main.textContent=nm;
-        main.onclick=()=>{menuPend={i,j,at:Date.now()};openChat(null);send(t.idGen.replace('{x}',nm),true)};
+        const it=sug.items[i*3+j];main.onclick=()=>menuOpen(i,j,it);
+        if(it[2]){const cb=document.createElement('span');cb.className='mcom';cb.textContent=' · ★ '+(it[3]?Number(it[3]).toLocaleString(lang,{minimumFractionDigits:1,maximumFractionDigits:1})+' · ':'')+t.mCom;lb.appendChild(cb)}
         items=[['🔄',t.mRegen,async()=>{main.textContent='…';main.disabled=true;try{await wkRegen(i,j)}catch(x){toast(t.err)}onChange()}],['✏️',t.mOwn,own],['🗑️',t.mRm,()=>{const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else{main.classList.add('mempty');main.textContent='+ '+t.mAdd;main.onclick=own}
       const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);row.append(ph,bd);mphoto(ph,e,e?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
@@ -3343,6 +3372,7 @@ function shareLink(e,quiet){
 async function shareRecipe(e){
   const pic=e.ph&&!hasOwnImg(e)&&okU(e.ph.pg)?'\n\n📷 '+T().phBy+' '+(e.ph.by||'Unsplash')+' · Unsplash\n'+e.ph.pg:''; // the recipient gets the credit and the link of the SAME photo
   const slink=await Promise.race([shareLink(e),new Promise(r=>setTimeout(()=>r(''),2500))]); // already resolved when prepared: no wait, the tap is still « fresh »
+  if(slink){const sid=slink.split('?s=')[1];if(sid)capi('POST','',{sid,hit:1},'/api/shared',true).catch(()=>{})} // v248: a REAL share (the copy above is prepared on every card): counts for the weekly menu
   const body=e.title+'\n\n'+plain(recipeText(e))+pic+(e.link?'\n\n'+e.link:'')+(slink?'\n\n💬 '+slink:!e.link&&/^https?:/.test(location.href)?'\n\n'+location.origin:'');
   if(navigator.share){try{await navigator.share({title:e.title,text:body});return}catch(x){if(x&&x.name==='AbortError')return}}
   let ok=false;
@@ -4306,11 +4336,13 @@ const SR=window.SpeechRecognition||window.webkitSpeechRecognition,mic=$('#mic');
 if(!SR)mic.style.display='none';else{let rec=null;mic.onclick=()=>{if(rec){rec.stop();return}try{rec=new SR();rec.lang=T().sr;rec.interimResults=true;rec.onresult=e=>{inp.value=Array.from(e.results).map(r=>r[0].transcript).join('')};rec.onend=()=>{rec=null;mic.classList.remove('on');if(inp.value.trim())send()};rec.onerror=()=>{rec=null;mic.classList.remove('on')};mic.classList.add('on');rec.start()}catch(e){rec=null;mic.style.display='none'}}}
 applyUI();
 // v129: received recipe « /?s=<id> »: it is added to the history with the SAME comment key as the sender's
-async function importShared(sid){const t=T();try{
-  const r=await capi('GET','?sid='+sid,null,'/api/shared');if(!r.ok)throw 0;const d=await r.json();
+function addShared(d){const t=T();
   const a=loadH();let e=/^u-/.test(d.ck)?a.find(x=>!x.qa&&(x.messages||[]).some(m=>m.vk===d.ck)):null;
   if(!e){const id=Date.now().toString(36),now=Date.now();e={id,title:d.title,date:new Date().toISOString(),updatedAt:now,k:-1,fav:false,lang:d.lang||lang,imp:1,messages:[{role:'user',content:d.title},{role:'assistant',content:d.text,rid:id,at:now,vn:1,vk:d.ck}]};
     if(d.ph&&okU(d.ph.t)&&okU(d.ph.u))e.ph=d.ph;a.unshift(e);if(!saveH(a))toast(t.stFull)}
+  return e}
+async function importShared(sid){const t=T();try{
+  const r=await capi('GET','?sid='+sid,null,'/api/shared');if(!r.ok)throw 0;const e=addShared(await r.json());
   try{history.replaceState(null,'',location.pathname)}catch(x){}
   drawHistory();openCard(e.id);toast('📥 '+t.impOk)}catch(x){toast(t.impErr)}}
 {let ss='';try{ss=(new URLSearchParams(location.search).get('s')||'').trim().slice(0,64)}catch(e){}

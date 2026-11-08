@@ -21,7 +21,7 @@ export function fail(res, code) {
 
 // Call to the Anthropic API. The key stays on the server.
 // Pass either `content` (one user message) or a full `messages` list. Returns { text, cut }.
-export async function callClaude({ system, content, messages, model, max_tokens = 2500 }) {
+export async function callClaude({ system, content, messages, model, max_tokens = 2500, timeout = 55000 }) {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw Object.assign(new Error("nokey"), { code: "nokey" });
   let r;
@@ -30,7 +30,7 @@ export async function callClaude({ system, content, messages, model, max_tokens 
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({ model, max_tokens, system, messages: messages || [{ role: "user", content }] }),
-      signal: AbortSignal.timeout(55000), // stay under the 60 s function limit and answer with a clear error
+      signal: AbortSignal.timeout(Math.max(5000, Math.min(55000, timeout))), // stay under the 60 s function limit and answer with a clear error
     });
   } catch (e) {
     const code = e && (e.name === "TimeoutError" || e.name === "AbortError") ? "timeout" : "upstream";

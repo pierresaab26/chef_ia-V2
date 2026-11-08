@@ -198,3 +198,9 @@ Every Sunday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 - `parseMenu` accepts bullets or `1.` lists, bold names, `:` or dash separators, plain `Name: sentence` lines; day/course headings are ignored.
 - `api/week-menu.js`: up to 3 attempts keeping the best parse, ≥18 dishes needed, missing ones stored as `null` (empty « + Ajouter » slots); logs the start of the answer when parsing fails (look for `week-menu:` in Vercel Functions logs).
 - App: on failure the status line shows an error message and a « Réessayer » button instead of an endless « Le chef prépare le menu… ».
+
+### v248 — Weekly menu: users' favourites + same recipe for everybody
+- The menu mixes the users' favourite recipes (Bayesian average of the stars + bonus per real share; eligible with ≥4★ or shared by ≥2 people, same language) and new dishes from the chef. Up to 12 candidates are sent to the chef, who places up to 7 where they fit (course, season). Marked « ★ 4,8 · Recette de la communauté ».
+- Tap on a dish: already in my recipes → opened; a favourite → its shared copy is opened as it is; a dish somebody already generated this week (`w-<lang>-<week>-<slot>`) → opened as it is; otherwise the chef writes it and it is published under that id (first writer wins). 🔄 makes a personal idea (slot no longer shared).
+- Server: dedicated short instructions + JSON answer (`MENU_SYS`, `menuPromptJ`, `parseMenuJ`), 45 s budget, key `wm3:`. `api/shared.js` keeps an index `s:ck` and counts real shares (`POST {sid, hit:1}` → `s:pop`); older shares indexed once by SCAN (`s:bf`).
+- Fix: the 🔄 button (lost in v247) works again.

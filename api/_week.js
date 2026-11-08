@@ -53,3 +53,40 @@ export function menuPrompt(avoid = [], lang = "", now = new Date()) {
   if (avoid.length) msg += ` Not these: ${avoid.join(", ")}.`;
   return msg + langRule(lang);
 }
+
+// v248: the menu no longer uses the chef's recipe instructions (13 000 characters that impose « ## Title, Servings… » and made the
+// chef answer with headings the parser could not read). Short dedicated instructions + a JSON answer instead.
+export const MENU_SYS = "You are Chef IA, a Michelin-starred chef who plans weekly home menus. You answer ONLY with the JSON object that is asked for: no text before or after it, no code fence.";
+
+// picks: community recipes [{ id:"C1", t:title, a:avg, n:votes }] that the chef may place in the menu (the best rated and shared ones).
+export function menuPromptJ(avoid = [], lang = "", picks = [], now = new Date()) {
+  const occ = OCC[occasionNowFR(now)];
+  let msg = "Plan a menu for the 7 days of the coming week, Monday to Sunday, 3 dishes a day in this order: starter, main course, dessert (21 dishes)."
+    + ` Everything must fit this time of year (${occ[1]}): nothing that belongs to another season. Vary the week: different main ingredients each day, at most 2 fish or seafood mains, 1 or 2 vegetarian mains, cuisines from several countries, realistic home cooking, a lighter dish after a rich one, and a more festive Sunday. No dish may appear twice.`;
+  if (picks.length) msg += " Our users' favourite recipes (best rated and most shared) are listed below. Use as many of them as fit well, up to 7, each at most once and only in a slot where it really fits (right course, right season); for those dishes write its id in « c » and copy its title exactly in « n ». Skip any title that is not a real, appropriate dish. The other dishes are your own ideas (« c »: \"\").\n"
+    + picks.map((p) => `${p.id}: ${p.t}`).join("\n");
+  if (avoid.length) msg += `\nNot these (last week): ${avoid.join(", ")}.`;
+  msg += '\nAnswer with exactly this JSON object: {"menu":[{"n":"dish name (1 to 5 words)","s":"one appetizing sentence","c":""}, … 21 entries in order: Monday starter, Monday main, Monday dessert, Tuesday starter, …]}';
+  return msg + langRule(lang);
+}
+
+// JSON answer → up to 21 items [name, sentence] or [title, sentence, sid, avg] for a community recipe. Falls back to the text parser.
+export function parseMenuJ(text, picks = []) {
+  const raw = String(text || "");
+  let arr = null;
+  try {
+    const a = raw.indexOf("{"), b = raw.lastIndexOf("}");
+    if (a >= 0 && b > a) { const o = JSON.parse(raw.slice(a, b + 1)); arr = Array.isArray(o) ? o : o && Array.isArray(o.menu) ? o.menu : null; }
+  } catch {}
+  if (!arr) return parseMenu(raw);
+  const byId = new Map(picks.map((p) => [p.id, p])), used = new Set(), out = [];
+  for (const x of arr) {
+    if (out.length >= 21) break;
+    if (!x || typeof x !== "object") { out.push(null); continue; }
+    const n = String(x.n || x.name || "").replace(/\*\*/g, "").trim().slice(0, 80), sn = String(x.s || x.sentence || "").trim().slice(0, 240);
+    const p = byId.get(String(x.c || "").trim().toUpperCase());
+    if (p && !used.has(p.id)) { used.add(p.id); out.push([p.t, sn || n, p.sid, Math.round(p.a * 10) / 10]); continue; }
+    out.push(n && sn ? [n, sn] : null);
+  }
+  return out;
+}
