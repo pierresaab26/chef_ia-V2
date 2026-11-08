@@ -212,3 +212,6 @@ Every Sunday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 ### v250 — Weekly menu diagnostics
 - On failure the server returns `detail` (each attempt: « api <status> <message> » or « parse <n> « start of the answer » »), shown in the menu error line.
 - `parseMenuJ` reads any JSON shape (menu array, days object, nested courses, keys n/name/dish and s/sentence/description).
+
+### v251 — Weekly menu: cut answers
+- Seen live: the chef answer was cut (1 dish read), then empty, then timeout. Now: 2 chef calls in parallel (+1 if both are short), merged slot by slot; max 6000 tokens, short sentences; a cut JSON keeps every complete dish.

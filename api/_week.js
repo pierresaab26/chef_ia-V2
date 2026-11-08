@@ -66,7 +66,7 @@ export function menuPromptJ(avoid = [], lang = "", picks = [], now = new Date())
   if (picks.length) msg += " Our users' favourite recipes (best rated and most shared) are listed below. Use as many of them as fit well, up to 7, each at most once and only in a slot where it really fits (right course, right season); for those dishes write its id in « c » and copy its title exactly in « n ». Skip any title that is not a real, appropriate dish. The other dishes are your own ideas (« c »: \"\").\n"
     + picks.map((p) => `${p.id}: ${p.t}`).join("\n");
   if (avoid.length) msg += `\nNot these (last week): ${avoid.join(", ")}.`;
-  msg += '\nAnswer with exactly this JSON object: {"menu":[{"n":"dish name (1 to 5 words)","s":"one appetizing sentence","c":""}, … 21 entries in order: Monday starter, Monday main, Monday dessert, Tuesday starter, …]}';
+  msg += '\nKeep each sentence short (at most 12 words). Answer with exactly this JSON object, on as few lines as possible: {"menu":[{"n":"dish name (1 to 5 words)","s":"one appetizing sentence","c":""}, … 21 entries in order: Monday starter, Monday main, Monday dessert, Tuesday starter, …]}';
   return msg + langRule(lang);
 }
 
@@ -86,6 +86,11 @@ export function parseMenuJ(text, picks = []) {
   for (const [a, b] of [[raw.indexOf("{"), raw.lastIndexOf("}")], [raw.indexOf("["), raw.lastIndexOf("]")]]) {
     if (arr || a < 0 || b <= a) continue;
     try { const d = dishes(JSON.parse(raw.slice(a, b + 1))); if (d.length) arr = d; } catch {}
+  }
+  if (!arr) { // v251: cut or broken JSON (the chef stopped mid-answer): every complete « {…} » dish is kept
+    const d = [];
+    for (const m of raw.match(/\{[^{}]*\}/g) || []) { try { dishes(JSON.parse(m), d); } catch {} }
+    if (d.length) arr = d;
   }
   if (!arr) return parseMenu(raw);
   const byId = new Map(picks.map((p) => [p.id, p])), used = new Set(), out = [];

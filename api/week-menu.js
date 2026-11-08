@@ -62,33 +62,46 @@ export async function community(lang, max = 12) {
   } catch (e) { console.error("week-menu: community recipes unavailable", e && e.message); return []; }
 }
 
+// v251: 2 chef calls IN PARALLEL (the time of one call), then a third one only if both are short. The best answer is kept and its
+// empty slots are filled from the other answer (same index = same day and course). Compact JSON, max 6000 tokens (cut answers are salvaged).
 async function generate(lang, avoid) {
-  const t0 = Date.now(), picks = await community(lang);
-  let best = [];
-  const why = []; // v250: returned with the error, so a screenshot tells the cause
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const left = 45000 - (Date.now() - t0);
-    if (left < 12000) break; // the function is stopped at 60 s: never start a call that cannot finish
-    let text = "";
+  const t0 = Date.now(), picks = await community(lang), why = [];
+  const one = async (tag) => {
+    const left = 50000 - (Date.now() - t0);
+    if (left < 12000) { why.push(tag + " no time"); return []; }
     try {
-      ({ text } = await callClaude({
+      const { text, cut } = await callClaude({
         model: process.env.MODEL || "claude-haiku-5-5",
-        max_tokens: 3000,
+        max_tokens: 6000,
         timeout: left,
         system: MENU_SYS,
         messages: [{ role: "user", content: menuPromptJ(avoid, lang, picks) }],
-      }));
-    } catch (e) { why.push("api " + (e && (e.status || e.code)) + (e && e.detail ? " " + e.detail : "")); console.error("week-menu: chef call failed", attempt, e && e.code, e && e.status, e && e.detail); if (!best.length && (e.code === "badkey" || e.code === "credit" || e.code === "nokey" || e.code === "model")) throw e; continue; }
-    const items = parseMenuJ(text, picks), ok = items.filter(Boolean).length;
-    if (ok > best.filter(Boolean).length) best = items;
-    if (ok >= 21) break;
-    why.push("parse " + ok + " « " + String(text).replace(/\s+/g, " ").slice(0, 60) + " »");
-    console.error("week-menu: only", ok, "dishes parsed; start of the answer:", JSON.stringify(String(text).slice(0, 300)));
+      });
+      const items = parseMenuJ(text, picks), ok = items.filter(Boolean).length;
+      if (ok < 21) why.push(tag + " parse " + ok + (cut ? " cut" : "") + " « " + String(text).replace(/\s+/g, " ").slice(0, 50) + " »");
+      return items;
+    } catch (e) {
+      why.push(tag + " api " + (e && (e.status || e.code)) + (e && e.detail ? " " + e.detail : ""));
+      if (e && (e.code === "badkey" || e.code === "credit" || e.code === "nokey" || e.code === "model")) throw e;
+      return [];
+    }
+  };
+  const n = (x) => x.filter(Boolean).length;
+  const merge = (list) => {
+    list = list.filter((x) => x.length).sort((a, b) => n(b) - n(a));
+    if (!list.length) return [];
+    const out = list[0].slice(0, 21), names = new Set(out.filter(Boolean).map((x) => x[0].toLowerCase()));
+    while (out.length < 21) out.push(null);
+    for (const other of list.slice(1)) out.forEach((x, k) => { const y = other[k]; if (!x && y && !names.has(y[0].toLowerCase())) { out[k] = y; names.add(y[0].toLowerCase()); } });
+    return out;
+  };
+  let best = merge(await Promise.all([one("A"), one("B")]));
+  if (n(best) < 21) best = merge([best, await one("C")]);
+  if (n(best) < MIN_OK) {
+    console.error("week-menu: failed", why.join(" | "));
+    throw Object.assign(new Error("upstream"), { code: "upstream", why: why.join(" | ") || "no attempt" });
   }
-  if (best.filter(Boolean).length < MIN_OK) throw Object.assign(new Error("upstream"), { code: "upstream", why: why.join(" | ") || "no attempt" });
-  best = best.slice(0, 21);
-  while (best.length < 21) best.push(null);
-  console.log("week-menu:", lang, best.filter((x) => x && x[2]).length, "community recipes of", picks.length, "candidates");
+  console.log("week-menu:", lang, n(best), "dishes,", best.filter((x) => x && x[2]).length, "community of", picks.length, why.length ? "| " + why.join(" | ") : "");
   return best;
 }
 
