@@ -22,14 +22,27 @@ export function weekOf(now = new Date()) {
   return weekById(Math.max(0, Math.floor((day - WK_ANCHOR) / 7)));
 }
 
-// 21 lines « - Name: sentence » from the chef, in order (same line format as the seasonal ideas).
+// Up to 21 lines « - Name: sentence » from the chef, in order. Tolerant on purpose (v247): bullets or « 1. », bold names, « : » or a dash
+// as separator, and a second pass on plain « Name: sentence » lines when the bullets give too few. Titles such as « Lundi : » are ignored.
+const WK_HEAD = /^(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|monday|tuesday|wednesday|thursday|friday|saturday|sunday|lunes|martes|miercoles|jueves|viernes|sabado|domingo|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica|segunda|terca|quarta|quinta|sexta|entree|plat|dessert|starter|main|main course|entrada|plato|postre|vorspeise|hauptgericht|nachtisch|antipasto|primo|secondo|dolce|prato|sobremesa)$/i;
 export function parseMenu(text) {
-  const out = [];
-  String(text || "").split("\n").forEach((l) => {
-    const m = l.trim().match(/^[-•*]\s+\*{0,2}([^:*]{1,60}?)\*{0,2}\s*[:：]\s*(.+)$/);
-    if (m && out.length < 21) out.push([m[1].trim(), m[2].replace(/\*\*/g, "").trim()]);
-  });
-  return out;
+  const clean = (s) => s.replace(/\*\*/g, "").trim();
+  const pass = (re) => {
+    const out = [];
+    String(text || "").split("\n").forEach((l) => {
+      const m = l.trim().match(re);
+      if (!m || out.length >= 21) return;
+      const name = clean(m[1]), sentence = clean(m[2]);
+      if (!name || !sentence || name.length > 60) return;
+      if (WK_HEAD.test(name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")) ) return;
+      out.push([name, sentence]);
+    });
+    return out;
+  };
+  const a = pass(/^(?:[-•*]|\d{1,2}[.)])\s+\*{0,2}([^:：*]{1,70}?)\*{0,2}\s*(?:[:：]|\s[—–-]\s)\s*(.+)$/);
+  if (a.length >= 18) return a;
+  const b = pass(/^\*{0,2}([^:：*]{1,70}?)\*{0,2}\s*[:：]\s*(.+)$/);
+  return b.length > a.length ? b : a;
 }
 
 // English request sent to the chef (the « [UI] » prefix makes him answer in the interface language, see api/chat.js).

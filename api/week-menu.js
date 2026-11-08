@@ -12,30 +12,40 @@ import { weekOf, parseMenu, menuPrompt } from "./_week.js";
 const TTL = 20 * 86400;
 const key = (lang, id) => `wm2:${lang}:${id}`; // wm2: v238 first menus were written in English (no language rule): new keys regenerate them
 
+const MIN_OK = 18; // dishes needed to publish a menu; the missing ones (null) stay empty slots in the app
+
 async function read(lang, id) {
   const [s] = await redis([["GET", key(lang, id)]]);
-  try { const d = s ? JSON.parse(s) : null; return d && Array.isArray(d.items) && d.items.length === 21 ? d.items : null; } catch { return null; }
+  try { const d = s ? JSON.parse(s) : null; return d && Array.isArray(d.items) && d.items.length === 21 && d.items.filter(Boolean).length >= MIN_OK ? d.items : null; } catch { return null; }
 }
 
 async function generate(lang, avoid) {
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const { text } = await callClaude({
-      model: process.env.MODEL || "claude-haiku-5-5",
-      max_tokens: 2200,
-      system: systemFor(PARTS, { lang }),
-      messages: [{ role: "user", content: menuPrompt(avoid, lang) }],
-    });
+  let best = [];
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let text = "";
+    try {
+      ({ text } = await callClaude({
+        model: process.env.MODEL || "claude-haiku-5-5",
+        max_tokens: 2200,
+        system: systemFor(PARTS, { lang }),
+        messages: [{ role: "user", content: menuPrompt(avoid, lang) }],
+      }));
+    } catch (e) { console.error("week-menu: chef call failed", attempt, e && e.code); if (attempt === 2 && !best.length) throw e; continue; }
     const items = parseMenu(text);
-    if (items.length === 21 && new Set(items.map((x) => norm(x[0]))).size >= 19) return items;
+    if (items.length > best.length) best = items;
+    if (items.length >= 21) break;
+    console.error("week-menu: only", items.length, "dishes parsed; start of the answer:", JSON.stringify(String(text).slice(0, 300)));
   }
-  throw Object.assign(new Error("upstream"), { code: "upstream" });
+  if (best.length < MIN_OK) throw Object.assign(new Error("upstream"), { code: "upstream" });
+  while (best.length < 21) best.push(null);
+  return best;
 }
 
 export async function getWeek(lang, wk = weekOf()) {
   let items = await read(lang, wk.id);
   if (!items) {
     const prev = wk.id > 0 ? await read(lang, wk.id - 1) : null;
-    items = await generate(lang, prev ? prev.map((x) => x[0]) : []);
+    items = await generate(lang, prev ? prev.filter(Boolean).map((x) => x[0]) : []);
     const [ok] = await redis([["SET", key(lang, wk.id), JSON.stringify({ items, at: Date.now() }), "NX", "EX", TTL]]);
     if (ok !== "OK") items = (await read(lang, wk.id)) || items; // somebody else wrote first: everybody must see the same menu
   }
