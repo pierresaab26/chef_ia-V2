@@ -187,10 +187,10 @@ input,textarea,select{font-size:16px!important}
 #homesearch{margin:10px 0 0;position:relative}.hsico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}#homesearch input{width:100%;font:inherit;padding:10px 14px 10px 40px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsfav{position:absolute;right:7px;top:50%;transform:translateY(-50%);padding:5px 11px;font-size:13px}#homesearch{margin-top:18px}.hsbtns{display:flex;gap:8px;margin-top:8px}.hsbtns button{flex:1;padding:9px 10px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-size:14px;font-weight:600}.hscnt{font-size:13px;color:var(--mut);margin:2px 4px 8px}#hsres:empty{display:none}#hsres{margin-top:10px}
 #hsearch,#fsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
 .mtile{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);padding:10px 10px 9px;box-shadow:var(--sh);font:inherit;color:var(--ink);cursor:pointer;min-width:0;-webkit-tap-highlight-color:transparent}
-.mtile.today{border-color:var(--pink);box-shadow:0 0 0 1px var(--pink),var(--sh)}.mtile.sun{grid-column:1/-1}
+.mtile.today{border-color:var(--pink);box-shadow:0 0 0 1px var(--pink),var(--sh)}.mtile.sun{grid-column:1/-1;align-items:center;text-align:center}.mtile.sun .mth{justify-content:center}
 .mth{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px}.mtile .mdn{font-size:14px;font-weight:700;color:var(--pink)}
-.mtl{display:block;font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.mtl.ghost{color:#4d444a}.mtl.done{font-weight:700}.mtl.done::before{content:'✓ ';color:#2e9e5b}.mtl.empty{color:var(--mut)}
-.mtr{display:flex;gap:10px;align-items:baseline;min-width:0}.mtr small{flex:none;width:58px;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--mut)}.mtile.sun .mtl{font-size:13.5px}
+.mtl{display:block;font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.mtl.ghost{color:#4d444a}.mtl.done{font-weight:700}.mtl.empty{color:var(--mut)}
+.mtr{display:flex;gap:10px;align-items:baseline;justify-content:center;min-width:0;max-width:100%}.mtr small{flex:none;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--mut)}.mtile.sun .mtl{font-size:13.5px}
 .mdh{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:2px 0 4px;font:inherit;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
 .mdn{font-size:15px;font-weight:700;color:var(--pink)}.mtd{font-size:11px;font-weight:700;color:#fff;background:var(--pink);border-radius:99px;padding:2px 8px}.mdc{font-size:12px;color:#2e9e5b;font-weight:700}
 .mdar{margin-left:auto;color:var(--mut);font-size:16px;transition:transform .15s;transform:rotate(-90deg)}.mdh.open .mdar{transform:none}
@@ -198,7 +198,7 @@ input,textarea,select{font-size:16px!important}
 .mrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}.mrow:first-child{border-top:0}
 .mlb{flex:none;width:64px;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--mut)}
 .mtit{flex:1;min-width:0;background:none;border:0;padding:6px 0;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer;line-height:1.3;border-radius:8px}
-.mtit.mghost{color:var(--ink)}.mtit.mghost::after{content:'›';margin-left:8px;color:var(--pink);font-weight:700;font-size:18px}.mtit.mdone{font-weight:600}.mtit.mdone::before{content:'✓ ';color:#2e9e5b;font-weight:800}.mtit.mempty{color:var(--mut);font-size:14px}
+.mtit.mghost{color:var(--ink)}.mtit.mghost::after{content:'›';margin-left:8px;color:var(--pink);font-weight:700;font-size:18px}.mtit.mdone{font-weight:600}.mtit.mempty{color:var(--mut);font-size:14px}
 .mmore{flex:none;width:44px;height:44px;margin:-6px -6px -6px 0;border-radius:50%;border:0;background:none;color:var(--mut);font-size:22px;font-weight:800;line-height:1;cursor:pointer;display:grid;place-items:center}
 .mauto{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 10px;font-size:12.5px;color:var(--mut)}
 .mgen{border-style:dashed;border-color:var(--psbd);background:var(--psoft);font-size:12.5px;cursor:pointer}.mgen b{font-weight:600}.mown{color:var(--pink);font-size:12px}
@@ -2633,7 +2633,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v244',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v245',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2987,7 +2987,7 @@ function drawMenu(){
   const grid=document.createElement('div');grid.className='mgrid';let any=false;
   days.forEach((dn,i)=>{const b=document.createElement('button');b.type='button';b.className='mtile'+(i===6?' sun':'')+(i===todayIdx?' today':'');b.setAttribute('aria-label',dn);
     const hd=document.createElement('span');hd.className='mth';const nm=document.createElement('span');nm.className='mdn';nm.textContent=dn;hd.appendChild(nm);
-    const nf=m.d[i].filter(id=>id&&rec.has(id)).length;if(nf){any=true;const c=document.createElement('span');c.className='mdc';c.textContent='✓'+nf;hd.appendChild(c)}
+    const nf=m.d[i].filter(id=>id&&rec.has(id)).length;if(nf)any=true;
     if(i===todayIdx){const bd=document.createElement('span');bd.className='mtd';bd.textContent=t.mToday;hd.appendChild(bd)}
     b.appendChild(hd);
     cs.forEach((cn,j)=>{const e=m.d[i][j]&&rec.get(m.d[i][j]),hid=!!(m.hid&&sug&&m.hid[sug.from+'|'+i+'|'+j]),ln=document.createElement('span');
