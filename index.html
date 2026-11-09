@@ -2761,7 +2761,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v261',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v262',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3069,12 +3069,6 @@ async function wkLoad(){if(wkBusy||wkRead()||Date.now()-wkOff<12e4)return;wkBusy
   if(document.getElementById('menuBox'))drawMenu()}
 const WK_LN={fr:'French',en:'English',es:'Spanish',de:'German',it:'Italian',pt:'Portuguese'};
 const snNorm=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-// 🔄 on one dish: a new idea for this user only (s.loc marks the slot, so its shared copy « w-… » is no longer used)
-async function wkRegen(i,j){const s=wkRead();if(!s)return;const cur=(s.items[i*3+j]||[''])[0],course=['starter','main course','dessert'][j];
-  const msg='[UI] Suggest 1 different '+course+' for a weekly menu, fitting this time of year, realistic home cooking. It must not be one of these: '+s.items.filter(Boolean).map(x=>x[0]).join(', ')+'. Answer with exactly one line written « - Dish name: one appetizing sentence » (the dish name is 1 to 5 words) and nothing else. Write the dish name and the sentence in '+WK_LN[lang]+' (the usual '+WK_LN[lang]+' name of the dish, never English unless that is the language).';
-  const res=await fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()},body:JSON.stringify({messages:[{role:'user',content:msg}],lang,taste:tasteProfile()})},60000);
-  if(!res.ok)throw new Error('regen');const it=snParse((await res.json()).text)[0];if(!it||snNorm(it[0])===snNorm(cur))throw new Error('regen');
-  const z=wkRead();if(!z)return;z.items[i*3+j]=it;z.loc=z.loc||{};z.loc[i*3+j]=1;try{localStorage.setItem('chefMenuSug',JSON.stringify(z))}catch(e){}}
 // v248: tap on a suggested dish. Same recipe for everybody, never generated twice:
 // 1) already in my recipes (same title) → opened; 2) a shared copy exists (a users' favourite, or the slot's recipe that somebody
 // already generated this week, « w-<lang>-<week>-<slot> ») → added to my recipes and opened as it is; 3) otherwise the chef writes it,
@@ -3125,7 +3119,7 @@ function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map
       else if(sug&&!hidden&&sug.items[i*3+j]){const nm=sug.items[i*3+j]&&sug.items[i*3+j][0];main.classList.add('mghost');main.textContent=nm;
         const it=sug.items[i*3+j];main.onclick=()=>menuOpen(i,j,it);
         if(it[2]){const cb=document.createElement('span');cb.className='mcom';cb.textContent=' · ★ '+(it[3]?Number(it[3]).toLocaleString(lang,{minimumFractionDigits:1,maximumFractionDigits:1})+' · ':'')+t.mCom;lb.appendChild(cb)}
-        items=[['🔄',t.mRegen,async()=>{main.textContent='…';main.disabled=true;try{await wkRegen(i,j)}catch(x){toast(t.err)}onChange()}],['✏️',t.mOwn,own],['👍',noIc(t.dayKeep),()=>{dayMark(it[0],'keep');toast(t.dayKept)}],['👎',noIc(t.dayNo),()=>{dayMark(it[0],'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
+        items=[['✏️',t.mOwn,own],['👍',noIc(t.dayKeep),()=>{dayMark(it[0],'keep');toast(t.dayKept)}],['👎',noIc(t.dayNo),()=>{dayMark(it[0],'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else{main.classList.add('mempty');main.textContent='+ '+t.mAdd;main.onclick=own}
       const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);row.append(ph,bd);mphoto(ph,e||pr,(e||pr)?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
       if(items){const op=document.createElement('div');op.className='mopts';items.forEach(([ic,lb2,fn,danger])=>{const ob=document.createElement('button');ob.type='button';ob.className='mopt'+(danger?' danger':'');ob.textContent=ic+' '+lb2;ob.onclick=ev=>{ev.stopPropagation();fn()};op.appendChild(ob)});row.appendChild(op)} // v258: the options sit under the dish instead of behind a ⋯ menu

@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v262 (owner: « enlève Autre idée, sinon les users passeront leur temps à générer des recettes »): the « 🔄 Autre idée » option (and `wkRegen()`) of the weekly menu is removed; the chef's dishes are the same for everybody for the whole week, the user can only keep, decline (« Pas pour moi ») or pick his own recipe. The key `mRegen` stays, unused. Local only until « pousse ».
+
 v261 (owner: « ne centre pas le titre »): the dish label and name of the weekly menu are left-aligned again (v259 had centred them); the option chips stay on their own centred line. Local only until « pousse ».
 
 v260 (owner: « tu fais n'importe quoi » — the chips overflowed the card on a mid-size window): the option chips of the weekly menu are centred and fit inside the card at every width (nowrap + compact 12 px from 560 px, 13 px from 900 px; under 560 px they wrap onto 2-3 centred lines). Checked at 320, 375, 430, 560, 620, 768, 1000 and 1280 px. Local only until « pousse ».

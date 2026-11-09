@@ -270,3 +270,7 @@ The option chips (`.mopts`) no longer overflow the day card: they wrap and are c
 ## v261 — Weekly menu: title left-aligned
 
 The course label and the dish name are left-aligned next to the photo again (the centring of v259 is cancelled); the chips of v259 / v260 stay centred on their own line. Local only until « pousse ».
+
+## v262 — Weekly menu: no « Autre idée »
+
+The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are removed so that nobody keeps asking the chef for new dishes (cost). The options of a chef's dish are now « ✏️ Choisir moi-même », « 👍 Garder » and « 👎 Pas pour moi ». Earlier mentions of 🔄 / `wkRegen` in this file (v238-v256) are outdated. Local only until « pousse ».
