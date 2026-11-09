@@ -1,6 +1,6 @@
 import { authOk, hasRedis, redis, overLimit, clean, callClaude, parseJsonLoose } from "./_lib.js";
 import { pidOf, liveRoots } from "./circle.js";
-import { notifyCircle } from "./_notify.js";
+import { notifyCircle, notifyOne } from "./_notify.js";
 import { PUB } from "./shared.js";
 import { sendModMail } from "./_mod.js";
 
@@ -162,7 +162,10 @@ async function admin(req, res, q) {
       let d = null; try { d = JSON.parse(raw); } catch {}
       if (!d) return res.status(404).json({ error: "notfound" });
       if (await notOwner(d)) return res.status(403).json({ error: "notowner" }); // v300: not his recipe
+      const [st0] = await redis([["GET", "pb:" + sid]]);
+      let s0 = null; try { s0 = JSON.parse(st0); } catch {}
       const ps = await makePublic(sid, d, pidOf(d.o));
+      if (s0 && s0.st === "pending") await notifyOne(pidOf(d.o), { k: "appok", sid: ps, t: d.title }); // v301: the author learns the answer to his appeal
       return res.status(200).json({ ok: true, ps });
     }
     if (q.reject) { // the appeal is turned down: back to « refused » (the author sees the selector without « En vérification »)
@@ -171,6 +174,11 @@ async function admin(req, res, q) {
       let s = null; try { s = JSON.parse(st); } catch {}
       if (!s) return res.status(404).json({ error: "notfound" });
       await redis([["SET", "pb:" + sid, JSON.stringify({ ...s, st: "refused", at: Date.now(), final: 1 })]]);
+      if (s.st === "pending") { // v301: tell the author (once: a second click finds « refused »)
+        const [raw] = await redis([["GET", "s:" + sid]]);
+        let d = null; try { d = JSON.parse(raw); } catch {}
+        if (d && d.o) await notifyOne(pidOf(d.o), { k: "appno", sid, t: d.title });
+      }
       return res.status(200).json({ ok: true, state: "refused" });
     }
     if (q.restore) { // a recipe hidden by reports goes back to the public index

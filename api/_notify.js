@@ -15,6 +15,16 @@ export async function notifyCircle(me, item) {
   } catch { return 0; } // a notification must never break the share itself
 }
 
+// v301: a note for ONE person (the author of an appeal gets the answer of the review).
+export async function notifyOne(pid, item) {
+  try {
+    if (!pid) return 0;
+    const line = JSON.stringify({ k: item.k, sid: item.sid || "", t: String(item.t || "").slice(0, 120), by: "", at: Date.now() });
+    await redis([["LPUSH", "cn:" + pid, line], ["LTRIM", "cn:" + pid, "0", String(KEEP - 1)], ["EXPIRE", "cn:" + pid, TTL]]);
+    return 1;
+  } catch { return 0; }
+}
+
 export async function readNotes(me) {
   const [raw, seen] = await redis([["LRANGE", "cn:" + me, "0", String(KEEP - 1)], ["GET", "cnr:" + me]]);
   const items = (raw || []).map((s) => { try { return JSON.parse(s); } catch { return null; } }).filter(Boolean);
