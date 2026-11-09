@@ -299,6 +299,10 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 ### v273–v275 — weekly menu page fits the phone screen
 Owner: « que cette page fasse la taille de l'écran sans défilement » / « ajuste les 3 vignettes à la page ». Under 560 px wide the compact CSS block before the `.dlg`-less `.mopts` rules (search `v273` in `index.html`) shrinks the week line, day tabs, day header, photos (4:3, height `clamp(44px, --appH × 7%, 80px)`; `--appH` = visible height, not `vh`, because iOS `vh` ignores the retracted toolbars), rows and option chips; from 375 px the option chips sit on ONE line (`.mopts2{display:contents}`, replaces the v267 two-line layout on phones). The menu view is a flex column: `#menuBox`, the day card and `.mslots` stretch and the 3 dish rows share the free height; the scroll area keeps 108 px at the bottom for the nav pill. Measured: iPhone 13 and 15 Pro Max no scroll; iPhone SE ~117 px (chips wrap under 375 px).
 
+### v279 — seasonal menu: « Une alternative », once per series
+
+`snMore` reads « 🔄 Une alternative » (en « An alternative », es, de, it, pt). One use per series: the token is the server period id (`p<id>`), or a 3-day window in fallback mode (`d<n>`); stored in `snAlt` = `{<lang>|<occasion>:{tok,items}}`. In server mode the 4 alternative ideas are saved and redisplayed under the series after a reload; the button disappears and comes back with the next series. A failed request does not use up the alternative. In fallback mode the alternative replaces the list as before.
+
 ### v278 — option chips on one line
 
 Garder / Pas pour moi (and Retirer) sit side by side on every width (all chips go in `.mopts2`); checked at 320, 375, 390, 430, 620, 810 and 1280 px.

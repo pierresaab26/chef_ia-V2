@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v279 (owner: « change Autres idées par une alternative, une seule fois »): the seasonal menu button « 🔄 Autres idées » is « 🔄 Une alternative » (`snMore`, 6 languages) and can be used ONCE per series (3-day period; fallback mode: per 3-day window). The 4 alternative ideas stay on the device (`localStorage` `snAlt`) until the series changes, then the button comes back. Local only until « pousse ».
+
 v278 (owner: « Garder / Pas pour moi côte à côte »): the option chips of a dish row all sit on ONE line (`op2`), on every width. Local only until « pousse ».
 
 v277 (owner: « mets un bouton éditer à droite de chaque case… »): weekly menu: « ✏️ Éditer » on every dish row (replaces « Choisir moi-même »), the picker lists only the slot's course (`courseOf()`: starter / main / dessert), and a message after « Vider le menu » says to tick « Le chef propose le menu de la semaine » to refill. Details in `docs/FEATURES.md` (v277). Local only until « pousse ».
