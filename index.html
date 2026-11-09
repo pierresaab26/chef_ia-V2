@@ -324,7 +324,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 12px}
 .tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;margin:0;padding:8px 4px;text-align:center}
 .tiles .impcard i{font-size:20px;height:26px;width:100%;display:grid;place-items:center;line-height:1}.tiles .impcard i.five5{width:24px;height:24px;margin:1px auto;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px}.tiles .impcard>div{width:100%}.tiles #fiveHome span{display:block;font-size:10.5px;line-height:1.2}.askico{font-size:17px;flex:none;line-height:1}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
-#hsFavs{display:none}.hhtabs{display:flex;gap:8px;margin:0 0 8px}.hhtabs .chip{flex:0 0 auto}.hhtabs{align-items:center}.hhall{margin-left:auto;background:none;border:0;color:var(--pink);font-weight:600;font-size:14px;padding:6px 2px;white-space:nowrap}#hwrap{margin-top:0}#menuHome{margin:0 0 12px}#homesearch{margin:0}#hsbtns{margin:12px 0 0}#hhome{margin-top:12px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
+#menuHome.mhrich{display:block;padding:14px;text-align:left;color:var(--ink)}#menuHome .mhh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}#menuHome .mht1{font-weight:700;font-size:16px}#menuHome .mhh em{font-style:normal;color:var(--pink);font-weight:600;font-size:14px;white-space:nowrap}#menuHome .mhimg{position:relative;height:170px;border-radius:16px;background:var(--bg1) center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}#menuHome .mhcr{position:absolute;left:8px;bottom:8px;font-size:11px;line-height:1;background:rgba(0,0,0,.45);color:#fff;border-radius:999px;padding:5px 9px}#menuHome .mhn{font-weight:700;font-size:18px;margin:10px 0 6px}#menuHome .mhm{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--mut);font-size:14px}#menuHome .mhp{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:600;white-space:nowrap}#menuHome .mho{margin-top:8px;color:var(--mut);font-size:14px}#hsFavs{display:none}.hhtabs{display:flex;gap:8px;margin:0 0 8px}.hhtabs .chip{flex:0 0 auto}.hhtabs{align-items:center}.hhall{margin-left:auto;background:none;border:0;color:var(--pink);font-weight:600;font-size:14px;padding:6px 2px;white-space:nowrap}#hwrap{margin-top:0}#menuHome{margin:0 0 12px}#homesearch{margin:0}#hsbtns{margin:12px 0 0}#hhome{margin-top:12px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
 .snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
 .imsec{background:var(--card);border-radius:var(--rc);padding:14px;margin-bottom:14px;box-shadow:var(--sh)}
@@ -830,6 +830,7 @@ fr:{
   histS:"Historique",
   hRecent:"Récentes",
   hAll:"Tout voir",
+  mhPlan:"Menu prévu",mhIdea:"Idée du chef",mhOthers:"{n} autres jours à découvrir",mhOther1:"1 autre jour à découvrir",
   tileImp:"Importer",tileQ:"Question cuisine",snFold:"Recettes des 3 jours précédents et idées par catégorie",menu0:"Rien de prévu pour l’instant",menu1:"1 plat prévu",menuN:"{n} plats prévus",
   
   
@@ -1138,6 +1139,7 @@ en:{
   histS:"History",
   hRecent:"Recent",
   hAll:"See all",
+  mhPlan:"Planned",mhIdea:"Chef’s idea",mhOthers:"{n} more days to discover",mhOther1:"1 more day to discover",
   tileImp:"Import",tileQ:"Cooking question",snFold:"Recipes of the previous 3 days and ideas by course",menu0:"Nothing planned yet",menu1:"1 dish planned",menuN:"{n} dishes planned",
   
   
@@ -1446,6 +1448,7 @@ es:{
   histS:"Historial",
   hRecent:"Recientes",
   hAll:"Ver todo",
+  mhPlan:"Previsto",mhIdea:"Idea del chef",mhOthers:"{n} días más por descubrir",mhOther1:"1 día más por descubrir",
   tileImp:"Importar",tileQ:"Pregunta de cocina",snFold:"Recetas de los 3 días anteriores e ideas por categoría",menu0:"Nada previsto por ahora",menu1:"1 plato previsto",menuN:"{n} platos previstos",
   
   
@@ -1754,6 +1757,7 @@ de:{
   histS:"Verlauf",
   hRecent:"Zuletzt",
   hAll:"Alle ansehen",
+  mhPlan:"Geplant",mhIdea:"Idee vom Chef",mhOthers:"{n} weitere Tage zu entdecken",mhOther1:"1 weiterer Tag zu entdecken",
   tileImp:"Importieren",tileQ:"Kochfrage",snFold:"Rezepte der letzten 3 Tage und Ideen nach Gang",menu0:"Noch nichts geplant",menu1:"1 Gericht geplant",menuN:"{n} Gerichte geplant",
   
   
@@ -2062,6 +2066,7 @@ it:{
   histS:"Cronologia",
   hRecent:"Recenti",
   hAll:"Vedi tutto",
+  mhPlan:"Previsto",mhIdea:"Idea dello chef",mhOthers:"{n} altri giorni da scoprire",mhOther1:"1 altro giorno da scoprire",
   tileImp:"Importa",tileQ:"Domanda di cucina",snFold:"Ricette dei 3 giorni precedenti e idee per portata",menu0:"Niente in programma per ora",menu1:"1 piatto previsto",menuN:"{n} piatti previsti",
   
   
@@ -2370,6 +2375,7 @@ pt:{
   histS:"Histórico",
   hRecent:"Recentes",
   hAll:"Ver tudo",
+  mhPlan:"Previsto",mhIdea:"Ideia do chef",mhOthers:"{n} outros dias para descobrir",mhOther1:"1 outro dia para descobrir",
   tileImp:"Importar",tileQ:"Pergunta de cozinha",snFold:"Receitas dos 3 dias anteriores e ideias por categoria",menu0:"Nada previsto por agora",menu1:"1 prato previsto",menuN:"{n} pratos previstos",
   
   
@@ -2880,7 +2886,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v305',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v306',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3224,8 +3230,8 @@ function mphKey(nm){return lang+'|'+String(nm).toLowerCase()}
 function mphLoad(){try{return JSON.parse(localStorage.getItem('chefMenuPh')||'{}')||{}}catch(e){return {}}}
 function mphSave(c){const ks=Object.keys(c);if(ks.length>150)ks.slice(0,ks.length-120).forEach(k=>delete c[k]);try{localStorage.setItem('chefMenuPh',JSON.stringify(c))}catch(e){}}
 let mphQ=Promise.resolve();
-function mphoto(el,e,name){ // thumbnail of a dish: the saved recipe's own photo, else the Unsplash photo of the dish name (looked up once, cached)
-  const show=ph=>{if(ph&&okU(ph.t)){el.style.backgroundImage="url('"+ph.t+"')";el.textContent='';el.title=(ph.by||'Unsplash')+' · Unsplash'}};
+function mphoto(el,e,name,big){ // thumbnail of a dish: the saved recipe's own photo, else the Unsplash photo of the dish name (looked up once, cached)
+  const show=ph=>{if(ph&&okU(ph.t)){const u=big&&okU(ph.u)?ph.u:ph.t;el.style.backgroundImage="url('"+u+"')";el.textContent='';el.title=(ph.by||'Unsplash')+' · Unsplash';if(big){const c=document.createElement('span');c.className='mhcr';c.textContent=(ph.by||'Unsplash')+' · Unsplash';el.appendChild(c)}}};
   el.textContent='🍽️';
   if(e){if(e.ph)show(e.ph);return}
   if(!name)return;const c=mphLoad(),k=mphKey(name);if(c[k]){show(c[k]);return}
@@ -3255,6 +3261,24 @@ function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map
       if(items){const op=document.createElement('div');op.className='mopts';const op2=document.createElement('div');op2.className='mopts2';items.forEach(([ic,lb2,fn,danger],ix)=>{const ob=document.createElement('button');ob.type='button';ob.className='mopt'+(danger?' danger':'');ob.textContent=ic+' '+lb2;ob.onclick=ev=>{ev.stopPropagation();fn()};op2.appendChild(ob)});op.appendChild(op2);row.appendChild(op)} // v267: « Choisir moi-même » alone, the other options on the line below // v258: the options sit under the dish instead of behind a ⋯ menu
       sl.appendChild(row)});
   return sl}
+function paintMenuHome(m,rec,sug){ // v306: « Votre menu de la semaine » card: photo, name, course and status of today's dish, how many other days have something
+  const t=T(),b=$('#menuHome'),cs=t.mCourses.split('|'),PS=sug?wkPers(sug):{};
+  const slot=(i,j)=>{const id=m.d[i][j],e=id&&rec.get(id);if(e)return{e,name:e.title,own:true};
+    if(!sug)return null;const hk=sug.from+'|'+i+'|'+j;if(m.hid&&m.hid[hk])return null;const px=PS[i*3+j],pr=px&&rec.get(px.id);if(pr)return{e:pr,name:pr.title};
+    const it=sug.items[i*3+j];return it&&it[0]?{e:null,name:it[0]}:null};
+  const pick=i=>{for(const j of [1,0,2]){const x=slot(i,j);if(x){x.j=j;return x}}return null};
+  const td=pick(todayIdx);let others=0;for(let i=0;i<7;i++)if(i!==todayIdx&&pick(i))others++;
+  b.innerHTML='';b.classList.toggle('mhrich',!!td);
+  if(!td){let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));
+    const i=document.createElement('i');i.textContent='🗓️';const d=document.createElement('div'),h=document.createElement('b'),sp=document.createElement('span');h.textContent=t.menuT;sp.textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0;d.append(h,sp);
+    const g=document.createElement('em');g.className='mgo';g.textContent='›';b.append(i,d,g);return}
+  const hd=document.createElement('div');hd.className='mhh';const tt=document.createElement('span');tt.className='mht1';tt.textContent='🗓️ '+t.menuT;const all=document.createElement('em');all.textContent=t.hAll+' →';hd.append(tt,all);
+  const img=document.createElement('div');img.className='mhimg';mphoto(img,td.e&&td.e.ph?td.e:null,td.name,true);
+  const nm=document.createElement('div');nm.className='mhn';nm.textContent=td.name;
+  const mt=document.createElement('div');mt.className='mhm';const w=document.createElement('span');w.textContent=t.mToday+' · '+cs[td.j];const pl=document.createElement('span');pl.className='mhp';pl.textContent=td.own?t.mhPlan:t.mhIdea;mt.append(w,pl);
+  b.append(hd,img,nm,mt);
+  if(others){const o=document.createElement('div');o.className='mho';o.textContent=(others>1?t.mhOthers:t.mhOther1).replace('{n}',others);b.appendChild(o)}
+}
 function drawMenu(){
   const t=T(),box=$('#menuBox');box.innerHTML='';$('#menuT').textContent=t.menuT;
   const m=readMenu(),rec=new Map(loadH().map(e=>[e.id,e])),days=t.mDays.split('|'),cs=t.mCourses.split('|');
@@ -3291,7 +3315,7 @@ function drawMenu(){
     if(sug){const cr=document.createElement('p');cr.className='mcred';const lk=document.createElement('a');lk.textContent='Unsplash';lk.href=UNS;lk.target='_blank';lk.rel='noopener noreferrer';cr.append(t.mPhotos+' ',lk);card.appendChild(cr)}
     box.appendChild(card)}
 
-  {let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));$('#menuHT').textContent=t.menuT;$('#menuHS').textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0} // v211: compact card on the home
+  paintMenuHome(m,rec,sug); // v306: rich card on the home (today's dish with its photo); v211 compact card when nothing is planned today
   const shown=m.auto&&sug&&sug.items.some((x,k)=>x&&!(m.hid&&m.hid[sug.from+'|'+Math.floor(k/3)+'|'+k%3]));
   if(any||shown){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[],auto:false,hid:{}});toast(t.mClearHint);clearTimeout(toastT);toastT=setTimeout(()=>$('#toast').classList.remove('on'),7000); // v256: « Vider le menu » also switches the chef's suggestions off (tick « Le chef propose… » to bring them back)
       drawMenu()}};box.querySelector('.mtop').appendChild(c)}
