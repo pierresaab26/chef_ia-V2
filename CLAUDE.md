@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v267 (owner: weekly menu): « Vider le menu » moved to the TOP line, right of « Le chef propose le menu » (`.mtop`); under each dish « Choisir moi-même » is alone on its line and the other options sit on the line below (`.mopts2`). Local only until « pousse ».
+
 v266 (owner: « enlève l'option demander au chef pour trouver ma recette »): « Trouver mes recettes » only searches the device again (« Aucune recette trouvée », no chef card). Local only until « pousse ».
 
 v265 (owner: « centre annuler et supprimer »): the buttons of every confirmation dialog (`.dlgb`) are centred. Local only until « pousse ».

@@ -290,3 +290,8 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 ## v266
 
 - « Trouver mes recettes » no longer offers « Demander au chef » when nothing matches (only « Aucune recette trouvée »); the chef / community columns stay under « Que voulez-vous cuisiner ? ». `chefAsk()` removed.
+
+## v267 — weekly menu layout
+
+- « Vider le menu » sits on the top line of the menu, right-aligned next to the « Le chef propose le menu » checkbox (`.mtop`), no more at the very bottom.
+- Options of each dish: « ✏️ Choisir moi-même » alone, the other options (👍 Garder, 👎 Pas pour moi / 🗑️ Retirer) centred on a second line (`.mopts` column + `.mopts2`).
