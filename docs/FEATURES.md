@@ -262,3 +262,7 @@ The options that were behind the « ⋯ » of each dish are chips under the dish
 ## v259 — Weekly menu: centred title, options on one line
 
 In each dish row the course label and the dish name are centred (`.mrow2 .mbody`, `.mtit`), and the option chips are one centred line below the photo and name (`.mopts` moved from `.mbody` to the row, `flex:1 0 100%`, nowrap). Up to 480 px wide they wrap onto two lines (four chips are about 360 px wide). Local only until « pousse ».
+
+## v260 — Weekly menu: chips fit the card at every width
+
+The option chips (`.mopts`) no longer overflow the day card: they wrap and are centred under 560 px (2-3 lines), stay on ONE centred line from 560 px with compact chips (12 px, `padding:6px 9px`), and use the larger chips (13 px) from 900 px. Replaces the 480 px rule of v259. Local only until « pousse ».
