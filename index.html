@@ -325,7 +325,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;margin:0;padding:8px 4px;text-align:center}
 .tiles .impcard i{font-size:20px;height:26px;width:100%;display:grid;place-items:center;line-height:1}.tiles .impcard i.five5{width:24px;height:24px;margin:1px auto;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px}.tiles .impcard>div{width:100%}.tiles #fiveHome span{display:block;font-size:10.5px;line-height:1.2}.askico{font-size:17px;flex:none;line-height:1}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
 #menuHome.mhrich{display:block;padding:14px;text-align:left;color:var(--ink)}#menuHome .mhh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}#menuHome .mht1{font-weight:700;font-size:16px}#menuHome .mhh em{font-style:normal;color:var(--pink);font-weight:600;font-size:14px;white-space:nowrap}#menuHome .mhimg{position:relative;height:170px;border-radius:16px;background:var(--bg1) center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}#menuHome .mhcr{position:absolute;left:8px;bottom:8px;font-size:11px;line-height:1;background:rgba(0,0,0,.45);color:#fff;border-radius:999px;padding:5px 9px}#menuHome .mhn{font-weight:700;font-size:18px;margin:10px 0 6px}#menuHome .mhm{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--mut);font-size:14px}#menuHome .mhp{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:600;white-space:nowrap}#menuHome .mho{margin-top:8px;color:var(--mut);font-size:14px}#hsFavs{display:none}.hhtabs{display:flex;gap:8px;margin:0 0 8px}.hhtabs .chip{flex:0 0 auto}.hhtabs{align-items:center}.hhall{margin-left:auto;background:none;border:0;color:var(--pink);font-weight:600;font-size:14px;padding:6px 2px;white-space:nowrap}#hwrap{margin-top:0}#menuHome{margin:0 0 12px}#homesearch{margin:0}#hsbtns{margin:12px 0 0}#hhome{margin-top:12px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
-.snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
+.snfold{display:block;width:100%;margin:12px 0 0;background:transparent;border:1px solid var(--bd);border-radius:999px;color:var(--mut);font-size:14px;font-weight:600;padding:12px 16px;line-height:1.3;text-align:center}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
 .imsec{background:var(--card);border-radius:var(--rc);padding:14px;margin-bottom:14px;box-shadow:var(--sh)}
 .imsec h3{margin:0 0 10px;font-size:15px}
@@ -831,7 +831,7 @@ fr:{
   hRecent:"Récentes",
   hAll:"Tout voir",
   mhPlan:"Menu prévu",mhIdea:"Idée du chef",mhOthers:"{n} autres jours à découvrir",mhOther1:"1 autre jour à découvrir",
-  tileImp:"Importer",tileQ:"Question cuisine",snFold:"Recettes des 3 jours précédents et idées par catégorie",menu0:"Rien de prévu pour l’instant",menu1:"1 plat prévu",menuN:"{n} plats prévus",
+  tileImp:"Importer",tileQ:"Question cuisine",snFold:"Découvrir les inspirations des 3 jours précédents et idées par catégories",menu0:"Rien de prévu pour l’instant",menu1:"1 plat prévu",menuN:"{n} plats prévus",
   
   
   
@@ -1140,7 +1140,7 @@ en:{
   hRecent:"Recent",
   hAll:"See all",
   mhPlan:"Planned",mhIdea:"Chef’s idea",mhOthers:"{n} more days to discover",mhOther1:"1 more day to discover",
-  tileImp:"Import",tileQ:"Cooking question",snFold:"Recipes of the previous 3 days and ideas by course",menu0:"Nothing planned yet",menu1:"1 dish planned",menuN:"{n} dishes planned",
+  tileImp:"Import",tileQ:"Cooking question",snFold:"Discover the inspirations of the previous 3 days and ideas by category",menu0:"Nothing planned yet",menu1:"1 dish planned",menuN:"{n} dishes planned",
   
   
   
@@ -1449,7 +1449,7 @@ es:{
   hRecent:"Recientes",
   hAll:"Ver todo",
   mhPlan:"Previsto",mhIdea:"Idea del chef",mhOthers:"{n} días más por descubrir",mhOther1:"1 día más por descubrir",
-  tileImp:"Importar",tileQ:"Pregunta de cocina",snFold:"Recetas de los 3 días anteriores e ideas por categoría",menu0:"Nada previsto por ahora",menu1:"1 plato previsto",menuN:"{n} platos previstos",
+  tileImp:"Importar",tileQ:"Pregunta de cocina",snFold:"Descubrir las inspiraciones de los 3 días anteriores e ideas por categoría",menu0:"Nada previsto por ahora",menu1:"1 plato previsto",menuN:"{n} platos previstos",
   
   
   
@@ -1758,7 +1758,7 @@ de:{
   hRecent:"Zuletzt",
   hAll:"Alle ansehen",
   mhPlan:"Geplant",mhIdea:"Idee vom Chef",mhOthers:"{n} weitere Tage zu entdecken",mhOther1:"1 weiterer Tag zu entdecken",
-  tileImp:"Importieren",tileQ:"Kochfrage",snFold:"Rezepte der letzten 3 Tage und Ideen nach Gang",menu0:"Noch nichts geplant",menu1:"1 Gericht geplant",menuN:"{n} Gerichte geplant",
+  tileImp:"Importieren",tileQ:"Kochfrage",snFold:"Inspirationen der letzten 3 Tage und Ideen nach Kategorie entdecken",menu0:"Noch nichts geplant",menu1:"1 Gericht geplant",menuN:"{n} Gerichte geplant",
   
   
   
@@ -2067,7 +2067,7 @@ it:{
   hRecent:"Recenti",
   hAll:"Vedi tutto",
   mhPlan:"Previsto",mhIdea:"Idea dello chef",mhOthers:"{n} altri giorni da scoprire",mhOther1:"1 altro giorno da scoprire",
-  tileImp:"Importa",tileQ:"Domanda di cucina",snFold:"Ricette dei 3 giorni precedenti e idee per portata",menu0:"Niente in programma per ora",menu1:"1 piatto previsto",menuN:"{n} piatti previsti",
+  tileImp:"Importa",tileQ:"Domanda di cucina",snFold:"Scopri le ispirazioni dei 3 giorni precedenti e idee per categoria",menu0:"Niente in programma per ora",menu1:"1 piatto previsto",menuN:"{n} piatti previsti",
   
   
   
@@ -2376,7 +2376,7 @@ pt:{
   hRecent:"Recentes",
   hAll:"Ver tudo",
   mhPlan:"Previsto",mhIdea:"Ideia do chef",mhOthers:"{n} outros dias para descobrir",mhOther1:"1 outro dia para descobrir",
-  tileImp:"Importar",tileQ:"Pergunta de cozinha",snFold:"Receitas dos 3 dias anteriores e ideias por categoria",menu0:"Nada previsto por agora",menu1:"1 prato previsto",menuN:"{n} pratos previstos",
+  tileImp:"Importar",tileQ:"Pergunta de cozinha",snFold:"Descobrir as inspirações dos 3 dias anteriores e ideias por categoria",menu0:"Nada previsto por agora",menu1:"1 prato previsto",menuN:"{n} pratos previstos",
   
   
   
@@ -2886,7 +2886,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v306',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v307',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
