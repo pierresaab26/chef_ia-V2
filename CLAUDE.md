@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v270 (owner screenshot): menu selection bar pinned at the bottom, bottom nav hidden while selecting. Local only until « pousse ».
+
 v269 (owner: « pas beau » on the selection mode): tick circle on the left of each dish row, soft-pink picked row, compact bar with « Retirer (N) ». Local only until « pousse ».
 
 v268 (owner: « vider doit avoir 2 options »): in the weekly menu « Vider le menu » opens a choice: « Vider tout le menu » (as before) or « Choisir les plats à retirer » (selection mode over the whole week: tap dishes, bar « Annuler / Retirer / Remplacer »; Retirer empties own slots and hides chef dishes, Remplacer opens the recipe picker for each picked slot). Details in `docs/FEATURES.md` (v268). Local only until « pousse ».

@@ -303,3 +303,6 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 
 ### v269 — weekly menu selection mode restyle
 Owner: « pas beau ». In « Choisir les plats à retirer » each dish row has a round tick circle on its LEFT (flex first child, `.mck`), a picked row gets a light soft-pink fill (`.mrow2.picked`, no outline on the photo), the bar is compact (hint hidden once something is picked, count shown in « Retirer (N) »). Local only until « pousse ».
+
+### v270 — selection bar pinned at the bottom
+Real iPhone screenshot: the selection bar floated mid-screen over the dishes. In « Choisir les plats à retirer » the bottom navigation is hidden (`#app.mselmode nav`) and the bar sticks to the bottom edge (safe area); leaving the menu view ends the selection (`show()`). Local only until « pousse ».
