@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v286 (owner: « ça marche enfin », then « remplace Recette de la semaine passée par recette des 3 derniers jours précédents »): `snPrevT` / `snFold` read « Recettes des 3 jours précédents » (+ « et idées par catégorie »), 6 languages. v285 confirmed working live (6/6 series generated). Local only until « pousse ».
+
 v285 (owner's admin-link output: 5 of 6 languages failed, « 0 idea line(s) read, answer cut; answer starts: » empty): the chef used up the 700-token budget of `generate()` before writing the first idea, so the text was empty; `max_tokens` is now 3000 (same order as `/api/chat`). Local only until « pousse ».
 
 v284 (owner: the live server could not generate the series, `si:err` said only `upstream`, status 0): the error record now says WHY — network failure in `callClaude` (`detail` = e.g. `ENOTFOUND`) or, when the chef's 3 answers gave no valid 4 lines, what he answered (`attempt N: x idea line(s) read, y/4 kept, z names banned; answer starts: …`). Read it in `/api/season-ideas?status=1` (`lastError.detail`) or in `errors` of the admin link. No behaviour change otherwise. Local only until « pousse ».

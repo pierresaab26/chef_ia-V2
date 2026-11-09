@@ -339,3 +339,6 @@ Owner: « Annule tout ce que tu as fait pour cette histoire de vider le menu ».
 
 ### v285
 `generate()` asks the chef with `max_tokens: 3000` (was 700, which left an empty, cut answer).
+
+### v286
+Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents (et idées par catégorie) », 6 languages.
