@@ -353,6 +353,15 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shact{display:flex;gap:8px;margin:4px 0 12px}
 .shact button{flex:1;font:inherit;font-size:14px;padding:10px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);cursor:pointer}
 .shempty{color:var(--mut);text-align:center;padding:30px 10px}
+#ciback{width:40px;height:40px;padding:0;border-radius:50%;border:1px solid var(--bd);background:var(--card);display:inline-flex;align-items:center;justify-content:center;font-size:20px;line-height:1;cursor:pointer;color:var(--ink)}
+.cisec{background:var(--card);border-radius:var(--rc);padding:14px 16px;margin-bottom:12px;box-shadow:var(--sh)}
+.cisec h3{margin:0 0 8px;font-size:15px}.cisec .cih{color:var(--mut);font-size:13px;margin:8px 0 0}
+.cime{display:flex;align-items:center;gap:10px}.cime b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px}
+.cirow{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}.cirow:first-of-type{border-top:0}
+.cirow .cin{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cirow .cis{display:block;color:var(--mut);font-size:13px}
+.cirow img{width:48px;height:48px;border-radius:12px;object-fit:cover;flex:none}
+.cimut{color:var(--mut);font-size:14px;margin:0}
+.civis.on{border-color:var(--psbd);background:var(--psoft);color:var(--pink)}
 .shop-row{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:var(--rc);padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .shop-row .st{flex:1;min-width:0;line-height:1.35}
 .shop-row small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
@@ -543,6 +552,11 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     <div class="scroll" id="shlist"></div>
   </section>
 
+  <section class="view" id="circle"><!-- v287: identity + circle -->
+    <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="ciback" aria-label="Home">🏠</button><b id="ciT"></b></div>
+    <div class="scroll" id="cilist"></div>
+  </section>
+
   <section class="view" id="menu"><!-- v211: the weekly menu has its own page -->
     <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="mback" aria-label="Home">🏠</button><b id="menuT"></b></div>
     <div class="scroll"><div id="menuBox"></div></div>
@@ -590,6 +604,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     <button class="ditem" data-go="home">🏠 <span id="dHome"></span></button>
     <button class="ditem" data-go="history">🕘 <span id="dHist"></span></button>
     <button class="ditem" data-go="shop">🛒 <span id="dShop"></span></button>
+    <button class="ditem" data-go="circle">👥 <span id="dCircle"></span></button>
     <button class="ditem" data-go="favs">❤️ <span class="dtx"><span id="dFav"></span><small id="dFavS"></small></span><span class="n" id="dFavN"></span></button>
     <div class="dlang"><span aria-hidden="true">🌐</span><select id="lang" aria-label="Language"></select></div>
     <div class="dver" id="dver"></div>
@@ -816,6 +831,7 @@ fr:{
   lsEdit:"Modifier",lsDone:"Terminé",lsJoin:"Fusionner",lsDup:"Dupliquer",lsMore:"Options de la liste",lsDelN:"Supprimer {n} liste(s) et leurs articles ?",lsDeleted:"{n} liste(s) supprimée(s)",lsUndo:"Annuler",lsJoinQ:"Fusionner {n} listes dans « {l} » ? Les articles identiques s’additionnent (les articles déjà cochés ne sont pas repris).",lsJoined:"Listes fusionnées",lsCopy:" (copie)",lsSelN:"{n} sélectionnée(s)",
   listsT:"Listes de courses",listDay:"Courses du {d}",listNew:"＋ Nouvelle liste",listPick:"Choisir la liste",listCnt:"{n} articles",listDone:"{d} sur {n} cochés",listRen:"Renommer la liste",listDel:"Supprimer la liste",listDelQ:"Supprimer cette liste et ses articles ?",listAdded:"Ajouté à {l}",listChange:"Changer",listShare:"Partager",listCreated:"Créée le {d}",listGo:"Ajouter",listCopied:"Liste copiée",listEmptyL:"Cette liste est vide.",listOld:"Ma liste",
   listSelect:"Sélectionner des ingrédients",listAddSel:"Ajouter à la liste",listCancel:"Annuler",listAll:"Tout",listN:"{n} sélectionné(s)",
+  dCircle:"Mon cercle",ciT:"Mon cercle",ciNickQ:"Choisis un pseudo : c’est le nom que verront tes proches dans ton cercle.",ciNickOk:"Valider",ciYou:"Ton pseudo",ciEdit:"Modifier",ciInvite:"Inviter un proche",ciInvTxt:"Rejoins mon cercle sur Chef IA :",ciInvH:"Le lien est valable 7 jours. Ton proche et toi serez chacun dans le cercle de l’autre.",ciMembers:"Membres",ciNone:"Personne dans ton cercle pour l’instant. Invite un proche avec le bouton ci-dessus.",ciRemQ:"Retirer {n} de ton cercle ? Vous ne verrez plus les recettes l’un de l’autre.",ciRem:"Retirer",ciFeed:"Recettes du cercle",ciFeedNone:"Aucune recette partagée dans ton cercle pour l’instant. Sur une recette, touche « 🔒 Privée » pour la passer en « 👥 Cercle ».",ciSave:"Enregistrer",ciJoined:"Tu es maintenant dans le cercle de {n}",ciAlready:"Tu es déjà dans le cercle de {n}",ciBadLink:"Lien d’invitation expiré ou invalide",ciSelf:"C’est ton propre lien d’invitation",ciFull:"Ce cercle est complet (50 personnes)",ciOn:"👥 Cercle",ciOff:"🔒 Privée",ciPosted:"Recette visible par ton cercle",ciUnposted:"Recette redevenue privée",ciBy:"par {n}",ciCopied:"Lien d’invitation copié",ciNoName:"Sans pseudo",ciErr:"Cercle indisponible pour l’instant, réessaie plus tard",
   dShop:"Liste de courses",shopT:"Liste de courses",shopAdd:"Ajouter à la liste",shopIn:"Dans la liste",shopAdded:"Ajouté à la liste de courses",shopSee:"Voir",shopEmpty:"Ta liste est vide. Ajoute des ingrédients depuis une recette.",shopDone:"Retirer les cochés",shopClear:"Tout effacer",shopClearQ:"Effacer toute la liste de courses ?",qHomeS:"Réponses courtes, sans recette",
   qaFavOk:"Ajouté à vos favoris · Questions cuisine",qaFavSee:"Voir",
   qaCom:"Commenter",
@@ -1118,6 +1134,7 @@ en:{
   lsEdit:"Edit",lsDone:"Done",lsJoin:"Merge",lsDup:"Duplicate",lsMore:"List options",lsDelN:"Delete {n} list(s) and their items?",lsDeleted:"{n} list(s) deleted",lsUndo:"Undo",lsJoinQ:"Merge {n} lists into “{l}”? Identical items are added together (items already ticked are not carried over).",lsJoined:"Lists merged",lsCopy:" (copy)",lsSelN:"{n} selected",
   listsT:"Shopping lists",listDay:"Shopping for {d}",listNew:"＋ New list",listPick:"Choose the list",listCnt:"{n} items",listDone:"{d} of {n} ticked",listRen:"Rename the list",listDel:"Delete the list",listDelQ:"Delete this list and its items?",listAdded:"Added to {l}",listChange:"Change",listShare:"Share",listCreated:"Created on {d}",listGo:"Add",listCopied:"List copied",listEmptyL:"This list is empty.",listOld:"My list",
   listSelect:"Select ingredients",listAddSel:"Add to list",listCancel:"Cancel",listAll:"All",listN:"{n} selected",
+  dCircle:"My circle",ciT:"My circle",ciNickQ:"Choose a nickname: it is the name the people of your circle will see.",ciNickOk:"OK",ciYou:"Your nickname",ciEdit:"Edit",ciInvite:"Invite someone",ciInvTxt:"Join my circle on Chef IA:",ciInvH:"The link is valid for 7 days. You will each be in the other’s circle.",ciMembers:"Members",ciNone:"Nobody in your circle yet. Invite someone with the button above.",ciRemQ:"Remove {n} from your circle? You will no longer see each other’s recipes.",ciRem:"Remove",ciFeed:"Circle recipes",ciFeedNone:"No recipe shared in your circle yet. On a recipe, tap « 🔒 Private » to switch it to « 👥 Circle ».",ciSave:"Save",ciJoined:"You are now in {n}’s circle",ciAlready:"You are already in {n}’s circle",ciBadLink:"Invite link expired or invalid",ciSelf:"This is your own invite link",ciFull:"This circle is full (50 people)",ciOn:"👥 Circle",ciOff:"🔒 Private",ciPosted:"Recipe visible to your circle",ciUnposted:"Recipe is private again",ciBy:"by {n}",ciCopied:"Invite link copied",ciNoName:"No nickname",ciErr:"Circle unavailable right now, try again later",
   dShop:"Shopping list",shopT:"Shopping list",shopAdd:"Add to list",shopIn:"In the list",shopAdded:"Added to the shopping list",shopSee:"View",shopEmpty:"Your list is empty. Add ingredients from a recipe.",shopDone:"Remove ticked",shopClear:"Clear all",shopClearQ:"Clear the whole shopping list?",qHomeS:"Short answers, no recipe",
   qaFavOk:"Added to your favourites · Cooking questions",qaFavSee:"View",
   qaCom:"Comment",
@@ -1420,6 +1437,7 @@ es:{
   lsEdit:"Editar",lsDone:"Hecho",lsJoin:"Combinar",lsDup:"Duplicar",lsMore:"Opciones de la lista",lsDelN:"¿Eliminar {n} lista(s) y sus artículos?",lsDeleted:"{n} lista(s) eliminada(s)",lsUndo:"Deshacer",lsJoinQ:"¿Combinar {n} listas en «{l}»? Los artículos idénticos se suman (los ya marcados no se incluyen).",lsJoined:"Listas combinadas",lsCopy:" (copia)",lsSelN:"{n} seleccionada(s)",
   listsT:"Listas de la compra",listDay:"Compra del {d}",listNew:"＋ Nueva lista",listPick:"Elige la lista",listCnt:"{n} artículos",listDone:"{d} de {n} marcados",listRen:"Renombrar la lista",listDel:"Eliminar la lista",listDelQ:"¿Eliminar esta lista y sus artículos?",listAdded:"Añadido a {l}",listChange:"Cambiar",listShare:"Compartir",listCreated:"Creada el {d}",listGo:"Añadir",listCopied:"Lista copiada",listEmptyL:"Esta lista está vacía.",listOld:"Mi lista",
   listSelect:"Seleccionar ingredientes",listAddSel:"Añadir a la lista",listCancel:"Cancelar",listAll:"Todo",listN:"{n} seleccionado(s)",
+  dCircle:"Mi círculo",ciT:"Mi círculo",ciNickQ:"Elige un apodo: es el nombre que verán las personas de tu círculo.",ciNickOk:"Aceptar",ciYou:"Tu apodo",ciEdit:"Cambiar",ciInvite:"Invitar a alguien",ciInvTxt:"Únete a mi círculo en Chef IA:",ciInvH:"El enlace vale 7 días. Cada uno estará en el círculo del otro.",ciMembers:"Miembros",ciNone:"Todavía no hay nadie en tu círculo. Invita a alguien con el botón de arriba.",ciRemQ:"¿Quitar a {n} de tu círculo? Ya no veréis las recetas del otro.",ciRem:"Quitar",ciFeed:"Recetas del círculo",ciFeedNone:"Todavía no hay recetas compartidas en tu círculo. En una receta, toca « 🔒 Privada » para pasarla a « 👥 Círculo ».",ciSave:"Guardar",ciJoined:"Ahora estás en el círculo de {n}",ciAlready:"Ya estás en el círculo de {n}",ciBadLink:"Enlace de invitación caducado o no válido",ciSelf:"Es tu propio enlace de invitación",ciFull:"Este círculo está completo (50 personas)",ciOn:"👥 Círculo",ciOff:"🔒 Privada",ciPosted:"Receta visible para tu círculo",ciUnposted:"La receta vuelve a ser privada",ciBy:"de {n}",ciCopied:"Enlace de invitación copiado",ciNoName:"Sin apodo",ciErr:"Círculo no disponible ahora, inténtalo más tarde",
   dShop:"Lista de la compra",shopT:"Lista de la compra",shopAdd:"Añadir a la lista",shopIn:"En la lista",shopAdded:"Añadido a la lista de la compra",shopSee:"Ver",shopEmpty:"Tu lista está vacía. Añade ingredientes desde una receta.",shopDone:"Quitar marcados",shopClear:"Vaciar todo",shopClearQ:"¿Vaciar toda la lista de la compra?",qHomeS:"Respuestas breves, sin receta",
   qaFavOk:"Añadido a tus favoritos · Preguntas de cocina",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -1722,6 +1740,7 @@ de:{
   lsEdit:"Bearbeiten",lsDone:"Fertig",lsJoin:"Zusammenführen",lsDup:"Duplizieren",lsMore:"Listenoptionen",lsDelN:"{n} Liste(n) mit allen Artikeln löschen?",lsDeleted:"{n} Liste(n) gelöscht",lsUndo:"Rückgängig",lsJoinQ:"{n} Listen in „{l}“ zusammenführen? Gleiche Artikel werden addiert (bereits abgehakte werden nicht übernommen).",lsJoined:"Listen zusammengeführt",lsCopy:" (Kopie)",lsSelN:"{n} ausgewählt",
   listsT:"Einkaufslisten",listDay:"Einkauf am {d}",listNew:"＋ Neue Liste",listPick:"Liste wählen",listCnt:"{n} Artikel",listDone:"{d} von {n} abgehakt",listRen:"Liste umbenennen",listDel:"Liste löschen",listDelQ:"Diese Liste und ihre Artikel löschen?",listAdded:"Hinzugefügt zu {l}",listChange:"Ändern",listShare:"Teilen",listCreated:"Erstellt am {d}",listGo:"Hinzufügen",listCopied:"Liste kopiert",listEmptyL:"Diese Liste ist leer.",listOld:"Meine Liste",
   listSelect:"Zutaten auswählen",listAddSel:"Zur Liste hinzufügen",listCancel:"Abbrechen",listAll:"Alle",listN:"{n} ausgewählt",
+  dCircle:"Mein Kreis",ciT:"Mein Kreis",ciNickQ:"Wähle einen Spitznamen: Diesen Namen sehen die Leute in deinem Kreis.",ciNickOk:"OK",ciYou:"Dein Spitzname",ciEdit:"Ändern",ciInvite:"Jemanden einladen",ciInvTxt:"Komm in meinen Kreis bei Chef IA:",ciInvH:"Der Link gilt 7 Tage. Ihr seid dann jeweils im Kreis des anderen.",ciMembers:"Mitglieder",ciNone:"Noch niemand in deinem Kreis. Lade jemanden mit dem Knopf oben ein.",ciRemQ:"{n} aus deinem Kreis entfernen? Ihr seht dann die Rezepte des anderen nicht mehr.",ciRem:"Entfernen",ciFeed:"Rezepte des Kreises",ciFeedNone:"Noch kein Rezept in deinem Kreis geteilt. Tippe bei einem Rezept auf « 🔒 Privat », um es auf « 👥 Kreis » zu stellen.",ciSave:"Speichern",ciJoined:"Du bist jetzt im Kreis von {n}",ciAlready:"Du bist schon im Kreis von {n}",ciBadLink:"Einladungslink abgelaufen oder ungültig",ciSelf:"Das ist dein eigener Einladungslink",ciFull:"Dieser Kreis ist voll (50 Personen)",ciOn:"👥 Kreis",ciOff:"🔒 Privat",ciPosted:"Rezept für deinen Kreis sichtbar",ciUnposted:"Rezept wieder privat",ciBy:"von {n}",ciCopied:"Einladungslink kopiert",ciNoName:"Ohne Spitznamen",ciErr:"Kreis gerade nicht verfügbar, versuch es später",
   dShop:"Einkaufsliste",shopT:"Einkaufsliste",shopAdd:"Zur Liste hinzufügen",shopIn:"In der Liste",shopAdded:"Zur Einkaufsliste hinzugefügt",shopSee:"Ansehen",shopEmpty:"Deine Liste ist leer. Füge Zutaten aus einem Rezept hinzu.",shopDone:"Markierte entfernen",shopClear:"Alles löschen",shopClearQ:"Gesamte Einkaufsliste leeren?",qHomeS:"Kurze Antworten, ohne Rezept",
   qaFavOk:"Zu deinen Favoriten hinzugefügt · Kochfragen",qaFavSee:"Ansehen",
   qaCom:"Kommentieren",
@@ -2024,6 +2043,7 @@ it:{
   lsEdit:"Modifica",lsDone:"Fine",lsJoin:"Unisci",lsDup:"Duplica",lsMore:"Opzioni della lista",lsDelN:"Eliminare {n} lista/e e i loro articoli?",lsDeleted:"{n} lista/e eliminata/e",lsUndo:"Annulla",lsJoinQ:"Unire {n} liste in «{l}»? Gli articoli uguali si sommano (quelli già spuntati non vengono riportati).",lsJoined:"Liste unite",lsCopy:" (copia)",lsSelN:"{n} selezionata/e",
   listsT:"Liste della spesa",listDay:"Spesa del {d}",listNew:"＋ Nuova lista",listPick:"Scegli la lista",listCnt:"{n} articoli",listDone:"{d} su {n} spuntati",listRen:"Rinomina la lista",listDel:"Elimina la lista",listDelQ:"Eliminare questa lista e i suoi articoli?",listAdded:"Aggiunto a {l}",listChange:"Cambia",listShare:"Condividi",listCreated:"Creata il {d}",listGo:"Aggiungi",listCopied:"Lista copiata",listEmptyL:"Questa lista è vuota.",listOld:"La mia lista",
   listSelect:"Seleziona ingredienti",listAddSel:"Aggiungi alla lista",listCancel:"Annulla",listAll:"Tutti",listN:"{n} selezionati",
+  dCircle:"La mia cerchia",ciT:"La mia cerchia",ciNickQ:"Scegli un nickname: è il nome che vedranno le persone della tua cerchia.",ciNickOk:"OK",ciYou:"Il tuo nickname",ciEdit:"Modifica",ciInvite:"Invita qualcuno",ciInvTxt:"Entra nella mia cerchia su Chef IA:",ciInvH:"Il link vale 7 giorni. Sarete ciascuno nella cerchia dell’altro.",ciMembers:"Membri",ciNone:"Ancora nessuno nella tua cerchia. Invita qualcuno con il pulsante qui sopra.",ciRemQ:"Togliere {n} dalla tua cerchia? Non vedrete più le ricette l’uno dell’altro.",ciRem:"Togli",ciFeed:"Ricette della cerchia",ciFeedNone:"Ancora nessuna ricetta condivisa nella tua cerchia. Su una ricetta, tocca « 🔒 Privata » per passarla a « 👥 Cerchia ».",ciSave:"Salva",ciJoined:"Ora sei nella cerchia di {n}",ciAlready:"Sei già nella cerchia di {n}",ciBadLink:"Link di invito scaduto o non valido",ciSelf:"È il tuo link di invito",ciFull:"Questa cerchia è piena (50 persone)",ciOn:"👥 Cerchia",ciOff:"🔒 Privata",ciPosted:"Ricetta visibile alla tua cerchia",ciUnposted:"La ricetta è di nuovo privata",ciBy:"di {n}",ciCopied:"Link di invito copiato",ciNoName:"Senza nickname",ciErr:"Cerchia non disponibile ora, riprova più tardi",
   dShop:"Lista della spesa",shopT:"Lista della spesa",shopAdd:"Aggiungi alla lista",shopIn:"Nella lista",shopAdded:"Aggiunto alla lista della spesa",shopSee:"Vedi",shopEmpty:"La tua lista è vuota. Aggiungi ingredienti da una ricetta.",shopDone:"Rimuovi i spuntati",shopClear:"Svuota tutto",shopClearQ:"Svuotare tutta la lista della spesa?",qHomeS:"Risposte brevi, senza ricetta",
   qaFavOk:"Aggiunto ai preferiti · Domande di cucina",qaFavSee:"Vedi",
   qaCom:"Commenta",
@@ -2326,6 +2346,7 @@ pt:{
   lsEdit:"Editar",lsDone:"Concluído",lsJoin:"Juntar",lsDup:"Duplicar",lsMore:"Opções da lista",lsDelN:"Eliminar {n} lista(s) e os seus artigos?",lsDeleted:"{n} lista(s) eliminada(s)",lsUndo:"Anular",lsJoinQ:"Juntar {n} listas em «{l}»? Os artigos iguais somam-se (os já marcados não são incluídos).",lsJoined:"Listas juntadas",lsCopy:" (cópia)",lsSelN:"{n} selecionada(s)",
   listsT:"Listas de compras",listDay:"Compras de {d}",listNew:"＋ Nova lista",listPick:"Escolher a lista",listCnt:"{n} artigos",listDone:"{d} de {n} marcados",listRen:"Renomear a lista",listDel:"Apagar a lista",listDelQ:"Apagar esta lista e os seus artigos?",listAdded:"Adicionado a {l}",listChange:"Mudar",listShare:"Partilhar",listCreated:"Criada em {d}",listGo:"Adicionar",listCopied:"Lista copiada",listEmptyL:"Esta lista está vazia.",listOld:"A minha lista",
   listSelect:"Selecionar ingredientes",listAddSel:"Adicionar à lista",listCancel:"Cancelar",listAll:"Todos",listN:"{n} selecionados",
+  dCircle:"O meu círculo",ciT:"O meu círculo",ciNickQ:"Escolhe um nome: é o nome que as pessoas do teu círculo vão ver.",ciNickOk:"OK",ciYou:"O teu nome",ciEdit:"Alterar",ciInvite:"Convidar alguém",ciInvTxt:"Junta-te ao meu círculo no Chef IA:",ciInvH:"O link é válido 7 dias. Cada um ficará no círculo do outro.",ciMembers:"Membros",ciNone:"Ainda ninguém no teu círculo. Convida alguém com o botão acima.",ciRemQ:"Retirar {n} do teu círculo? Deixarão de ver as receitas um do outro.",ciRem:"Retirar",ciFeed:"Receitas do círculo",ciFeedNone:"Ainda nenhuma receita partilhada no teu círculo. Numa receita, toca em « 🔒 Privada » para a passar a « 👥 Círculo ».",ciSave:"Guardar",ciJoined:"Estás agora no círculo de {n}",ciAlready:"Já estás no círculo de {n}",ciBadLink:"Link de convite expirado ou inválido",ciSelf:"É o teu próprio link de convite",ciFull:"Este círculo está cheio (50 pessoas)",ciOn:"👥 Círculo",ciOff:"🔒 Privada",ciPosted:"Receita visível para o teu círculo",ciUnposted:"A receita voltou a ser privada",ciBy:"de {n}",ciCopied:"Link de convite copiado",ciNoName:"Sem nome",ciErr:"Círculo indisponível agora, tenta mais tarde",
   dShop:"Lista de compras",shopT:"Lista de compras",shopAdd:"Adicionar à lista",shopIn:"Na lista",shopAdded:"Adicionado à lista de compras",shopSee:"Ver",shopEmpty:"A tua lista está vazia. Adiciona ingredientes a partir de uma receita.",shopDone:"Remover marcados",shopClear:"Limpar tudo",shopClearQ:"Esvaziar toda a lista de compras?",qHomeS:"Respostas curtas, sem receita",
   qaFavOk:"Adicionado aos favoritos · Perguntas de cozinha",qaFavSee:"Ver",
   qaCom:"Comentar",
@@ -2812,7 +2833,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v286',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v287',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3248,12 +3269,12 @@ function wkPers(sug){if(!sug)return {};const live=o=>o&&loadH().some(e=>e.id===o
 function drawerText(){const t=T();drawMenu();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
-  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.fsPh;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#dShop').textContent=t.dShop;$('#dFavS').textContent=t.favsS;impText();$('#fpT').textContent=t.favT;
+  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.fsPh;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#dShop').textContent=t.dShop;$('#dCircle').textContent=t.dCircle;$('#dFavS').textContent=t.favsS;impText();$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
 function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','false'));if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
-function goTo(v){closeDrawer();if(v==='history')drawHistory();if(v==='favs'){favCat=null;$('#fsearch').value='';drawFavs()}if(v==='shop')drawShop();if(v==='imp')resetImp();show(v)}
+function goTo(v){closeDrawer();if(v==='history')drawHistory();if(v==='favs'){favCat=null;$('#fsearch').value='';drawFavs()}if(v==='shop')drawShop();if(v==='circle')drawCircle();if(v==='imp')resetImp();show(v)}
 // ---------- Favorites grouped by category ----------
 // The category of a recipe is guessed from its title and ingredients (6 languages); an `e.cat` set on the entry would win.
 // Index = position in the interface texts `cats` (🍲 Everyday dishes, 🍰 Desserts…, 🍹 Cocktails, 🥤 Drinks, …, 🍞 Bakery, 🧂 Sauces and sides, 🍬 Chocolate and ice cream…).
@@ -4091,6 +4112,7 @@ function openCard(id,vi){
   fv.onclick=()=>{const f=toggleFav(id,cvi);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f)};
   const sh=document.createElement('button');sh.className='cbtn shr';sh.innerHTML='↗<span class="shl"> '+t.share.replace(/</g,'&lt;')+'</span>';sh.setAttribute('aria-label',t.share);sh.onclick=()=>shareRecipe(verOf(loadH().find(x=>x.id===id)||e,cvi)); // v117: icon only on phones
   act.append(fv,rateBox(id,cvi),sh); // v139: heart on every version again
+  if(!e.imp&&/^https?:/.test(location.href))act.appendChild(visBtn(e,cvi)); // v287: 🔒 Privée / 👥 Cercle (not for a recipe received from someone else)
   sh.addEventListener('pointerdown',()=>{try{shareLink(verOf(loadH().find(x=>x.id===id)||e,cvi),true)}catch(x){}});setTimeout(()=>{try{if(cardId===id)shareLink(verOf(loadH().find(x=>x.id===id)||e,cvi),true)}catch(x){}},500); // v139: prepare the shared link (iOS cancels a share that waits for the server)
   {const cta=$('#cardcta');cta.textContent='💬 '+t.cont;cta.onclick=()=>openSaved(id)} // sticky main button at the bottom of the card
   {const ri=resetInfoFor(id,e.messages||[]),rb=$('#cardorig');rb.textContent='🗑️ '+t.origDel; // « ↺ Recette originale » at the top, like in the chat
@@ -4581,6 +4603,69 @@ async function importShared(sid){const t=T();try{
   const r=await capi('GET','?sid='+sid,null,'/api/shared');if(!r.ok)throw 0;const e=addShared(await r.json());
   try{history.replaceState(null,'',location.pathname)}catch(x){}
   drawHistory();openCard(e.id);toast('📥 '+t.impOk)}catch(x){toast(t.impErr)}}
+
+// ----- v287: identity (pseudo) and circle (community plan steps 6–7, server api/circle.js) -----
+const CIRC_KEY='chefCirc'; // vKey of a version → sid of its shared copy listed in my circle
+function circMap(){try{return JSON.parse(localStorage.getItem(CIRC_KEY)||'{}')||{}}catch(x){return{}}}
+function circSave(m){try{localStorage.setItem(CIRC_KEY,JSON.stringify(m))}catch(x){}}
+function nick(){try{return localStorage.getItem('nick')||''}catch(x){return''}}
+async function syncNick(quiet){const n=nick();if(!n||!/^https?:/.test(location.href))return false;try{const r=await capi('POST','',{act:'name',name:n},'/api/circle',quiet);if(r.ok){try{localStorage.setItem('nickSync',n)}catch(x){}return true}}catch(x){}return false}
+async function askNick(force){const t=T();if(nick()&&!force)return nick();
+  const w=ask({text:t.ciNickQ,input:true,okLabel:t.ciNickOk});
+  setTimeout(()=>{const f=document.querySelector('.dlg input');if(f){f.maxLength=24;f.value=nick()||(()=>{try{return localStorage.getItem('uname')||''}catch(x){return''}})();f.setAttribute('autocapitalize','words')}},40);
+  const v=await w;if(typeof v!=='string'||!v.trim())return nick();
+  const n=v.trim().replace(/[<>"]/g,'').replace(/\s+/g,' ').slice(0,24);try{localStorage.setItem('nick',n);if(!localStorage.getItem('uname'))localStorage.setItem('uname',n)}catch(x){}
+  syncNick(true);return n}
+function visBtn(e,vi){const t=T(),k=vKey(e,vi),b=document.createElement('button');b.type='button';b.className='cbtn civis';
+  const paint=()=>{const on=!!circMap()[k];b.textContent=on?t.ciOn:t.ciOff;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false')};paint();
+  b.onclick=async()=>{if(b.disabled)return;b.disabled=true;try{const m=circMap();
+    if(m[k]){const r=await capi('POST','',{act:'unpost',sid:m[k]},'/api/circle');if(!r.ok)throw 0;delete m[k];circSave(m);toast(t.ciUnposted)}
+    else{if(!nick())await askNick();if(!nick())return;if(nick()!==(localStorage.getItem('nickSync')||''))await syncNick();
+      const z=loadH().find(x=>x.id===e.id)||e,link=await shareLink(verOf(z,vi));const sid=link.split('?s=')[1];if(!sid)throw 0;
+      const r=await capi('POST','',{act:'post',sid},'/api/circle');if(!r.ok)throw 0;m[k]=sid;circSave(m);toast(t.ciPosted)}
+  }catch(x){toast(t.ciErr)}finally{b.disabled=false;paint()}};
+  return b}
+let ciData=null;
+async function drawCircle(){const t=T(),box=$('#cilist');$('#ciT').textContent=t.ciT;box.textContent='';
+  const sec=(h)=>{const d=document.createElement('section');d.className='cisec';if(h){const x=document.createElement('h3');x.textContent=h;d.appendChild(x)}box.appendChild(d);return d};
+  // pseudo
+  const s1=sec(t.ciYou),me=document.createElement('div');me.className='cime';const nb=document.createElement('b');nb.textContent=nick()||t.ciNoName;
+  const eb=document.createElement('button');eb.type='button';eb.className='cbtn';eb.textContent='✏️ '+t.ciEdit;eb.onclick=async()=>{await askNick(true);drawCircle()};me.append(nb,eb);s1.appendChild(me);
+  // invite
+  const s2=sec(''),ib=document.createElement('button');ib.type='button';ib.className='newbig';ib.style.marginBottom='0';ib.textContent='➕ '+t.ciInvite;ib.onclick=()=>inviteCircle(ib);
+  const ih=document.createElement('p');ih.className='cih';ih.textContent=t.ciInvH;s2.append(ib,ih);
+  const s3=sec(t.ciMembers),s4=sec(t.ciFeed);const wait=x=>{const p=document.createElement('p');p.className='cimut';p.textContent='…';x.appendChild(p);return p};const w3=wait(s3),w4=wait(s4);
+  if(!/^https?:/.test(location.href)){w3.textContent=t.ciErr;w4.remove();return}
+  try{const[r1,r2]=await Promise.all([capi('GET','',null,'/api/circle'),capi('GET','?feed=1',null,'/api/circle')]);if(!r1.ok||!r2.ok)throw 0;
+    const who=await r1.json(),fd=await r2.json();if(curView!=='circle')return;ciData=who;
+    if(nick()&&who.name!==nick())syncNick(true);
+    w3.remove();if(!who.members.length){const p=document.createElement('p');p.className='cimut';p.textContent=t.ciNone;s3.appendChild(p)}
+    who.members.forEach(m=>{const r=document.createElement('div');r.className='cirow';const n=document.createElement('span');n.className='cin';n.textContent='👤 '+(m.name||t.ciNoName);
+      const x=document.createElement('button');x.type='button';x.className='cbtn';x.textContent='✕';x.setAttribute('aria-label',t.ciRem);
+      x.onclick=async()=>{if(!await ask({text:t.ciRemQ.replace('{n}',m.name||t.ciNoName),okLabel:t.ciRem}))return;try{const q=await capi('POST','',{act:'remove',pid:m.pid},'/api/circle');if(!q.ok)throw 0}catch(y){toast(t.ciErr)}drawCircle()};
+      r.append(n,x);s3.appendChild(r)});
+    w4.remove();const items=fd.items||[];if(!items.length){const p=document.createElement('p');p.className='cimut';p.textContent=t.ciFeedNone;s4.appendChild(p)}
+    items.forEach(it=>{const r=document.createElement('div');r.className='cirow';
+      if(it.ph&&okU(it.ph.t)){const im=document.createElement('img');im.src=it.ph.t;im.alt='';im.loading='lazy';r.appendChild(im)}
+      const n=document.createElement('span');n.className='cin';n.textContent=it.t;const sm=document.createElement('small');sm.className='cis';sm.textContent=t.ciBy.replace('{n}',it.by||t.ciNoName)+' · '+ago(it.at);n.appendChild(sm);
+      const sv=document.createElement('button');sv.type='button';sv.className='cbtn civis on';sv.textContent=t.ciSave;sv.onclick=()=>importShared(it.sid);
+      r.append(n,sv);s4.appendChild(r)});
+  }catch(x){w3.textContent=t.ciErr;w4.remove()}}
+async function inviteCircle(btn){const t=T();if(!nick())await askNick();if(!nick())return;btn.disabled=true;
+  try{if(nick()!==(localStorage.getItem('nickSync')||''))await syncNick();const r=await capi('POST','',{act:'invite'},'/api/circle');if(!r.ok)throw 0;const{code}=await r.json();
+    const link=location.origin+'/?c='+code,txt=t.ciInvTxt+' '+nick()+'\n'+link;
+    if(navigator.share){try{await navigator.share({title:'Chef IA',text:txt});return}catch(x){if(x&&x.name==='AbortError')return}}
+    let ok=false;try{await navigator.clipboard.writeText(txt);ok=true}catch(x){}toast(ok?t.ciCopied:link)}catch(x){toast(t.ciErr)}finally{btn.disabled=false}}
+async function joinCircle(code){const t=T();try{history.replaceState(null,'',location.pathname)}catch(x){}
+  if(!nick())await askNick();if(nick())await syncNick();
+  try{const r=await capi('POST','',{act:'join',code},'/api/circle');let d={};try{d=await r.json()}catch(x){}
+    if(r.ok){toast((d.already?t.ciAlready:t.ciJoined).replace('{n}',d.name||t.ciNoName));drawCircle();show('circle');return}
+    toast(d.error==='self'?t.ciSelf:d.error==='full'?t.ciFull:r.status===404||r.status===400?t.ciBadLink:t.ciErr)}catch(x){toast(t.ciErr)}}
+$('#ciback').onclick=()=>show('home');
+{let cc='';try{cc=(new URLSearchParams(location.search).get('c')||'').trim().toLowerCase().slice(0,16)}catch(e){}
+  if(/^[a-z0-9]{8,16}$/.test(cc))setTimeout(()=>joinCircle(cc),300);
+  else if(!nick())setTimeout(()=>{if(!document.querySelector('.dlgw'))askNick()},1200); // first opening: choose a nickname (step 6)
+  else if(nick()!==(()=>{try{return localStorage.getItem('nickSync')||''}catch(x){return''}})())setTimeout(()=>syncNick(true),2000)}
 {let ss='';try{ss=(new URLSearchParams(location.search).get('s')||'').trim().slice(0,64)}catch(e){}
   if(/^[a-z0-9-]{8,64}$/.test(ss))importShared(ss)}
 // Shared link « /?q=question »: opens the cooking-questions screen on that question (the chef answers again; the comments are the shared ones for that question).

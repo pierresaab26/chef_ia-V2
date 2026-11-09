@@ -342,3 +342,10 @@ Owner: « Annule tout ce que tu as fait pour cette histoire de vider le menu ».
 
 ### v286
 Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents (et idées par catégorie) », 6 languages.
+
+## Identity and circle (v287, community plan steps 6–7)
+- **Nickname**: asked at first opening (`askNick()`, localStorage `nick`), editable in « Mon cercle », sent with `POST /api/circle {act:"name"}`. No account: the person is the device owner id (`x-owner`), stored server-side only as a hash `pid`. Changing phone = new identity.
+- **Circle**: one per person. « ➕ Inviter un proche » creates `/?c=<code>` (7 days); the friend opens it → both are in each other's circle (max 50). ✕ on a member removes both sides.
+- **Visibility**: on the recipe card, « 🔒 Privée » / « 👥 Cercle » per version (not on received recipes). Cercle = the version's shared copy listed for the circle (`cp:<pid>`); Privée again = removed from the list.
+- **« Recettes du cercle »**: the circle's recipes, newest first, with the author's nickname; « Enregistrer » imports the recipe (same comments, like a shared link).
+- Redis: `cu:<pid>` nickname, `cf:<pid>` circle set, `ci:<code>` invite, `cp:<pid>` listed recipes. Limit: a « Privée » recipe whose card was opened can still be found by the community search (v263 index of shared copies).
