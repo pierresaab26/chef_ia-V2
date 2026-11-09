@@ -60,6 +60,7 @@ No framework, no build step. `package.json` only sets `"type": "module"`.
 | `api/season-ideas.js` | « Chef's ideas » of the seasonal menu, SAME for everybody: 4 ideas per language and occasion, renewed every 3 days at 9:00 Paris time, stored in Redis; also the scheduled warm-up (`?run=1`). See v96 in section 5. |
 | `api/_season.js` | Pure helpers for it (no network, unit-tested): 3-day periods from 3 Nov 2026 9:00 Paris time, occasion list, French calendar, idea parser and prompt. Also copied as-is into the claude.ai preview bridge. |
 | `api/photo.js` | Photo of a recipe (Unsplash, `UNSPLASH_ACCESS_KEY`). `POST {title,lang,skip}` (access code): the model writes two English search phrases (precise, broad), Unsplash returns 8 landscape photos, the model LOOKS at the thumbnails and scores each 0–10 (kept from 4, best first, max 6; broad phrase if nothing kept; Unsplash order if the scoring fails), the ranking is cached in Redis (`ph2:`), photo ids already used by the device's other recipes are skipped. Nothing good → the title goes to `ph:missing` with a reason. `GET ?missing=1` (public) lists those titles for the manual check. Only `images.unsplash.com` / `unsplash.com` URLs are accepted; credit links carry `utm_source=chef_ia&utm_medium=referral`. |
+| `api/_taste.js` | Personal taste profile (v254): `cleanTaste()` sanitises the profile sent by the browser, `tasteText()` turns it into one prompt paragraph; used by `systemFor()` in `api/chat.js`. Pure helpers, also copied into the claude.ai preview bridge. |
 | `api/_lib.js` | Shared helpers used by every route: `authOk` (checks `x-code` against `APP_PASSWORD`), `fail` (error code → HTTP status), `callClaude` / `askClaude` (the only Anthropic call), `redis` / `hasRedis` (Upstash), `overLimit` (per-IP rate limit, never blocks if Redis is missing or fails), `clean`, JSON parsing. |
 | `api/_page.js` | Web page fetching for link import (SSRF protection, redirect/size/time limits). |
 | `api/selftest.js` | Daily « food only » self-test (2 Vercel crons, half of the 55 questions each; needs `CRON_SECRET`). `GET /api/selftest` = public report (last run + 30-day history). |
@@ -118,6 +119,10 @@ Files starting with `_` in `api/` are helpers, not routes.
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (up to v149)
+
+v256 (owner's request: merge the daily menu into the weekly menu; v255 never pushed): the « Menu du jour » is removed; the weekly menu card sits under the four home tiles and the weekly menu is personal (classics from the cookbook by rating / delay, 14-day no-repeat, « Garder » / « Pas pour moi » feeding the taste profile, taste sent with 🔄). Details in `docs/FEATURES.md` (v256). No prompt change beyond v254.
+
+v254 (owner's request « point 2 », community plan step 2): the chef gets a personal taste profile (loved / disliked dishes, recent recipes, repeated quick tags) computed on the device and injected into the prompt before the scope guard. Details in `docs/FEATURES.md` (v254). PROMPT CHANGED: rerun the 55-question bench.
 
 v253 (owner's request « go » on the origin badge): small badge « 👨‍🍳 Chef IA / 📥 Importée / 🔀 Variante / 📨 Reçue » next to the date (card, chat, History, Favorites, search). Fixes the v252 origin rule (`imp` = received by link, photo / link imports = `src`). Details in `docs/FEATURES.md` (v253).
 

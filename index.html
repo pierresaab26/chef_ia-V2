@@ -152,6 +152,7 @@ input,textarea,select{font-size:16px!important}
 #hfilter{display:flex;gap:8px;padding:10px 18px 10px}
 
 @media (min-width:768px){#app{max-width:760px}#cardbody .cphoto{height:380px}}
+@media (min-width:900px){#app:has(#menu.on){max-width:1040px}#menu .mdaycard{padding:24px 30px 18px}#menu .mdhd{margin-bottom:12px}#menu .mdhd h3{font-size:28px}#menu .mpill{font-size:14px;padding:7px 14px}#menu .mph{width:140px;height:100px;border-radius:16px}#menu .mrow2{gap:22px;padding:14px 0}#menu .mrow2 .mtit{font-size:21px}#menu .mlb2{font-size:13px;margin-bottom:4px}#menu .mchip{padding:12px 0 14px;border-radius:18px}#menu .mchip .mcw{font-size:13px}#menu .mchip .mcn{font-size:22px}#menu .mcred{font-size:12px}} /* v256: the weekly menu uses the room of a computer screen */
 #scrim{position:fixed;inset:0;background:rgba(10,8,20,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
 #scrim.on{opacity:1;pointer-events:auto}
 #drawer{position:fixed;top:0;bottom:0;left:0;width:min(300px,82vw);background:var(--card);z-index:41;transform:translateX(-102%);transition:transform .28s ease;display:flex;flex-direction:column;padding:calc(14px + env(safe-area-inset-top,0px)) 14px 14px;box-shadow:4px 0 24px rgba(0,0,0,.2);visibility:hidden}
@@ -189,19 +190,19 @@ input,textarea,select{font-size:16px!important}
 
 #homesearch{margin:10px 0 0;position:relative}.hsico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}#homesearch input{width:100%;font:inherit;padding:10px 14px 10px 40px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsfav{position:absolute;right:7px;top:50%;transform:translateY(-50%);padding:5px 11px;font-size:13px}#homesearch{margin-top:18px}.hsbtns{display:flex;gap:8px;margin-top:8px}.hsbtns button{flex:1;padding:9px 10px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-size:14px;font-weight:600}.hscnt{font-size:13px;color:var(--mut);margin:2px 4px 8px}#hsres:empty{display:none}#hsres{margin-top:10px}
 #hsearch,#fsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
-.mchips{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:0 0 14px}
+.mchips{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:0 0 16px}
 .mchip{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 10px;border-radius:16px;border:1px solid var(--bd);background:var(--card);color:var(--ink);font:inherit;cursor:pointer;box-shadow:var(--sh);-webkit-tap-highlight-color:transparent}
 .mchip .mcw{font-size:11.5px;font-weight:600;color:var(--mut)}.mchip .mcn{font-size:18px;font-weight:800;line-height:1.1}
 .mchip i{position:absolute;bottom:4px;width:5px;height:5px;border-radius:50%;background:var(--pink)}
 .mchip.on{background:var(--pink);border-color:var(--pink);color:#fff}.mchip.on .mcw{color:rgba(255,255,255,.85)}.mchip.on i{background:#fff}
-.mdaycard{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);padding:14px 14px 10px;box-shadow:var(--sh)}
-.mdhd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}.mdhd h3{margin:0;font-size:21px;color:var(--pink)}
+.mdaycard{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);padding:16px 16px 12px;box-shadow:var(--sh)}
+.mdhd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.mdhd h3{margin:0;font-size:21px;color:var(--pink)}
 .mpill{background:#2e9e5b;color:#fff;font-size:13px;font-weight:700;border-radius:99px;padding:6px 12px;white-space:nowrap}
-.mrow2{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--bd)}.mrow2:first-child{border-top:0}
+.mrow2{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--bd)}.mrow2:first-child{border-top:0}
 .mph{width:92px;height:68px;border-radius:14px;flex:none;background:#f3e6d8 center/cover no-repeat;display:grid;place-items:center;font-size:24px;opacity:.95}
 .mbody{flex:1;min-width:0}.mlb2{display:block;font-size:11.5px;font-weight:800;letter-spacing:.05em;color:var(--pink);text-transform:uppercase;margin-bottom:1px}
 .mrow2 .mtit{display:block;width:100%;padding:2px 0;font-size:16.5px;font-weight:700;line-height:1.25}.mrow2 .mtit.mghost::after{content:none}
-.mcom{text-transform:none;letter-spacing:0;font-weight:700;color:var(--mut)}.mweek{overflow-wrap:anywhere}.mretry{margin-left:6px;padding:5px 12px;border-radius:99px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.mcred{margin:6px 0 0;font-size:11px;color:var(--mut);text-align:right}.mcred a{color:inherit}
+.mcom{text-transform:none;letter-spacing:0;font-weight:700;color:var(--mut)}.mweek{overflow-wrap:anywhere}.mretry{margin-left:6px;padding:5px 12px;border-radius:99px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.mcred{margin:8px 0 0;font-size:11px;color:var(--mut);text-align:right}.mcred a{color:inherit}
 .mdh{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:2px 0 4px;font:inherit;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent}
 .mdn{font-size:15px;font-weight:700;color:var(--pink)}.mtd{font-size:11px;font-weight:700;color:#fff;background:var(--pink);border-radius:99px;padding:2px 8px}.mdc{font-size:12px;color:#2e9e5b;font-weight:700}
 .mdar{margin-left:auto;color:var(--mut);font-size:16px;transition:transform .15s;transform:rotate(-90deg)}.mdh.open .mdar{transform:none}
@@ -211,7 +212,7 @@ input,textarea,select{font-size:16px!important}
 .mtit{flex:1;min-width:0;background:none;border:0;padding:6px 0;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer;line-height:1.3;border-radius:8px}
 .mtit.mghost{color:var(--ink)}.mtit.mghost::after{content:'›';margin-left:8px;color:var(--pink);font-weight:700;font-size:18px}.mtit.mdone{font-weight:600}.mtit.mempty{color:var(--mut);font-size:14px}
 .mmore{flex:none;width:44px;height:44px;margin:-6px -6px -6px 0;border-radius:50%;border:0;background:none;color:var(--mut);font-size:22px;font-weight:800;line-height:1;cursor:pointer;display:grid;place-items:center}
-.mauto{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 10px;font-size:12.5px;color:var(--mut)}
+.mauto{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 16px;font-size:13px;color:var(--mut)}
 .mgen{border-style:dashed;border-color:var(--psbd);background:var(--psoft);font-size:12.5px;cursor:pointer}.mgen b{font-weight:600}.mown{color:var(--pink);font-size:12px}
 .mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .mday{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);padding:10px 12px;box-shadow:var(--sh)}.mday h4{margin:0 0 8px;font-size:15px;color:var(--pink)}
@@ -301,10 +302,10 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .impcard i{font-style:normal;font-size:22px;flex:none}
 .impcard b{display:block;font-size:14px}
 .impcard span{color:var(--mut);font-size:12px}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 2px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 12px}
 .tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;margin:0;padding:8px 4px;text-align:center}
 .tiles .impcard i{font-size:20px;height:26px;width:100%;display:grid;place-items:center;line-height:1}.tiles .impcard i.five5{width:24px;height:24px;margin:1px auto;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px}.tiles .impcard>div{width:100%}.tiles #fiveHome span{display:block;font-size:10.5px;line-height:1.2}.askico{font-size:17px;flex:none;line-height:1}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
-#hwrap{margin-top:10px}#menuHome{margin:14px 0 18px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
+#hwrap{margin-top:0}#menuHome{margin:0 0 12px}#homesearch{margin:0}#hsbtns{margin:12px 0 0}#hhome{margin-top:12px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
 .snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
 .imsec{background:var(--card);border-radius:var(--rc);padding:14px;margin-bottom:14px;box-shadow:var(--sh)}
@@ -492,6 +493,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <button class="impcard" id="fiveHome"><i class="five5">5</i><div><b id="fiveHT"></b><span id="fiveHS"></span></div></button>
       <button class="impcard" id="qHome"><i>💬</i><div><b id="qHomeT"></b><span id="qHomeS"></span></div></button>
       </div>
+      <button class="impcard" id="menuHome"><i>🗓️</i><div><b id="menuHT"></b><span id="menuHS"></span></div><em class="mgo">›</em></button>
       <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav" hidden></button></div>
       <div class="hsbtns" id="hsbtns"><button type="button" id="hsHist"></button><button type="button" id="hsFavs"></button></div><!-- v212: Historique / Favoris under the search box -->
       <div id="hsres"></div>
@@ -501,7 +503,6 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <h2 id="chT"></h2>
       <div class="chefs" id="chefs"></div>
       <h2 style="display:none"><span id="hT"></span><button class="more" id="hmore"></button></h2>
-      <button class="impcard" id="menuHome"><i>🗓️</i><div><b id="menuHT"></b><span id="menuHS"></span></div><em class="mgo">›</em></button>
     </div>
   </section>
 
@@ -781,6 +782,11 @@ fr:{
   listAddFree:"Ajouter un ingrédient…",listAddBtn:"Ajouter",
   histS:"Historique",
   tileImp:"Importer",tileQ:"Question cuisine",snFold:"Recettes précédentes et idées par catégorie",menu0:"Rien de prévu pour l’instant",menu1:"1 plat prévu",menuN:"{n} plats prévus",
+  
+  
+  
+  dayCl:"⭐ Ton classique",dayAdj:"🔧 On l’ajuste ?",dayKeep:"👍 Garder",dayKept:"👍 Gardé",dayNo:"👎 Pas pour moi",
+  dayAdjMsg:"J’ai donné 3 étoiles à cette recette. Propose-moi une version améliorée (assaisonnement, texture, cuisson), en gardant l’esprit du plat.",
   listBought:"Acheté",
   listHistQN:"Les ingrédients de {r} sont dans les listes de courses {l}. Voulez-vous les retirer ?",listHistQ:"Les ingrédients de {r} sont dans la liste de courses {l}. Voulez-vous les retirer ?",listHistOk:"Retirer",listHistNo:"Garder",
   listRecs:"Recettes de la liste",listRecDel:"Retirer la recette",listRecQ:"Retirer la recette « {r} » et ses ingrédients de la liste ?",
@@ -1072,6 +1078,11 @@ en:{
   listAddFree:"Add an ingredient…",listAddBtn:"Add",
   histS:"History",
   tileImp:"Import",tileQ:"Cooking question",snFold:"Previous recipes and ideas by course",menu0:"Nothing planned yet",menu1:"1 dish planned",menuN:"{n} dishes planned",
+  
+  
+  
+  dayCl:"⭐ Your classic",dayAdj:"🔧 Shall we tweak it?",dayKeep:"👍 Keep",dayKept:"👍 Kept",dayNo:"👎 Not for me",
+  dayAdjMsg:"I gave this recipe 3 stars. Give me an improved version (seasoning, texture, cooking), keeping the spirit of the dish.",
   listBought:"Bought",
   listHistQN:"The ingredients of {r} are in the shopping lists {l}. Do you want to remove them?",listHistQ:"The ingredients of {r} are in the shopping list {l}. Do you want to remove them?",listHistOk:"Remove",listHistNo:"Keep",
   listRecs:"Recipes in this list",listRecDel:"Remove the recipe",listRecQ:"Remove the recipe “{r}” and its ingredients from the list?",
@@ -1363,6 +1374,11 @@ es:{
   listAddFree:"Añadir un ingrediente…",listAddBtn:"Añadir",
   histS:"Historial",
   tileImp:"Importar",tileQ:"Pregunta de cocina",snFold:"Recetas anteriores e ideas por categoría",menu0:"Nada previsto por ahora",menu1:"1 plato previsto",menuN:"{n} platos previstos",
+  
+  
+  
+  dayCl:"⭐ Tu clásico",dayAdj:"🔧 ¿Lo ajustamos?",dayKeep:"👍 Guardar",dayKept:"👍 Guardado",dayNo:"👎 No es para mí",
+  dayAdjMsg:"Di 3 estrellas a esta receta. Propón una versión mejorada (condimentos, textura, cocción), manteniendo el espíritu del plato.",
   listBought:"Comprado",
   listHistQN:"Los ingredientes de {r} están en las listas de la compra {l}. ¿Quieres quitarlos?",listHistQ:"Los ingredientes de {r} están en la lista de la compra {l}. ¿Quieres quitarlos?",listHistOk:"Quitar",listHistNo:"Conservar",
   listRecs:"Recetas de la lista",listRecDel:"Quitar la receta",listRecQ:"¿Quitar la receta «{r}» y sus ingredientes de la lista?",
@@ -1654,6 +1670,11 @@ de:{
   listAddFree:"Zutat hinzufügen…",listAddBtn:"Hinzufügen",
   histS:"Verlauf",
   tileImp:"Importieren",tileQ:"Kochfrage",snFold:"Frühere Rezepte und Ideen nach Gang",menu0:"Noch nichts geplant",menu1:"1 Gericht geplant",menuN:"{n} Gerichte geplant",
+  
+  
+  
+  dayCl:"⭐ Dein Klassiker",dayAdj:"🔧 Sollen wir es anpassen?",dayKeep:"👍 Merken",dayKept:"👍 Gemerkt",dayNo:"👎 Nichts für mich",
+  dayAdjMsg:"Ich habe dieses Rezept mit 3 Sternen bewertet. Gib mir eine verbesserte Version (Würzung, Textur, Garung) im Geist des Gerichts.",
   listBought:"Gekauft",
   listHistQN:"Die Zutaten von {r} stehen auf den Einkaufslisten {l}. Möchtest du sie entfernen?",listHistQ:"Die Zutaten von {r} stehen auf der Einkaufsliste {l}. Möchtest du sie entfernen?",listHistOk:"Entfernen",listHistNo:"Behalten",
   listRecs:"Rezepte in der Liste",listRecDel:"Rezept entfernen",listRecQ:"Das Rezept „{r}“ und seine Zutaten von der Liste entfernen?",
@@ -1945,6 +1966,11 @@ it:{
   listAddFree:"Aggiungi un ingrediente…",listAddBtn:"Aggiungi",
   histS:"Cronologia",
   tileImp:"Importa",tileQ:"Domanda di cucina",snFold:"Ricette precedenti e idee per portata",menu0:"Niente in programma per ora",menu1:"1 piatto previsto",menuN:"{n} piatti previsti",
+  
+  
+  
+  dayCl:"⭐ Il tuo classico",dayAdj:"🔧 Lo aggiustiamo?",dayKeep:"👍 Tieni",dayKept:"👍 Tenuto",dayNo:"👎 Non fa per me",
+  dayAdjMsg:"Ho dato 3 stelle a questa ricetta. Proponimi una versione migliorata (condimento, consistenza, cottura), mantenendo lo spirito del piatto.",
   listBought:"Comprato",
   listHistQN:"Gli ingredienti di {r} sono nelle liste della spesa {l}. Vuoi toglierli?",listHistQ:"Gli ingredienti di {r} sono nella lista della spesa {l}. Vuoi toglierli?",listHistOk:"Togli",listHistNo:"Tieni",
   listRecs:"Ricette della lista",listRecDel:"Rimuovi la ricetta",listRecQ:"Rimuovere la ricetta «{r}» e i suoi ingredienti dalla lista?",
@@ -2236,6 +2262,11 @@ pt:{
   listAddFree:"Adicionar um ingrediente…",listAddBtn:"Adicionar",
   histS:"Histórico",
   tileImp:"Importar",tileQ:"Pergunta de cozinha",snFold:"Receitas anteriores e ideias por categoria",menu0:"Nada previsto por agora",menu1:"1 prato previsto",menuN:"{n} pratos previstos",
+  
+  
+  
+  dayCl:"⭐ O teu clássico",dayAdj:"🔧 Vamos ajustá-lo?",dayKeep:"👍 Guardar",dayKept:"👍 Guardado",dayNo:"👎 Não é para mim",
+  dayAdjMsg:"Dei 3 estrelas a esta receita. Dá-me uma versão melhorada (tempero, textura, cozedura), mantendo o espírito do prato.",
   listBought:"Comprado",
   listHistQN:"Os ingredientes de {r} estão nas listas de compras {l}. Quer retirá-los?",listHistQ:"Os ingredientes de {r} estão na lista de compras {l}. Quer retirá-los?",listHistOk:"Retirar",listHistNo:"Manter",
   listRecs:"Receitas da lista",listRecDel:"Remover a receita",listRecQ:"Remover a receita «{r}» e os seus ingredientes da lista?",
@@ -2728,7 +2759,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v253',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v256',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3024,14 +3055,14 @@ function pickRecipe(askText){ // dialog: pick a saved recipe (search) or ask the
 }
 // v238: the chef's weekly menu, the same for everybody (GET /api/week-menu, see api/week-menu.js): only the 21 dish NAMES; the full recipe is
 // generated when the user taps a dish, and the new recipe then fills that slot. The toggle « The chef suggests the weekly menu » (m.auto, default on)
-// hides the suggestions; a slot the user filled himself is never replaced. Kept in localStorage `chefMenuSug` until the next Sunday 9:00 (Paris).
+// hides the suggestions; a slot the user filled himself is never replaced. Kept in localStorage `chefMenuSug` until the next Monday 9:00 (Paris).
 let wkBusy=false,wkOff=0,wkFail=false,wkErr='',menuPend=null;const mdOpen={}; // v243: day cards of the weekly menu: today open, the others folded (tap a day to change)
 const todayIdx=(new Date().getDay()+6)%7;
-function wkRead(){try{const s=JSON.parse(localStorage.getItem('chefMenuSug')||'null');return s&&s.v===4&&s.lang===lang&&Array.isArray(s.items)&&s.items.length===21&&s.items.filter(Boolean).length>=18&&s.until>Date.now()?s:null}catch(e){return null}}
+function wkRead(){try{const s=JSON.parse(localStorage.getItem('chefMenuSug')||'null');return s&&s.v===5&&s.lang===lang&&Array.isArray(s.items)&&s.items.length===21&&s.items.filter(Boolean).length>=18&&s.until>Date.now()?s:null}catch(e){return null}}
 async function wkLoad(){if(wkBusy||wkRead()||Date.now()-wkOff<12e4)return;wkBusy=true;wkFail=false;
   try{const res=await fetchT('/api/week-menu?lang='+lang,{headers:{'x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()}},70000);
     if(!res.ok){wkOff=Date.now();wkFail=true;let c='';try{const j=await res.json();c=(j.error||'')+(j.detail?' — '+j.detail:'')}catch(x){}wkErr=res.status+(c?' '+c:'');return}const d=await res.json();
-    if(d&&d.week&&Array.isArray(d.items)&&d.items.length===21&&d.items.filter(Boolean).length>=18){try{localStorage.setItem('chefMenuSug',JSON.stringify({v:4,lang,id:d.week.id,from:d.week.from,to:d.week.to,until:d.week.until,items:d.items}))}catch(e){}wkOff=0}else{wkOff=Date.now();wkFail=true;wkErr='format'}}
+    if(d&&d.week&&Array.isArray(d.items)&&d.items.length===21&&d.items.filter(Boolean).length>=18){try{localStorage.setItem('chefMenuSug',JSON.stringify({v:5,lang,id:d.week.id,from:d.week.from,to:d.week.to,until:d.week.until,items:d.items}))}catch(e){}wkOff=0}else{wkOff=Date.now();wkFail=true;wkErr='format'}}
   catch(e){wkOff=Date.now();wkFail=true;wkErr=e&&e.name==='AbortError'?'timeout':'network'}finally{wkBusy=false}
   if(document.getElementById('menuBox'))drawMenu()}
 const WK_LN={fr:'French',en:'English',es:'Spanish',de:'German',it:'Italian',pt:'Portuguese'};
@@ -3039,7 +3070,7 @@ const snNorm=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').to
 // 🔄 on one dish: a new idea for this user only (s.loc marks the slot, so its shared copy « w-… » is no longer used)
 async function wkRegen(i,j){const s=wkRead();if(!s)return;const cur=(s.items[i*3+j]||[''])[0],course=['starter','main course','dessert'][j];
   const msg='[UI] Suggest 1 different '+course+' for a weekly menu, fitting this time of year, realistic home cooking. It must not be one of these: '+s.items.filter(Boolean).map(x=>x[0]).join(', ')+'. Answer with exactly one line written « - Dish name: one appetizing sentence » (the dish name is 1 to 5 words) and nothing else. Write the dish name and the sentence in '+WK_LN[lang]+' (the usual '+WK_LN[lang]+' name of the dish, never English unless that is the language).';
-  const res=await fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()},body:JSON.stringify({messages:[{role:'user',content:msg}],lang})},60000);
+  const res=await fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()},body:JSON.stringify({messages:[{role:'user',content:msg}],lang,taste:tasteProfile()})},60000);
   if(!res.ok)throw new Error('regen');const it=snParse((await res.json()).text)[0];if(!it||snNorm(it[0])===snNorm(cur))throw new Error('regen');
   const z=wkRead();if(!z)return;z.items[i*3+j]=it;z.loc=z.loc||{};z.loc[i*3+j]=1;try{localStorage.setItem('chefMenuSug',JSON.stringify(z))}catch(e){}}
 // v248: tap on a suggested dish. Same recipe for everybody, never generated twice:
@@ -3062,7 +3093,7 @@ function rowMenu(title,items){const w=document.createElement('div');w.className=
 function menuAssign(id){if(!menuPend)return;const p=menuPend;menuPend=null;if(Date.now()-p.at>10*60e3)return;const z=readMenu();if(!z.d[p.i][p.j]){z.d[p.i][p.j]=id;saveMenu(z);mdOpen[p.i]=true;const t=T();toastAct(t.mAdded,t.mSee,()=>{drawMenu();show('menu')})}
   if(p.sid){const e=loadH().find(x=>x.id===id),tx=e&&recipeText(e);if(tx&&looksLikeRecipe(tx))capi('POST','',{sid:p.sid,ck:vKey(e),title:e.title,text:tx,lang:e.lang||lang},'/api/shared',true).catch(()=>{})}}
 // v246: weekly menu = week strip (Sun…Sat, like a calendar) + the selected day with a photo per dish.
-let menuSel=null;const mdUsed=new Set(); // menuSel: displayed day (0 = Sunday); mdUsed: photos already on screen
+let menuSel=null;const mdUsed=new Set(); // menuSel: displayed day (0 = Monday); mdUsed: photos already on screen
 function mphKey(nm){return lang+'|'+String(nm).toLowerCase()}
 function mphLoad(){try{return JSON.parse(localStorage.getItem('chefMenuPh')||'{}')||{}}catch(e){return {}}}
 function mphSave(c){const ks=Object.keys(c);if(ks.length>150)ks.slice(0,ks.length-120).forEach(k=>delete c[k]);try{localStorage.setItem('chefMenuPh',JSON.stringify(c))}catch(e){}}
@@ -3076,21 +3107,25 @@ function mphoto(el,e,name){ // thumbnail of a dish: the saved recipe's own photo
     const r=await fetchT('/api/photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':code},body:JSON.stringify({title:name,lang,skip:[...Object.values(mphLoad()).map(x=>x&&x.id).filter(Boolean)]})},30000);
     const j=await r.json();if(j&&j.photo&&okU(j.photo.u)&&okU(j.photo.t)){const z=mphLoad();z[k]=j.photo;mphSave(z);show(j.photo)}}catch(x){}}).catch(()=>{});
 }
-function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map(e=>[e.id,e])),cs=t.mCourses.split('|'),sug=m.auto?wkRead():null;
+function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map(e=>[e.id,e])),cs=t.mCourses.split('|'),sug=m.auto?wkRead():null;const PS=wkPers(sug),noIc=x=>String(x).replace(/^[^\p{L}\p{N}]+/u,'');
   const sl=document.createElement('div');sl.className='mslots';
   cs.forEach((cn,j)=>{ // v241: one plain row per course: label · dish · ⋯ menu
       const row=document.createElement('div');row.className='mrow2';const lb=document.createElement('span');lb.className='mlb2';lb.textContent=cn;
-      const e=m.d[i][j]&&rec.get(m.d[i][j]),hk=sug?sug.from+'|'+i+'|'+j:'',hidden=!!(m.hid&&m.hid[hk]);
+      const e=m.d[i][j]&&rec.get(m.d[i][j]),hk=sug?sug.from+'|'+i+'|'+j:'',hidden=!!(m.hid&&m.hid[hk]),px=!e&&sug&&!hidden?PS[i*3+j]:null,pr=px&&rec.get(px.id);
       const main=document.createElement('button');main.type='button';main.className='mtit';let items=null;
       const own=async()=>{const id=await pickRecipe(t.mAskReq.replace('{d}',dn).replace('{c}',cn));if(id){const z=readMenu();z.d[i][j]=id;saveMenu(z);onChange()}};
       const clear=()=>{const z=readMenu();z.d[i][j]=null;saveMenu(z);onChange()};
       if(e){main.classList.add('mdone');main.textContent=e.title;main.onclick=()=>{openCard(e.id)};items=[['✏️',t.mOwn,own],['🗑️',t.mRm,clear,1]]}
+      else if(pr){main.classList.add('mghost');main.textContent=pr.title;const adj=px.k==='adjust';
+        const cb=document.createElement('span');cb.className='mcom';cb.textContent=' · '+(adj?t.dayAdj:t.dayCl);lb.appendChild(cb);
+        main.onclick=()=>{if(adj){openSaved(pr.id);send(t.dayAdjMsg)}else openCard(pr.id,px.vi)};
+        items=[['✏️',t.mOwn,own],['👎',noIc(t.dayNo),()=>{dayMark(pr.title,'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else if(sug&&!hidden&&sug.items[i*3+j]){const nm=sug.items[i*3+j]&&sug.items[i*3+j][0];main.classList.add('mghost');main.textContent=nm;
         const it=sug.items[i*3+j];main.onclick=()=>menuOpen(i,j,it);
         if(it[2]){const cb=document.createElement('span');cb.className='mcom';cb.textContent=' · ★ '+(it[3]?Number(it[3]).toLocaleString(lang,{minimumFractionDigits:1,maximumFractionDigits:1})+' · ':'')+t.mCom;lb.appendChild(cb)}
-        items=[['🔄',t.mRegen,async()=>{main.textContent='…';main.disabled=true;try{await wkRegen(i,j)}catch(x){toast(t.err)}onChange()}],['✏️',t.mOwn,own],['🗑️',t.mRm,()=>{const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
+        items=[['🔄',t.mRegen,async()=>{main.textContent='…';main.disabled=true;try{await wkRegen(i,j)}catch(x){toast(t.err)}onChange()}],['✏️',t.mOwn,own],['👍',noIc(t.dayKeep),()=>{dayMark(it[0],'keep');toast(t.dayKept)}],['👎',noIc(t.dayNo),()=>{dayMark(it[0],'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else{main.classList.add('mempty');main.textContent='+ '+t.mAdd;main.onclick=own}
-      const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);row.append(ph,bd);mphoto(ph,e,e?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
+      const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);row.append(ph,bd);mphoto(ph,e||pr,(e||pr)?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
       if(items){const mb=document.createElement('button');mb.type='button';mb.className='mmore';mb.textContent='⋯';mb.setAttribute('aria-label',t.lsMore);mb.onclick=()=>rowMenu(e?e.title:main.textContent,items);row.appendChild(mb)}
       sl.appendChild(row)});
   return sl}
@@ -3111,8 +3146,8 @@ function drawMenu(){
       else n.textContent=t.mSugLoad;box.appendChild(n)}}
   let any=false;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))any=true}));
   { // week strip: Sunday … Saturday, dates from the suggestion week (else the last Sunday)
-    const base=sug?new Date(sug.from+'T12:00:00Z'):(()=>{const x=new Date();x.setUTCHours(12,0,0,0);x.setUTCDate(x.getUTCDate()-new Date().getDay());return x})();
-    const dt=k=>{const x=new Date(base);x.setUTCDate(x.getUTCDate()+k);return x},todayD=new Date().getDay();
+    const base=sug?new Date(sug.from+'T12:00:00Z'):(()=>{const x=new Date();x.setUTCHours(12,0,0,0);x.setUTCDate(x.getUTCDate()-todayIdx);return x})();
+    const dt=k=>{const x=new Date(base);x.setUTCDate(x.getUTCDate()+k);return x},todayD=todayIdx;
     if(menuSel===null)menuSel=todayD;
     const lo=(d,o)=>d.toLocaleDateString(lang,Object.assign({timeZone:'UTC'},o)),cp=s=>s.charAt(0).toUpperCase()+s.slice(1);
     if(m.auto&&sug){const a0=dt(0),a6=dt(6),sameM=a0.getUTCMonth()===a6.getUTCMonth(),rg=sameM?a0.getUTCDate()+' – '+lo(a6,{day:'numeric',month:'long'}):lo(a0,{day:'numeric',month:'short'})+' – '+lo(a6,{day:'numeric',month:'short'});
@@ -3123,7 +3158,7 @@ function drawMenu(){
       const n=document.createElement('span');n.className='mcn';n.textContent=dt(k).getUTCDate();b.append(w,n);if(k===todayD){const dot=document.createElement('i');b.appendChild(dot)}
       b.onclick=()=>{menuSel=k;drawMenu()};chips.appendChild(b)}
     box.appendChild(chips);
-    const di=(menuSel+6)%7,dn=days[di],card=document.createElement('div');card.className='mdaycard';
+    const di=menuSel,dn=days[di],card=document.createElement('div');card.className='mdaycard';
     const hd=document.createElement('div');hd.className='mdhd';const h3=document.createElement('h3');h3.textContent=dn+' '+dt(menuSel).getUTCDate();hd.appendChild(h3);
     if(menuSel===todayD){const pill=document.createElement('span');pill.className='mpill';pill.textContent='✓ '+t.mToday;hd.appendChild(pill)}
     card.appendChild(hd);card.appendChild(dayRows(di,dn,drawMenu));
@@ -3133,6 +3168,30 @@ function drawMenu(){
   {let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));$('#menuHT').textContent=t.menuT;$('#menuHS').textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0} // v211: compact card on the home
   if(any){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[],auto:readMenu().auto});drawMenu()}};box.appendChild(c)}
 }
+// ----- v256: the weekly menu is personal (merged from the v255 daily menu): your classics + the chef's discoveries, never the same dish within 14 days -----
+const DAY_HIST='chefDailyHist',D14=14*864e5,D21=21*864e5;
+const dayRead=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||'')||d}catch(e){return d}},dayWrite=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const normN=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+function dayHist(){const n=Date.now();return dayRead(DAY_HIST,[]).filter(x=>x&&x.n&&n-x.t<60*864e5)} // dishes shown / kept / declined: {n name, t time, s: '' | 'keep' | 'no'}
+function dayMark(name,st){const h=dayHist(),k=normN(name),x=h.find(y=>normN(y.n)===k);if(x){x.s=st;x.t=Date.now()}else h.push({n:name,t:Date.now(),s:st});dayWrite(DAY_HIST,h)}
+function dayCooked(m,e){const c=+m.cooked;if(c>1e12)return c;const a=+m.at;return a>1e12?a:(Date.parse(e.date)||0)} // when the version was cooked (before v252: the date of the recipe)
+// Rules: 4-5 stars come back after 3 weeks (« your classic »), 3 stars after 3 weeks with an offer to improve them, 1-2 stars never; nothing shown in the last 14 days, nothing declined (60 days).
+function dayClassics(){const n=Date.now(),h=dayHist(),block=new Set(h.filter(x=>x.s==='no'||n-x.t<D14).map(x=>normN(x.n))),seen=new Set(),out=[];
+  loadH().forEach(e=>{if(!e||e.qa||e.arch)return;let b=null;
+    ownIdx(e).forEach(i=>{const m=e.messages[i],s=+m.stars||0;if(!s)return;const w=dayCooked(m,e);if(!b||w>b.w)b={s,w,i}});
+    if(!b||b.s<3||n-b.w<D21)return;const k=normN(e.title);if(!k||seen.has(k)||block.has(k))return;seen.add(k);
+    out.push({k:b.s>=4?'classic':'adjust',n:e.title,id:e.id,vi:b.i,s:b.s,w:b.w,c:recipeCat(e)})});
+  return out.sort((a,b)=>a.w-b.w)}
+// Personal plan of the week, kept on the device until the next shared menu: up to 5 mains + 2 desserts (about 70 % of the 7 × 2 slots that can hold a classic) from your own recipes, starting with today; the other slots stay the chef's shared dishes.
+function wkPers(sug){if(!sug)return {};const live=o=>o&&loadH().some(e=>e.id===o.id);
+  let p=dayRead('chefWkPers',null);
+  if(p&&p.from===sug.from&&p.lang===lang&&p.slots){const o={};Object.keys(p.slots).forEach(k=>{if(live(p.slots[k]))o[k]=p.slots[k]});return o}
+  const cl=dayClassics(),pool=c=>cl.filter(x=>c.includes(x.c)),take=(a,n)=>{const r=a.filter(x=>x.k==='classic').slice(0,n),j=a.find(x=>x.k==='adjust');if(r.length<n&&j)r.push(j);return r};
+  const mains=take(pool([0,4,5]),5),des=take(pool([1,8]),2);
+  if(!mains.length&&!des.length)return {};
+  const order=[];for(let k=0;k<7;k++)order.push((todayIdx+k)%7);const slots={};
+  mains.forEach((x,k)=>{slots[order[k]*3+1]=x;dayMark(x.n,'')});des.forEach((x,k)=>{slots[order[k*3+1]*3+2]=x;dayMark(x.n,'')});
+  dayWrite('chefWkPers',{from:sug.from,lang,slots});return slots}
 function drawerText(){const t=T();drawMenu();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
@@ -4121,11 +4180,24 @@ function openChat(chef){
 }
 function openQA(){openChat(null);qaMode=true;log.innerHTML='';showWelcome();qaUI()}
 function start(q){openChat(null);send(q,true)}
+// v254: personal taste profile, computed on the device from the user's own cookbook and sent with each chef request (api/_taste.js cleans it).
+function tasteProfile(){try{
+  const loved=[],avoid=[],recent=[],tags={},now=Date.now(),seen=new Set();
+  loadH().forEach(e=>{if(!e||e.qa)return;
+    const own=ownIdx(e);let best=0;
+    own.forEach(i=>{const m=e.messages[i],n=+m.stars||0;if(n)best=best?Math.round((best+n)/2):n;if(n&&m.tag&&m.tag!=='none')tags[m.tag]=(tags[m.tag]||0)+1});
+    const t=e.title;if(!t||seen.has(t))return;seen.add(t);
+    if(best>=4)loved.push([t,e.updatedAt||0]);else if(best>=1&&best<=2)avoid.push([t,e.updatedAt||0]);
+    const d=Date.parse(e.date);if(d&&now-d<14*864e5)recent.push([t,d])});
+  const top=(a,n)=>a.sort((x,y)=>y[1]-x[1]).slice(0,n).map(x=>x[0]);
+  const dh=dayHist(),dn=now-30*864e5,pick=k=>dh.filter(x=>x.s===k&&x.t>dn).sort((x,y)=>y.t-x.t).map(x=>x.n);
+  const p={loved:top(loved,8),avoid:top(avoid,8),recent:top(recent,10),tags,wish:pick('keep').slice(0,5),passed:pick('no').slice(0,8)};
+  return p.loved.length||p.avoid.length||p.recent.length||p.wish.length||p.passed.length||Object.keys(tags).length?p:undefined}catch(x){return undefined}}
 /*CALL_START*/
 function devId(){try{let d=localStorage.getItem('chefDev');if(!d){d=(crypto.randomUUID?crypto.randomUUID().replace(/-/g,''):Math.random().toString(36).slice(2)+Date.now().toString(36)+Math.random().toString(36).slice(2));localStorage.setItem('chefDev',d)}return d}catch(e){return ''}}
-async function chatCall(h,out){
+async function chatCall(h,out,o){
   const code=()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}};
-  const call=()=>fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h.map(m=>({role:m.role,content:m.content})),chef:chefNow&&chefNow.k>=0?chefNow.k:undefined,lang,dev:devId(),mode:qaMode?'qa':undefined})});
+  const call=()=>fetchT('/api/chat',{method:'POST',headers:{'Content-Type':'application/json','x-code':code()},body:JSON.stringify({messages:h.map(m=>({role:m.role,content:m.content})),chef:chefNow&&chefNow.k>=0?chefNow.k:undefined,lang,dev:devId(),mode:qaMode&&!(o&&o.free)?'qa':undefined,taste:qaMode&&!(o&&o.free)?undefined:tasteProfile()})});
   let res=await call();
   if(res.status===401){const c=await askCode();if(c)res=await call()}
   if(!res.ok){

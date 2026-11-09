@@ -1,6 +1,7 @@
 import { authOk, fail, callClaude, overLimit } from "./_lib.js";
 import { stripFlag, warnText, FLAG_WARN } from "./_flags.js";
 import { who, isBanned, recordFlag } from "./_mod.js";
+import { cleanTaste, tasteText } from "./_taste.js";
 
 // Chef instructions. Edit this text to adjust the scope or the tone.
 const QA =
@@ -39,12 +40,13 @@ const CHEFS = [
 ];
 
 // Whole system prompt for one request. Pure function (also copied as-is into the claude.ai preview build).
-export function systemFor(P, { lang, chef, mode }) {
+export function systemFor(P, { lang, chef, mode, taste }) {
   const c = Number.isInteger(chef) && P.CHEFS[chef] ? P.CHEFS[chef] : "";
   return P.BASE
     + (lang ? " Interface language (fallback hint only; the language of the user's message takes priority): " + lang + "." : "")
     + (c ? " " + c : "")
     + (mode === "qa" ? " " + P.QA : "")
+    + (taste && mode !== "qa" ? "\n\n" + taste : "")
     + (P.FLAGS ? "\n\n" + P.FLAGS : "")
     + "\n\n" + P.GUARD;
 }
@@ -83,7 +85,7 @@ export default async function handler(req, res) {
     const out = await callClaude({
       model: process.env.MODEL || "claude-haiku-5-5",
       max_tokens: 4000,
-      system: systemFor(PARTS, { lang, chef, mode }),
+      system: systemFor(PARTS, { lang, chef, mode, taste: tasteText(cleanTaste(body.taste)) }),
       messages,
     });
     // Moderation safety: the chef marks silly / dangerous requests; count them, warn from the 3rd, block at the 10th.

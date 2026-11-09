@@ -1,10 +1,10 @@
 // Helpers of the shared « chef's weekly menu » (used by api/week-menu.js). Pure functions only (no network): unit-testable,
 // and copied as-is (import/export removed) into the claude.ai preview bridge.
-// A « week » starts on a Sunday at 9:00 Paris time and lasts 7 days; week 0 starts on the anchor Sunday. The menu has 21 dishes:
+// A « week » starts on a Monday at 9:00 Paris time and lasts 7 days (Monday … Sunday); week 0 starts on the anchor Monday. The menu has 21 dishes:
 // Monday … Sunday × starter, main course, dessert (index = day * 3 + course).
 import { parisParts, parisToEpoch, OCC, occasionNowFR, langRule } from "./_season.js";
 
-const WK_ANCHOR = Date.UTC(2026, 10, 8) / 864e5; // day number of Sunday 8 Nov 2026
+const WK_ANCHOR = Date.UTC(2026, 10, 9) / 864e5; // day number of Monday 9 Nov 2026
 const WK_HOUR = 9; // Paris time
 const wkIso = (dayNum) => new Date(dayNum * 864e5).toISOString().slice(0, 10);
 
