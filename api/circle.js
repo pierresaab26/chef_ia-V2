@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { notifyCircle, readNotes, markSeen } from "./_notify.js";
 
 // v287: identity (pseudo) and circle (community plan steps 6 and 7).
 // A person = the device owner id sent as « x-owner » (never stored nor returned: only its hash « pid » is).
@@ -22,6 +23,7 @@ export default async function handler(req, res) {
   try {
     if (req.method === "GET") {
       if (q.feed) return res.status(200).json({ items: await feed(me) });
+      if (q.notes) return res.status(200).json(await readNotes(me)); // v291: in-app notifications (🔔 on « Mon cercle »)
       if (q.live != null) { // v288: are these recipes (saved from my circle) still shared by someone of my circle?
         const sids = String(q.live).split(",").filter((x) => /^[a-z0-9-]{8,64}$/.test(x)).slice(0, 20);
         const [pids] = await redis([["SMEMBERS", "cf:" + me]]);
@@ -41,6 +43,7 @@ export default async function handler(req, res) {
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
     const act = String(body.act || "");
 
+    if (act === "seen") { await markSeen(me); return res.status(200).json({ ok: true }); }
     if (act === "name") {
       const n = cleanName(body.name);
       if (!n) return res.status(400).json({ error: "name" });
@@ -79,7 +82,10 @@ export default async function handler(req, res) {
       if (o !== owner) return res.status(403).json({ error: "forbidden" }); // only the author puts his own copy in his circle
       let rs = ""; try { rs = JSON.parse(raw).rs || ""; } catch {}
       if (rs && !(await liveRoots([rs])).has(rs)) return res.status(409).json({ error: "gone" }); // v289: its author no longer shares it
+      const [was] = await redis([["ZSCORE", "cp:" + me, sid]]);
       await redis([["ZADD", "cp:" + me, String(Date.now()), sid], ["ZREMRANGEBYRANK", "cp:" + me, "0", String(-MAX_POSTS - 1)]]);
+      let t = ""; try { t = JSON.parse(raw).title || ""; } catch {}
+      if (was == null && !body.quiet) await notifyCircle(me, { k: "circle", sid, t }); // v291: my circle is told once (not again on a re-post)
       return res.status(200).json({ ok: true });
     }
     return res.status(400).json({ error: "act" });
@@ -90,7 +96,7 @@ export default async function handler(req, res) {
 
 // v289: a re-shared recipe (copy with « rs ») is only shown while its ROOT copy is still in its author's circle list:
 // when the author sets it back to « Privée », every re-share disappears too. Returns a Set of the root sids still live.
-async function liveRoots(roots) {
+export async function liveRoots(roots) {
   const list = [...new Set(roots.filter(Boolean))];
   if (!list.length) return new Set();
   const raws = await redis(list.map((r) => ["GET", "s:" + r]));

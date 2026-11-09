@@ -114,7 +114,7 @@ export async function searchShared(q, lang, max = 6) {
         const nt = nz(m.t);
         if (!words.every((w) => nt.includes(w)) || seen.has(nt)) continue;
         seen.add(nt);
-        hit.push({ ck: flat[i], sid: m.sid, t: String(m.t).slice(0, 80) });
+        hit.push({ ck: m.ck || flat[i], sid: m.sid, t: String(m.t).slice(0, 80) });
       } catch {}
     }
     const list = hit.slice(0, 40);

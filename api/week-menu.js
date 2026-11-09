@@ -27,7 +27,7 @@ export async function community(lang, max = 12) {
     await dropOldIndex(); // v290: only PUBLISHED recipes (index pub:ck), never the shared copies
     const [flat] = await redis([["HGETALL", PUB]]);
     const all = [];
-    for (let i = 0; i + 1 < (flat || []).length; i += 2) { try { const m = JSON.parse(flat[i + 1]); if (m && m.sid && m.t && (!m.l || m.l === lang)) all.push({ ck: flat[i], sid: m.sid, t: String(m.t).slice(0, 80) }); } catch {} }
+    for (let i = 0; i + 1 < (flat || []).length; i += 2) { try { const m = JSON.parse(flat[i + 1]); if (m && m.sid && m.t && (!m.l || m.l === lang)) all.push({ ck: m.ck || flat[i], sid: m.sid, t: String(m.t).slice(0, 80) }); } catch {} }
     const list = all.slice(0, 300);
     if (!list.length) return [];
     const res = await redis(list.flatMap((c) => [["HGETALL", "r:" + c.ck], ["ZSCORE", "s:pop", c.ck]]));
