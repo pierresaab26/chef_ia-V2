@@ -299,6 +299,12 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 ### v273–v275 — weekly menu page fits the phone screen
 Owner: « que cette page fasse la taille de l'écran sans défilement » / « ajuste les 3 vignettes à la page ». Under 560 px wide the compact CSS block before the `.dlg`-less `.mopts` rules (search `v273` in `index.html`) shrinks the week line, day tabs, day header, photos (4:3, height `clamp(44px, --appH × 7%, 80px)`; `--appH` = visible height, not `vh`, because iOS `vh` ignores the retracted toolbars), rows and option chips; from 375 px the option chips sit on ONE line (`.mopts2{display:contents}`, replaces the v267 two-line layout on phones). The menu view is a flex column: `#menuBox`, the day card and `.mslots` stretch and the 3 dish rows share the free height; the scroll area keeps 108 px at the bottom for the nav pill. Measured: iPhone 13 and 15 Pro Max no scroll; iPhone SE ~117 px (chips wrap under 375 px).
 
+### v280 — seasonal ideas: no expired series, health check
+
+- `snServer()` keeps the last known series only while it is still valid (`until` in the future). An expired one is dropped, so a failing server can no longer make the screen show « du 3 nov. au 6 nov. » days later; the app then uses its own on-demand ideas (fallback, no dates).
+- `GET /api/season-ideas?status=1` (public, no secret): `{now, period:{id,from,to}, occasion, anthropicKey, cronSecret, redis, seriesFR:{<period>:true|false}, lastCron, lastError}`. `lastError` = why the last on-demand generation failed (`credit`, `badkey`, `model`, `rate`, `upstream`, `timeout`… + HTTP status + 160 characters of the model's message); `lastCron` = last scheduled warm-up (needs `CRON_SECRET`). Both are kept 7 days in Redis (`si:err`, `si:cron`).
+- A period nobody asked for (and the cron did not prepare) is never generated afterwards: it stays absent from « Recettes précédentes ».
+
 ### v279 — seasonal menu: « Une alternative », once per series
 
 `snMore` reads « 🔄 Une alternative » (en « An alternative », es, de, it, pt). One use per series: the token is the server period id (`p<id>`), or a 3-day window in fallback mode (`d<n>`); stored in `snAlt` = `{<lang>|<occasion>:{tok,items}}`. In server mode the 4 alternative ideas are saved and redisplayed under the series after a reload; the button disappears and comes back with the next series. A failed request does not use up the alternative. In fallback mode the alternative replaces the list as before.

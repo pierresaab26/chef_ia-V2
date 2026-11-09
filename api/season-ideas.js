@@ -67,7 +67,12 @@ export async function getSeries(lang, occ, per = periodOf()) {
   let current = found[0] && found[0].items;
   if (!current) {
     const avoid = [...new Set([...previous.flatMap((p) => p.items.map((x) => x[0])), ...seen.slice(-PROMPT_SEEN)])];
-    const items = await generate(lang, occ, avoid, [...seen, ...avoid]);
+    let items;
+    try { items = await generate(lang, occ, avoid, [...seen, ...avoid]); }
+    catch (e) { // v280: remember why the generation failed, so that /api/season-ideas?status=1 can tell
+      try { await redis([["SET", "si:err", JSON.stringify({ at: new Date().toISOString(), lang, occ, period: per.id, code: e && e.code || "?", status: e && e.status || 0, detail: e && e.detail || "" }), "EX", String(7 * 86400)]]); } catch { /* diagnosis only */ }
+      throw e;
+    }
     const [ok] = await redis([["SET", key(lang, occ, per.id), JSON.stringify({ items, at: Date.now() }), "NX", "EX", TTL]]);
     current = items;
     if (ok === "OK") { // we published it: remember the names for 3 months
@@ -88,7 +93,25 @@ export async function getSeries(lang, occ, per = periodOf()) {
 async function warmup() {
   const per = periodOf(), occ = occasionNowFR();
   const res = await Promise.allSettled(LANGS.map((l) => getSeries(l, occ, per)));
-  return { period: per.id, occasion: occ, ok: res.filter((r) => r.status === "fulfilled").length, failed: res.filter((r) => r.status === "rejected").length };
+  const out = { period: per.id, occasion: occ, ok: res.filter((r) => r.status === "fulfilled").length, failed: res.filter((r) => r.status === "rejected").length };
+  try { await redis([["SET", "si:cron", JSON.stringify({ at: new Date().toISOString(), ...out }), "EX", String(7 * 86400)]]); } catch { /* diagnosis only */ }
+  return out;
+}
+
+// v280: public health check (booleans, dates and the last error only; no secret): is the series of the current / previous periods stored, did the scheduled run happen, why did a generation fail.
+async function status() {
+  const per = periodOf(), occ = occasionNowFR();
+  const out = { now: new Date().toISOString(), period: { id: per.id, from: per.from, to: per.to }, occasion: occ, anthropicKey: !!process.env.ANTHROPIC_API_KEY, cronSecret: !!process.env.CRON_SECRET, redis: hasRedis() };
+  if (!out.redis) return out;
+  const parse = (x) => { try { return x ? JSON.parse(x) : null; } catch { return null; } };
+  try {
+    const ids = [per.id, per.id - 1, per.id - 2].filter((i) => i >= 0);
+    const [err, cron, ...ser] = await redis([["GET", "si:err"], ["GET", "si:cron"], ...ids.map((id) => ["GET", key("fr", occ, id)])]);
+    out.seriesFR = Object.fromEntries(ids.map((id, k) => [id, !!ser[k]]));
+    out.lastCron = parse(cron);
+    out.lastError = parse(err);
+  } catch { out.redis = false; }
+  return out;
 }
 
 export default async function handler(req, res) {
@@ -103,6 +126,7 @@ export default async function handler(req, res) {
     try { return res.status(200).json(await warmup()); } catch (e) { return fail(res, e.code || "upstream"); }
   }
 
+  if (q.status) return res.status(200).json(await status());
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
   if (!authOk(req, res)) return;
   const lang = String(q.lang || ""), occ = String(q.occ || "");

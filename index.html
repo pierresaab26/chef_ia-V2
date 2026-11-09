@@ -2738,7 +2738,7 @@ async function snAsk(o,avoid){const t=T();let msg=(o.season?t.snSugS:t.snSugF).r
 function snServer(o){const key=lang+'|'+o.k;let pr=snSrvBusy.get(key);if(pr)return pr;
   pr=(async()=>{
     const cached=snSerCache()[key];if(cached&&cached.until>Date.now())return cached.data;
-    const stale=cached?cached.data:null;
+    const stale=cached&&cached.until>Date.now()?cached.data:null; // v280: an expired series is never shown as the current one
     if(Date.now()-snSrvOff<12e4)return stale;
     let res;try{res=await fetchT('/api/season-ideas?lang='+lang+'&occ='+encodeURIComponent(o.k),{headers:{'x-code':(()=>{try{return localStorage.getItem('code')||''}catch(e){return ''}})()}},70000)}catch(e){snSrvOff=Date.now();return stale}
     if(res.status===401)throw {code:'code'};
@@ -2812,7 +2812,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v279',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v280',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}

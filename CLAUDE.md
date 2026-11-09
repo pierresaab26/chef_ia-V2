@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v280 (owner: « les dernières recettes n'ont pas été régénérées », the screen still said « du 3 nov. au 6 nov. » on 9 Nov): (1) `snServer()` no longer returns an EXPIRED series when the server fails (before, any failure showed the last known series, here the 3–6 Nov one, as if it were current); now only a still-valid cached series is kept, otherwise the app falls back to its own ideas. (2) New public health check `GET /api/season-ideas?status=1` (no code needed): current period, `anthropicKey`, `cronSecret`, `redis`, whether the French series of the current and 2 previous periods exist (`seriesFR`), the last scheduled run (`lastCron`, Redis `si:cron`) and the last generation error (`lastError`, Redis `si:err`: code, HTTP status, short detail). Local only until « pousse ».
+
 v279 (owner: « change Autres idées par une alternative, une seule fois »): the seasonal menu button « 🔄 Autres idées » is « 🔄 Une alternative » (`snMore`, 6 languages) and can be used ONCE per series (3-day period; fallback mode: per 3-day window). The 4 alternative ideas stay on the device (`localStorage` `snAlt`) until the series changes, then the button comes back. Local only until « pousse ».
 
 v278 (owner: « Garder / Pas pour moi côte à côte »): the option chips of a dish row all sit on ONE line (`op2`), on every width. Local only until « pousse ».
