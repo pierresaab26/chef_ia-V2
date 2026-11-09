@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v265 (owner: « centre annuler et supprimer »): the buttons of every confirmation dialog (`.dlgb`) are centred. Local only until « pousse ».
+
 v264 (owner: « tu fais n'importe quoi »): the chef / community columns are under « Que voulez-vous cuisiner ? » (not under « Trouver mes recettes »); « Trouver mes recettes » only shows a « Demander au chef » card when nothing matches. Local only until « pousse ».
 
 v263 (owner: « fais-le pour voir » on the mockup, + « mets Partager à côté des favoris et des étoiles »): home search shows two columns « Recette du chef » / « Recette de la communauté » (new `GET /api/shared?q=`), local search matches word by word; in the chat « Partager » sits on the heart / stars line. Details in `docs/FEATURES.md` (v263). Local only until « pousse ».
