@@ -363,3 +363,10 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 - v292: moderation emails (same address as the block email): one per appeal (links « Publier » / « Laisser refusée »), one when a public recipe is hidden after 3 reports (links « Remettre en ligne » / « Retirer définitivement »). Admin links `&reject=<sid>` and `&restore=<pub sid>` added.
 
 - v293: `/api/publish` is served by `api/circle.js` (rewrite in `vercel.json`) because the Vercel free plan allows 12 routes; the deployments of v291–v292 had failed.
+
+
+## Install on the home screen (v295)
+
+- `manifest.webmanifest`, `icons/*`, `sw.js` (no cache, offline page only) make the site installable.
+- Drawer « 📲 Ajouter à l’écran d’accueil » (`#dA2hs`): only in a phone / tablet browser, hidden when already installed. Android Chrome-based browsers: native install prompt (`beforeinstallprompt`). iPhone / iPad and others: dialog with the steps (`a2Steps()`).
+- Limit: on iOS the installed app has its own storage (recipes saved in Safari are not in it).
