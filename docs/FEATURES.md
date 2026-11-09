@@ -254,3 +254,7 @@ The « 🍽️ Menu du jour » card, page and code are gone (never pushed). The 
 ## v257 — « Vider le menu » always reachable
 
 The « Vider le menu » button of the weekly menu page (`.mclear`) now appears as soon as something is shown: a recipe the user put in a slot, or the chef's suggestions (before, only his own recipes counted, so it never showed with the suggestions alone). After the confirmation the slots are emptied and the « Le chef propose le menu de la semaine » box is switched off (`auto:false`, `hid` reset); ticking it again brings the suggestions back. Local only until the owner says « pousse ».
+
+## v258 — Weekly menu: options under the dish
+
+The options that were behind the « ⋯ » of each dish are chips under the dish name (`.mopts`, `.mopt`, built in `dayRows()`): « 🔄 Autre idée » (chef's dish), « ✏️ Choisir moi-même », « 👍 Garder » (chef's dish), « 👎 Pas pour moi », « 🗑️ Retirer » (own recipe). Same actions as before; `rowMenu()` is no longer used by this page. Local only until « pousse ».

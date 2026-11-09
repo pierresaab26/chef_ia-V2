@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v258 (owner: « sors les options du ⋯ et mets-les sous la recette »): in the weekly menu the options of each dish (Autre idée, Choisir moi-même, Garder, Pas pour moi, Retirer) are visible chips under the dish name (`.mopts` / `.mopt`), no more ⋯ menu. Details in `docs/FEATURES.md` (v258). Local only until « pousse ».
+
 v257 (owner: « vider le menu n'apparaît pas »): « Vider le menu » is shown whenever the weekly menu shows something (his own recipes OR the chef's suggestions); confirming empties his slots AND switches « Le chef propose le menu » off (tick it again to bring the suggestions back, `hid` reset). Details in `docs/FEATURES.md` (v257). Local only until « pousse ».
 
 v256 (owner's request: merge the daily menu into the weekly menu; v255 never pushed): the « Menu du jour » is removed; the weekly menu card sits under the four home tiles and the weekly menu is personal (classics from the cookbook by rating / delay, 14-day no-repeat, « Garder » / « Pas pour moi » feeding the taste profile, taste sent with 🔄). Details in `docs/FEATURES.md` (v256). No prompt change beyond v254.

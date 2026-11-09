@@ -211,6 +211,7 @@ input,textarea,select{font-size:16px!important}
 .mlb{flex:none;width:64px;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--mut)}
 .mtit{flex:1;min-width:0;background:none;border:0;padding:6px 0;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer;line-height:1.3;border-radius:8px}
 .mtit.mghost{color:var(--ink)}.mtit.mghost::after{content:'›';margin-left:8px;color:var(--pink);font-weight:700;font-size:18px}.mtit.mdone{font-weight:600}.mtit.mempty{color:var(--mut);font-size:14px}
+.mopts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.mopt{border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;line-height:1.2}.mopt.danger{color:#c04a42}
 .mmore{flex:none;width:44px;height:44px;margin:-6px -6px -6px 0;border-radius:50%;border:0;background:none;color:var(--mut);font-size:22px;font-weight:800;line-height:1;cursor:pointer;display:grid;place-items:center}
 .mauto{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 16px;font-size:13px;color:var(--mut)}
 .mgen{border-style:dashed;border-color:var(--psbd);background:var(--psoft);font-size:12.5px;cursor:pointer}.mgen b{font-weight:600}.mown{color:var(--pink);font-size:12px}
@@ -2759,7 +2760,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v257',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v258',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3126,7 +3127,7 @@ function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map
         items=[['🔄',t.mRegen,async()=>{main.textContent='…';main.disabled=true;try{await wkRegen(i,j)}catch(x){toast(t.err)}onChange()}],['✏️',t.mOwn,own],['👍',noIc(t.dayKeep),()=>{dayMark(it[0],'keep');toast(t.dayKept)}],['👎',noIc(t.dayNo),()=>{dayMark(it[0],'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else{main.classList.add('mempty');main.textContent='+ '+t.mAdd;main.onclick=own}
       const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);row.append(ph,bd);mphoto(ph,e||pr,(e||pr)?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
-      if(items){const mb=document.createElement('button');mb.type='button';mb.className='mmore';mb.textContent='⋯';mb.setAttribute('aria-label',t.lsMore);mb.onclick=()=>rowMenu(e?e.title:main.textContent,items);row.appendChild(mb)}
+      if(items){const op=document.createElement('div');op.className='mopts';items.forEach(([ic,lb2,fn,danger])=>{const ob=document.createElement('button');ob.type='button';ob.className='mopt'+(danger?' danger':'');ob.textContent=ic+' '+lb2;ob.onclick=ev=>{ev.stopPropagation();fn()};op.appendChild(ob)});bd.appendChild(op)} // v258: the options sit under the dish instead of behind a ⋯ menu
       sl.appendChild(row)});
   return sl}
 function drawMenu(){
