@@ -333,3 +333,6 @@ Garder / Pas pour moi (and Retirer) sit side by side on every width (all chips g
 
 ### v276 — « Vider le menu » back to the simple version
 Owner: « Annule tout ce que tu as fait pour cette histoire de vider le menu ». The two-option dialog and the selection mode (v268–v272, v275) are removed: « Vider le menu » (top line, v267) asks one confirmation and empties the whole menu again. The phone fit of the weekly menu page (v273–v274, photo size from `--appH`) is kept. Local only until « pousse ».
+
+### v284 — generation failure diagnosis
+`generate()` (api/season-ideas.js) and `callClaude` (api/_lib.js) now put a `detail` on the `upstream` error: network cause, or the number of idea lines read / kept and the start of the chef's last answer. It is stored in `si:err` and shown by `?status=1` (`lastError.detail`) and by the admin link (`errors`).

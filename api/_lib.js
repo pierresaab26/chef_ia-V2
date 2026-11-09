@@ -34,7 +34,7 @@ export async function callClaude({ system, content, messages, model, max_tokens 
     });
   } catch (e) {
     const code = e && (e.name === "TimeoutError" || e.name === "AbortError") ? "timeout" : "upstream";
-    throw Object.assign(new Error(code), { code });
+    throw Object.assign(new Error(code), { code, detail: String(e && (e.cause && e.cause.code || e.message) || "").slice(0, 120) }); // v284: why the call itself failed (network, bad header…)
   }
   if (!r.ok) {
     let msg = "";

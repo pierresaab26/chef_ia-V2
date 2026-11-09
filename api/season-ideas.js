@@ -38,21 +38,24 @@ async function generate(lang, occ, avoid, banned) {
   const ban = new Set(banned.map(norm));
   const slots = [null, null, null, null];
   const asked = [...avoid];
+  let last = "";
   for (let attempt = 0; attempt < 3; attempt++) {
-    const { text } = await callClaude({
+    const { text, cut } = await callClaude({
       model: process.env.MODEL || "claude-haiku-5-5",
       max_tokens: 700,
       system: systemFor(PARTS, { lang }),
       messages: [{ role: "user", content: ideasPrompt(occ, asked, lang) }],
     });
-    parseIdeas(text).forEach((it, i) => {
+    const parsed = parseIdeas(text);
+    last = `attempt ${attempt + 1}: ${parsed.length} idea line(s) read, ${slots.filter(Boolean).length}/4 kept, ${ban.size} names banned${cut ? ", answer cut" : ""}; answer starts: ` + String(text || "").replace(/\s+/g, " ").slice(0, 140);
+    parsed.forEach((it, i) => {
       const k = norm(it[0]);
       if (i < 4 && !slots[i] && !ban.has(k)) { slots[i] = it; ban.add(k); }
       else if (!asked.includes(it[0])) asked.push(it[0]);
     });
     if (slots.every(Boolean)) return slots;
   }
-  throw Object.assign(new Error("upstream"), { code: "upstream" });
+  throw Object.assign(new Error("upstream"), { code: "upstream", detail: last.slice(0, 300) }); // v284: what the chef answered, so that the cause shows in ?status=1 / the admin link
 }
 
 // Series of the current period (generated when missing) and the previous ones, for one language and one occasion.
