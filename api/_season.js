@@ -18,7 +18,7 @@ export const OCC = {
 
 export const PERIOD_DAYS = 3;
 export const PERIOD_HOUR = 9; // Paris time
-const ANCHOR = Date.UTC(2026, 10, 3) / 864e5; // day number of 3 Nov 2026: the first period starts that day at 9:00 (Paris)
+const ANCHOR = Date.UTC(2026, 10, 9) / 864e5; // day number of 9 Nov 2026: the first period starts that day at 9:00 (Paris). v283: restarted on 9 Nov (the 3 Nov start was dropped, new series numbering and new Redis keys)
 
 // Paris wall-clock parts of an instant (DST included).
 export function parisParts(d = new Date()) {

@@ -15,7 +15,7 @@ const TTL = 40 * 86400;
 const KEEP_PREVIOUS = 3; // earlier series shown in « Previous recipes »
 const SEEN_DAYS = 90; // an idea is not proposed again before 3 months
 const PROMPT_SEEN = 150; // names sent to the chef as « Not these » (the most recent ones); the check afterwards uses all of them
-const key = (lang, occ, id) => `si:${lang}:${occ}:${id}`;
+const key = (lang, occ, id) => `si2:${lang}:${occ}:${id}`; // v283: si2 = numbering restarted on 9 Nov 2026 (the older si: series are no longer read)
 const seenKey = (lang) => `sh:${lang}`;
 
 // Names published in the last 90 days for this language (oldest first); older ones are dropped from Redis on the way.
