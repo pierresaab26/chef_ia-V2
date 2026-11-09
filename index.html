@@ -51,7 +51,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .snpanel .snsug{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:8px}@media (min-width:768px){.snpanel .snsug{grid-template-columns:1fr 1fr}}
 .snpanel .snsug>button{text-align:left;background:rgba(255,255,255,.85);color:#16121a;border-radius:16px;padding:10px 12px;border-left:4px solid currentColor;font-size:14px;line-height:1.35}
 .snpanel.dk .snsug>button{background:rgba(255,255,255,.1);color:#f4f1fa}
-.snpanel .snsug.ph{grid-template-columns:1fr 1fr}.snpanel .snsug>button.ph,.snpanel .snsug.ph>button{border-left:0;padding:8px 8px 10px}.snpimg{position:relative;height:120px;border-radius:12px;background:var(--bg1) center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:8px;overflow:hidden}.snpimg .mhcr{position:absolute;left:6px;bottom:6px;max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;line-height:1;background:rgba(0,0,0,.45);color:#fff;border-radius:999px;padding:4px 7px}@media (min-width:768px){.snpimg{height:170px}}.snpanel .snsug>button b{display:block;font-size:15px;margin-bottom:2px}
+.snpanel .snsug.ph{grid-template-columns:1fr 1fr}.snpanel .snsug>button{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch}.snpanel .snsug.ph>button{padding:8px 10px 10px 8px}.snpimg{position:relative;height:120px;border-radius:12px;background:var(--bg1) center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:8px;overflow:hidden}.snpimg .mhcr{position:absolute;left:6px;bottom:6px;max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;line-height:1;background:rgba(0,0,0,.45);color:#fff;border-radius:999px;padding:4px 7px}@media (min-width:768px){.snpimg{height:170px}}.snpanel .snsug>button b{display:block;font-size:15px;margin-bottom:2px}
 .snpanel .snsug .snwait{grid-column:1/-1;font-size:14px;opacity:.8;padding:6px 2px}
 .snpanel .snpvbtn{display:block;width:100%;text-align:left;font-weight:700;font-size:13px;padding:8px 2px;margin:0 0 6px;color:inherit;opacity:.9}
 .snpanel .snpvh{font-size:12px;font-weight:700;margin:8px 0 6px;opacity:.75}
@@ -2887,7 +2887,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v308',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v309',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
