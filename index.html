@@ -645,7 +645,7 @@ fr:{
   delq:"Supprimer cette recette de l’historique ?",
   hi:"Bonjour !",
   sub:"Votre chef de poche, propulsé par l’IA",
-  ask:"Que voulez-vous cuisiner ?",
+  ask:"Qu’est-ce qu’on cuisine aujourd’hui ?",askS:"On cuisine quoi ?",
   snT:"Menu de saison",
   snNow:"En ce moment",
   snMsg:"Propose-moi 4 idées {c} pour la période « {o} » : typiques de cette période et/ou avec les produits de saison. Rien qui appartienne à une autre saison (pas de vin chaud en été, pas de glace en hiver).",
@@ -951,7 +951,7 @@ en:{
   delq:"Delete this recipe from your history?",
   hi:"Hello!",
   sub:"Your pocket chef, powered by AI",
-  ask:"What do you want to cook?",
+  ask:"What do you want to cook?",askS:"What’s cooking?",
   snT:"Seasonal menu",
   snNow:"Right now",
   snMsg:"Suggest 4 ideas for {c} for {o}: typical of this time of year and/or using seasonal produce. Nothing that belongs to another season (no mulled wine in summer, no ice cream in winter).",
@@ -1257,7 +1257,7 @@ es:{
   delq:"¿Eliminar esta receta del historial?",
   hi:"¡Hola!",
   sub:"Tu chef de bolsillo, con IA",
-  ask:"¿Qué quieres cocinar?",
+  ask:"¿Qué quieres cocinar?",askS:"¿Qué cocinamos?",
   snT:"Menú de temporada",
   snNow:"Ahora",
   snMsg:"Propón 4 ideas de {c} para {o}: típicas de esta época y/o con productos de temporada. Nada que pertenezca a otra estación (ni vino caliente en verano, ni helado en invierno).",
@@ -1563,7 +1563,7 @@ de:{
   delq:"Dieses Rezept aus dem Verlauf löschen?",
   hi:"Hallo!",
   sub:"Dein Taschenkoch mit KI",
-  ask:"Was möchtest du kochen?",
+  ask:"Was möchtest du kochen?",askS:"Was kochen wir?",
   snT:"Saisonmenü",
   snNow:"Gerade jetzt",
   snMsg:"Schlag mir 4 Ideen für {c} zu {o} vor: typisch für diese Zeit und/oder mit Saisonprodukten. Nichts, was zu einer anderen Jahreszeit gehört (kein Glühwein im Sommer, kein Eis im Winter).",
@@ -1869,7 +1869,7 @@ it:{
   delq:"Eliminare questa ricetta dalla cronologia?",
   hi:"Ciao!",
   sub:"Il tuo chef tascabile, con l’IA",
-  ask:"Cosa vuoi cucinare?",
+  ask:"Cosa vuoi cucinare?",askS:"Cosa cuciniamo?",
   snT:"Menu di stagione",
   snNow:"Adesso",
   snMsg:"Proponimi 4 idee di {c} per {o}: tipiche di questo periodo e/o con prodotti di stagione. Niente che appartenga a un’altra stagione (niente vin brulé d’estate, niente gelato d’inverno).",
@@ -2175,7 +2175,7 @@ pt:{
   delq:"Eliminar esta receita do histórico?",
   hi:"Olá!",
   sub:"O seu chef de bolso, com IA",
-  ask:"O que quer cozinhar?",
+  ask:"O que quer cozinhar?",askS:"O que cozinhamos?",
   snT:"Menu da estação",
   snNow:"Agora",
   snMsg:"Sugere 4 ideias de {c} para {o}: típicas desta época e/ou com produtos da estação. Nada que pertença a outra estação (nem vinho quente no verão, nem gelado no inverno).",
@@ -2536,11 +2536,15 @@ let codeAsk=null;
 function askCode(){if(!codeAsk)codeAsk=ask({text:T().code,input:true}).then(c=>{codeAsk=null;if(c){try{localStorage.setItem('code',c)}catch(x){}}return c});return codeAsk}
 
 let curView='home';
-function show(id){const a2p=document.getElementById('a2pop');if(a2p)a2p.classList.toggle('oncard',id==='card');if(id!=='history'&&typeof hsel!=='undefined'&&hsel){hsel=null;try{selBar()}catch(x){}}curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}if(id==='home'){try{drawHomeSearch();drawMenu()}catch(x){}}}
+// v303: the long home placeholder (« Qu’est-ce qu’on cuisine aujourd’hui ? ») is replaced by its short form (« On cuisine quoi ? ») when it does not fit the box
+function fitAsk(){const i=$('#hq');if(!i)return;const t=T();i.placeholder=t.ask;try{const cs=getComputedStyle(i),c=fitAsk.c||(fitAsk.c=document.createElement('canvas').getContext('2d'));c.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
+  const room=i.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);if(room>0&&c.measureText(t.ask).width>room&&t.askS)i.placeholder=t.askS}catch(x){}}
+addEventListener('resize',()=>{try{fitAsk()}catch(x){}});
+function show(id){if(id==='home')setTimeout(()=>{try{fitAsk()}catch(x){}},0);const a2p=document.getElementById('a2pop');if(a2p)a2p.classList.toggle('oncard',id==='card');if(id!=='history'&&typeof hsel!=='undefined'&&hsel){hsel=null;try{selBar()}catch(x){}}curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}if(id==='home'){try{drawHomeSearch();drawMenu()}catch(x){}}}
 function markDrawer(){document.querySelectorAll('.ditem').forEach(b=>b.classList.toggle('on',b.dataset.go===curView))}
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
-  $('#hi').textContent=t.hi;$('#sub').textContent=t.sub;$('#hq').placeholder=t.ask;
+  $('#hi').textContent=t.hi;$('#sub').textContent=t.sub;fitAsk();
   $('#hT').textContent=t.hist;$('#hmore').textContent=t.more;$('#hpT').textContent=t.hist;$('#snT').textContent=t.snT;$('#chT').textContent=t.chefs;
   inp.placeholder=t.ph;sendB.textContent=t.send;$('#toorig').textContent=t.origR;
   drawSeason();drawChefs();refreshChat();drawHistory();drawFavs();drawerText();
@@ -2864,7 +2868,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v302',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v303',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
