@@ -344,6 +344,7 @@ Owner: « Annule tout ce que tu as fait pour cette histoire de vider le menu ».
 Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents (et idées par catégorie) », 6 languages.
 
 ## Identity and circle (v287, community plan steps 6–7)
+- **Invite on a computer (v298)**: « 🔗 Copier le lien » (+ « ↗ Partager » where the browser has a share menu); phones keep the single native-share button.
 - **Home entry (v294)**: a « 👥 Cercle » button between « 🕘 Historique » and « ❤️ Favoris » under « Trouver mes recettes » opens « Mon cercle ».
 - **Nickname**: asked at first opening (`askNick()`, localStorage `nick`), editable in « Mon cercle », sent with `POST /api/circle {act:"name"}`. No account: the person is the device owner id (`x-owner`), stored server-side only as a hash `pid`. Changing phone = new identity.
 - **Circle**: one per person. « ➕ Inviter un proche » creates `/?c=<code>` (7 days); the friend opens it → both are in each other's circle (max 50). ✕ on a member removes both sides.
