@@ -281,3 +281,8 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 - **Server.** `GET /api/shared?q=<words>&lang=<fr>` (in `api/shared.js`, no new function): reads `s:ck`, keeps the recipes of that language whose title contains EVERY word (accents / case ignored, filler words dropped, ≥ 3 letters in total), ranks by Bayesian average of the stars + share bonus (same formula as the weekly menu), returns `{items:[{sid,t,a,n}]}` (max 6). Rate limit 30/min per IP (`rl:cs:`). Client cache per query (`csMem`), 450 ms debounce.
 - **Share.** In the chat, « ↗ Partager » of each version is on the same line as the heart and the stars (icon only up to 520 px; on a 320 px phone it still wraps); the quick tags (« Trop salé… ») and « Commencer la recette » come below (`.chact` order).
 - Preview: the claude.ai preview has no `/api/shared`, so its community column always says « Pas encore de recette partagée ».
+
+## v264 — the two columns move to « Que voulez-vous cuisiner ? »
+
+- **Top box** (`#hq`): once 3+ letters are typed, two columns appear under it (`#hqcs`, `drawTopCs()`): **Recette du chef** (« Demander au chef », same request as `idGen`) and **Recette de la communauté** (shared recipes, `GET /api/shared?q=`, see v263). « Go » / Enter still sends the text straight to the chef.
+- **« Trouver mes recettes »** goes back to searching only the device (history + favorites, word by word). When nothing matches, « Aucune recette trouvée » + ONE « Demander au chef » card (`chefAsk()`); no community there.
