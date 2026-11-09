@@ -365,8 +365,8 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 - v293: `/api/publish` is served by `api/circle.js` (rewrite in `vercel.json`) because the Vercel free plan allows 12 routes; the deployments of v291–v292 had failed.
 
 
-## Install on the home screen (v295)
+## Install on the home screen (v295–v296)
 
 - `manifest.webmanifest`, `icons/*`, `sw.js` (no cache, offline page only) make the site installable.
-- Drawer « 📲 Ajouter à l’écran d’accueil » (`#dA2hs`): only in a phone / tablet browser, hidden when already installed. Android Chrome-based browsers: native install prompt (`beforeinstallprompt`). iPhone / iPad and others: dialog with the steps (`a2Steps()`).
-- Limit: on iOS the installed app has its own storage (recipes saved in Safari are not in it).
+- Android only (v296): when the browser fires `beforeinstallprompt` (installable, not installed), a thin bottom pop-up `#a2pop` « Installe Chef IA sur ton téléphone · Installer · ✕ » and a drawer item `#dA2hs` open the native install prompt. ✕ or a refused install hides it for 3 days (localStorage `a2Hide`). Hidden while typing and on the recipe card.
+- iOS: nothing is offered (the installed app would have its own storage, separate from Safari: no history, no circle).
