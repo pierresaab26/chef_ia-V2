@@ -266,3 +266,7 @@ In each dish row the course label and the dish name are centred (`.mrow2 .mbody`
 ## v260 — Weekly menu: chips fit the card at every width
 
 The option chips (`.mopts`) no longer overflow the day card: they wrap and are centred under 560 px (2-3 lines), stay on ONE centred line from 560 px with compact chips (12 px, `padding:6px 9px`), and use the larger chips (13 px) from 900 px. Replaces the 480 px rule of v259. Local only until « pousse ».
+
+## v261 — Weekly menu: title left-aligned
+
+The course label and the dish name are left-aligned next to the photo again (the centring of v259 is cancelled); the chips of v259 / v260 stay centred on their own line. Local only until « pousse ».

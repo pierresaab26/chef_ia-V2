@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v261 (owner: « ne centre pas le titre »): the dish label and name of the weekly menu are left-aligned again (v259 had centred them); the option chips stay on their own centred line. Local only until « pousse ».
+
 v260 (owner: « tu fais n'importe quoi » — the chips overflowed the card on a mid-size window): the option chips of the weekly menu are centred and fit inside the card at every width (nowrap + compact 12 px from 560 px, 13 px from 900 px; under 560 px they wrap onto 2-3 centred lines). Checked at 320, 375, 430, 560, 620, 768, 1000 and 1280 px. Local only until « pousse ».
 
 v259 (owner: « centre le titre, mets les options sur une ligne »): in the weekly menu the label + dish name are centred and the option chips sit on ONE centred line under the whole row (`.mopts` is a child of `.mrow2`, `flex-wrap:nowrap`); on screens of 480 px or less they wrap onto two lines because four chips do not fit one phone line. Local only until « pousse ».

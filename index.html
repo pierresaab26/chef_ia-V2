@@ -211,7 +211,7 @@ input,textarea,select{font-size:16px!important}
 .mlb{flex:none;width:64px;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--mut)}
 .mtit{flex:1;min-width:0;background:none;border:0;padding:6px 0;font:inherit;font-size:15px;text-align:left;color:var(--ink);cursor:pointer;line-height:1.3;border-radius:8px}
 .mtit.mghost{color:var(--ink)}.mtit.mghost::after{content:'›';margin-left:8px;color:var(--pink);font-weight:700;font-size:18px}.mtit.mdone{font-weight:600}.mtit.mempty{color:var(--mut);font-size:14px}
-.mrow2{flex-wrap:wrap;row-gap:4px}.mrow2 .mbody{text-align:center}.mrow2 .mtit{text-align:center}.mopts{flex:1 0 100%;min-width:0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:2px}.mopt{border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;white-space:nowrap;font:inherit;font-size:13px;font-weight:600;cursor:pointer;line-height:1.2}.mopt.danger{color:#c04a42}
+.mrow2{flex-wrap:wrap;row-gap:4px}.mrow2 .mtit{text-align:left}.mopts{flex:1 0 100%;min-width:0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:2px}.mopt{border:1px solid var(--bd);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;white-space:nowrap;font:inherit;font-size:13px;font-weight:600;cursor:pointer;line-height:1.2}.mopt.danger{color:#c04a42}
 @media(min-width:560px){.mopts{flex-wrap:nowrap}.mopt{padding:6px 9px;font-size:12px}}@media(min-width:900px){.mopts{gap:8px}.mopt{padding:6px 12px;font-size:13px}}
 .mmore{flex:none;width:44px;height:44px;margin:-6px -6px -6px 0;border-radius:50%;border:0;background:none;color:var(--mut);font-size:22px;font-weight:800;line-height:1;cursor:pointer;display:grid;place-items:center}
 .mauto{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 16px;font-size:13px;color:var(--mut)}
@@ -2761,7 +2761,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v260',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v261',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
