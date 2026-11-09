@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v257 (owner: « vider le menu n'apparaît pas »): « Vider le menu » is shown whenever the weekly menu shows something (his own recipes OR the chef's suggestions); confirming empties his slots AND switches « Le chef propose le menu » off (tick it again to bring the suggestions back, `hid` reset). Details in `docs/FEATURES.md` (v257). Local only until « pousse ».
+
 v256 (owner's request: merge the daily menu into the weekly menu; v255 never pushed): the « Menu du jour » is removed; the weekly menu card sits under the four home tiles and the weekly menu is personal (classics from the cookbook by rating / delay, 14-day no-repeat, « Garder » / « Pas pour moi » feeding the taste profile, taste sent with 🔄). Details in `docs/FEATURES.md` (v256). No prompt change beyond v254.
 
 v254 (owner's request « point 2 », community plan step 2): the chef gets a personal taste profile (loved / disliked dishes, recent recipes, repeated quick tags) computed on the device and injected into the prompt before the scope guard. Details in `docs/FEATURES.md` (v254). PROMPT CHANGED: rerun the 55-question bench.

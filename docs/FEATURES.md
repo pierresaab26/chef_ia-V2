@@ -250,3 +250,7 @@ The « 🍽️ Menu du jour » card, page and code are gone (never pushed). The 
 - **Feedback.** The « ⋯ » menu of a suggested dish has « Garder » (history `keep` → `wish` in the taste profile) and « Pas pour moi » (hides the slot, history `no` → `passed`); a classic slot has « Pas pour moi » (never proposed again for 60 days).
 - Taste prompt wording: « declined from the menu ». Server changes: `api/_taste.js` wording and the Monday week anchor in `api/_week.js`. Tested with Playwright (iPhone 13, SE, 320 px) and a mocked `/api/week-menu`.
 - **Week Monday → Sunday (v256).** The shared week now starts on Monday at 9:00 Paris time (`WK_ANCHOR` = Monday 9 Nov 2026 in `api/_week.js`); the strip and the day cards run Monday … Sunday (`menuSel` 0 = Monday, `todayIdx`); the device cache `chefMenuSug` is version 5 so an old Sunday-based week is dropped.
+
+## v257 — « Vider le menu » always reachable
+
+The « Vider le menu » button of the weekly menu page (`.mclear`) now appears as soon as something is shown: a recipe the user put in a slot, or the chef's suggestions (before, only his own recipes counted, so it never showed with the suggestions alone). After the confirmation the slots are emptied and the « Le chef propose le menu de la semaine » box is switched off (`auto:false`, `hid` reset); ticking it again brings the suggestions back. Local only until the owner says « pousse ».

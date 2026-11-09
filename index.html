@@ -2759,7 +2759,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v256',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v257',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3138,7 +3138,7 @@ function drawMenu(){
   const sug=m.auto?wkRead():null;if(m.auto&&!sug)wkLoad();
   { // v238: toggle « the chef suggests the weekly menu » + the week of the suggestions
     const row=document.createElement('label');row.className='mauto';const cb=document.createElement('input');cb.type='checkbox';cb.checked=m.auto;
-    cb.onchange=()=>{const z=readMenu();z.auto=cb.checked;saveMenu(z);drawMenu()};const sp=document.createElement('span');sp.textContent=t.mAutoT;row.append(cb,sp);box.appendChild(row);
+    cb.onchange=()=>{const z=readMenu();z.auto=cb.checked;if(cb.checked)z.hid={};saveMenu(z);drawMenu()};const sp=document.createElement('span');sp.textContent=t.mAutoT;row.append(cb,sp);box.appendChild(row);
     const fm=x=>new Date(x+'T12:00:00Z').toLocaleDateString(lang,{day:'numeric',month:'short',timeZone:'UTC'});
     if(m.auto){const n=document.createElement('p');n.className='mweek';
       if(sug)n.textContent=t.mWeekOf.replace('{a}',fm(sug.from)).replace('{b}',fm(sug.to));
@@ -3166,7 +3166,9 @@ function drawMenu(){
     box.appendChild(card)}
 
   {let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));$('#menuHT').textContent=t.menuT;$('#menuHS').textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0} // v211: compact card on the home
-  if(any){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[],auto:readMenu().auto});drawMenu()}};box.appendChild(c)}
+  const shown=m.auto&&sug&&sug.items.some((x,k)=>x&&!(m.hid&&m.hid[sug.from+'|'+Math.floor(k/3)+'|'+k%3]));
+  if(any||shown){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[],auto:false,hid:{}}); // v256: « Vider le menu » also switches the chef's suggestions off (tick « Le chef propose… » to bring them back)
+      drawMenu()}};box.appendChild(c)}
 }
 // ----- v256: the weekly menu is personal (merged from the v255 daily menu): your classics + the chef's discoveries, never the same dish within 14 days -----
 const DAY_HIST='chefDailyHist',D14=14*864e5,D21=21*864e5;
