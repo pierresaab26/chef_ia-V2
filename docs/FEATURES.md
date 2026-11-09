@@ -300,3 +300,6 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 
 - Tap « Vider le menu » (top right of the weekly menu): a dialog offers **Choisir les plats à retirer** and **Vider tout le menu** (the previous behaviour, with its confirmation; it also switches « Le chef propose le menu » off).
 - **Selection mode** (`msel` = Set of `day|course`, works across the 7 days): filled dishes show a round check, a tap picks / unpicks; a sticky bar shows the count and **Annuler / Retirer / Remplacer**. *Retirer* (confirmation): own slots are emptied and the chef's / classic dishes of the picked slots are hidden for the week (no taste signal). *Replace*: for each picked slot the recipe picker opens in turn (search the carnet, or « Demander au chef », which stops the chain); a slot whose picker is cancelled is left as it is. Keys `mVidAll`, `mVidPick`, `mSelRm`, `mSelRep`, `mSelRmQ` in 6 languages.
+
+### v269 — weekly menu selection mode restyle
+Owner: « pas beau ». In « Choisir les plats à retirer » each dish row has a round tick circle on its LEFT (flex first child, `.mck`), a picked row gets a light soft-pink fill (`.mrow2.picked`, no outline on the photo), the bar is compact (hint hidden once something is picked, count shown in « Retirer (N) »). Local only until « pousse ».
