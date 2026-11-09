@@ -286,3 +286,7 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 
 - **Top box** (`#hq`): once 3+ letters are typed, two columns appear under it (`#hqcs`, `drawTopCs()`): **Recette du chef** (« Demander au chef », same request as `idGen`) and **Recette de la communauté** (shared recipes, `GET /api/shared?q=`, see v263). « Go » / Enter still sends the text straight to the chef.
 - **« Trouver mes recettes »** goes back to searching only the device (history + favorites, word by word). When nothing matches, « Aucune recette trouvée » + ONE « Demander au chef » card (`chefAsk()`); no community there.
+
+## v266
+
+- « Trouver mes recettes » no longer offers « Demander au chef » when nothing matches (only « Aucune recette trouvée »); the chef / community columns stay under « Que voulez-vous cuisiner ? ». `chefAsk()` removed.

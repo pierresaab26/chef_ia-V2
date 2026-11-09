@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v266 (owner: « enlève l'option demander au chef pour trouver ma recette »): « Trouver mes recettes » only searches the device again (« Aucune recette trouvée », no chef card). Local only until « pousse ».
+
 v265 (owner: « centre annuler et supprimer »): the buttons of every confirmation dialog (`.dlgb`) are centred. Local only until « pousse ».
 
 v264 (owner: « tu fais n'importe quoi »): the chef / community columns are under « Que voulez-vous cuisiner ? » (not under « Trouver mes recettes »); « Trouver mes recettes » only shows a « Demander au chef » card when nothing matches. Local only until « pousse ».
