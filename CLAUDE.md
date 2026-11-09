@@ -57,7 +57,7 @@ No framework, no build step. `package.json` only sets `"type": "module"`.
 | `api/comments.js` | Recipe comments in Redis. |
 | `api/shared.js` | Shared recipes (`s:<sid>`, creator `o:<key>`): link `/?s=<sid>` imports the recipe with its comment key. v263: `GET ?q=&lang=` = search among the shared recipes (home search, « Recette de la communauté »). |
 | `api/circle.js` | v287: nickname + circle (invite `/?c=`, members, feed of circle recipes, post / unpost a shared copy). Redis `cu:` `cf:` `ci:` `cp:`. |
-| `api/publish.js` | v291: « 🌍 Publique »: chef check (food, complete, safe, remix for received recipes), frozen public copy `s:pub-<sid>` + index `pub:ck`, appeal queue `pub:queue`, reports `pub:rep:<ps>` (3 → hidden), admin `?key=<CRON_SECRET>` (&approve / &remove). Helper `api/_notify.js` = circle notifications `cn:<pid>` / `cnr:<pid>`. |
+| `api/_publish.js` (served as `/api/publish` via `api/circle.js`, v293) | v291: « 🌍 Publique »: chef check (food, complete, safe, remix for received recipes), frozen public copy `s:pub-<sid>` + index `pub:ck`, appeal queue `pub:queue`, reports `pub:rep:<ps>` (3 → hidden), admin `?key=<CRON_SECRET>` (&approve / &remove). Helper `api/_notify.js` = circle notifications `cn:<pid>` / `cnr:<pid>`. |
 | `api/ratings.js` | 1–5 star ratings in Redis, plus an analysis log. |
 | `api/season-ideas.js` | « Chef's ideas » of the seasonal menu, SAME for everybody: 4 ideas per language and occasion, renewed every 3 days at 9:00 Paris time, stored in Redis; also the scheduled warm-up (`?run=1`). See v96 in section 5. |
 | `api/_season.js` | Pure helpers for it (no network, unit-tested): 3-day periods from 3 Nov 2026 9:00 Paris time, occasion list, French calendar, idea parser and prompt. Also copied as-is into the claude.ai preview bridge. |
@@ -70,7 +70,7 @@ No framework, no build step. `package.json` only sets `"type": "module"`.
 | `api/_selftest-i18n.js` | The same 55 questions in the 6 languages (`ALL_CASES`, 330 cases; used by the morning check, not by the daily cron). |
 | `vercel.json` | Functions: 60 s max duration. Two crons (UTC, once a day each) call `/api/season-ideas?run=1` at 07:00 and 08:00 UTC, so that 9:00 Paris time is covered in summer (CEST) and in winter (CET); the warm-up is idempotent. The self-test has NO cron (it costs model calls): it is run from the browser test bench artifact instead. |
 
-Files starting with `_` in `api/` are helpers, not routes.
+Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at most 12 routes (files without `_`); there are 12 since v293, so a new route must be merged into an existing one (see v293).
 
 **Environment variables** (values live in Vercel only):
 `ANTHROPIC_API_KEY` (required), `APP_PASSWORD`, `MODEL`, `VISION_MODEL`, `EXTRACT_MODEL`,
@@ -121,6 +121,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (up to v149)
+
+v293 (the v291 and v292 deployments FAILED on Vercel: the Hobby plan allows at most 12 serverless functions and `api/publish.js` made 13; the live site stayed on v289): `api/publish.js` is renamed `api/_publish.js` (a helper, not a route) and served by `api/circle.js` when `?via=pub`; `vercel.json` has a rewrite `/api/publish` → `/api/circle?via=pub`, so the app, the admin links and the emails keep the same address. 12 routes again: ANY NEW ROUTE MUST BE MERGED INTO AN EXISTING ONE (or the plan upgraded). Local only until « pousse ».
 
 v292 (owner: « je reçois un email comme pour un user bloqué ? » → go): moderation emails for the publication, same Resend account and address as the block email (`sendModMail()` in `api/_mod.js`, needs `RESEND_API_KEY` + `MOD_EMAIL`, optional `MOD_FROM`): (1) every APPEAL → « Chef IA : appel de publication « X » » with the chef's reason and two links « ✅ Publier » (`&approve=<sid>`) / « ❌ Laisser refusée » (new `&reject=<sid>`: state `refused` + `final`, the author cannot appeal that refusal again); (2) a public recipe HIDDEN after 3 reports → one email with « ✅ La remettre en ligne » (new `&restore=<pub sid>`: back in `pub:ck`, reports cleared) / « ❌ La retirer définitivement » (`&remove=`). No email for single reports. The links carry `CRON_SECRET` (whoever reads the email can act). Links use the request host. Tests: /tmp/citest/t4.mjs (29 checks). Local only until « pousse ».
 

@@ -360,3 +360,5 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 - **Admin** (browser): `/api/publish?key=<CRON_SECRET>` lists the queue (appeals, reports); `&approve=<sid>` publishes, `&remove=<pub sid>` takes down.
 - **Notifications in the app**: when someone puts a recipe in « Cercle » (first time) or publishes it, his circle gets a line: counter next to « Mon cercle » in the menu, dot on ☰, list « 🔔 Nouveautés » at the top of « Mon cercle » (opening it marks them as read). No phone push notification (option B, later).
 - v292: moderation emails (same address as the block email): one per appeal (links « Publier » / « Laisser refusée »), one when a public recipe is hidden after 3 reports (links « Remettre en ligne » / « Retirer définitivement »). Admin links `&reject=<sid>` and `&restore=<pub sid>` added.
+
+- v293: `/api/publish` is served by `api/circle.js` (rewrite in `vercel.json`) because the Vercel free plan allows 12 routes; the deployments of v291–v292 had failed.

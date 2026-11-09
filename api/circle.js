@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { notifyCircle, readNotes, markSeen } from "./_notify.js";
+import publishHandler from "./_publish.js"; // v293: « /api/publish » is served by this route (rewrite in vercel.json) to stay within 12 functions
 
 // v287: identity (pseudo) and circle (community plan steps 6 and 7).
 // A person = the device owner id sent as « x-owner » (never stored nor returned: only its hash « pid » is).
@@ -13,6 +14,7 @@ export const pidOf = (owner) => createHash("sha256").update("circle|" + owner).d
 export const cleanName = (s) => clean(s, 24).replace(/[<>"]/g, "").replace(/\s+/g, " ");
 
 export default async function handler(req, res) {
+  if (req.query && req.query.via === "pub") return publishHandler(req, res); // v293: /api/publish → /api/circle?via=pub
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
   if (!authOk(req, res)) return;
   const owner = clean(req.headers["x-owner"], 60);

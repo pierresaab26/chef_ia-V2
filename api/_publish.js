@@ -4,7 +4,7 @@ import { notifyCircle } from "./_notify.js";
 import { PUB } from "./shared.js";
 import { sendModMail } from "./_mod.js";
 
-// v291: « 🌍 Publique » (community plan step 9, first version) + reports (step 8).
+// v291: « 🌍 Publique »; v293: file renamed _publish.js (not a route), served as /api/publish through /api/circle?via=pub (community plan step 9, first version) + reports (step 8).
 // The author publishes the shared copy « s:<sid> » of one of his recipe versions. Conditions:
 //  - he tapped « J'ai cuisiné » (or rated it) on that version (rc:<ck> / r:<ck>);
 //  - the chef (model) checks it: food, complete, safe; a recipe received from someone (copy with « rs ») must ALSO be a real
