@@ -2808,7 +2808,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v277',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v278',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3173,7 +3173,7 @@ function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map
         items=[['👍',noIc(t.dayKeep),()=>{dayMark(it[0],'keep');toast(t.dayKept)}],['👎',noIc(t.dayNo),()=>{dayMark(it[0],'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else{main.classList.add('mempty');main.textContent='+ '+t.mAdd;main.onclick=own}
       const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);const eb=document.createElement('button');eb.type='button';eb.className='medit';eb.textContent='✏️ '+t.mEdit;eb.onclick=ev=>{ev.stopPropagation();own()};row.append(ph,bd,eb);mphoto(ph,e||pr,(e||pr)?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
-      if(items){const op=document.createElement('div');op.className='mopts';const op2=document.createElement('div');op2.className='mopts2';items.forEach(([ic,lb2,fn,danger],ix)=>{const ob=document.createElement('button');ob.type='button';ob.className='mopt'+(danger?' danger':'');ob.textContent=ic+' '+lb2;ob.onclick=ev=>{ev.stopPropagation();fn()};(ix?op2:op).appendChild(ob)});if(op2.children.length)op.appendChild(op2);row.appendChild(op)} // v267: « Choisir moi-même » alone, the other options on the line below // v258: the options sit under the dish instead of behind a ⋯ menu
+      if(items){const op=document.createElement('div');op.className='mopts';const op2=document.createElement('div');op2.className='mopts2';items.forEach(([ic,lb2,fn,danger],ix)=>{const ob=document.createElement('button');ob.type='button';ob.className='mopt'+(danger?' danger':'');ob.textContent=ic+' '+lb2;ob.onclick=ev=>{ev.stopPropagation();fn()};op2.appendChild(ob)});op.appendChild(op2);row.appendChild(op)} // v267: « Choisir moi-même » alone, the other options on the line below // v258: the options sit under the dish instead of behind a ⋯ menu
       sl.appendChild(row)});
   return sl}
 function drawMenu(){
