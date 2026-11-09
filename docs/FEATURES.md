@@ -296,28 +296,8 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 - « Vider le menu » sits on the top line of the menu, right-aligned next to the « Le chef propose le menu » checkbox (`.mtop`), no more at the very bottom.
 - Options of each dish: « ✏️ Choisir moi-même » alone, the other options (👍 Garder, 👎 Pas pour moi / 🗑️ Retirer) centred on a second line (`.mopts` column + `.mopts2`).
 
-## v268 — « Vider le menu » has two options
+### v273–v275 — weekly menu page fits the phone screen
+Owner: « que cette page fasse la taille de l'écran sans défilement » / « ajuste les 3 vignettes à la page ». Under 560 px wide the compact CSS block before the `.dlg`-less `.mopts` rules (search `v273` in `index.html`) shrinks the week line, day tabs, day header, photos (4:3, height `clamp(44px, --appH × 7%, 80px)`; `--appH` = visible height, not `vh`, because iOS `vh` ignores the retracted toolbars), rows and option chips; from 375 px the option chips sit on ONE line (`.mopts2{display:contents}`, replaces the v267 two-line layout on phones). The menu view is a flex column: `#menuBox`, the day card and `.mslots` stretch and the 3 dish rows share the free height; the scroll area keeps 108 px at the bottom for the nav pill. Measured: iPhone 13 and 15 Pro Max no scroll; iPhone SE ~117 px (chips wrap under 375 px).
 
-- Tap « Vider le menu » (top right of the weekly menu): a dialog offers **Choisir les plats à retirer** and **Vider tout le menu** (the previous behaviour, with its confirmation; it also switches « Le chef propose le menu » off).
-- **Selection mode** (`msel` = Set of `day|course`, works across the 7 days): filled dishes show a round check, a tap picks / unpicks; a sticky bar shows the count and **Annuler / Retirer / Remplacer**. *Retirer* (confirmation): own slots are emptied and the chef's / classic dishes of the picked slots are hidden for the week (no taste signal). *Replace*: for each picked slot the recipe picker opens in turn (search the carnet, or « Demander au chef », which stops the chain); a slot whose picker is cancelled is left as it is. Keys `mVidAll`, `mVidPick`, `mSelRm`, `mSelRep`, `mSelRmQ` in 6 languages.
-
-### v269 — weekly menu selection mode restyle
-Owner: « pas beau ». In « Choisir les plats à retirer » each dish row has a round tick circle on its LEFT (flex first child, `.mck`), a picked row gets a light soft-pink fill (`.mrow2.picked`, no outline on the photo), the bar is compact (hint hidden once something is picked, count shown in « Retirer (N) »). Local only until « pousse ».
-
-### v270 — selection bar pinned at the bottom
-Real iPhone screenshot: the selection bar floated mid-screen over the dishes. In « Choisir les plats à retirer » the bottom navigation is hidden (`#app.mselmode nav`) and the bar sticks to the bottom edge (safe area); leaving the menu view ends the selection (`show()`). Local only until « pousse ».
-
-### v271 — selection bar really fixed
-v270 left the bar `sticky` inside the day card, so it stayed in the middle of the card. It is now `position:fixed` at the bottom of the screen (centred, max 492 px, safe area) and the menu gets 140 px of bottom padding while selecting. Local only until « pousse ».
-
-### v272 — no extra space under the menu while selecting
-v271 added 140 px of padding on top of the 96 px the scroll area already has, leaving a big empty band under the last day. Now only `#app.mselmode .scroll` gets `104px + safe area`; at the end of the scroll the last card sits 17 px above the bar (measured). Local only until « pousse ».
-
-### v273 — weekly menu page fits the screen (phones)
-Owner: « que cette page fasse la taille de l'écran sans défilement ». Under 560 px wide, the compact CSS block before `.dlg.vid` shrinks the chips, week line, day header, photos (64×48), rows and the option chips; from 375 px the option chips sit on ONE line (`.mopts2{display:contents}`; this replaces the v267 two-line layout on phones only). Measured with Playwright (no scroll left): iPhone 13 (664 px high), iPhone 15 Pro Max (740 px); iPhone SE (320 × 568) still scrolls ~124 px because the chips wrap under 375 px. Local only until « pousse ».
-
-### v274 — the 3 dishes fill the page height (phones)
-Owner: « ajuste les 3 vignettes à la page ». Under 560 px the menu view is a flex column: `#menuBox`, the day card and `.mslots` stretch, the 3 dish rows (`.mrow2{flex:1 0 auto;align-content:center}`) share the free height equally; photo height `clamp(44px,7vh,80px)` (4:3); the scroll area keeps 108 px at the bottom so the card ends just above the nav pill. Measured: iPhone 13 (664 px) and iPhone 15 Pro Max (740 px) no scroll, rows 96–121 px each; iPhone SE still scrolls ~124 px (chips wrap under 375 px). Local only until « pousse ».
-
-### v275 — « Vider le menu » selection fits the screen too
-Owner: same fit logic for « Vider le menu ». In « Choisir les plats à retirer » (phones) the 3 dishes also fill the screen without scrolling: bigger photos (`clamp(44px, appH×8.5%, 104px)`, since the option chips are hidden), tick circle inside the card (no negative margin), bar fixed at the bottom. Photo size in both modes now follows `--appH` (visible height) instead of `vh`, because on iOS `vh` is the tall viewport (browser toolbars retracted) and made the dish rows taller than the visible area (card under the bottom pill on the owner's phone). Credit line tightened. Measured: iPhone 13 / 15 Pro Max no scroll in both modes; SE no scroll in selection mode, ~117 px in normal mode (chips wrap). Local only until « pousse ».
+### v276 — « Vider le menu » back to the simple version
+Owner: « Annule tout ce que tu as fait pour cette histoire de vider le menu ». The two-option dialog and the selection mode (v268–v272, v275) are removed: « Vider le menu » (top line, v267) asks one confirmation and empties the whole menu again. The phone fit of the weekly menu page (v273–v274, photo size from `--appH`) is kept. Local only until « pousse ».

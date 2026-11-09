@@ -120,21 +120,11 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
-v275 (owner: same fit for « Vider le menu »): selection mode fits the phone screen, photo sizes follow --appH instead of vh. Local only until « pousse ».
+v276 (owner: « annule tout ce que tu as fait pour vider le menu »): the two-option « Vider le menu » and its selection mode (v268–v272, v275) are removed; « Vider le menu » asks one confirmation and empties the whole menu (v267 behaviour). The phone fit of the menu page (v273–v274) stays. Local only until « pousse ».
 
 v274 (owner: « ajuste les 3 vignettes à la page »): the 3 dish rows of the weekly menu stretch to fill the phone screen. Local only until « pousse ».
 
 v273 (owner: menu page without scrolling): compact rows and one-line option chips under 560 px; fits iPhone 13 and bigger, iPhone SE still scrolls a little. Local only until « pousse ».
-
-v272 (owner: « pourquoi autant d’espace ? »): removed the extra 140 px; the scroll area gets 104 px + safe area while selecting. Local only until « pousse ».
-
-v271 (owner screenshot): selection bar is `position:fixed` at the bottom (v270 sticky stayed inside the card). Local only until « pousse ».
-
-v270 (owner screenshot): menu selection bar pinned at the bottom, bottom nav hidden while selecting. Local only until « pousse ».
-
-v269 (owner: « pas beau » on the selection mode): tick circle on the left of each dish row, soft-pink picked row, compact bar with « Retirer (N) ». Local only until « pousse ».
-
-v268 (owner: « vider doit avoir 2 options »): in the weekly menu « Vider le menu » opens a choice: « Vider tout le menu » (as before) or « Choisir les plats à retirer » (selection mode over the whole week: tap dishes, bar « Annuler / Retirer / Remplacer »; Retirer empties own slots and hides chef dishes, Remplacer opens the recipe picker for each picked slot). Details in `docs/FEATURES.md` (v268). Local only until « pousse ».
 
 v267 (owner: weekly menu): « Vider le menu » moved to the TOP line, right of « Le chef propose le menu » (`.mtop`); under each dish « Choisir moi-même » is alone on its line and the other options sit on the line below (`.mopts2`). Local only until « pousse ».
 
