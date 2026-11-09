@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v273 (owner: menu page without scrolling): compact rows and one-line option chips under 560 px; fits iPhone 13 and bigger, iPhone SE still scrolls a little. Local only until « pousse ».
+
 v272 (owner: « pourquoi autant d’espace ? »): removed the extra 140 px; the scroll area gets 104 px + safe area while selecting. Local only until « pousse ».
 
 v271 (owner screenshot): selection bar is `position:fixed` at the bottom (v270 sticky stayed inside the card). Local only until « pousse ».

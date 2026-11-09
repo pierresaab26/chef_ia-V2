@@ -312,3 +312,6 @@ v270 left the bar `sticky` inside the day card, so it stayed in the middle of th
 
 ### v272 — no extra space under the menu while selecting
 v271 added 140 px of padding on top of the 96 px the scroll area already has, leaving a big empty band under the last day. Now only `#app.mselmode .scroll` gets `104px + safe area`; at the end of the scroll the last card sits 17 px above the bar (measured). Local only until « pousse ».
+
+### v273 — weekly menu page fits the screen (phones)
+Owner: « que cette page fasse la taille de l'écran sans défilement ». Under 560 px wide, the compact CSS block before `.dlg.vid` shrinks the chips, week line, day header, photos (64×48), rows and the option chips; from 375 px the option chips sit on ONE line (`.mopts2{display:contents}`; this replaces the v267 two-line layout on phones only). Measured with Playwright (no scroll left): iPhone 13 (664 px high), iPhone 15 Pro Max (740 px); iPhone SE (320 × 568) still scrolls ~124 px because the chips wrap under 375 px. Local only until « pousse ».
