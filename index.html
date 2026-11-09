@@ -2864,7 +2864,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v298',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v299',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3301,7 +3301,7 @@ function wkPers(sug){if(!sug)return {};const live=o=>o&&loadH().some(e=>e.id===o
 function drawerText(){const t=T();drawMenu();
   const pv=typeof claude!=='undefined',lab=(pv?'claude.ai preview':'▲ Vercel')+' · '+APP_VERSION;
   $('#verpill span').textContent=lab;$('#verpill').classList.toggle('pv',pv);$('#dver').textContent=lab;
-  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.fsPh;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#dShop').textContent=t.dShop;$('#dCircle').textContent=t.dCircle;$('#dA2hsT').textContent=t.a2hs;try{a2Paint()}catch(x){} // v296: may run before the install code is defined$('#dFavS').textContent=t.favsS;impText();$('#fpT').textContent=t.favT;
+  $('#hsearch').placeholder=t.search;$('#fsearch').placeholder=t.fsPh;$('#hsq').placeholder=t.hsPh;$('#dHome').textContent=t.home;$('#dHist').textContent=t.hist;$('#dFav').textContent=t.favs;$('#dShop').textContent=t.dShop;$('#dCircle').textContent=t.dCircle;$('#dA2hsT').textContent=t.a2hs;try{a2Paint()}catch(x){} /* v296: may run before the install code is defined */$('#dFavS').textContent=t.favsS;impText();$('#fpT').textContent=t.favT;
   document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-label',t.menu));$('#dclose').setAttribute('aria-label',t.close);$('#drawer').setAttribute('aria-label',t.menu)}
 let lastFocus=null;
 function openDrawer(){lastFocus=document.activeElement;markDrawer();$('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');document.querySelectorAll('.menubtn').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>{const f=$('.ditem.on')||$('.ditem');f&&f.focus()},50)}
