@@ -86,7 +86,8 @@ export default async function handler(req, res) {
       const [nm] = await redis([["GET", "cu:" + me]]);
       await sendModMail("Chef IA : appel de publication « " + d.title + " »",
         (nm || "Un utilisateur") + " fait appel du refus de publication de « " + d.title + " ».\nRaison du chef : " + (s.reason || "?") + (d.rs ? "\n(Recette reçue et modifiée : remix d'une autre recette.)" : "") +
-        "\n\n✅ Publier : " + adminLink(req, "&approve=" + sid) + "\n❌ Laisser refusée : " + adminLink(req, "&reject=" + sid) +
+        "\n\n👉 Répondre (avec un commentaire pour l'auteur) : " + adminLink(req, "&review=" + sid) +
+        "\n\nOu directement, sans commentaire :\n✅ Publier : " + adminLink(req, "&approve=" + sid) + "\n❌ Laisser refusée : " + adminLink(req, "&reject=" + sid) +
         "\n\nToute la file : " + adminLink(req, "") + "\n\nRecette :\n" + String(d.text || "").slice(0, 3000));
       return res.status(200).json({ ok: true, state: "pending" });
     }
@@ -152,34 +153,67 @@ export async function notOwner(d) {
   try { const [pr] = await redis([["GET", "s:" + d.rs]]); const p = JSON.parse(pr); return !!(p && p.ck && p.ck === d.ck); } catch { return false; }
 }
 
+// v302: the moderator's page for an appeal (link « Répondre » of the email): the recipe, the chef's reason, a comment for the author
+// and two buttons; the form calls &approve= / &reject= with &note= and &html=1 (answer as a small page instead of JSON).
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+function page(res, code, title, body) {
+  res.setHeader("content-type", "text/html; charset=utf-8");
+  return res.status(code).send(`<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title>
+<body style="margin:0;background:#fffaf2;color:#16121a;font:16px/1.5 system-ui,-apple-system,sans-serif"><main style="max-width:560px;margin:0 auto;padding:24px 16px">${body}</main></body></html>`);
+}
+const card = (h) => `<section style="background:#fff;border-radius:22px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:18px;margin:0 0 14px">${h}</section>`;
+function answer(res, q, code, json, msg) {
+  if (!q.html) return res.status(code).json(json);
+  return page(res, code, "Chef IA", card(`<p style="font-size:18px;font-weight:600;margin:0">${esc(msg)}</p>`));
+}
+
 async function admin(req, res, q) {
   const secret = process.env.CRON_SECRET;
   if (!secret || String(q.key) !== secret) return res.status(401).json({ error: "code" });
+  const note = clean(q.note, 300); // v302: the moderator's comment, sent to the author with the answer
   try {
+    if (q.review) {
+      const sid = String(q.review);
+      const [raw, st] = await redis([["GET", "s:" + sid], ["GET", "pb:" + sid]]);
+      let d = null, s = null; try { d = JSON.parse(raw); } catch {} try { s = JSON.parse(st); } catch {}
+      if (!d) return page(res, 404, "Chef IA", card("<p>Recette introuvable (supprimée par son auteur ?).</p>"));
+      const [nm] = d.o ? await redis([["GET", "cu:" + pidOf(d.o)]]) : [null];
+      const done = s && s.st !== "pending" ? `<p style="color:#b5645e;margin:0 0 10px">Déjà traité : ${esc(s.st === "public" ? "publiée" : s.st === "refused" ? "refusée" : s.st)}.</p>` : "";
+      const b = "padding:12px 18px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer;flex:1";
+      return page(res, 200, "Appel · " + d.title, card(`<h1 style="font-size:22px;margin:0 0 6px">${esc(d.title)}</h1><p style="margin:0;color:#7b7684">par ${esc(nm || "?")}${d.rs ? " · recette reçue et modifiée" : ""}</p>`) +
+        card(`<b>Raison du chef</b><p style="margin:6px 0 0">${esc(s && s.reason || "?")}</p>`) +
+        card(`<details><summary style="cursor:pointer;font-weight:600">Voir la recette</summary><pre style="white-space:pre-wrap;font:inherit;margin:10px 0 0">${esc(String(d.text || "").slice(0, 6000))}</pre></details>`) +
+        card(`${done}<form method="get" action="/api/publish"><input type="hidden" name="key" value="${esc(q.key)}"><input type="hidden" name="html" value="1">
+<label for="n" style="font-weight:600">Commentaire pour l'auteur (facultatif)</label>
+<textarea id="n" name="note" maxlength="300" rows="4" style="width:100%;box-sizing:border-box;margin:8px 0 14px;padding:10px 12px;border-radius:14px;border:1px solid rgba(0,0,0,.15);font:inherit"></textarea>
+<div style="display:flex;gap:10px"><button name="approve" value="${esc(sid)}" style="${b};border:1px solid rgba(229,25,95,.22);background:#fde6ee;color:#e5195f">✅ Publier</button>
+<button name="reject" value="${esc(sid)}" style="${b};border:1px solid rgba(0,0,0,.12);background:#fff;color:#16121a">❌ Laisser refusée</button></div></form>`));
+    }
     if (q.approve) {
       const sid = String(q.approve);
       const [raw] = await redis([["GET", "s:" + sid]]);
       let d = null; try { d = JSON.parse(raw); } catch {}
-      if (!d) return res.status(404).json({ error: "notfound" });
-      if (await notOwner(d)) return res.status(403).json({ error: "notowner" }); // v300: not his recipe
+      if (!d) return answer(res, q, 404, { error: "notfound" }, "Recette introuvable.");
+      if (await notOwner(d)) return answer(res, q, 403, { error: "notowner" }, "Refusé : ce n'est pas sa recette (recette reçue)."); // v300: not his recipe
       const [st0] = await redis([["GET", "pb:" + sid]]);
       let s0 = null; try { s0 = JSON.parse(st0); } catch {}
       const ps = await makePublic(sid, d, pidOf(d.o));
-      if (s0 && s0.st === "pending") await notifyOne(pidOf(d.o), { k: "appok", sid: ps, t: d.title }); // v301: the author learns the answer to his appeal
-      return res.status(200).json({ ok: true, ps });
+      if (s0 && s0.st === "pending") await notifyOne(pidOf(d.o), { k: "appok", sid: ps, t: d.title, m: note }); // v301: the author learns the answer to his appeal (v302: + comment)
+      return answer(res, q, 200, { ok: true, ps }, "✅ Recette publiée." + (s0 && s0.st === "pending" ? " L'auteur a été prévenu." : ""));
     }
     if (q.reject) { // the appeal is turned down: back to « refused » (the author sees the selector without « En vérification »)
       const sid = String(q.reject);
       const [st] = await redis([["GET", "pb:" + sid]]);
       let s = null; try { s = JSON.parse(st); } catch {}
-      if (!s) return res.status(404).json({ error: "notfound" });
+      if (!s) return answer(res, q, 404, { error: "notfound" }, "Recette introuvable.");
       await redis([["SET", "pb:" + sid, JSON.stringify({ ...s, st: "refused", at: Date.now(), final: 1 })]]);
+      let told = false;
       if (s.st === "pending") { // v301: tell the author (once: a second click finds « refused »)
         const [raw] = await redis([["GET", "s:" + sid]]);
         let d = null; try { d = JSON.parse(raw); } catch {}
-        if (d && d.o) await notifyOne(pidOf(d.o), { k: "appno", sid, t: d.title });
+        if (d && d.o) { await notifyOne(pidOf(d.o), { k: "appno", sid, t: d.title, m: note }); told = true; } // v302: + comment
       }
-      return res.status(200).json({ ok: true, state: "refused" });
+      return answer(res, q, 200, { ok: true, state: "refused" }, "❌ Recette laissée refusée." + (told ? " L'auteur a été prévenu." : ""));
     }
     if (q.restore) { // a recipe hidden by reports goes back to the public index
       const ps = String(q.restore);

@@ -347,6 +347,7 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 - **Invite on a computer (v298)**: « 🔗 Copier le lien » (+ « ↗ Partager » where the browser has a share menu); phones keep the single native-share button.
 - **Not the owner (v300)**: a received recipe, as its author wrote it, cannot be made « Publique » by the receiver (client `notMine()`, server `notOwner()`: 403 `notowner`); only his own later versions can, through the chef's remix check.
 - **Appeal answer (v301)**: the author of an appeal gets « ✅ Appel accepté … » or « ❌ Appel refusé … » in « 🔔 Nouveautés » (own note `appok` / `appno`, `notifyOne()`).
+- **Moderator's comment (v302)**: the appeal email links to a review page (`&review=<sid>`) with a comment field; the comment is shown to the author under the answer (« 💬 Message du modérateur »).
 - **Home entry (v294)**: a « 👥 Cercle » button between « 🕘 Historique » and « ❤️ Favoris » under « Trouver mes recettes » opens « Mon cercle ».
 - **Nickname**: asked at first opening (`askNick()`, localStorage `nick`), editable in « Mon cercle », sent with `POST /api/circle {act:"name"}`. No account: the person is the device owner id (`x-owner`), stored server-side only as a hash `pid`. Changing phone = new identity.
 - **Circle**: one per person. « ➕ Inviter un proche » creates `/?c=<code>` (7 days); the friend opens it → both are in each other's circle (max 50). ✕ on a member removes both sides.
