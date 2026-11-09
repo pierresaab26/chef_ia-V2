@@ -299,6 +299,10 @@ The « 🔄 Autre idée » chip and `wkRegen()` (a personal idea per slot) are r
 ### v273–v275 — weekly menu page fits the phone screen
 Owner: « que cette page fasse la taille de l'écran sans défilement » / « ajuste les 3 vignettes à la page ». Under 560 px wide the compact CSS block before the `.dlg`-less `.mopts` rules (search `v273` in `index.html`) shrinks the week line, day tabs, day header, photos (4:3, height `clamp(44px, --appH × 7%, 80px)`; `--appH` = visible height, not `vh`, because iOS `vh` ignores the retracted toolbars), rows and option chips; from 375 px the option chips sit on ONE line (`.mopts2{display:contents}`, replaces the v267 two-line layout on phones). The menu view is a flex column: `#menuBox`, the day card and `.mslots` stretch and the 3 dish rows share the free height; the scroll area keeps 108 px at the bottom for the nav pill. Measured: iPhone 13 and 15 Pro Max no scroll; iPhone SE ~117 px (chips wrap under 375 px).
 
+### v282 — admin link: generate / reset today's seasonal ideas
+
+`GET /api/season-ideas?run=1&key=<CRON_SECRET>` (needs `CRON_SECRET` in Vercel; open it in a browser): prepares the current series for the French occasion in the 6 languages (nothing is regenerated when it already exists). `&reset=1` deletes the current series of the 6 languages first, so a new one is generated (the 3-month memory `sh:<lang>` still applies: names already published are not proposed again). The JSON answer gives `ok` / `failed` and the error of each failed language. A cron call (Bearer header) never resets.
+
 ### v281 — wording
 
 `snFold` / `snPrevT` say « Recettes de la semaine passée » instead of « Recettes précédentes » (en « Last week’s recipes »). The folded list still shows up to the 3 previous series.

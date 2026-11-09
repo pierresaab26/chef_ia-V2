@@ -90,10 +90,13 @@ export async function getSeries(lang, occ, per = periodOf()) {
   return { period: per, current, previous, seen: seen.slice(-PROMPT_SEEN) };
 }
 
-async function warmup() {
+async function warmup(reset = false) {
   const per = periodOf(), occ = occasionNowFR();
+  if (reset) await redis(LANGS.map((l) => ["DEL", key(l, occ, per.id)])); // v282: admin reset of the current series (all languages), regenerated just below
   const res = await Promise.allSettled(LANGS.map((l) => getSeries(l, occ, per)));
   const out = { period: per.id, occasion: occ, ok: res.filter((r) => r.status === "fulfilled").length, failed: res.filter((r) => r.status === "rejected").length };
+  const errors = res.map((r, i) => r.status === "rejected" ? { lang: LANGS[i], code: r.reason && r.reason.code || "?", status: r.reason && r.reason.status || 0, detail: r.reason && r.reason.detail || "" } : null).filter(Boolean);
+  if (errors.length) out.errors = errors;
   try { await redis([["SET", "si:cron", JSON.stringify({ at: new Date().toISOString(), ...out }), "EX", String(7 * 86400)]]); } catch { /* diagnosis only */ }
   return out;
 }
@@ -121,9 +124,11 @@ export default async function handler(req, res) {
 
   if (q.run) { // scheduled warm-up
     const secret = process.env.CRON_SECRET;
-    if (!secret || (req.headers.authorization || "") !== "Bearer " + secret) return res.status(401).json({ error: "code" });
+    // v282: the owner can also open the link in a browser: /api/season-ideas?run=1&key=<CRON_SECRET> (add &reset=1 to erase and regenerate today's series)
+    const asCron = (req.headers.authorization || "") === "Bearer " + secret, asOwner = String(q.key || "") === secret;
+    if (!secret || (!asCron && !asOwner)) return res.status(401).json({ error: "code" });
     if (!hasRedis()) return res.status(501).json({ error: "storage" });
-    try { return res.status(200).json(await warmup()); } catch (e) { return fail(res, e.code || "upstream"); }
+    try { return res.status(200).json(await warmup(asOwner && !!q.reset)); } catch (e) { return fail(res, e.code || "upstream"); }
   }
 
   if (q.status) return res.status(200).json(await status());

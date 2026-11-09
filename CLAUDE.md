@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v282 (owner: « reset tout et fais une génération du jour »): admin link for the seasonal ideas: `GET /api/season-ideas?run=1&key=<CRON_SECRET>` (opened in a browser) generates today's series in the 6 languages for the current French occasion; adding `&reset=1` first ERASES the current series (Redis `si:<lang>:<occasion>:<period>`) and regenerates it. The answer lists `ok`, `failed` and, per failed language, `errors:[{lang,code,status,detail}]` (the real reason: `credit`, `badkey`, `rate`, `upstream`…). The cron header still works and never resets. Local only until « pousse ».
+
 v281 (owner: « à la place de recettes précédentes, tu mets recette de la semaine passée »): the folded seasonal-menu labels `snFold` and `snPrevT` read « Recettes de la semaine passée et idées par catégorie » / « Recettes de la semaine passée » (6 languages). Local only until « pousse ».
 
 v280 (owner: « les dernières recettes n'ont pas été régénérées », the screen still said « du 3 nov. au 6 nov. » on 9 Nov): (1) `snServer()` no longer returns an EXPIRED series when the server fails (before, any failure showed the last known series, here the 3–6 Nov one, as if it were current); now only a still-valid cached series is kept, otherwise the app falls back to its own ideas. (2) New public health check `GET /api/season-ideas?status=1` (no code needed): current period, `anthropicKey`, `cronSecret`, `redis`, whether the French series of the current and 2 previous periods exist (`seriesFR`), the last scheduled run (`lastCron`, Redis `si:cron`) and the last generation error (`lastError`, Redis `si:err`: code, HTTP status, short detail). Local only until « pousse ».
