@@ -108,6 +108,9 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .cact{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}@media(max-width:350px){.cact .shr .shl{display:none}}@media(max-width:360px){.cact{gap:6px}.cact .rate{padding:3px 7px}.cact .stars button{font-size:16px;padding:2px 0}.cact .cbtn{padding:8px 12px}}
 .cbtn{background:var(--card);border-radius:999px;padding:9px 16px;font-weight:600;box-shadow:var(--sh)}
 .rate{display:inline-flex;align-items:center;gap:4px;flex:none;margin:0;padding:3px 10px;background:var(--card);border:1px solid var(--bd);border-radius:999px;box-shadow:var(--sh)}.rate .rl{display:none}
+.rwrap{display:contents}.rate .rck{background:none;border:0;padding:4px 2px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.rtags{display:flex;flex-wrap:wrap;gap:6px;flex:1 0 100%;align-items:center}.cact .rtags{order:9}
+.obadge{display:inline-block;font-size:11px;font-weight:500;line-height:1.5;padding:1px 8px;margin-left:6px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--mut);white-space:nowrap;vertical-align:1px}.cdate .obadge{margin-left:0}.rtags .rtl{font-size:13px;color:var(--mut);flex:1 0 100%}.rtag{background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;font-size:13px;color:var(--ink);cursor:pointer}.rtag.on{background:var(--pink);border-color:var(--pink);color:#fff}
 #totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.12);padding:0}#totop.on{display:grid}
 .qgrid{padding:0;margin:0 0 14px}
 .dlgw{position:fixed;inset:0;z-index:60;background:rgba(10,8,20,.45);display:grid;place-items:center;padding:20px}.dlg{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.3)}.dlg p{margin:0 0 14px;line-height:1.4}.dlg input{width:100%;box-sizing:border-box;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg1);color:var(--ink);margin:0 0 14px}.dlgb{display:flex;gap:8px;justify-content:flex-end}.dlgb .cbtn{border:1px solid var(--bd)}.dlgb .dlgok{background:var(--psoft);color:var(--pink);border-color:var(--psbd);font-weight:700}
@@ -674,6 +677,17 @@ fr:{
   rateT:"Votre note",
   rateH:"1 = très mauvaise · 5 = excellente",
   rateOk:"Note enregistrée : {n}/5",
+  ckB:"✅ J’ai cuisiné",
+  ckOk:"Merci ! Donnez maintenant votre note.",
+  tgT:"Un mot sur la recette (facultatif)",
+  tg_salty:"Trop salé",
+  tg_easy:"Facile",
+  tg_kids:"Plaît aux enfants",
+  tg_long:"Trop long",
+  orgC:"👨‍🍳 Chef IA",
+  orgI:"📥 Importée",
+  orgV:"🔀 Variante",
+  orgS:"📨 Reçue",
   oldH:"Je cache les anciennes versions",
   oldS:"Revoir les versions précédentes ({n})",
   cookB:"Commencer la recette",
@@ -954,6 +968,17 @@ en:{
   rateT:"Your rating",
   rateH:"1 = terrible · 5 = the best",
   rateOk:"Rating saved: {n}/5",
+  ckB:"✅ I cooked it",
+  ckOk:"Thanks! Now give your rating.",
+  tgT:"One word about the recipe (optional)",
+  tg_salty:"Too salty",
+  tg_easy:"Easy",
+  tg_kids:"Kids loved it",
+  tg_long:"Too long",
+  orgC:"👨‍🍳 Chef IA",
+  orgI:"📥 Imported",
+  orgV:"🔀 Variant",
+  orgS:"📨 Received",
   oldH:"Keep only the latest version",
   oldS:"Show earlier versions ({n})",
   cookB:"Start the recipe",
@@ -1234,6 +1259,17 @@ es:{
   rateT:"Tu nota",
   rateH:"1 = muy mala · 5 = la mejor",
   rateOk:"Nota guardada: {n}/5",
+  ckB:"✅ La cociné",
+  ckOk:"¡Gracias! Ahora pon tu nota.",
+  tgT:"Una palabra sobre la receta (opcional)",
+  tg_salty:"Muy salada",
+  tg_easy:"Fácil",
+  tg_kids:"Gusta a los niños",
+  tg_long:"Muy larga",
+  orgC:"👨‍🍳 Chef IA",
+  orgI:"📥 Importada",
+  orgV:"🔀 Variante",
+  orgS:"📨 Recibida",
   oldH:"Dejar solo la última versión",
   oldS:"Ver versiones anteriores ({n})",
   cookB:"Empezar la receta",
@@ -1514,6 +1550,17 @@ de:{
   rateT:"Deine Bewertung",
   rateH:"1 = furchtbar · 5 = die beste",
   rateOk:"Bewertung gespeichert: {n}/5",
+  ckB:"✅ Ich habe es gekocht",
+  ckOk:"Danke! Gib jetzt deine Bewertung ab.",
+  tgT:"Ein Wort zum Rezept (optional)",
+  tg_salty:"Zu salzig",
+  tg_easy:"Einfach",
+  tg_kids:"Kinder mögen es",
+  tg_long:"Zu langwierig",
+  orgC:"👨‍🍳 Chef IA",
+  orgI:"📥 Importiert",
+  orgV:"🔀 Variante",
+  orgS:"📨 Erhalten",
   oldH:"Nur die neueste Version behalten",
   oldS:"Frühere Versionen anzeigen ({n})",
   cookB:"Rezept starten",
@@ -1794,6 +1841,17 @@ it:{
   rateT:"Il tuo voto",
   rateH:"1 = pessima · 5 = la migliore",
   rateOk:"Voto salvato: {n}/5",
+  ckB:"✅ L’ho cucinata",
+  ckOk:"Grazie! Ora dai il tuo voto.",
+  tgT:"Una parola sulla ricetta (facoltativo)",
+  tg_salty:"Troppo salata",
+  tg_easy:"Facile",
+  tg_kids:"Piace ai bambini",
+  tg_long:"Troppo lunga",
+  orgC:"👨‍🍳 Chef IA",
+  orgI:"📥 Importata",
+  orgV:"🔀 Variante",
+  orgS:"📨 Ricevuta",
   oldH:"Lascia solo l’ultima versione",
   oldS:"Mostra le versioni precedenti ({n})",
   cookB:"Inizia la ricetta",
@@ -2074,6 +2132,17 @@ pt:{
   rateT:"A sua nota",
   rateH:"1 = péssima · 5 = a melhor",
   rateOk:"Nota guardada: {n}/5",
+  ckB:"✅ Cozinhei",
+  ckOk:"Obrigado! Agora dê a sua nota.",
+  tgT:"Uma palavra sobre a receita (opcional)",
+  tg_salty:"Muito salgada",
+  tg_easy:"Fácil",
+  tg_kids:"As crianças gostam",
+  tg_long:"Muito demorada",
+  orgC:"👨‍🍳 Chef IA",
+  orgI:"📥 Importada",
+  orgV:"🔀 Variante",
+  orgS:"📨 Recebida",
   oldH:"Deixar só a última versão",
   oldS:"Ver versões anteriores ({n})",
   cookB:"Começar a receita",
@@ -2659,7 +2728,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v251',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v253',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2700,7 +2769,9 @@ function looksLikeRecipe(txt){if(txt.length<60)return false;const L=txt.split('\
 function ownVers(e){return e&&e.messages?e.messages.filter(m=>m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id)).length:0} // v124: number of versions of a recipe written by the chef
 function vnOf(e,i){let cur=e&&e.vbase||0,r=null;(e&&e.messages||[]).forEach((m,j)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id)){cur=m.vn||cur+1;if(j===i)r=cur}});return r==null?cur||1:r} // v128: version number (frozen `vn` after a deletion, so the others keep their number)
 function verNum(e){return vnOf(e,lastVi(e))} // latest version number (variants continue the numbering of their original)
-function msgOut(m){const o={role:m.role,content:m.content};if(m.rid)o.rid=m.rid;if(m.at)o.at=m.at;if(m.stars)o.stars=m.stars;if(m.vn)o.vn=m.vn;if(m.vk)o.vk=m.vk;return o}
+function msgOut(m){const o={role:m.role,content:m.content};if(m.rid)o.rid=m.rid;if(m.at)o.at=m.at;if(m.stars)o.stars=m.stars;if(m.cooked)o.cooked=m.cooked;if(m.tag)o.tag=m.tag;if(m.vn)o.vn=m.vn;if(m.vk)o.vk=m.vk;return o}
+function originOf(e){return e&&e.from?'remix':e&&(e.src==='photo'||e.src==='link')?'import':e&&e.imp?'shared':'chef'} // v252/v253: where a recipe comes from: remix = variant of another recipe, import = photo / link, shared = received through a share link (`imp`), chef = written by the chef; sent with each rating
+function originBadge(e){if(!e||e.qa)return null;const k=originOf(e),b=document.createElement('span');b.className='obadge';b.dataset.o=k;b.textContent=T()['org'+{chef:'C',import:'I',remix:'V',shared:'S'}[k]];return b} // v253: small badge « Chef IA / Importée / Variante / Reçue » next to the date
 // v127: every version of a recipe has its OWN favorite, rating, comments and share
 function ownIdx(e){const r=[];(e&&e.messages||[]).forEach((m,i)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id))r.push(i)});return r}
 function lastVi(e){const o=ownIdx(e);return o.length?o[o.length-1]:null}
@@ -2779,7 +2850,7 @@ function openFamily(e){ // v126: the normal chat with EVERY version of the recip
   const first=log.querySelector('.xfam')||log.querySelector('.m');const pin=log.firstElementChild;stickEl=pin; // starts at the original; nothing may scroll to the bottom meanwhile (no jumps)
   log.scrollTop=0;requestAnimationFrame(()=>{log.scrollTop=0;try{updTop()}catch(z){}});setTimeout(()=>{if(stickEl===pin)stickEl=null},1500)}
 function verLine(e,n,at,cur,inChat){ // date + version badge (+ « all versions » button when the recipe has more than one version)
-  const dl=document.createElement('div');dl.className='cdate';const ds=document.createElement('span');ds.textContent=fmtDate(new Date(at||Date.parse(e.date)||Date.now()).toISOString());dl.append(ds,verBadge(n));
+  const dl=document.createElement('div');dl.className='cdate';const ds=document.createElement('span');ds.textContent=fmtDate(new Date(at||Date.parse(e.date)||Date.now()).toISOString());dl.append(ds,verBadge(n));{const ob=originBadge(e);if(ob)dl.appendChild(ob)}
   if(!inChat&&famVersions(e).length>1){const b=document.createElement('button');b.type='button';b.className='allv';b.textContent=T().allV;b.onclick=()=>openFamily(e);dl.appendChild(b)}
   return dl}
 function verBadge(n){const b=document.createElement('span');b.className='vbadge';b.textContent=n<=1?T().verO:T().verN.replace('{n}',n);return b}
@@ -2795,7 +2866,7 @@ function saveCurrent(){
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
   hist.forEach(m=>{if(m.role==='assistant'&&!m.rid&&looksLikeRecipe(m.content))m.rid=currentId}); // recipe message → saved recipe
-  {const old=e.messages||[];e.messages=hist.map((m,i)=>{const o=msgOut(m),q=old[i];if(q&&q.content===m.content){if(q.stars)o.stars=q.stars;if(q.vn)o.vn=q.vn;if(q.vk)o.vk=q.vk;if(q.fav)o.fav=true}return o});e.favV=1}e.updatedAt=Date.now();
+  {const old=e.messages||[];e.messages=hist.map((m,i)=>{const o=msgOut(m),q=old[i];if(q&&q.content===m.content){if(q.stars)o.stars=q.stars;if(q.cooked)o.cooked=q.cooked;if(q.tag)o.tag=q.tag;if(q.vn)o.vn=q.vn;if(q.vk)o.vk=q.vk;if(q.fav)o.fav=true}return o});e.favV=1}e.updatedAt=Date.now();
   a.unshift(e);if(!saveH(a))toast(T().stFull);drawHistory();syncCardBtn();try{ensurePhoto(currentId)}catch(x){}menuAssign(e.id);
 }
 function rowFor(e,del,heart,sc,unarch){
@@ -2806,7 +2877,7 @@ function rowFor(e,del,heart,sc,unarch){
   const p=document.createElement('div');p.className='hpic';p.style.background=bg;p.textContent=em;
   const ru=e.img||(e.ph&&okU(e.ph.t)?e.ph.t:'');if(ru){p.textContent='';const im=document.createElement('img');im.alt='';im.referrerPolicy='no-referrer';im.src=ru;im.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:14px;display:block';im.onerror=()=>{im.remove();p.textContent=em};p.appendChild(im)}
   const x=document.createElement('div');x.className='htx';
-  const b=document.createElement('b');b.textContent=(famFav(e)?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);
+  const b=document.createElement('b');b.textContent=(famFav(e)?'❤️ ':'')+e.title;const d=document.createElement('span');d.textContent=fmtDate(e.date);{const ob=originBadge(e);if(ob)d.appendChild(ob)}
   x.append(b,d);o.append(p,x);o.onclick=()=>{if(e.qa){openCard(e.id);return}if(e._vi!=null){openCard(e.id,e._vi);return}const a=loadH(),r=famRoot(e,a)||e;openCard(r.id,ownIdx(r)[0])};/* v130: every row opens the card of the ORIGINALE of its family */r.appendChild(o);
   if(sc){ // selection mode: a round checkbox on the left, tapping the row toggles it (no heart, no ✕)
     const c=document.createElement('button');c.type='button';c.className='hchk';c.setAttribute('role','checkbox');
@@ -2917,7 +2988,7 @@ function branchWith(src,ings,mode){ // v132: like the quick filters — same con
 function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({id,text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
-  newConv();hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined),at:m.at,stars:m.stars,vn:m.vn,vk:m.vk}));log.innerHTML='';hiddenIdx=new Set();
+  newConv();hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined),at:m.at,stars:m.stars,cooked:m.cooked,tag:m.tag,vn:m.vn,vk:m.vk}));log.innerHTML='';hiddenIdx=new Set();
   chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=id;branchFrom=null;
   hist.forEach(m=>add(m.role==='user'?'u':'a',shown(m.content)));
   refreshChat();drawQuick();show('chat');
@@ -3825,24 +3896,40 @@ function renderRecipe(el,txt,title,chat,swap,prevTxt){
   {const tp=el.querySelector(':scope > .rsec[data-k=tip]'),cg=el.querySelector(':scope > .rsec[data-k=chg]');if(tp&&cg&&(cg.compareDocumentPosition(tp)&Node.DOCUMENT_POSITION_FOLLOWING))cg.before(tp)} // v123: the chef's tip comes above « what changed »
   if(chat)cardTabs(el); // v122: same Ingredients / Utensils / Preparation tabs in the chat as on the recipe card
 }
-function rateBox(id,vi){ // 1 to 5 stars: 1 = terrible, 5 = the best. Rating kept on the device + sent to the server (if enabled)
+function rateBox(id,vi){ // v252: « J'ai cuisiné » first, THEN 1 to 5 stars (1 = terrible, 5 = the best), then an optional one-word tag. Kept on the device + sent to the server (if enabled)
   const t=T(),e0=loadH().find(x=>x.id===id);if(!e0)return document.createElement('span');
+  const wrap=document.createElement('span');wrap.className='rwrap';
   const box=document.createElement('div');box.className='rate';
   const lb=document.createElement('span');lb.className='rl';lb.textContent=t.rateT;
+  const ck=document.createElement('button');ck.type='button';ck.className='rck';ck.textContent=t.ckB;
   const st=document.createElement('span');st.className='stars';st.title=t.rateH;
   const info=document.createElement('span');info.className='ri';
   const bs=[1,2,3,4,5].map(n=>{const b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('aria-label',n+'/5');b.title=n+'/5';st.appendChild(b);return b});
   const paint=n=>bs.forEach((b,i)=>{b.classList.toggle('on',i<n);b.setAttribute('aria-pressed',String(i+1===n))});
+  const tg=document.createElement('div');tg.className='rtags';
+  {const tl=document.createElement('span');tl.className='rtl';tl.textContent=t.tgT;tg.appendChild(tl)}
+  const tbs=['salty','easy','kids','long'].map(k=>{const b=document.createElement('button');b.type='button';b.className='rtag';b.dataset.k=k;b.textContent=t['tg_'+k];tg.appendChild(b);return b});
+  const paintT=v=>tbs.forEach(b=>{const on=b.dataset.k===v;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
   const mi=(()=>{const o=ownIdx(e0);return o.length?(vi!=null&&o.includes(vi)?vi:o[o.length-1]):null})(),getS=z=>z?(mi!=null&&z.messages&&z.messages[mi]?z.messages[mi].stars||0:z.stars||0):0,setS=(z,n)=>{if(mi!=null&&z.messages&&z.messages[mi])z.messages[mi].stars=n;else z.stars=n};
-  paint(getS(e0));
+  const getM=z=>(z&&mi!=null&&z.messages&&z.messages[mi])||z; // the version's message (or the entry itself for an old recipe)
+  const getT=z=>z?getM(z).tag||'':'',setT=(z,v)=>{const m=getM(z);if(v)m.tag=v;else delete m.tag};
+  const isC=z=>!!z&&(getS(z)>0||!!getM(z).cooked),setC=z=>{getM(z).cooked=Date.now()}; // a rating always means « cooked » (ratings given before v252 count)
+  const sync=()=>{const z=loadH().find(x=>x.id===id),c=isC(z);ck.style.display=c?'none':'';st.style.display=c?'':'none';tg.style.display=getS(z)>0?'':'none';paint(getS(z));paintT(getT(z))};
   const key=vKey(e0,mi),vtit=mi!=null?recipeTitle(e0.messages[mi].content)||e0.title:e0.title; // v127: own rating for each version
-  const show=j=>{if(j&&j.count)info.textContent=j.avg.toFixed(1).replace('.',T().sr&&/^(fr|es|de|it|pt)/.test(T().sr)?',':'.')+' ('+j.count+')'; // shared rating: average + number of votes, only when someone voted
-    if(j&&j.mine&&!getS(e0)){paint(j.mine);updEntry(id,z=>setS(z,j.mine))}};
+  const show=j=>{if(!j)return;if(j.count)info.textContent=j.avg.toFixed(1).replace('.',T().sr&&/^(fr|es|de|it|pt)/.test(T().sr)?',':'.')+' ('+j.count+')'; // shared rating: average + number of votes, only when someone voted
+    const z=loadH().find(x=>x.id===id);
+    if(j.mine&&!getS(z))updEntry(id,y=>setS(y,j.mine));
+    if(j.mineTag&&!getT(z))updEntry(id,y=>setT(y,j.mineTag));
+    if(j.mineCooked&&!isC(z))updEntry(id,y=>setC(y));
+    sync()};
+  const post=d=>capi('POST','',{key,title:vtit,lang,origin:originOf(loadH().find(x=>x.id===id)||e0),...d},'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
+  sync();
   capi('GET','?key='+key,null,'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
+  ck.onclick=()=>{updEntry(id,setC);sync();toast(t.ckOk);post({cooked:1})};
   bs.forEach((b,i)=>b.onclick=()=>{const n=i+1;const cur=getS(loadH().find(x=>x.id===id));if(n===cur)return;
-    updEntry(id,z=>setS(z,n));paint(n);toast(t.rateOk.replace('{n}',n));
-    capi('POST','',{key,stars:n,title:vtit,lang},'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{})});
-  box.append(lb,st,info);return box;
+    updEntry(id,z=>setS(z,n));sync();toast(t.rateOk.replace('{n}',n));post({stars:n})});
+  tbs.forEach(b=>b.onclick=()=>{const k=b.dataset.k,v=getT(loadH().find(x=>x.id===id))===k?'':k;updEntry(id,z=>setT(z,v));paintT(v);post({tag:v||'none'})});
+  box.append(lb,ck,st,info);wrap.append(box,tg);return wrap;
 }
 // v115: Ingredients / Utensils / Preparation as three tabs (one section at a time) instead of one long scroll
 function cardTabs(rt){

@@ -215,3 +215,19 @@ Every Sunday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 
 ### v251 — Weekly menu: cut answers
 - Seen live: the chef answer was cut (1 dish read), then empty, then timeout. Now: 2 chef calls in parallel (+1 if both are short), merged slot by slot; max 6000 tokens, short sentences; a cut JSON keeps every complete dish.
+
+### v252 — « I cooked it » before rating, quick tag, origin of the recipe (step 1 of the community plan)
+- **Why.** Only a rating given AFTER cooking says something about a recipe; the later community steps (badge « Cooked by N people », score, re-proposals) need that signal. Part of the community plan (types / ratings / tiers) agreed with the owner on 2026-11-09.
+- **Action bar / card.** `rateBox(id,vi)`: until the version is cooked, the pill shows « ✅ J'ai cuisiné » instead of the stars; one tap marks it (`messages[i].cooked` = time) and reveals the stars. After a rating, an optional row of 4 one-word tags appears (`messages[i].tag`: `salty` / `easy` / `kids` / `long`, labels `tg_*` in the 6 languages, tap again to clear). On the card the tag row sits under the heart / rating / share row (`.cact .rtags{order:9}`).
+- **Compatibility.** A rating always counts as « cooked »: every recipe rated before v252 shows its stars and the tags straight away, nothing to redo. `cooked` and `tag` travel with the version exactly like `stars` (`msgOut`, `saveCurrent`, `openSaved`).
+- **Origin.** `originOf(e)` (see v253 for the final rule) is sent with each rating and logged. (The « visibility » field of the plan — private / circle / public — is NOT stored yet: nothing uses it before the sharing step.)
+- **Server (`api/ratings.js`).** One POST carries ONE thing: `{stars}` (rating, also counts as cooked, log line gets `o` = origin), `{cooked:1}` (cooked without rating, kept in `rc:<key>`, NOT added to `r:index`) or `{tag}` (`salty|easy|kids|long`, or `none` to clear; only from someone who rated, kept in `rt:<key>`). `GET` returns, besides `count / avg / mine`: `cooked` (people who rated or marked it), `mineCooked`, `tags` (counts), `mineTag`. Same 30/min limit per IP. Deleting a recipe (`api/comments.js`) also deletes `rc:` and `rt:`.
+- **Tests (not in the repo).** Fake-Redis test of the route (13 checks) and Playwright iPhone 13 / 320 px checks of the card and the chat bar.
+- **Next steps of the plan.** Profile of tastes + « my library » (step 2), daily menu with re-proposal rules (3), import (4), remix test (5), identity (6), circle sharing + badge (7), moderation (8), public publication + weighted score (9).
+
+### v253 — Origin badge (Chef IA / Importée / Variante / Reçue)
+- **What.** A small neutral pill next to the date, on the recipe card and the chat date line (`verLine`) and in every list row (History, Favorites, search results: `rowFor`). Built by `originBadge(e)`; texts `orgC` / `orgI` / `orgV` / `orgS` in the 6 languages. Cooking questions (❓) never get one. Colours stay neutral on purpose: pink is kept for the « Original » version badge.
+- **Rule (`originOf`).** `remix` = the recipe has `from` (variant of another one) → « 🔀 Variante »; `import` = `src` is `photo` or `link` → « 📥 Importée »; `shared` = `imp` (received through a share link, `addShared`) → « 📨 Reçue »; otherwise `chef` → « 👨‍🍳 Chef IA ». The first match wins in this order.
+- **Fix of v252.** v252 had read `imp` as « imported by the user » (it means « received by link »), so photo / link imports were logged as `chef` and received recipes as `import`. `api/ratings.js` now accepts `chef | import | remix | shared` (`manual` removed, nothing produces it yet).
+- **Not done.** Typed / pasted recipes without photo or link have no import flag yet, so they show « Chef IA » (the import step of the plan will set it). The label « Communauté » for public recipes comes with the public step.
+
