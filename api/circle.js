@@ -22,6 +22,17 @@ export default async function handler(req, res) {
   try {
     if (req.method === "GET") {
       if (q.feed) return res.status(200).json({ items: await feed(me) });
+      if (q.live != null) { // v288: are these recipes (saved from my circle) still shared by someone of my circle?
+        const sids = String(q.live).split(",").filter((x) => /^[a-z0-9-]{8,64}$/.test(x)).slice(0, 20);
+        const [pids] = await redis([["SMEMBERS", "cf:" + me]]);
+        const list = Array.isArray(pids) ? pids.slice(0, MAX_CIRCLE) : [];
+        const live = {};
+        if (sids.length && list.length) {
+          const sc = await redis(sids.flatMap((sid) => list.map((p) => ["ZSCORE", "cp:" + p, sid])));
+          sids.forEach((sid, i) => { live[sid] = sc.slice(i * list.length, (i + 1) * list.length).some((v) => v != null); });
+        } else sids.forEach((sid) => { live[sid] = false; });
+        return res.status(200).json({ live });
+      }
       return res.status(200).json(await whoami(me));
     }
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
