@@ -72,3 +72,18 @@ async function notify(ids, n, lang) {
     });
   } catch {}
 }
+
+// v292: plain moderation email (same Resend account and address as the block email). Never throws.
+export async function sendModMail(subject, text) {
+  const key = process.env.RESEND_API_KEY, to = process.env.MOD_EMAIL;
+  if (!key || !to) return false;
+  try {
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
+      body: JSON.stringify({ from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>", to: [to], subject, text }),
+      signal: AbortSignal.timeout(5000),
+    });
+    return r.ok;
+  } catch { return false; }
+}

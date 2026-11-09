@@ -2,6 +2,7 @@ import { authOk, hasRedis, redis, overLimit, clean, callClaude, parseJsonLoose }
 import { pidOf, liveRoots } from "./circle.js";
 import { notifyCircle } from "./_notify.js";
 import { PUB } from "./shared.js";
+import { sendModMail } from "./_mod.js";
 
 // v291: « 🌍 Publique » (community plan step 9, first version) + reports (step 8).
 // The author publishes the shared copy « s:<sid> » of one of his recipe versions. Conditions:
@@ -13,9 +14,13 @@ import { PUB } from "./shared.js";
 // (read by the community search and the weekly menu), with the author's nickname. Its circle is notified.
 // Reports: 3 different people → hidden from the public index until reviewed.
 // Redis: pb:<sid> = {st: public|refused|pending|hidden, ps, reason, at} · pub:rep:<ps> set of reporters · pub:queue (200 last)
-// Admin (browser): GET /api/publish?key=<CRON_SECRET> = queue; &approve=<sid> publishes; &remove=<ps> takes a public recipe down.
+// Admin (browser): GET /api/publish?key=<CRON_SECRET> = queue; &approve=<sid> publishes; &reject=<sid> keeps it refused;
+// &remove=<ps> takes a public recipe down; &restore=<ps> puts a hidden (reported) one back. v292: an email (Resend, MOD_EMAIL) with these
+// links is sent for every appeal and when a recipe is hidden after 3 reports.
 const pubSid = (sid) => ("pub-" + sid).slice(0, 64);
 const REPORTS_TO_HIDE = 3;
+const site = (req) => "https://" + String(req.headers["x-forwarded-host"] || req.headers.host || "chefia-v3.vercel.app").split(",")[0].trim();
+const adminLink = (req, p) => site(req) + "/api/publish?key=" + encodeURIComponent(process.env.CRON_SECRET || "<CRON_SECRET>") + p;
 
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
@@ -47,8 +52,12 @@ export default async function handler(req, res) {
       const [, n] = await redis([["SADD", "pub:rep:" + ps, me], ["SCARD", "pub:rep:" + ps]]);
       await redis([["LPUSH", "pub:queue", JSON.stringify({ k: "report", ps, t: d.title, n: Number(n), at: Date.now(), why: clean(body.why, 200) })], ["LTRIM", "pub:queue", "0", "199"]]);
       if (Number(n) >= REPORTS_TO_HIDE) {
-        await redis([["HDEL", PUB, ps]]);
+        const [was] = await redis([["HDEL", PUB, ps]]);
         if (d.src) await redis([["SET", "pb:" + d.src, JSON.stringify({ st: "hidden", ps, at: Date.now() })]]);
+        if (Number(was)) await sendModMail("Chef IA : recette masquée après " + n + " signalements", // once, when it leaves the public index
+          "La recette publique « " + d.title + " » (par " + (d.by || "?") + ") a été signalée par " + n + " personnes : elle est masquée.\n\n" +
+          "✅ La remettre en ligne : " + adminLink(req, "&restore=" + ps) + "\n❌ La retirer définitivement : " + adminLink(req, "&remove=" + ps) +
+          "\n\nToute la file : " + adminLink(req, "") + "\n\nRecette :\n" + String(d.text || "").slice(0, 3000));
       }
       return res.status(200).json({ ok: true });
     }
@@ -68,9 +77,14 @@ export default async function handler(req, res) {
     if (act === "appeal") {
       const [st] = await redis([["GET", "pb:" + sid]]);
       let s = null; try { s = JSON.parse(st); } catch {}
-      if (!s || s.st !== "refused") return res.status(409).json({ error: "state" });
+      if (!s || s.st !== "refused" || s.final) return res.status(409).json({ error: "state" }); // final = already turned down by the admin
       await redis([["SET", "pb:" + sid, JSON.stringify({ ...s, st: "pending", at: Date.now() })],
         ["LPUSH", "pub:queue", JSON.stringify({ k: "appeal", sid, t: d.title, reason: s.reason, at: Date.now() })], ["LTRIM", "pub:queue", "0", "199"]]);
+      const [nm] = await redis([["GET", "cu:" + me]]);
+      await sendModMail("Chef IA : appel de publication « " + d.title + " »",
+        (nm || "Un utilisateur") + " fait appel du refus de publication de « " + d.title + " ».\nRaison du chef : " + (s.reason || "?") + (d.rs ? "\n(Recette reçue et modifiée : remix d'une autre recette.)" : "") +
+        "\n\n✅ Publier : " + adminLink(req, "&approve=" + sid) + "\n❌ Laisser refusée : " + adminLink(req, "&reject=" + sid) +
+        "\n\nToute la file : " + adminLink(req, "") + "\n\nRecette :\n" + String(d.text || "").slice(0, 3000));
       return res.status(200).json({ ok: true, state: "pending" });
     }
     if (act !== "publish") return res.status(400).json({ error: "act" });
@@ -139,6 +153,22 @@ async function admin(req, res, q) {
       if (!d) return res.status(404).json({ error: "notfound" });
       const ps = await makePublic(sid, d, pidOf(d.o));
       return res.status(200).json({ ok: true, ps });
+    }
+    if (q.reject) { // the appeal is turned down: back to « refused » (the author sees the selector without « En vérification »)
+      const sid = String(q.reject);
+      const [st] = await redis([["GET", "pb:" + sid]]);
+      let s = null; try { s = JSON.parse(st); } catch {}
+      if (!s) return res.status(404).json({ error: "notfound" });
+      await redis([["SET", "pb:" + sid, JSON.stringify({ ...s, st: "refused", at: Date.now(), final: 1 })]]);
+      return res.status(200).json({ ok: true, state: "refused" });
+    }
+    if (q.restore) { // a recipe hidden by reports goes back to the public index
+      const ps = String(q.restore);
+      const [raw] = await redis([["GET", "s:" + ps]]);
+      let d = null; try { d = JSON.parse(raw); } catch {}
+      if (!d) return res.status(404).json({ error: "notfound" });
+      await redis([["HSET", PUB, ps, JSON.stringify({ sid: ps, ck: d.ck, t: d.title, l: d.lang })], ["DEL", "pub:rep:" + ps]].concat(d.src ? [["SET", "pb:" + d.src, JSON.stringify({ st: "public", ps, at: Date.now() })]] : []));
+      return res.status(200).json({ ok: true, state: "public" });
     }
     if (q.remove) {
       const ps = String(q.remove);
