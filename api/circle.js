@@ -30,6 +30,9 @@ export default async function handler(req, res) {
         if (sids.length && list.length) {
           const sc = await redis(sids.flatMap((sid) => list.map((p) => ["ZSCORE", "cp:" + p, sid])));
           sids.forEach((sid, i) => { live[sid] = sc.slice(i * list.length, (i + 1) * list.length).some((v) => v != null); });
+          const raws = await redis(sids.map((sid) => ["GET", "s:" + sid])), rs = raws.map((r) => { try { return JSON.parse(r).rs || ""; } catch { return ""; } });
+          const ok = await liveRoots(rs);
+          sids.forEach((sid, i) => { if (rs[i] && !ok.has(rs[i])) live[sid] = false; }); // v289: the author took it back
         } else sids.forEach((sid) => { live[sid] = false; });
         return res.status(200).json({ live });
       }
@@ -74,6 +77,8 @@ export default async function handler(req, res) {
       let o = null; try { o = JSON.parse(raw).o; } catch {}
       if (!raw) return res.status(404).json({ error: "notfound" });
       if (o !== owner) return res.status(403).json({ error: "forbidden" }); // only the author puts his own copy in his circle
+      let rs = ""; try { rs = JSON.parse(raw).rs || ""; } catch {}
+      if (rs && !(await liveRoots([rs])).has(rs)) return res.status(409).json({ error: "gone" }); // v289: its author no longer shares it
       await redis([["ZADD", "cp:" + me, String(Date.now()), sid], ["ZREMRANGEBYRANK", "cp:" + me, "0", String(-MAX_POSTS - 1)]]);
       return res.status(200).json({ ok: true });
     }
@@ -81,6 +86,19 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(502).json({ error: "storage" });
   }
+}
+
+// v289: a re-shared recipe (copy with « rs ») is only shown while its ROOT copy is still in its author's circle list:
+// when the author sets it back to « Privée », every re-share disappears too. Returns a Set of the root sids still live.
+async function liveRoots(roots) {
+  const list = [...new Set(roots.filter(Boolean))];
+  if (!list.length) return new Set();
+  const raws = await redis(list.map((r) => ["GET", "s:" + r]));
+  const chk = [];
+  list.forEach((r, i) => { try { const o = JSON.parse(raws[i]).o; if (o) chk.push([r, pidOf(o)]); } catch {} });
+  if (!chk.length) return new Set();
+  const sc = await redis(chk.map(([r, p]) => ["ZSCORE", "cp:" + p, r]));
+  return new Set(chk.filter((x, i) => sc[i] != null).map((x) => x[0]));
 }
 
 async function whoami(me) {
@@ -105,7 +123,11 @@ async function feed(me) {
   const top = posts.slice(0, FEED);
   if (!top.length) return [];
   const raws = await redis(top.map((x) => ["GET", "s:" + x.sid]));
+  const docs = top.map((x, i) => { try { return JSON.parse(raws[i]); } catch { return null; } });
+  const live = await liveRoots(docs.map((d) => d && d.rs));
   return top.map((x, i) => {
-    try { const d = JSON.parse(raws[i]); return { sid: x.sid, t: String(d.title || "").slice(0, 120), l: d.lang || "", by: x.by, at: x.at, ph: d.ph && d.ph.t ? { t: d.ph.t } : null }; } catch { return null; }
+    const d = docs[i];
+    if (!d || (d.rs && !live.has(d.rs))) return null;
+    return { sid: x.sid, t: String(d.title || "").slice(0, 120), l: d.lang || "", by: x.by, og: d.by || "", rs: d.rs || "", at: x.at, ph: d.ph && d.ph.t ? { t: d.ph.t } : null };
   }).filter(Boolean);
 }

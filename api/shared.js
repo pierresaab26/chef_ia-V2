@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       const [raw] = await redis([["GET", "s:" + sid]]);
       if (!raw) return res.status(404).json({ error: "notfound" });
       const d = JSON.parse(raw);
-      return res.status(200).json({ title: d.title, text: d.text, ck: d.ck, lang: d.lang, ph: d.ph || null });
+      return res.status(200).json({ title: d.title, text: d.text, ck: d.ck, lang: d.lang, ph: d.ph || null, rs: d.rs || null, by: d.by || null });
     }
 
     if (req.method === "POST") {
@@ -58,6 +58,10 @@ export default async function handler(req, res) {
         if (p && typeof p === "object" && JSON.stringify(p).length < 800) ph = p;
       } catch {}
       const d = { title, text, ck, lang: clean(body.lang, 5), ph, o: owner, ts: Date.now() };
+      // v289: a recipe received from someone and shared again keeps its root copy (rs) and its author's nickname (by)
+      if (/^[a-z0-9-]{8,64}$/.test(String(body.rs || "")) && body.rs !== sid) d.rs = String(body.rs);
+      const by = clean(body.by, 24).replace(/[<>"]/g, "");
+      if (by) d.by = by;
       const cmds = [["SET", "s:" + sid, JSON.stringify(d)], ["SETNX", "o:" + ck, owner], ["HSET", "s:ck", ck, JSON.stringify({ sid, t: title, l: d.lang })]];
       await redis(cmds);
       return res.status(200).json({ ok: true });
