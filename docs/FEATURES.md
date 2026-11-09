@@ -344,6 +344,7 @@ Owner: « Annule tout ce que tu as fait pour cette histoire de vider le menu ».
 Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents (et idées par catégorie) », 6 languages.
 
 ## Identity and circle (v287, community plan steps 6–7)
+- **Home entry (v294)**: a « 👥 Cercle » button between « 🕘 Historique » and « ❤️ Favoris » under « Trouver mes recettes » opens « Mon cercle ».
 - **Nickname**: asked at first opening (`askNick()`, localStorage `nick`), editable in « Mon cercle », sent with `POST /api/circle {act:"name"}`. No account: the person is the device owner id (`x-owner`), stored server-side only as a hash `pid`. Changing phone = new identity.
 - **Circle**: one per person. « ➕ Inviter un proche » creates `/?c=<code>` (7 days); the friend opens it → both are in each other's circle (max 50). ✕ on a member removes both sides.
 - **Visibility**: on the recipe card, « 🔒 Privée » / « 👥 Cercle » per version (not on received recipes). Cercle = the version's shared copy listed for the circle (`cp:<pid>`); Privée again = removed from the list.
@@ -358,7 +359,7 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 - **Publique**: needs « ✅ J'ai cuisiné » on that version. The chef checks the recipe (food, complete, safe). A received recipe can only be published as a real remix (another dish); an adjustment (quantities, seasoning, minor swap) is refused with the reason. A refused recipe can be appealed (manual queue). The published copy is frozen, labelled « Communauté » with the author's nickname (and « recette de X » for a remix).
 - **Community**: « Recette de la communauté » (home search) and the weekly menu use published recipes only. « 🚩 Signaler » on a community recipe; 3 different reports hide it until reviewed.
 - **Admin** (browser): `/api/publish?key=<CRON_SECRET>` lists the queue (appeals, reports); `&approve=<sid>` publishes, `&remove=<pub sid>` takes down.
-- **Notifications in the app**: when someone puts a recipe in « Cercle » (first time) or publishes it, his circle gets a line: counter next to « Mon cercle » in the menu, dot on ☰, list « 🔔 Nouveautés » at the top of « Mon cercle » (opening it marks them as read). No phone push notification (option B, later).
+- **Notifications in the app**: when someone puts a recipe in « Cercle » (first time) or publishes it, his circle gets a line: counter next to « Mon cercle » in the menu, dot on ☰ and after « 👥 Cercle » on the home (v294), list « 🔔 Nouveautés » at the top of « Mon cercle » (opening it marks them as read). No phone push notification (option B, later).
 - v292: moderation emails (same address as the block email): one per appeal (links « Publier » / « Laisser refusée »), one when a public recipe is hidden after 3 reports (links « Remettre en ligne » / « Retirer définitivement »). Admin links `&reject=<sid>` and `&restore=<pub sid>` added.
 
 - v293: `/api/publish` is served by `api/circle.js` (rewrite in `vercel.json`) because the Vercel free plan allows 12 routes; the deployments of v291–v292 had failed.

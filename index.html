@@ -364,7 +364,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .civis.on{border-color:var(--psbd);background:var(--psoft);color:var(--pink)}
 .dlg .lopt.vopt{box-sizing:border-box;width:100%;align-items:flex-start;padding:10px 12px;min-height:0}.dlg .vopt .n{display:block;flex:1;min-width:0}.dlg .vopt .n b{display:block;font-size:15px}.dlg .vopt .n small{display:block;white-space:normal;margin:2px 0 0;color:var(--mut);font-size:13px}.dlg .vopt .radio{margin-top:2px}
 .repv{color:var(--mut)!important}.cirow.ntnew .cin{font-weight:600}
-.menubtn.ntdot{position:relative}.menubtn.ntdot::after{content:'';position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:var(--pink);border:2px solid var(--card)}
+.menubtn.ntdot,#hsCirc{position:relative}#hsCirc.ntdot::after{content:'';display:inline-block;vertical-align:top;margin-left:4px;width:8px;height:8px;border-radius:50%;background:var(--pink)}.hsbtns button{white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}@media(max-width:380px){.hsbtns{gap:6px}.hsbtns button{font-size:13px;padding:9px 2px}}.menubtn.ntdot::after{content:'';position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:var(--pink);border:2px solid var(--card)}
 .dlg p{white-space:pre-line}
 .cisec h3{display:flex;align-items:center;justify-content:space-between;gap:8px}.cirf{font-size:13px;padding:5px 10px;font-weight:500}
 .shop-row{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:var(--rc);padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh);cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -522,7 +522,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       </div>
       <button class="impcard" id="menuHome"><i>🗓️</i><div><b id="menuHT"></b><span id="menuHS"></span></div><em class="mgo">›</em></button>
       <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav" hidden></button></div>
-      <div class="hsbtns" id="hsbtns"><button type="button" id="hsHist"></button><button type="button" id="hsFavs"></button></div><!-- v212: Historique / Favoris under the search box -->
+      <div class="hsbtns" id="hsbtns"><button type="button" id="hsHist"></button><button type="button" id="hsCirc"></button><button type="button" id="hsFavs"></button></div><!-- v212: Historique / Favoris under the search box -->
       <div id="hsres"></div>
       <div id="hwrap"><div id="hhome"></div></div>
       <h2 id="snT"></h2>
@@ -2856,7 +2856,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v293',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v294',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4502,7 +4502,7 @@ $('#hsearch').addEventListener('input',drawHistory);
 // While a search or filter is active the results replace the history block.
 function drawHomeSearch(){
   const t=T(),a=loadH().filter(e=>!e.qa&&!e.arch),l=$('#hsres');l.innerHTML='';
-  $('#homesearch').style.display=a.length?'':'none';$('#hsbtns').style.display=a.length?'':'none';$('#hsHist').textContent='🕘 '+t.histS;$('#hsFavs').textContent='❤️ '+t.favs;
+  $('#homesearch').style.display=a.length?'':'none';$('#hsbtns').style.display=a.length?'':'none';$('#hsHist').textContent='🕘 '+t.histS;$('#hsCirc').textContent=t.ciOn;$('#hsFavs').textContent='❤️ '+t.favs;
   if(!a.length){hsFav=false;hsCat=null;$('#hwrap').style.display='';return}
   const nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#hsq').value.trim()),names=t.cats.split('|');
   const fb=$('#hsfav');fb.textContent='❤️ '+t.favs;fb.classList.toggle('on',hsFav);fb.onclick=()=>{hsFav=!hsFav;drawHomeSearch()};
@@ -4584,7 +4584,7 @@ function updTop(){
   if(window.ResizeObserver){const ro=new ResizeObserver(()=>updTop());[log,$('#quick'),$('#bar')].forEach(x=>ro.observe(x))}} // follow layout changes (new reply, filters button)
 $('#tofav').onclick=()=>{if(qaMode){qaFav();return}if(currentId){const z=loadH().find(x=>x.id===currentId),f=toggleFav(currentId,z&&!z.qa&&!famFav(z)?lastVi(z):null);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
-$('#hsHist').onclick=()=>goTo('history');$('#hsFavs').onclick=()=>goTo('favs');
+$('#hsHist').onclick=()=>goTo('history');$('#hsCirc').onclick=()=>goTo('circle');$('#hsFavs').onclick=()=>goTo('favs');
 $('#menuHome').onclick=()=>{drawMenu();show('menu')};$('#mback').onclick=()=>show('home');
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
@@ -4682,7 +4682,7 @@ function reportLink(e){const t=T(),b=document.createElement('button');b.type='bu
 // v291: in-app notifications of the circle (🔔): count on « Mon cercle » in the drawer, list at the top of « Mon cercle »
 let ntData=null;
 async function loadNotes(){if(!/^https?:/.test(location.href)||!nick())return;try{const r=await capi('GET','?notes=1',null,'/api/circle',true);if(!r.ok)return;ntData=await r.json();paintNotes()}catch(x){}}
-function paintNotes(){const n=ntData&&ntData.unread||0,el=$('#dCircleN');if(el)el.textContent=n?String(n):'';document.querySelectorAll('.menubtn').forEach(b=>b.classList.toggle('ntdot',n>0))}
+function paintNotes(){const n=ntData&&ntData.unread||0,el=$('#dCircleN');if(el)el.textContent=n?String(n):'';document.querySelectorAll('.menubtn,#hsCirc').forEach(b=>b.classList.toggle('ntdot',n>0))}
 function notesBlock(box,sec){const t=T();if(!ntData)return;const s0=sec(t.ntT),it=(ntData.items||[]).slice(0,10),seen=ntData.seen||0;
   if(!it.length){const p=document.createElement('p');p.className='cimut';p.textContent=t.ntNone;s0.appendChild(p)}
   it.forEach(x=>{const r=document.createElement('div');r.className='cirow'+(x.at>seen?' ntnew':'');const n=document.createElement('span');n.className='cin';
