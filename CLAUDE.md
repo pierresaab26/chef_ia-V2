@@ -55,7 +55,7 @@ No framework, no build step. `package.json` only sets `"type": "module"`.
 | `api/import-photo.js` | Recipe extraction from a photo (vision model). |
 | `api/import-link.js` | Recipe extraction from a public web page (structured data first, then the model). |
 | `api/comments.js` | Recipe comments in Redis. |
-| `api/shared.js` | Shared recipes (`s:<sid>`, creator `o:<key>`): link `/?s=<sid>` imports the recipe with its comment key. |
+| `api/shared.js` | Shared recipes (`s:<sid>`, creator `o:<key>`): link `/?s=<sid>` imports the recipe with its comment key. v263: `GET ?q=&lang=` = search among the shared recipes (home search, « Recette de la communauté »). |
 | `api/ratings.js` | 1–5 star ratings in Redis, plus an analysis log. |
 | `api/season-ideas.js` | « Chef's ideas » of the seasonal menu, SAME for everybody: 4 ideas per language and occasion, renewed every 3 days at 9:00 Paris time, stored in Redis; also the scheduled warm-up (`?run=1`). See v96 in section 5. |
 | `api/_season.js` | Pure helpers for it (no network, unit-tested): 3-day periods from 3 Nov 2026 9:00 Paris time, occasion list, French calendar, idea parser and prompt. Also copied as-is into the claude.ai preview bridge. |
@@ -119,6 +119,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (up to v149)
+
+v263 (owner: « fais-le pour voir » on the mockup, + « mets Partager à côté des favoris et des étoiles »): home search shows two columns « Recette du chef » / « Recette de la communauté » (new `GET /api/shared?q=`), local search matches word by word; in the chat « Partager » sits on the heart / stars line. Details in `docs/FEATURES.md` (v263). Local only until « pousse ».
 
 v262 (owner: « enlève Autre idée, sinon les users passeront leur temps à générer des recettes »): the « 🔄 Autre idée » option (and `wkRegen()`) of the weekly menu is removed; the chef's dishes are the same for everybody for the whole week, the user can only keep, decline (« Pas pour moi ») or pick his own recipe. The key `mRegen` stays, unused. Local only until « pousse ».
 

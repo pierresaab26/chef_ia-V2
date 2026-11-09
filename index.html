@@ -123,7 +123,8 @@ input,textarea,select{font-size:16px!important}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
 .chact .cbtn.cook{background:var(--psoft);color:var(--pink);border-color:var(--psbd);font-weight:700}
 .m .chact{margin:12px 0 16px}.chact .cbtn.cook{flex:1 0 100%;text-align:center;justify-content:center}.chcom .comb{margin:0 0 8px}.delv{flex:1 0 100%;background:none;border:0;color:#c04a42;font-size:13px;font-weight:500;padding:6px 0;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}.delv svg{display:block;flex:none;width:15px;height:15px}.cdelv{display:flex;margin:-6px auto 10px}
-.chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}
+.csg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.csc{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);box-shadow:var(--sh);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}.csh{font-size:14px;font-weight:500}.csp{font-size:13px;color:var(--mut);margin:0;overflow-wrap:anywhere}.csb{margin-top:auto;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);border-radius:999px;padding:9px 10px;font-size:13px;font-weight:500;cursor:pointer}.csi{display:block;text-align:left;background:none;border:0;border-top:1px solid var(--bd);padding:8px 0 0;cursor:pointer;color:var(--ink);font:inherit;width:100%}.csi:first-of-type{border-top:0;padding-top:0}.csi b{display:block;font-size:13px;font-weight:500;overflow-wrap:anywhere}.csi span{font-size:12px;color:var(--mut)}
+.chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .rtags{order:1}.chact .cbtn.cook{order:2}.chact .delv{order:3}@media(max-width:520px){.chact .shr .shl{display:none}}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
 .stars button{background:none;border:0;padding:2px 1px;font-size:19px;line-height:1;color:#cfd0dc;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -744,6 +745,12 @@ fr:{
   search:"Rechercher une recette…",
   fsPh:"Rechercher une recette ou une question",
   noresult:"Aucune recette trouvée.",
+  csChef:"Recette du chef",
+  csChefD:"Le chef écrit une recette de « {x} » rien que pour toi.",
+  csChefB:"Demander au chef",
+  csCom:"Recette de la communauté",
+  csNone:"Pas encore de recette partagée pour ça.",
+  csMore:"Voir plus",
   hsPh:"Trouver mes recettes",
   resN:"résultats",
   res1:"résultat",
@@ -1040,6 +1047,12 @@ en:{
   search:"Search a recipe…",
   fsPh:"Search a recipe or a question",
   noresult:"No recipe found.",
+  csChef:"Chef’s recipe",
+  csChefD:"The chef writes a “{x}” recipe just for you.",
+  csChefB:"Ask the chef",
+  csCom:"Community recipe",
+  csNone:"No shared recipe for this yet.",
+  csMore:"See more",
   hsPh:"Find your recipes",
   resN:"results",
   res1:"result",
@@ -1336,6 +1349,12 @@ es:{
   search:"Buscar una receta…",
   fsPh:"Buscar una receta o una pregunta",
   noresult:"No se encontró ninguna receta.",
+  csChef:"Receta del chef",
+  csChefD:"El chef escribe una receta de «{x}» solo para ti.",
+  csChefB:"Pedir al chef",
+  csCom:"Receta de la comunidad",
+  csNone:"Aún no hay receta compartida para esto.",
+  csMore:"Ver más",
   hsPh:"Encuentra tus recetas",
   resN:"resultados",
   res1:"resultado",
@@ -1632,6 +1651,12 @@ de:{
   search:"Rezept suchen…",
   fsPh:"Rezept oder Frage suchen",
   noresult:"Kein Rezept gefunden.",
+  csChef:"Rezept vom Chef",
+  csChefD:"Der Chef schreibt dir ein Rezept für „{x}“.",
+  csChefB:"Den Chef fragen",
+  csCom:"Rezept der Community",
+  csNone:"Dafür gibt es noch kein geteiltes Rezept.",
+  csMore:"Mehr anzeigen",
   hsPh:"Finde deine Rezepte",
   resN:"Ergebnisse",
   res1:"Ergebnis",
@@ -1928,6 +1953,12 @@ it:{
   search:"Cerca una ricetta…",
   fsPh:"Cerca una ricetta o una domanda",
   noresult:"Nessuna ricetta trovata.",
+  csChef:"Ricetta dello chef",
+  csChefD:"Lo chef scrive una ricetta di «{x}» solo per te.",
+  csChefB:"Chiedi allo chef",
+  csCom:"Ricetta della community",
+  csNone:"Nessuna ricetta condivisa per ora.",
+  csMore:"Mostra altre",
   hsPh:"Trova le tue ricette",
   resN:"risultati",
   res1:"risultato",
@@ -2224,6 +2255,12 @@ pt:{
   search:"Pesquisar uma receita…",
   fsPh:"Pesquisar uma receita ou uma pergunta",
   noresult:"Nenhuma receita encontrada.",
+  csChef:"Receita do chef",
+  csChefD:"O chef escreve uma receita de «{x}» só para ti.",
+  csChefB:"Pedir ao chef",
+  csCom:"Receita da comunidade",
+  csNone:"Ainda não há receita partilhada para isto.",
+  csMore:"Ver mais",
   hsPh:"Encontra as tuas receitas",
   resN:"resultados",
   res1:"resultado",
@@ -2761,7 +2798,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v262',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v263',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2819,7 +2856,7 @@ function favItems(list){const a=loadH(),seen=new Set(),out=[];list.forEach(e=>{i
 function verBar(e,vi,isLast,noDel){ // favorite, rating, share of THIS version + « Commencer la recette » (full width)
   const t=T(),rid=e.id,bar=document.createElement('div');bar.className='chact';bar.dataset.rid=rid;bar.dataset.vi=vi;const on=favAt(e,vi);
   const fv=document.createElement('button');fv.type='button';fv.className='cbtn fvb'+(on?' on':'');fv.textContent=(on?'❤️ ':'🤍 ')+t.fav;fv.onclick=()=>toggleFav(rid,vi);
-  const sh=document.createElement('button');sh.type='button';sh.className='cbtn';sh.textContent='↗ '+t.share;sh.onclick=()=>{const z=loadH().find(x=>x.id===rid);if(z)shareRecipe(verOf(z,vi))};
+  const sh=document.createElement('button');sh.type='button';sh.className='cbtn shr';sh.innerHTML='↗<span class="shl"> '+t.share.replace(/</g,'&lt;')+'</span>';sh.setAttribute('aria-label',t.share);sh.onclick=()=>{const z=loadH().find(x=>x.id===rid);if(z)shareRecipe(verOf(z,vi))}; // v263: icon only on phones, so it stays on the heart / stars line
   sh.addEventListener('pointerdown',()=>{try{const z=loadH().find(x=>x.id===rid);if(z)shareLink(verOf(z,vi),true)}catch(x){}}); // v139: the shared link is prepared before the tap ends
   bar.append(fv,rateBox(rid,vi),sh); // v139: the heart is back on every version / variant (it still marks the whole recipe)
   if(isLast&&e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.type='button';og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openSaved(e.from);bar.appendChild(og)}
@@ -4405,11 +4442,34 @@ function drawHomeSearch(){
   const fb=$('#hsfav');fb.textContent='❤️ '+t.favs;fb.classList.toggle('on',hsFav);fb.onclick=()=>{hsFav=!hsFav;drawHomeSearch()};
   const active=!!q||hsFav||hsCat!==null;$('#hwrap').style.display=active?'none':'';
   if(!active)return;
-  const hit=(hsFav?favItems(a):a).filter(e=>(hsCat===null||recipeCat(e)===hsCat)&&(!q||nz(e.title).includes(q)||nz(names[recipeCat(e)]).includes(q)));
-  if(!hit.length){const p=document.createElement('div');p.className='empty';p.textContent=t.noresult;l.appendChild(p);return}
+  const hit=(hsFav?favItems(a):a).filter(e=>(hsCat===null||recipeCat(e)===hsCat)&&(!q||q.split(/\s+/).filter(Boolean).every(w=>nz(e.title).includes(w)||nz(names[recipeCat(e)]).includes(w))));
+  const raw=$('#hsq').value.trim(),cs=raw.length>=3&&!hsFav&&hsCat===null;
+  if(!hit.length){if(!cs){const p=document.createElement('div');p.className='empty';p.textContent=t.noresult;l.appendChild(p)}csDraw(l,raw,cs);return}
   const c=document.createElement('div');c.className='hscnt';c.textContent=hit.length+' '+(hit.length>1?t.resN:t.res1);l.appendChild(c);
   hit.sort((x,y)=>(y.updatedAt||0)-(x.updatedAt||0)).forEach(e=>l.appendChild(rowFor(e,true,true)));
+  csDraw(l,raw,cs);
 }
+// v263: under the home search, once 3+ letters are typed: two columns « Recette du chef » (asks the chef) and « Recette de la communauté » (shared recipes whose title contains the words, GET /api/shared?q=).
+const csMem={};let csTimer=0;
+function csDraw(l,raw,on){
+  if(!on)return;const t=T(),key=lang+'|'+raw.toLowerCase(),nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const g=document.createElement('div');g.className='csg';
+  const c1=document.createElement('div');c1.className='csc';
+  const h1=document.createElement('div');h1.className='csh';h1.textContent='👨‍🍳 '+t.csChef;
+  const p1=document.createElement('p');p1.className='csp';p1.textContent=t.csChefD.replace('{x}',raw);
+  const b1=document.createElement('button');b1.type='button';b1.className='csb';b1.textContent=t.csChefB;b1.onclick=()=>{openChat(null);send(t.idGen.replace('{x}',raw),true)};
+  c1.append(h1,p1,b1);
+  const c2=document.createElement('div');c2.className='csc';
+  const h2=document.createElement('div');h2.className='csh';h2.textContent='👥 '+t.csCom;c2.appendChild(h2);
+  const own=new Set(loadH().filter(e=>!e.qa).map(e=>nz(e.title))),it=(csMem[key]||[]).filter(x=>!own.has(nz(x.t)));
+  if(csMem[key]===undefined){const p=document.createElement('p');p.className='csp';p.textContent='…';c2.appendChild(p);
+    clearTimeout(csTimer);csTimer=setTimeout(async()=>{let items=[];try{const r=await capi('GET','?q='+encodeURIComponent(raw)+'&lang='+lang,null,'/api/shared',true);if(r.ok)items=(await r.json()).items||[]}catch(x){}
+      csMem[key]=items;if($('#hsq').value.trim()===raw)drawHomeSearch()},450)}
+  else if(!it.length){const p=document.createElement('p');p.className='csp';p.textContent=t.csNone;c2.appendChild(p)}
+  else it.slice(0,4).forEach(x=>{const r=document.createElement('button');r.type='button';r.className='csi';
+    const n=document.createElement('b');n.textContent=x.t;const st=document.createElement('span');st.textContent=x.n?'★ '+String(x.a).replace('.',',')+' ('+x.n+')':'';
+    r.append(n,st);r.onclick=()=>importShared(x.sid);c2.appendChild(r)});
+  g.append(c1,c2);l.appendChild(g)}
 $('#hsq').addEventListener('input',drawHomeSearch);drawHomeSearch();
 $('#fsearch').addEventListener('input',()=>{favCat=null;drawFavs()});
 $('#fback').onclick=()=>show('home');

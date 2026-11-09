@@ -11,6 +11,12 @@ export default async function handler(req, res) {
   const owner = clean(req.headers["x-owner"], 60);
   const q = req.query || {};
   const body = req.body && typeof req.body === "object" ? req.body : {};
+
+  // v263: community search (GET ?q=mousse chocolat&lang=fr): the shared recipes whose title contains every word, best rated / most shared first.
+  if (req.method === "GET" && q.q != null && q.sid == null) {
+    if (await overLimit(req, "rl:cs:", 30)) return res.status(429).json({ error: "rate" });
+    return res.status(200).json({ items: await searchShared(String(q.q), clean(q.lang, 5)) });
+  }
   const sid = String((req.method === "POST" ? body.sid : q.sid) || "");
   if (!/^[a-z0-9-]{8,64}$/.test(sid)) return res.status(400).json({ error: "key" });
 
@@ -73,4 +79,39 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(502).json({ error: "storage" });
   }
+}
+
+const nz = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+// Words of the query (accents / case ignored, at least 2 letters, filler words dropped); every word must be part of the title (« choco » finds « chocolat », « mousse chocolat » finds « Mousse au chocolat »).
+export function searchWords(q) {
+  return nz(q).split(/[^a-z0-9]+/).filter((w) => w.length >= 2 && !["au", "aux", "de", "du", "des", "la", "le", "les", "un", "une", "et", "en", "a", "the", "of", "al", "el", "con", "di", "da", "und", "mit"].includes(w)).slice(0, 6);
+}
+
+export async function searchShared(q, lang, max = 6) {
+  const words = searchWords(q);
+  if (!words.length || words.join("").length < 3) return [];
+  try {
+    const [flat] = await redis([["HGETALL", "s:ck"]]);
+    const hit = [], seen = new Set();
+    for (let i = 0; i + 1 < (flat || []).length; i += 2) {
+      try {
+        const m = JSON.parse(flat[i + 1]);
+        if (!m || !m.sid || !m.t || (m.l && lang && m.l !== lang)) continue;
+        const nt = nz(m.t);
+        if (!words.every((w) => nt.includes(w)) || seen.has(nt)) continue;
+        seen.add(nt);
+        hit.push({ ck: flat[i], sid: m.sid, t: String(m.t).slice(0, 80) });
+      } catch {}
+    }
+    const list = hit.slice(0, 40);
+    if (!list.length) return [];
+    const res = await redis(list.flatMap((c) => [["HGETALL", "r:" + c.ck], ["ZSCORE", "s:pop", c.ck]]));
+    return list.map((c, x) => {
+      const h = res[x * 2] || [], v = [];
+      for (let i = 1; i < h.length; i += 2) { const n = Number(h[i]); if (n >= 1 && n <= 5) v.push(n); }
+      const n = v.length, a = n ? v.reduce((p, r) => p + r, 0) / n : 0, sh = Number(res[x * 2 + 1]) || 0;
+      return { sid: c.sid, t: c.t, a: Math.round(a * 10) / 10, n, score: (a * n + 3.5 * 2) / (n + 2) + 0.3 * Math.log2(1 + sh) };
+    }).sort((p, r) => r.score - p.score).slice(0, max).map(({ score, ...o }) => o);
+  } catch { return []; }
 }
