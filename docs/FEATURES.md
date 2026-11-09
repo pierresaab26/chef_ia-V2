@@ -306,3 +306,6 @@ Owner: « pas beau ». In « Choisir les plats à retirer » each dish row has a
 
 ### v270 — selection bar pinned at the bottom
 Real iPhone screenshot: the selection bar floated mid-screen over the dishes. In « Choisir les plats à retirer » the bottom navigation is hidden (`#app.mselmode nav`) and the bar sticks to the bottom edge (safe area); leaving the menu view ends the selection (`show()`). Local only until « pousse ».
+
+### v271 — selection bar really fixed
+v270 left the bar `sticky` inside the day card, so it stayed in the middle of the card. It is now `position:fixed` at the bottom of the screen (centred, max 492 px, safe area) and the menu gets 140 px of bottom padding while selecting. Local only until « pousse ».

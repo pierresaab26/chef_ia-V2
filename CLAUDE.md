@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v271 (owner screenshot): selection bar is `position:fixed` at the bottom (v270 sticky stayed inside the card). Local only until « pousse ».
+
 v270 (owner screenshot): menu selection bar pinned at the bottom, bottom nav hidden while selecting. Local only until « pousse ».
 
 v269 (owner: « pas beau » on the selection mode): tick circle on the left of each dish row, soft-pink picked row, compact bar with « Retirer (N) ». Local only until « pousse ».
