@@ -69,6 +69,9 @@ export default async function handler(req, res) {
     if (!d) return res.status(404).json({ error: "notfound" });
     if (d.o !== owner) return res.status(403).json({ error: "forbidden" }); // only the author of this copy
 
+    // v300: the recipe exactly as received (same comment key as its root copy) belongs to its author: the receiver cannot publish it
+    if ((act === "publish" || act === "appeal") && await notOwner(d)) return res.status(403).json({ error: "notowner" });
+
     if (act === "unpublish") {
       const ps = pubSid(sid);
       await redis([["DEL", "s:" + ps], ["HDEL", PUB, ps], ["DEL", "pb:" + sid], ["DEL", "pub:rep:" + ps]]);
@@ -142,6 +145,13 @@ async function review(d, parent, lang) {
   return { ok, kind, reason: clean(j.reason, 300) };
 }
 
+// v300: true when this shared copy is a recipe RECEIVED and not changed by the receiver (same comment / rating key as the root copy).
+// His own new versions get their own key, so they can still go through the chef's « remix » check.
+export async function notOwner(d) {
+  if (!d || !d.rs) return false;
+  try { const [pr] = await redis([["GET", "s:" + d.rs]]); const p = JSON.parse(pr); return !!(p && p.ck && p.ck === d.ck); } catch { return false; }
+}
+
 async function admin(req, res, q) {
   const secret = process.env.CRON_SECRET;
   if (!secret || String(q.key) !== secret) return res.status(401).json({ error: "code" });
@@ -151,6 +161,7 @@ async function admin(req, res, q) {
       const [raw] = await redis([["GET", "s:" + sid]]);
       let d = null; try { d = JSON.parse(raw); } catch {}
       if (!d) return res.status(404).json({ error: "notfound" });
+      if (await notOwner(d)) return res.status(403).json({ error: "notowner" }); // v300: not his recipe
       const ps = await makePublic(sid, d, pidOf(d.o));
       return res.status(200).json({ ok: true, ps });
     }
