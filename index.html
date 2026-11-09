@@ -324,7 +324,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 12px}
 .tiles .impcard{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;margin:0;padding:8px 4px;text-align:center}
 .tiles .impcard i{font-size:20px;height:26px;width:100%;display:grid;place-items:center;line-height:1}.tiles .impcard i.five5{width:24px;height:24px;margin:1px auto;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px}.tiles .impcard>div{width:100%}.tiles #fiveHome span{display:block;font-size:10.5px;line-height:1.2}.askico{font-size:17px;flex:none;line-height:1}.tiles .impcard b{font-size:12px;font-weight:600;line-height:1.25}.tiles .impcard span{display:none}
-#hwrap{margin-top:0}#menuHome{margin:0 0 12px}#homesearch{margin:0}#hsbtns{margin:12px 0 0}#hhome{margin-top:12px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
+#hsFavs{display:none}.hhtabs{display:flex;gap:8px;margin:0 0 8px}.hhtabs .chip{flex:0 0 auto}#hwrap{margin-top:0}#menuHome{margin:0 0 12px}#homesearch{margin:0}#hsbtns{margin:12px 0 0}#hhome{margin-top:12px}#menuHome>div{flex:1;min-width:0}#menuHome .mgo{font-style:normal;color:var(--mut);font-size:22px;flex:none}
 .snfold{display:block;margin:10px auto 0;background:none;border:0;color:inherit;opacity:.8;font-size:13px;font-weight:600;padding:6px 10px}
 .imhint{color:var(--mut);font-size:13px;margin:0 0 14px}
 .imsec{background:var(--card);border-radius:var(--rc);padding:14px;margin-bottom:14px;box-shadow:var(--sh)}
@@ -828,6 +828,7 @@ fr:{
   listNewQ:"Nom de la liste",listCreate:"Créer",
   listAddFree:"Ajouter un ingrédient…",listAddBtn:"Ajouter",
   histS:"Historique",
+  hRecent:"Récentes",
   tileImp:"Importer",tileQ:"Question cuisine",snFold:"Recettes des 3 jours précédents et idées par catégorie",menu0:"Rien de prévu pour l’instant",menu1:"1 plat prévu",menuN:"{n} plats prévus",
   
   
@@ -1134,6 +1135,7 @@ en:{
   listNewQ:"Name of the list",listCreate:"Create",
   listAddFree:"Add an ingredient…",listAddBtn:"Add",
   histS:"History",
+  hRecent:"Recent",
   tileImp:"Import",tileQ:"Cooking question",snFold:"Recipes of the previous 3 days and ideas by course",menu0:"Nothing planned yet",menu1:"1 dish planned",menuN:"{n} dishes planned",
   
   
@@ -1440,6 +1442,7 @@ es:{
   listNewQ:"Nombre de la lista",listCreate:"Crear",
   listAddFree:"Añadir un ingrediente…",listAddBtn:"Añadir",
   histS:"Historial",
+  hRecent:"Recientes",
   tileImp:"Importar",tileQ:"Pregunta de cocina",snFold:"Recetas de los 3 días anteriores e ideas por categoría",menu0:"Nada previsto por ahora",menu1:"1 plato previsto",menuN:"{n} platos previstos",
   
   
@@ -1746,6 +1749,7 @@ de:{
   listNewQ:"Name der Liste",listCreate:"Erstellen",
   listAddFree:"Zutat hinzufügen…",listAddBtn:"Hinzufügen",
   histS:"Verlauf",
+  hRecent:"Zuletzt",
   tileImp:"Importieren",tileQ:"Kochfrage",snFold:"Rezepte der letzten 3 Tage und Ideen nach Gang",menu0:"Noch nichts geplant",menu1:"1 Gericht geplant",menuN:"{n} Gerichte geplant",
   
   
@@ -2052,6 +2056,7 @@ it:{
   listNewQ:"Nome della lista",listCreate:"Crea",
   listAddFree:"Aggiungi un ingrediente…",listAddBtn:"Aggiungi",
   histS:"Cronologia",
+  hRecent:"Recenti",
   tileImp:"Importa",tileQ:"Domanda di cucina",snFold:"Ricette dei 3 giorni precedenti e idee per portata",menu0:"Niente in programma per ora",menu1:"1 piatto previsto",menuN:"{n} piatti previsti",
   
   
@@ -2358,6 +2363,7 @@ pt:{
   listNewQ:"Nome da lista",listCreate:"Criar",
   listAddFree:"Adicionar um ingrediente…",listAddBtn:"Adicionar",
   histS:"Histórico",
+  hRecent:"Recentes",
   tileImp:"Importar",tileQ:"Pergunta de cozinha",snFold:"Receitas dos 3 dias anteriores e ideias por categoria",menu0:"Nada previsto por agora",menu1:"1 prato previsto",menuN:"{n} pratos previstos",
   
   
@@ -2868,7 +2874,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v303',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v304',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3044,7 +3050,12 @@ function drawHistory(){
   const empty=(z,txt)=>{const p=document.createElement('div');p.className='empty';p.textContent=txt;z.appendChild(p)};
   if(!all.length){hsel=null;harch=false;$('#hfilter').innerHTML='';[h,l].forEach(z=>empty(z,t.empty));selBar();return}
   if(!ar.length&&harch)harch=false; // the last archived recipe was restored: back to the main list
-  if(!a.length)empty(h,t.empty);else a.slice(0,3).forEach(e=>h.appendChild(rowFor(e,true)));
+  if(!a.length)empty(h,t.empty);else{ /* v304: the home block has two tabs « Récentes | ❤️ Favoris » */
+    const hf=favItems(a.filter(e=>famFav(e))),tb=document.createElement('div');tb.className='hhtabs';
+    [[false,t.hRecent],[true,'❤️ '+t.favs+' ('+hf.length+')']].forEach(([v,lab])=>{const b=document.createElement('button');b.type='button';b.className='chip'+(hhFav===v?' on':'');b.textContent=lab;b.onclick=()=>{hhFav=v;drawHistory()};tb.appendChild(b)});
+    h.appendChild(tb);
+    if(hhFav){if(!hf.length)empty(h,t.nofav);else hf.slice(0,3).forEach(e=>h.appendChild(rowFor(e,true,true)))}
+    else a.slice(0,3).forEach(e=>h.appendChild(rowFor(e,true)))}
   const f=$('#hfilter');f.innerHTML='';
   const nFav=favItems(a.filter(e=>famFav(e))).length; // counters: « Toutes » and « Favoris » do not count the archived recipes
   const tabs=[['all',t.all+' ('+a.length+')'],['fav','❤️ '+t.favs+' ('+nFav+')']];if(ar.length)tabs.push(['arch','🗄️ '+t.hArch+' ('+ar.length+')']);
@@ -3137,7 +3148,7 @@ function openSaved(id){
   try{chatActions()}catch(x){}
 }
 // ---------- Fiches recette : photo, favoris, partage, commentaires ----------
-let cardId=null,hfav=false,cardFrom=null,hScroll=0; // cardFrom = 'history' when the recipe card was opened from the History view (shows the ← back button); hScroll = list position to restore
+let cardId=null,hfav=false,hhFav=false,cardFrom=null,hScroll=0; // cardFrom = 'history' when the recipe card was opened from the History view (shows the ← back button); hScroll = list position to restore
 // ---------- Side menu ----------
 // ---------- Weekly menu (home): 7 days x starter/main/dessert + « Others », filled from the saved recipes ----------
 const MENU_KEY='chefMenu';
