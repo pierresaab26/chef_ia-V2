@@ -315,3 +315,6 @@ v271 added 140 px of padding on top of the 96 px the scroll area already has, le
 
 ### v273 — weekly menu page fits the screen (phones)
 Owner: « que cette page fasse la taille de l'écran sans défilement ». Under 560 px wide, the compact CSS block before `.dlg.vid` shrinks the chips, week line, day header, photos (64×48), rows and the option chips; from 375 px the option chips sit on ONE line (`.mopts2{display:contents}`; this replaces the v267 two-line layout on phones only). Measured with Playwright (no scroll left): iPhone 13 (664 px high), iPhone 15 Pro Max (740 px); iPhone SE (320 × 568) still scrolls ~124 px because the chips wrap under 375 px. Local only until « pousse ».
+
+### v274 — the 3 dishes fill the page height (phones)
+Owner: « ajuste les 3 vignettes à la page ». Under 560 px the menu view is a flex column: `#menuBox`, the day card and `.mslots` stretch, the 3 dish rows (`.mrow2{flex:1 0 auto;align-content:center}`) share the free height equally; photo height `clamp(44px,7vh,80px)` (4:3); the scroll area keeps 108 px at the bottom so the card ends just above the nav pill. Measured: iPhone 13 (664 px) and iPhone 15 Pro Max (740 px) no scroll, rows 96–121 px each; iPhone SE still scrolls ~124 px (chips wrap under 375 px). Local only until « pousse ».
