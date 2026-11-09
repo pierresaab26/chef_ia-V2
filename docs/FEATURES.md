@@ -258,3 +258,7 @@ The « Vider le menu » button of the weekly menu page (`.mclear`) now appears a
 ## v258 — Weekly menu: options under the dish
 
 The options that were behind the « ⋯ » of each dish are chips under the dish name (`.mopts`, `.mopt`, built in `dayRows()`): « 🔄 Autre idée » (chef's dish), « ✏️ Choisir moi-même », « 👍 Garder » (chef's dish), « 👎 Pas pour moi », « 🗑️ Retirer » (own recipe). Same actions as before; `rowMenu()` is no longer used by this page. Local only until « pousse ».
+
+## v259 — Weekly menu: centred title, options on one line
+
+In each dish row the course label and the dish name are centred (`.mrow2 .mbody`, `.mtit`), and the option chips are one centred line below the photo and name (`.mopts` moved from `.mbody` to the row, `flex:1 0 100%`, nowrap). Up to 480 px wide they wrap onto two lines (four chips are about 360 px wide). Local only until « pousse ».

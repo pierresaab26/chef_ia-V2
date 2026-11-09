@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v259 (owner: « centre le titre, mets les options sur une ligne »): in the weekly menu the label + dish name are centred and the option chips sit on ONE centred line under the whole row (`.mopts` is a child of `.mrow2`, `flex-wrap:nowrap`); on screens of 480 px or less they wrap onto two lines because four chips do not fit one phone line. Local only until « pousse ».
+
 v258 (owner: « sors les options du ⋯ et mets-les sous la recette »): in the weekly menu the options of each dish (Autre idée, Choisir moi-même, Garder, Pas pour moi, Retirer) are visible chips under the dish name (`.mopts` / `.mopt`), no more ⋯ menu. Details in `docs/FEATURES.md` (v258). Local only until « pousse ».
 
 v257 (owner: « vider le menu n'apparaît pas »): « Vider le menu » is shown whenever the weekly menu shows something (his own recipes OR the chef's suggestions); confirming empties his slots AND switches « Le chef propose le menu » off (tick it again to bring the suggestions back, `hid` reset). Details in `docs/FEATURES.md` (v257). Local only until « pousse ».
