@@ -309,3 +309,6 @@ Real iPhone screenshot: the selection bar floated mid-screen over the dishes. In
 
 ### v271 — selection bar really fixed
 v270 left the bar `sticky` inside the day card, so it stayed in the middle of the card. It is now `position:fixed` at the bottom of the screen (centred, max 492 px, safe area) and the menu gets 140 px of bottom padding while selecting. Local only until « pousse ».
+
+### v272 — no extra space under the menu while selecting
+v271 added 140 px of padding on top of the 96 px the scroll area already has, leaving a big empty band under the last day. Now only `#app.mselmode .scroll` gets `104px + safe area`; at the end of the scroll the last card sits 17 px above the bar (measured). Local only until « pousse ».

@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v272 (owner: « pourquoi autant d’espace ? »): removed the extra 140 px; the scroll area gets 104 px + safe area while selecting. Local only until « pousse ».
+
 v271 (owner screenshot): selection bar is `position:fixed` at the bottom (v270 sticky stayed inside the card). Local only until « pousse ».
 
 v270 (owner screenshot): menu selection bar pinned at the bottom, bottom nav hidden while selecting. Local only until « pousse ».
