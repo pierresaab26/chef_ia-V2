@@ -222,6 +222,7 @@ input,textarea,select{font-size:16px!important}
 /* the card fills the screen: the 3 dishes share the free height */
 @media(max-width:560px){#menu .scroll{display:flex;flex-direction:column;padding-bottom:108px}#menu #menuBox{flex:1 0 auto;display:flex;flex-direction:column}#menu .mdaycard{flex:1 0 auto;display:flex;flex-direction:column}#menu .mslots{flex:1 0 auto}#menu .mrow2{flex:1 0 auto;align-content:center}}
 @media(max-width:374px){#menu .mopts{flex-wrap:wrap}}
+.medit{flex:none;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;line-height:1.2;white-space:nowrap}@media(max-width:560px){#menu .medit{padding:5px 9px;font-size:12px}}
 .mmore{flex:none;width:44px;height:44px;margin:-6px -6px -6px 0;border-radius:50%;border:0;background:none;color:var(--mut);font-size:22px;font-weight:800;line-height:1;cursor:pointer;display:grid;place-items:center}
 .mtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}.mtop .mclear{margin:0;padding:6px 4px;white-space:nowrap;flex:none}.mopts{flex-direction:column;align-items:center}.mopts2{display:flex;gap:6px;justify-content:center;flex-wrap:nowrap}.mauto{display:flex;align-items:center;gap:10px;margin:0;font-size:14px;font-weight:600;cursor:pointer}.mauto input{width:20px;height:20px;accent-color:var(--pink);flex:none}.mweek{margin:0 0 16px;font-size:13px;color:var(--mut)}
 .mgen{border-style:dashed;border-color:var(--psbd);background:var(--psoft);font-size:12.5px;cursor:pointer}.mgen b{font-weight:600}.mown{color:var(--pink);font-size:12px}
@@ -778,7 +779,7 @@ fr:{
   mPick:"Choisir une recette",
   mAsk:"✨ Demander au chef",
   mAskReq:"Menu de la semaine : propose-moi une idée pour {d} — {c}.",
-  mNone:"Aucune recette enregistrée pour l’instant.",
+  mNone:"Aucune recette enregistrée pour l’instant.",mEdit:"Éditer",mNoneC:"Aucune recette « {c} » enregistrée pour l’instant.",mClearHint:"Menu vidé. Pour le remplir à nouveau, coche « Le chef propose le menu de la semaine ».",
   mClear:"Vider le menu",
   mClearQ:"Vider tout le menu de la semaine ?",
   mRm:"Retirer",
@@ -1080,7 +1081,7 @@ en:{
   mPick:"Choose a recipe",
   mAsk:"✨ Ask the chef",
   mAskReq:"Weekly menu: suggest an idea for {d} — {c}.",
-  mNone:"No saved recipes yet.",
+  mNone:"No saved recipes yet.",mEdit:"Edit",mNoneC:"No saved « {c} » recipe yet.",mClearHint:"Menu cleared. To fill it again, tick « The chef suggests the weekly menu ».",
   mClear:"Clear the menu",
   mClearQ:"Clear the whole weekly menu?",
   mRm:"Remove",
@@ -1382,7 +1383,7 @@ es:{
   mPick:"Elige una receta",
   mAsk:"✨ Pedir al chef",
   mAskReq:"Menú de la semana: propónme una idea para {d} — {c}.",
-  mNone:"Aún no hay recetas guardadas.",
+  mNone:"Aún no hay recetas guardadas.",mEdit:"Editar",mNoneC:"Aún no hay recetas « {c} » guardadas.",mClearHint:"Menú vaciado. Para llenarlo de nuevo, marca « El chef propone el menú de la semana ».",
   mClear:"Vaciar el menú",
   mClearQ:"¿Vaciar todo el menú de la semana?",
   mRm:"Quitar",
@@ -1684,7 +1685,7 @@ de:{
   mPick:"Rezept wählen",
   mAsk:"✨ Den Koch fragen",
   mAskReq:"Wochenmenü: Schlag mir eine Idee für {d} vor — {c}.",
-  mNone:"Noch keine Rezepte gespeichert.",
+  mNone:"Noch keine Rezepte gespeichert.",mEdit:"Ändern",mNoneC:"Noch kein Rezept « {c} » gespeichert.",mClearHint:"Menü geleert. Um es wieder zu füllen, hake « Der Koch schlägt das Wochenmenü vor » an.",
   mClear:"Menü leeren",
   mClearQ:"Das ganze Wochenmenü leeren?",
   mRm:"Entfernen",
@@ -1986,7 +1987,7 @@ it:{
   mPick:"Scegli una ricetta",
   mAsk:"✨ Chiedi allo chef",
   mAskReq:"Menu della settimana: proponimi un’idea per {d} — {c}.",
-  mNone:"Nessuna ricetta salvata per ora.",
+  mNone:"Nessuna ricetta salvata per ora.",mEdit:"Modifica",mNoneC:"Nessuna ricetta « {c} » salvata per ora.",mClearHint:"Menu svuotato. Per riempirlo di nuovo, spunta « Lo chef propone il menu della settimana ».",
   mClear:"Svuota il menu",
   mClearQ:"Svuotare tutto il menu della settimana?",
   mRm:"Rimuovi",
@@ -2288,7 +2289,7 @@ pt:{
   mPick:"Escolher uma receita",
   mAsk:"✨ Pedir ao chef",
   mAskReq:"Menu da semana: sugere-me uma ideia para {d} — {c}.",
-  mNone:"Ainda não há receitas guardadas.",
+  mNone:"Ainda não há receitas guardadas.",mEdit:"Editar",mNoneC:"Ainda não há receitas « {c} » guardadas.",mClearHint:"Menu esvaziado. Para o preencher de novo, marque « O chef propõe o menu da semana ».",
   mClear:"Limpar o menu",
   mClearQ:"Limpar todo o menu da semana?",
   mRm:"Remover",
@@ -2807,7 +2808,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v276',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v277',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3083,16 +3084,20 @@ function readMenu(){let m=null;try{m=JSON.parse(localStorage.getItem(MENU_KEY)||
   if(!m||!Array.isArray(m.d)||m.d.length!==7)m={d:Array.from({length:7},()=>[null,null,null]),o:[]};
   m.d=m.d.map(r=>Array.isArray(r)&&r.length===3?r:[null,null,null]);if(!Array.isArray(m.o))m.o=[];if(typeof m.auto!=='boolean')m.auto=true;if(!m.hid||typeof m.hid!=='object')m.hid={};return m}
 function saveMenu(m){try{localStorage.setItem(MENU_KEY,JSON.stringify(m))}catch(e){}}
-function pickRecipe(askText){ // dialog: pick a saved recipe (search) or ask the chef; resolves to a recipe id, or null
+const STARTER_RE=/\b(entrees?|entrantes?|entradas?|antipast[oi]|vorspeisen?|starters?|appetizers?|appetisers?|salades?|salads?|salad|ensaladas?|salate?|insalate?|insalata|saladas?|soupes?|soups?|sopas?|suppen?|suppe|zuppe|zuppa|veloutes?|gaspacho|gazpacho|carpaccio|tartare|bruschetta|crostini|terrines?|rillettes?|nems?|accras?|samoussas?|samosas?|crudites?|canapes?|verrines?|tapas|foie gras|bouillon|caldo)\b/;
+// v277: course of a saved recipe for the weekly menu: 0 starter, 1 main, 2 dessert, -1 = not a dish (drink, bread, sauce)
+function courseOf(e){const nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),c=recipeCat(e);
+  if(c===1||c===8)return 2;if(STARTER_RE.test(nz(e.title)))return 0;if(c===2||c===3||c===6||c===7||c==='q')return -1;return 1}
+function pickRecipe(askText,course,cname){ // dialog: pick a saved recipe (search) or ask the chef; resolves to a recipe id, or null
   return new Promise(done=>{
-    const t=T(),a=loadH().filter(e=>!e.qa&&!e.arch),nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    const t=T(),a=loadH().filter(e=>!e.qa&&!e.arch&&(course==null||courseOf(e)===course)),nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
     const w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg wide';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
-    const h=document.createElement('p');h.textContent=t.mPick;h.style.fontWeight='700';d.appendChild(h);
+    const h=document.createElement('p');h.textContent=t.mPick+(cname?' · '+cname:'');h.style.fontWeight='700';d.appendChild(h);
     const f=document.createElement('input');f.type='search';f.autocomplete='off';f.placeholder=t.search;d.appendChild(f);
     const l=document.createElement('div');l.className='pickl';d.appendChild(l);
     const end=v=>{w.remove();done(v)};
     const paint=()=>{l.innerHTML='';const q=nz(f.value.trim()),hit=a.filter(e=>!q||nz(e.title).includes(q));
-      if(!hit.length){const p=document.createElement('p');p.className='empty';p.textContent=a.length?t.noresult:t.mNone;l.appendChild(p);return}
+      if(!hit.length){const p=document.createElement('p');p.className='empty';p.textContent=a.length?t.noresult:(cname?t.mNoneC.replace('{c}',cname):t.mNone);l.appendChild(p);return}
       hit.forEach(e=>{const b=document.createElement('button');b.type='button';b.textContent=(famFav(e)?'❤️ ':'')+e.title;const s=document.createElement('small');s.textContent=fmtDate(e.date);b.appendChild(s);b.onclick=()=>end(e.id);l.appendChild(b)})};
     f.oninput=paint;paint();
     const row=document.createElement('div');row.className='dlgb';
@@ -3155,19 +3160,19 @@ function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map
       const row=document.createElement('div');row.className='mrow2';const lb=document.createElement('span');lb.className='mlb2';lb.textContent=cn;
       const e=m.d[i][j]&&rec.get(m.d[i][j]),hk=sug?sug.from+'|'+i+'|'+j:'',hidden=!!(m.hid&&m.hid[hk]),px=!e&&sug&&!hidden?PS[i*3+j]:null,pr=px&&rec.get(px.id);
       const main=document.createElement('button');main.type='button';main.className='mtit';let items=null;
-      const own=async()=>{const id=await pickRecipe(t.mAskReq.replace('{d}',dn).replace('{c}',cn));if(id){const z=readMenu();z.d[i][j]=id;saveMenu(z);onChange()}};
+      const own=async()=>{const id=await pickRecipe(t.mAskReq.replace('{d}',dn).replace('{c}',cn),j,cn);if(id){const z=readMenu();z.d[i][j]=id;saveMenu(z);onChange()}};
       const clear=()=>{const z=readMenu();z.d[i][j]=null;saveMenu(z);onChange()};
-      if(e){main.classList.add('mdone');main.textContent=e.title;main.onclick=()=>{openCard(e.id)};items=[['✏️',t.mOwn,own],['🗑️',t.mRm,clear,1]]}
+      if(e){main.classList.add('mdone');main.textContent=e.title;main.onclick=()=>{openCard(e.id)};items=[['🗑️',t.mRm,clear,1]]}
       else if(pr){main.classList.add('mghost');main.textContent=pr.title;const adj=px.k==='adjust';
         const cb=document.createElement('span');cb.className='mcom';cb.textContent=' · '+(adj?t.dayAdj:t.dayCl);lb.appendChild(cb);
         main.onclick=()=>{if(adj){openSaved(pr.id);send(t.dayAdjMsg)}else openCard(pr.id,px.vi)};
-        items=[['✏️',t.mOwn,own],['👎',noIc(t.dayNo),()=>{dayMark(pr.title,'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
+        items=[['👎',noIc(t.dayNo),()=>{dayMark(pr.title,'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else if(sug&&!hidden&&sug.items[i*3+j]){const nm=sug.items[i*3+j]&&sug.items[i*3+j][0];main.classList.add('mghost');main.textContent=nm;
         const it=sug.items[i*3+j];main.onclick=()=>menuOpen(i,j,it);
         if(it[2]){const cb=document.createElement('span');cb.className='mcom';cb.textContent=' · ★ '+(it[3]?Number(it[3]).toLocaleString(lang,{minimumFractionDigits:1,maximumFractionDigits:1})+' · ':'')+t.mCom;lb.appendChild(cb)}
-        items=[['✏️',t.mOwn,own],['👍',noIc(t.dayKeep),()=>{dayMark(it[0],'keep');toast(t.dayKept)}],['👎',noIc(t.dayNo),()=>{dayMark(it[0],'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
+        items=[['👍',noIc(t.dayKeep),()=>{dayMark(it[0],'keep');toast(t.dayKept)}],['👎',noIc(t.dayNo),()=>{dayMark(it[0],'no');const z=readMenu();z.hid=z.hid||{};z.hid[hk]=1;saveMenu(z);onChange()},1]]}
       else{main.classList.add('mempty');main.textContent='+ '+t.mAdd;main.onclick=own}
-      const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);row.append(ph,bd);mphoto(ph,e||pr,(e||pr)?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
+      const ph=document.createElement('div');ph.className='mph';const bd=document.createElement('div');bd.className='mbody';bd.append(lb,main);const eb=document.createElement('button');eb.type='button';eb.className='medit';eb.textContent='✏️ '+t.mEdit;eb.onclick=ev=>{ev.stopPropagation();own()};row.append(ph,bd,eb);mphoto(ph,e||pr,(e||pr)?null:(sug&&!hidden&&sug.items[i*3+j]?sug.items[i*3+j][0]:null));
       if(items){const op=document.createElement('div');op.className='mopts';const op2=document.createElement('div');op2.className='mopts2';items.forEach(([ic,lb2,fn,danger],ix)=>{const ob=document.createElement('button');ob.type='button';ob.className='mopt'+(danger?' danger':'');ob.textContent=ic+' '+lb2;ob.onclick=ev=>{ev.stopPropagation();fn()};(ix?op2:op).appendChild(ob)});if(op2.children.length)op.appendChild(op2);row.appendChild(op)} // v267: « Choisir moi-même » alone, the other options on the line below // v258: the options sit under the dish instead of behind a ⋯ menu
       sl.appendChild(row)});
   return sl}
@@ -3209,7 +3214,7 @@ function drawMenu(){
 
   {let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));$('#menuHT').textContent=t.menuT;$('#menuHS').textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0} // v211: compact card on the home
   const shown=m.auto&&sug&&sug.items.some((x,k)=>x&&!(m.hid&&m.hid[sug.from+'|'+Math.floor(k/3)+'|'+k%3]));
-  if(any||shown){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[],auto:false,hid:{}}); // v256: « Vider le menu » also switches the chef's suggestions off (tick « Le chef propose… » to bring them back)
+  if(any||shown){const c=document.createElement('button');c.type='button';c.className='mclear';c.textContent=t.mClear;c.onclick=async()=>{if(await ask({text:t.mClearQ,okLabel:t.mClear})){saveMenu({d:Array.from({length:7},()=>[null,null,null]),o:[],auto:false,hid:{}});toast(t.mClearHint);clearTimeout(toastT);toastT=setTimeout(()=>$('#toast').classList.remove('on'),7000); // v256: « Vider le menu » also switches the chef's suggestions off (tick « Le chef propose… » to bring them back)
       drawMenu()}};box.querySelector('.mtop').appendChild(c)}
 }
 // ----- v256: the weekly menu is personal (merged from the v255 daily menu): your classics + the chef's discoveries, never the same dish within 14 days -----
@@ -3224,14 +3229,14 @@ function dayClassics(){const n=Date.now(),h=dayHist(),block=new Set(h.filter(x=>
   loadH().forEach(e=>{if(!e||e.qa||e.arch)return;let b=null;
     ownIdx(e).forEach(i=>{const m=e.messages[i],s=+m.stars||0;if(!s)return;const w=dayCooked(m,e);if(!b||w>b.w)b={s,w,i}});
     if(!b||b.s<3||n-b.w<D21)return;const k=normN(e.title);if(!k||seen.has(k)||block.has(k))return;seen.add(k);
-    out.push({k:b.s>=4?'classic':'adjust',n:e.title,id:e.id,vi:b.i,s:b.s,w:b.w,c:recipeCat(e)})});
+    out.push({k:b.s>=4?'classic':'adjust',n:e.title,id:e.id,vi:b.i,s:b.s,w:b.w,c:recipeCat(e),co:courseOf(e)})});
   return out.sort((a,b)=>a.w-b.w)}
 // Personal plan of the week, kept on the device until the next shared menu: up to 5 mains + 2 desserts (about 70 % of the 7 × 2 slots that can hold a classic) from your own recipes, starting with today; the other slots stay the chef's shared dishes.
 function wkPers(sug){if(!sug)return {};const live=o=>o&&loadH().some(e=>e.id===o.id);
   let p=dayRead('chefWkPers',null);
   if(p&&p.from===sug.from&&p.lang===lang&&p.slots){const o={};Object.keys(p.slots).forEach(k=>{if(live(p.slots[k]))o[k]=p.slots[k]});return o}
   const cl=dayClassics(),pool=c=>cl.filter(x=>c.includes(x.c)),take=(a,n)=>{const r=a.filter(x=>x.k==='classic').slice(0,n),j=a.find(x=>x.k==='adjust');if(r.length<n&&j)r.push(j);return r};
-  const mains=take(pool([0,4,5]),5),des=take(pool([1,8]),2);
+  const mains=take(pool([0,4,5]).filter(x=>x.co===1),5),des=take(pool([1,8]).filter(x=>x.co===2),2);
   if(!mains.length&&!des.length)return {};
   const order=[];for(let k=0;k<7;k++)order.push((todayIdx+k)%7);const slots={};
   mains.forEach((x,k)=>{slots[order[k]*3+1]=x;dayMark(x.n,'')});des.forEach((x,k)=>{slots[order[k*3+1]*3+2]=x;dayMark(x.n,'')});

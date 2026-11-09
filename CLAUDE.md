@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v277 (owner: « mets un bouton éditer à droite de chaque case… »): weekly menu: « ✏️ Éditer » on every dish row (replaces « Choisir moi-même »), the picker lists only the slot's course (`courseOf()`: starter / main / dessert), and a message after « Vider le menu » says to tick « Le chef propose le menu de la semaine » to refill. Details in `docs/FEATURES.md` (v277). Local only until « pousse ».
+
 v276 (owner: « annule tout ce que tu as fait pour vider le menu »): the two-option « Vider le menu » and its selection mode (v268–v272, v275) are removed; « Vider le menu » asks one confirmation and empties the whole menu (v267 behaviour). The phone fit of the menu page (v273–v274) stays. Local only until « pousse ».
 
 v274 (owner: « ajuste les 3 vignettes à la page »): the 3 dish rows of the weekly menu stretch to fill the phone screen. Local only until « pousse ».
