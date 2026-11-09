@@ -42,7 +42,7 @@ async function generate(lang, occ, avoid, banned) {
   for (let attempt = 0; attempt < 3; attempt++) {
     const { text, cut } = await callClaude({
       model: process.env.MODEL || "claude-haiku-5-5",
-      max_tokens: 700,
+      max_tokens: 3000, // v285: 700 was used up by the model before the first idea (empty answer, "cut")
       system: systemFor(PARTS, { lang }),
       messages: [{ role: "user", content: ideasPrompt(occ, asked, lang) }],
     });

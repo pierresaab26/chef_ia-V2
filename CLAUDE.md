@@ -120,6 +120,8 @@ Files starting with `_` in `api/` are helpers, not routes.
 
 ## 5. Done (up to v149)
 
+v285 (owner's admin-link output: 5 of 6 languages failed, « 0 idea line(s) read, answer cut; answer starts: » empty): the chef used up the 700-token budget of `generate()` before writing the first idea, so the text was empty; `max_tokens` is now 3000 (same order as `/api/chat`). Local only until « pousse ».
+
 v284 (owner: the live server could not generate the series, `si:err` said only `upstream`, status 0): the error record now says WHY — network failure in `callClaude` (`detail` = e.g. `ENOTFOUND`) or, when the chef's 3 answers gave no valid 4 lines, what he answered (`attempt N: x idea line(s) read, y/4 kept, z names banned; answer starts: …`). Read it in `/api/season-ideas?status=1` (`lastError.detail`) or in `errors` of the admin link. No behaviour change otherwise. Local only until « pousse ».
 
 v283 (owner: « tu mets que la date de première génération c'est maintenant, ça relance une nouvelle série »): the seasonal-ideas numbering restarts today: `ANCHOR` in `api/_season.js` is 9 Nov 2026 (period 0 = 9 → 12 Nov, 9:00 Paris time, periods of 3 days as before), the series are stored under NEW Redis keys `si2:<lang>:<occasion>:<period>` (the old `si:` ones of 3–6 Nov are no longer read, so « Recettes de la semaine passée » starts empty), the 3-month idea memory `sh:` is kept. The « Une alternative » token uses the period start date instead of its number. Section 2 / Redis keys below still say `si:` and « 3 Nov »: read them as `si2:` and « 9 Nov ». Local only until « pousse ».
