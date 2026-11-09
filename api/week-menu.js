@@ -1,6 +1,7 @@
 import { authOk, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js";
 import { LANGS, norm } from "./_season.js";
 import { weekOf, MENU_SYS, menuPromptJ, parseMenuJ } from "./_week.js";
+import { PUB, dropOldIndex } from "./shared.js";
 
 // « Chef's weekly menu »: the SAME 21 dishes (Monday … Sunday × starter, main, dessert) for everybody, renewed every Monday at 9:00 Paris time.
 // - GET /api/week-menu?lang=fr  (access code like the other routes) → { week:{id,from,to,until}, items:[[name,sentence]×21] }.
@@ -20,29 +21,11 @@ async function read(lang, id) {
   try { const d = s ? JSON.parse(s) : null; return d && Array.isArray(d.items) && d.items.length === 21 && d.items.filter(Boolean).length >= MIN_OK ? d.items : null; } catch { return null; }
 }
 
-// Shared recipes known from « s:ck » (written by api/shared.js since v248). Older shares are indexed once by a SCAN (flag s:bf).
-async function backfill() {
-  const [done] = await redis([["GET", "s:bf"]]);
-  if (done) return;
-  let cur = "0", keys = [];
-  for (let n = 0; n < 8 && keys.length < 400; n++) {
-    const [r] = await redis([["SCAN", cur, "MATCH", "s:*", "COUNT", "500"]]);
-    cur = String(r[0]); keys.push(...(r[1] || []).filter((k) => /^s:[a-z0-9-]{8,64}$/.test(k)));
-    if (cur === "0") break;
-  }
-  for (let a = 0; a < keys.length; a += 50) {
-    const part = keys.slice(a, a + 50), vals = await redis(part.map((k) => ["GET", k])), cmds = [];
-    vals.forEach((v, x) => { try { const d = JSON.parse(v); if (d && d.ck && d.title) cmds.push(["HSETNX", "s:ck", d.ck, JSON.stringify({ sid: part[x].slice(2), t: d.title, l: d.lang })]); } catch {} });
-    if (cmds.length) await redis(cmds);
-  }
-  await redis([["SET", "s:bf", "1"]]);
-}
-
 // The users' favourite recipes in this language: Bayesian average of the stars + a bonus for each share. Never blocks the menu.
 export async function community(lang, max = 12) {
   try {
-    await backfill();
-    const [flat] = await redis([["HGETALL", "s:ck"]]);
+    await dropOldIndex(); // v290: only PUBLISHED recipes (index pub:ck), never the shared copies
+    const [flat] = await redis([["HGETALL", PUB]]);
     const all = [];
     for (let i = 0; i + 1 < (flat || []).length; i += 2) { try { const m = JSON.parse(flat[i + 1]); if (m && m.sid && m.t && (!m.l || m.l === lang)) all.push({ ck: flat[i], sid: m.sid, t: String(m.t).slice(0, 80) }); } catch {} }
     const list = all.slice(0, 300);

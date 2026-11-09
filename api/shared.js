@@ -62,7 +62,8 @@ export default async function handler(req, res) {
       if (/^[a-z0-9-]{8,64}$/.test(String(body.rs || "")) && body.rs !== sid) d.rs = String(body.rs);
       const by = clean(body.by, 24).replace(/[<>"]/g, "");
       if (by) d.by = by;
-      const cmds = [["SET", "s:" + sid, JSON.stringify(d)], ["SETNX", "o:" + ck, owner], ["HSET", "s:ck", ck, JSON.stringify({ sid, t: title, l: d.lang })]];
+      // v290: a shared copy is NOT public: it is no longer indexed for the community search / weekly menu (index « pub:ck », filled only by a future explicit publication)
+      const cmds = [["SET", "s:" + sid, JSON.stringify(d)], ["SETNX", "o:" + ck, owner]];
       await redis(cmds);
       return res.status(200).json({ ok: true });
     }
@@ -74,7 +75,7 @@ export default async function handler(req, res) {
       try { o = JSON.parse(old).o; } catch {}
       if (!owner || o !== owner) return res.status(403).json({ error: "forbidden" });
       const cmds = [["DEL", "s:" + sid]];
-      try { const ck = JSON.parse(old).ck; const [m] = await redis([["HGET", "s:ck", ck]]); if (m && JSON.parse(m).sid === sid) cmds.push(["HDEL", "s:ck", ck]); } catch {}
+      try { const ck = JSON.parse(old).ck; const [m] = await redis([["HGET", PUB, ck]]); if (m && JSON.parse(m).sid === sid) cmds.push(["HDEL", PUB, ck]); } catch {}
       await redis(cmds);
       return res.status(200).json({ ok: true });
     }
@@ -83,6 +84,13 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(502).json({ error: "storage" });
   }
+}
+
+// v290: public index = recipes their author PUBLISHED (palier 3, not built yet: empty for now). The old index « s:ck » listed every
+// shared copy (even a recipe only opened, or put in a circle) and is erased once (flag « pub:mig »), with its backfill flag « s:bf ».
+export const PUB = "pub:ck";
+export async function dropOldIndex() {
+  try { const [first] = await redis([["SET", "pub:mig", "1", "NX"]]); if (first) await redis([["DEL", "s:ck"], ["DEL", "s:bf"]]); } catch {}
 }
 
 const nz = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -96,7 +104,8 @@ export async function searchShared(q, lang, max = 6) {
   const words = searchWords(q);
   if (!words.length || words.join("").length < 3) return [];
   try {
-    const [flat] = await redis([["HGETALL", "s:ck"]]);
+    await dropOldIndex();
+    const [flat] = await redis([["HGETALL", PUB]]);
     const hit = [], seen = new Set();
     for (let i = 0; i + 1 < (flat || []).length; i += 2) {
       try {

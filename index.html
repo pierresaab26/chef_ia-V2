@@ -123,7 +123,7 @@ input,textarea,select{font-size:16px!important}
 .chcom{align-self:stretch;margin:-4px 2px 4px}.chcom .coms{margin-top:0}.chcom .coms h2{font-size:17px}
 .chact .cbtn.cook{background:var(--psoft);color:var(--pink);border-color:var(--psbd);font-weight:700}
 .m .chact{margin:12px 0 16px}.chact .cbtn.cook{flex:1 0 100%;text-align:center;justify-content:center}.chcom .comb{margin:0 0 8px}.delv{flex:1 0 100%;background:none;border:0;color:#c04a42;font-size:13px;font-weight:500;padding:6px 0;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}.delv svg{display:block;flex:none;width:15px;height:15px}.cdelv{display:flex;margin:-6px auto 10px}
-.cs1{margin:12px 0}#hqcs:empty{display:none}#hqcs{margin:-2px 0 10px}#hqcs .csg{margin:0}.csg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.csc{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);box-shadow:var(--sh);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}.csh{font-size:14px;font-weight:500}.csp{font-size:13px;color:var(--mut);margin:0;overflow-wrap:anywhere}.csb{margin-top:auto;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);border-radius:999px;padding:9px 10px;font-size:13px;font-weight:500;cursor:pointer}.csi{display:block;text-align:left;background:none;border:0;border-top:1px solid var(--bd);padding:8px 0 0;cursor:pointer;color:var(--ink);font:inherit;width:100%}.csi:first-of-type{border-top:0;padding-top:0}.csi b{display:block;font-size:13px;font-weight:500;overflow-wrap:anywhere}.csi span{font-size:12px;color:var(--mut)}
+.cs1{margin:12px 0}#hqcs:empty{display:none}#hqcs{margin:-2px 0 10px}#hqcs .csg{margin:0}.csg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.csg.one{grid-template-columns:1fr}.csc{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);box-shadow:var(--sh);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}.csh{font-size:14px;font-weight:500}.csp{font-size:13px;color:var(--mut);margin:0;overflow-wrap:anywhere}.csb{margin-top:auto;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);border-radius:999px;padding:9px 10px;font-size:13px;font-weight:500;cursor:pointer}.csi{display:block;text-align:left;background:none;border:0;border-top:1px solid var(--bd);padding:8px 0 0;cursor:pointer;color:var(--ink);font:inherit;width:100%}.csi:first-of-type{border-top:0;padding-top:0}.csi b{display:block;font-size:13px;font-weight:500;overflow-wrap:anywhere}.csi span{font-size:12px;color:var(--mut)}
 .chact{display:flex;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;align-self:flex-start;max-width:100%}.chact .rtags{order:1}.chact .cbtn.cook{order:2}.chact .delv{order:3}@media(max-width:520px){.chact .shr .shl{display:none}}.chact .cbtn{padding:8px 14px;font-size:14px;border:1px solid var(--bd)}
 .rl{font-size:13px;color:var(--mut)}
 .stars{display:inline-flex;gap:2px}
@@ -2846,7 +2846,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v289',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v290',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4504,7 +4504,7 @@ function drawHomeSearch(){
   hit.sort((x,y)=>(y.updatedAt||0)-(x.updatedAt||0)).forEach(e=>l.appendChild(rowFor(e,true,true)));
 }
 // v263 / v264: under « Que voulez-vous cuisiner ? » (#hqcs), once 3+ letters are typed: two columns « Recette du chef » (asks the chef) and « Recette de la communauté » (shared recipes whose title contains the words, GET /api/shared?q=).
-const csMem={};let csTimer=0;
+const csMem={};let csTimer=0;const COMMUNITY_ON=false; // v290: back to true when recipes can be PUBLISHED (palier 3)
 function drawTopCs(){const l=$('#hqcs');l.innerHTML='';const raw=$('#hq').value.trim();if(raw.length>=3)csDraw(l,raw,true,drawTopCs)}
 function csDraw(l,raw,on,redraw){
   if(!on)return;const t=T(),key=lang+'|'+raw.toLowerCase(),nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -4514,6 +4514,7 @@ function csDraw(l,raw,on,redraw){
   const p1=document.createElement('p');p1.className='csp';p1.textContent=t.csChefD.replace('{x}',raw);
   const b1=document.createElement('button');b1.type='button';b1.className='csb';b1.textContent=t.csChefB;b1.onclick=()=>{$('#hq').value='';drawTopCs();openChat(null);send(t.idGen.replace('{x}',raw),true)};
   c1.append(h1,p1,b1);
+  if(!COMMUNITY_ON){g.classList.add('one');g.append(c1);l.appendChild(g);return} // v290: no public recipes yet (palier 3): the « community » column is hidden
   const c2=document.createElement('div');c2.className='csc';
   const h2=document.createElement('div');h2.className='csh';h2.textContent='👥 '+t.csCom;c2.appendChild(h2);
   const own=new Set(loadH().filter(e=>!e.qa).map(e=>nz(e.title))),it=(csMem[key]||[]).filter(x=>!own.has(nz(x.t)));
