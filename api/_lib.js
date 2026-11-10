@@ -15,6 +15,14 @@ async function inviteOk(tok) {
   akCache.delete(tok);
   return false;
 }
+// v329: same check as authOk, but answers nothing (used by the invitation link, which also works for people without access).
+export async function hasAccess(req) {
+  const need = process.env.APP_PASSWORD;
+  if (!need) return true;
+  const got = String(req.headers["x-code"] || "");
+  return got === need || (await inviteOk(got));
+}
+
 export async function authOk(req, res) {
   const need = process.env.APP_PASSWORD;
   if (!need) return true;

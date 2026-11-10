@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
-import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { authOk, hasAccess, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { notifyCircle, readNotes, markSeen } from "./_notify.js";
 import publishHandler from "./_publish.js"; // v293: « /api/publish » is served by this route (rewrite in vercel.json) to stay within 12 functions
 
@@ -17,6 +17,25 @@ export const cleanName = (s) => clean(s, 24).replace(/[<>"]/g, "").replace(/\s+/
 export default async function handler(req, res) {
   if (req.query && req.query.via === "pub") return publishHandler(req, res); // v293: /api/publish → /api/circle?via=pub
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
+  // v329: ONE invitation link (/?c=<code>) = join my circle AND, for a friend who has no access yet, get in.
+  // « redeem » is the only call allowed without access: someone who already has access gets nothing new (free, unlimited);
+  // someone without access receives a personal token (table "ak") counted on the inviter's quota (ACCESS_MAX new people).
+  if (req.method === "POST" && req.body && typeof req.body === "object" && req.body.act === "redeem") {
+    try {
+      if (await overLimit(req, "rl:rd:", 10)) return res.status(429).json({ error: "rate" });
+      const code = String(req.body.code || "");
+      if (!/^[a-z0-9]{8,16}$/.test(code)) return res.status(400).json({ error: "key" });
+      if (await hasAccess(req)) return res.status(200).json({ ok: true, has: true });
+      const [inviter] = await redis([["GET", "ci:" + code]]);
+      if (!inviter) return res.status(404).json({ error: "notfound" });
+      const [used] = await redis([["INCR", "ai:" + inviter]]);
+      if (Number(used) > ACCESS_MAX) { await redis([["DECR", "ai:" + inviter]]); return res.status(409).json({ error: "limit" }); }
+      const tok = randomBytes(16).toString("hex");
+      const [who] = await redis([["GET", "cu:" + inviter]]);
+      await redis([["HSET", "ak", tok, JSON.stringify({ n: "par " + (who || "?"), at: Date.now(), by: inviter })]]);
+      return res.status(200).json({ ok: true, code: tok });
+    } catch (e) { return res.status(502).json({ error: "storage" }); }
+  }
   if (!(await authOk(req, res))) return;
   const owner = clean(req.headers["x-owner"], 60);
   if (!owner || owner.length < 8) return res.status(400).json({ error: "key" });
