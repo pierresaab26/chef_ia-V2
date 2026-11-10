@@ -10,6 +10,7 @@ import publishHandler from "./_publish.js"; // v293: « /api/publish » is serve
 // the circle feed = the recipes listed by the people of my circle.
 // Redis: cu:<pid> pseudo · cf:<pid> set of circle pids · ci:<code> invite → pid (7 days) · cp:<pid> zset sid → time (max 100)
 const MAX_CIRCLE = 50, MAX_POSTS = 100, FEED = 60, INVITE_TTL = 7 * 86400;
+const ACCESS_MAX = 3; // v323: each person with access can give access to 3 friends (personal link in the shared "ak" table)
 export const pidOf = (owner) => createHash("sha256").update("circle|" + owner).digest("hex").slice(0, 16);
 export const cleanName = (s) => clean(s, 24).replace(/[<>"]/g, "").replace(/\s+/g, " ");
 
@@ -56,6 +57,15 @@ export default async function handler(req, res) {
       const code = randomBytes(9).toString("base64url").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 12).padEnd(12, "0");
       await redis([["SET", "ci:" + code, me, "EX", String(INVITE_TTL)]]);
       return res.status(200).json({ code });
+    }
+    if (act === "access") { // v323: a member gives access to a friend (personal link, max 3 per person)
+      const [used] = await redis([["INCR", "ai:" + me]]);
+      if (Number(used) > ACCESS_MAX) { await redis([["DECR", "ai:" + me]]); return res.status(429).json({ error: "limit" }); }
+      const tok = randomBytes(16).toString("hex");
+      const [who] = await redis([["GET", "cu:" + me]]);
+      await redis([["HSET", "ak", tok, JSON.stringify({ n: "par " + (who || "?"), at: Date.now(), by: me })]]);
+      const origin = "https://" + String(req.headers["x-forwarded-host"] || req.headers.host || "chefia-v3.vercel.app");
+      return res.status(200).json({ link: origin + "/?k=" + tok, left: ACCESS_MAX - Number(used) });
     }
     if (act === "join") {
       const code = String(body.code || "");
@@ -110,10 +120,10 @@ export async function liveRoots(roots) {
 }
 
 async function whoami(me) {
-  const [name, pids] = await redis([["GET", "cu:" + me], ["SMEMBERS", "cf:" + me]]);
+  const [name, pids, used] = await redis([["GET", "cu:" + me], ["SMEMBERS", "cf:" + me], ["GET", "ai:" + me]]);
   const list = Array.isArray(pids) ? pids.slice(0, MAX_CIRCLE) : [];
   const names = list.length ? await redis(list.map((p) => ["GET", "cu:" + p])) : [];
-  return { name: name || "", members: list.map((p, i) => ({ pid: p, name: names[i] || "" })).sort((a, b) => a.name.localeCompare(b.name)) };
+  return { name: name || "", members: list.map((p, i) => ({ pid: p, name: names[i] || "" })).sort((a, b) => a.name.localeCompare(b.name)), left: Math.max(0, ACCESS_MAX - Number(used || 0)) };
 }
 
 // Recipes put in « Cercle » by the people of my circle, newest first. A copy deleted by its author (s:<sid> gone) is dropped.

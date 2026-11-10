@@ -74,7 +74,7 @@ async function invites(q, req) {
   if (q.invite) {
     const name = nameOf(q.invite);
     if (!name) return { error: "name" };
-    if ((await rows()).length >= 100) return { error: "limit" };
+    if ((await rows()).length >= 500) return { error: "limit" }; // v323: friends links live here too (max 3 per member)
     const token = randomBytes(16).toString("hex");
     await redis([["HSET", "ak", token, JSON.stringify({ n: name, at: Date.now() })]]);
     return { name, link: origin + "/?k=" + token };
