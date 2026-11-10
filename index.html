@@ -3003,7 +3003,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v321',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v322',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4778,8 +4778,9 @@ $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
 // 💬 « Reprendre la recette ou la question »: the last thing generated in this session (recipe or question), else the latest saved one, else a new chat
 $('#n2').onclick=()=>{
-  if(hist.length){show('chat');return}
+  if(hist.length){track('resume_click',{to:qaMode?'qa':'chat'});show('chat');return}
   const last=loadH().filter(x=>!x.arch).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0))[0];
+  track('resume_click',{to:last?(last.qa?'qa':'card'):'new'});
   if(last)openCard(last.id);else openChat(null);
 };
 // « Surprends-moi »: opens the chat and the chef proposes the four courses as buttons, in the conversation
