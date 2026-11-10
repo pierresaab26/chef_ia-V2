@@ -19,3 +19,8 @@ export function starsOf(flat) {
   for (let i = 1; i < (flat || []).length; i += 2) { const s = Number(flat[i]); if (s >= 1 && s <= 5) v.push(s); }
   return { n: v.length, avg: v.length ? v.reduce((p, q) => p + q, 0) / v.length : 0 };
 }
+// v315: « Recommandée » badge = enough votes (5+) AND a high weighted score (4.2+): a lone 5-star vote (3.75) never qualifies.
+export const REC_MIN_VOTES = 5, REC_MIN_QUALITY = 4.2;
+export function recommended(avg, n) {
+  return (Number(n) || 0) >= REC_MIN_VOTES && quality(avg, n) >= REC_MIN_QUALITY;
+}

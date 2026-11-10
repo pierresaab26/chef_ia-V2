@@ -1,5 +1,5 @@
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
-import { rank } from "./_score.js";
+import { rank, recommended } from "./_score.js";
 
 // v129: shared recipes. The sender publishes a copy of the recipe ("s:<sid>") and gets a link /?s=<sid>.
 // The friend opens the link: the recipe lands in his app with the SAME comment key, so both see the same comments.
@@ -119,12 +119,12 @@ export async function searchShared(q, lang, max = 6) {
     }
     const list = hit.slice(0, 40);
     if (!list.length) return [];
-    const res = await redis(list.flatMap((c) => [["HGETALL", "r:" + c.ck], ["ZSCORE", "s:pop", c.ck]]));
+    const res = await redis(list.flatMap((c) => [["HGETALL", "r:" + c.ck], ["ZSCORE", "s:pop", c.ck], ["HLEN", "rc:" + c.ck]]));
     return list.map((c, x) => {
-      const h = res[x * 2] || [], v = [];
+      const h = res[x * 3] || [], v = [];
       for (let i = 1; i < h.length; i += 2) { const n = Number(h[i]); if (n >= 1 && n <= 5) v.push(n); }
-      const n = v.length, a = n ? v.reduce((p, r) => p + r, 0) / n : 0, sh = Number(res[x * 2 + 1]) || 0;
-      return { sid: c.sid, t: c.t, nt: c.nt, a: Math.round(a * 10) / 10, n, score: rank(a, n, sh) };
+      const n = v.length, a = n ? v.reduce((p, r) => p + r, 0) / n : 0, sh = Number(res[x * 3 + 1]) || 0, cooked = Math.max(Number(res[x * 3 + 2]) || 0, n); // v315: people who cooked it (marked or rated)
+      return { sid: c.sid, t: c.t, nt: c.nt, a: Math.round(a * 10) / 10, n, c: cooked, rec: recommended(a, n), score: rank(a, n, sh) };
     }).sort((p, r) => r.score - p.score).filter((o) => !seen.has(o.nt) && seen.add(o.nt)).slice(0, max).map(({ score, nt, ...o }) => o); // v314: one card per dish, the best-ranked variant first
   } catch { return []; }
 }

@@ -396,3 +396,8 @@ The optional row « Un mot sur la recette » (Too salty / Easy / Kids loved it /
 ## v314 — Weighted score (stars + number of votes)
 
 Recipes are ranked with `api/_score.js`: Bayesian average with a prior of 3.5 worth 5 votes, plus a small capped share bonus. A recipe with one 5-star vote does not beat one with many good votes. Used by the community search and the weekly menu's community picks; same-title variants collapse to one card, the best-ranked on top. The card still shows the raw average and vote count.
+
+
+## v315 — Weighted score made visible
+
+Community search items show the average, the number of votes and « Cuisinée par N personnes » (from 2 people), plus a « ⭐ Recommandée » pill when the recipe has at least 5 votes and a weighted quality of 4.2 or more (`recommended()` in `api/_score.js`). The recipe card and the chat bar show the same « Cuisinée par N personnes » line under the actions. Ordering still uses the weighted score (v314); the displayed average stays the real one.
