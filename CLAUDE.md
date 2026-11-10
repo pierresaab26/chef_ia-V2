@@ -3,7 +3,7 @@
 Read this first in every session. Keep it up to date when something important changes (state, decisions, rules).
 Never put secrets here (keys, passwords, tokens): this repository may be public.
 
-## 0. Resume here (state at the end of the session of 2026-11-10, app v326)
+## 0. Resume here (state at the end of the session of 2026-11-10, app v327)
 
 **State.** Live site https://chefia-v3.vercel.app runs the latest commit of `main` (v115 pushed; v116 exists only LOCALLY until the owner says « pousse »; the badge « ▲ Vercel · vN » and the browser console line `Chef IA vN` tell which version is loaded). Vercel deploys every push: check it with `gh api repos/pierresaab26/chef_ia-V2/commits/<sha>/statuses` (two Vercel projects deploy the same repo, `chef_ia-v3` = the real site and `chef_ia-v2`); the sandbox itself cannot open the site (proxy 403). A user who still sees an old version just needs to close the tab / app completely and reopen it.
 
@@ -121,6 +121,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (up to v149)
+
+v327 (owner: « Mon pseudo, puis Donner l’accès à un ami, puis Membres de mon cercle, tout en haut »): « Mon cercle » now starts with 1) « Mon pseudo » (key `ciYou`, 6 languages), 2) « Donner l’accès à un ami », 3) « Membres de mon cercle », then 🔔 Nouveautés, then the rest; done by `box.prepend` in `drawCircle()`. Syntax checked only. Committed locally, NOT pushed.
 
 v326 (owner: « Tu l’as pas fait, il doit être tout en haut »): in `drawCircle()` the « 🔔 Nouveautés » block (`notesBlock`) was still drawn first, so v325 left « Donner l’accès » second; the access block is now created BEFORE `notesBlock`, i.e. the very first block of « Mon cercle ». Syntax checked only. Committed locally, NOT pushed.
 
