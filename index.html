@@ -2893,7 +2893,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v312',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v313',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4125,15 +4125,11 @@ function rateBox(id,vi){ // v252: « J'ai cuisiné » first, THEN 1 to 5 stars (
   const bs=[1,2,3,4,5].map(n=>{const b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('aria-label',n+'/5');b.title=n+'/5';st.appendChild(b);return b});
   const paint=n=>bs.forEach((b,i)=>{b.classList.toggle('on',i<n);b.setAttribute('aria-pressed',String(i+1===n))});
   const tp=document.createElement('div');tp.className='rtips';tp.hidden=true; /* v311: adjustments others tested on this recipe */
-  const tg=document.createElement('div');tg.className='rtags';
-  {const tl=document.createElement('span');tl.className='rtl';tl.textContent=t.tgT;tg.appendChild(tl)}
-  const tbs=['salty','easy','kids','long'].map(k=>{const b=document.createElement('button');b.type='button';b.className='rtag';b.dataset.k=k;b.textContent=t['tg_'+k];tg.appendChild(b);return b});
-  const paintT=v=>tbs.forEach(b=>{const on=b.dataset.k===v;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});
   const mi=(()=>{const o=ownIdx(e0);return o.length?(vi!=null&&o.includes(vi)?vi:o[o.length-1]):null})(),getS=z=>z?(mi!=null&&z.messages&&z.messages[mi]?z.messages[mi].stars||0:z.stars||0):0,setS=(z,n)=>{if(mi!=null&&z.messages&&z.messages[mi])z.messages[mi].stars=n;else z.stars=n};
   const getM=z=>(z&&mi!=null&&z.messages&&z.messages[mi])||z; // the version's message (or the entry itself for an old recipe)
   const getT=z=>z?getM(z).tag||'':'',setT=(z,v)=>{const m=getM(z);if(v)m.tag=v;else delete m.tag};
   const isC=z=>!!z&&(getS(z)>0||!!getM(z).cooked),setC=z=>{getM(z).cooked=Date.now()}; // a rating always means « cooked » (ratings given before v252 count)
-  const sync=()=>{const z=loadH().find(x=>x.id===id),c=isC(z);ck.style.display=c?'none':'';st.style.display=c?'':'none';tg.style.display=getS(z)>0?'':'none';paint(getS(z));paintT(getT(z))};
+  const sync=()=>{const z=loadH().find(x=>x.id===id),c=isC(z);ck.style.display=c?'none':'';st.style.display=c?'':'none';paint(getS(z))};
   const key=vKey(e0,mi),vtit=mi!=null?recipeTitle(e0.messages[mi].content)||e0.title:e0.title; // v127: own rating for each version
   const adjOf=()=>{const z=loadH().find(x=>x.id===id),o=z?ownIdx(z):[],m=z?getM(z):null;return m&&m.adj&&m.adj.length&&mi!=null&&o.length>1&&mi!==o[0]?{adj:m.adj,parent:vKey(z,o[0])}:null}; /* v311: a LATER version made with the filters: once cooked, its filters become tips of the first version */
   const showTips=j=>{const L=[null,t.qD1o,t.qD2o,t.qO],a=Object.entries((j&&j.tips)||{}).filter(([c])=>/^[123]\.\d$/.test(c)&&L[+c[0]]&&L[+c[0]].split('|')[+c.slice(2)]).sort((x,y)=>y[1]-x[1]).map(([c,n])=>L[+c[0]].split('|')[+c.slice(2)]+(n>1?' ×'+n:''));tp.hidden=!a.length;tp.textContent=a.length?t.tipsT.replace('{x}',a.join(', ')):''};
@@ -4149,8 +4145,7 @@ function rateBox(id,vi){ // v252: « J'ai cuisiné » first, THEN 1 to 5 stars (
   ck.onclick=()=>{updEntry(id,setC);sync();toast(t.ckOk);post({cooked:1})};
   bs.forEach((b,i)=>b.onclick=()=>{const n=i+1;const cur=getS(loadH().find(x=>x.id===id));if(n===cur)return;
     updEntry(id,z=>setS(z,n));sync();toast(t.rateOk.replace('{n}',n));post({stars:n})});
-  tbs.forEach(b=>b.onclick=()=>{const k=b.dataset.k,v=getT(loadH().find(x=>x.id===id))===k?'':k;updEntry(id,z=>setT(z,v));paintT(v);post({tag:v||'none'})});
-  box.append(lb,ck,st,info);wrap.append(box,tg,tp);return wrap;
+  box.append(lb,ck,st,info);wrap.append(box,tp);return wrap; /* v313: the « Un mot sur la recette » tag row is gone (tags already stored still feed the taste profile) */
 }
 // v115: Ingredients / Utensils / Preparation as three tabs (one section at a time) instead of one long scroll
 function cardTabs(rt){

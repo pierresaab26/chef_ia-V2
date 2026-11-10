@@ -386,3 +386,8 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 - `manifest.webmanifest`, `icons/*`, `sw.js` (no cache, offline page only) make the site installable.
 - Android only (v296): when the browser fires `beforeinstallprompt` (installable, not installed), a thin bottom pop-up `#a2pop` « Installe Chef IA sur ton téléphone · Installer · ✕ » and a drawer item `#dA2hs` open the native install prompt. ✕ or a refused install hides it for 3 days (localStorage `a2Hide`). Hidden while typing and on the recipe card.
 - iOS: nothing is offered (the installed app would have its own storage, separate from Safari: no history, no circle).
+
+
+## v313 — Quick-tag row removed
+
+The optional row « Un mot sur la recette » (Too salty / Easy / Kids loved it / Too long) under the stars is gone from the recipe card and the chat. Tags already given stay stored and still feed the taste profile (repeated tags); nothing new can be added from the app. The server route still accepts `tag`.
