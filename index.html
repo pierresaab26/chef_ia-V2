@@ -718,6 +718,14 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 <script>
 // v320: personal invitation link « /?k=<token> »: the token becomes this device's access code, then leaves the address bar.
 {try{const p=new URLSearchParams(location.search),k=(p.get('k')||'').trim().toLowerCase();if(/^[a-f0-9]{32}$/.test(k)){localStorage.setItem('code',k);p.delete('k');const q=p.toString();history.replaceState(null,'',location.pathname+(q?'?'+q:'')+location.hash)}}catch(e){}}
+// v321: PostHog usage analytics (EU cloud). Real site only (never on localhost, the claude.ai preview or other Vercel projects), anonymous, no cookies (id kept in localStorage), NO session recording. track() never throws.
+function track(n,p){try{if(window.posthog&&window.posthog.capture)window.posthog.capture(n,p)}catch(e){}}
+(function(){try{if(location.hostname!=='chefia-v3.vercel.app')return;
+  const ph=window.posthog=[];ph._i=[];ph.__SV=1;
+  ph.init=function(k,c,n){ph._i.push([k,c,n]);const s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.src='https://eu-assets.i.posthog.com/static/array.js';document.head.appendChild(s)};
+  ph.capture=function(){ph.push(['capture'].concat([].slice.call(arguments)))};
+  ph.init('phc_rGe5PDJ6NcPVXSQEaiu86KUqhAHTSrwHcor2iQw6Z6hZ',{api_host:'https://eu.i.posthog.com',ui_host:'https://eu.posthog.com',persistence:'localStorage',person_profiles:'identified_only',autocapture:{dom_event_allowlist:['click'],capture_copied_text:false},capture_pageview:true,capture_pageleave:true,enable_heatmaps:true,disable_session_recording:true})
+}catch(e){}})();
 // ---------- Interface texts: ONE block per language, same keys in every language ----------
 // e_* keys are import/API error messages, read as t['e_'+code].
 const I18={
@@ -2656,7 +2664,7 @@ let curView='home';
 function fitAsk(){const i=$('#hq');if(!i)return;const t=T();i.placeholder=t.ask;try{const cs=getComputedStyle(i),c=fitAsk.c||(fitAsk.c=document.createElement('canvas').getContext('2d'));c.font=cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily;
   const room=i.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);if(room>0&&c.measureText(t.ask).width>room&&t.askS)i.placeholder=t.askS}catch(x){}}
 addEventListener('resize',()=>{try{fitAsk()}catch(x){}});
-function show(id){if(id==='home')setTimeout(()=>{try{fitAsk()}catch(x){}},0);const a2p=document.getElementById('a2pop');if(a2p)a2p.classList.toggle('oncard',id==='card');if(id!=='history'&&typeof hsel!=='undefined'&&hsel){hsel=null;try{selBar()}catch(x){}}curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}if(id==='home'){try{drawHomeSearch();drawMenu()}catch(x){}}}
+function show(id){track('view',{v:id});if(id==='home')setTimeout(()=>{try{fitAsk()}catch(x){}},0);const a2p=document.getElementById('a2pop');if(a2p)a2p.classList.toggle('oncard',id==='card');if(id!=='history'&&typeof hsel!=='undefined'&&hsel){hsel=null;try{selBar()}catch(x){}}curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));$('#n1').classList.toggle('on',id==='home');markDrawer();try{updTop()}catch(x){}if(id==='home'){try{drawHomeSearch();drawMenu()}catch(x){}}}
 function markDrawer(){document.querySelectorAll('.ditem').forEach(b=>b.classList.toggle('on',b.dataset.go===curView))}
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
@@ -2789,7 +2797,7 @@ function drawQuick(){if(qaMode)return;quickCols($('#quick'),txt=>send(txt));try{
 // « Generate the recipe(s) »: the ideas lists STAY in the thread (and stay usable: ideas already generated get a ✓), each ticked idea gets its recipe right below it (one chef request per idea),
 // and each recipe is saved as its own recipe (own favorite, rating, comments) with a link back to the ideas.
 async function genRecipes(picks,f){
-  const I=ideaPicks();if(busy||!I||!picks.length)return;
+  const I=ideaPicks();if(busy||!I||!picks.length)return;track('recipes_from_ideas',{n:picks.length});
   const t=T(),els=[...log.querySelectorAll('.m:not(.xfam)')],idx=els.indexOf(picks[0].msg);if(idx<0||!hist[idx]||hist[idx].role!=='assistant')return;
   const at=idx+1,ask=idx>0?shown(hist[idx-1].content):'',fl=f.length?' : '+f.join(', '):'';
   busy=true;sendB.disabled=true;
@@ -2995,7 +3003,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v320',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v321',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3401,7 +3409,7 @@ function paintMenuHome(m,rec,sug){ // v317: « Menu de la semaine » card: strip
     r.append(th,tx);r.onclick=stop(x?x.go:openMenuView);rt.appendChild(r)});
   bd.append(img,rt);b.append(hd,st,bd);
 }
-function openMenuView(){drawMenu();show('menu')}
+function openMenuView(){track('menu_week_open');drawMenu();show('menu')}
 var mhDay=null;
 function drawMenu(){
   const t=T(),box=$('#menuBox');box.innerHTML='';$('#menuT').textContent=t.menuT;
@@ -3765,7 +3773,7 @@ async function getPhoto(e){
   }catch(x){return null}
   updEntry(e.id,z=>{z.photo=url});return url;
 }
-function toggleFav(id,vi){let res=false;const a=loadH(),e=a.find(x=>x.id===id);if(e){if(e.qa){e.fav=!e.fav;res=e.fav}else{const o=ownIdx(e);if(vi==null){if(famFav(e)){o.forEach(i=>{delete e.messages[i].fav});res=false}else if(o.length){e.messages[o[0]].fav=true;res=true}}else{const m=e.messages[vi];if(m){if(m.fav)delete m.fav;else m.fav=true;res=!!m.fav}}}e.updatedAt=Date.now();saveH(a)}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}return res}
+function toggleFav(id,vi){let res=false;const a=loadH(),e=a.find(x=>x.id===id);if(e){if(e.qa){e.fav=!e.fav;res=e.fav}else{const o=ownIdx(e);if(vi==null){if(famFav(e)){o.forEach(i=>{delete e.messages[i].fav});res=false}else if(o.length){e.messages[o[0]].fav=true;res=true}}else{const m=e.messages[vi];if(m){if(m.fav)delete m.fav;else m.fav=true;res=!!m.fav}}}e.updatedAt=Date.now();saveH(a)}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}if(res)track('favorite_add');return res}
 // v139: the shared copy of a version is created ONCE and kept (shareMemo), ideally BEFORE the tap (card opened, finger down on the button):
 // iOS refuses navigator.share() when the page has waited for the server after the tap, which made the share button look broken.
 const shareMemo={};
@@ -3775,7 +3783,7 @@ function shareLink(e,quiet){
   if(shareMemo[ck])return shareMemo[ck];
   const p=(async()=>{try{const sid=await sidFor(k),r=await capi('POST','',{sid,ck:k,title:e.title,text:recipeText(e),lang:e.lang||lang,ph:e.ph&&!hasOwnImg(e)?e.ph:null,rs:e.imp&&(e.croot||e.csid)||'',by:e.imp&&(e.corig||e.cby)||''},'/api/shared',quiet);if(r.ok)return location.origin+'/?s='+sid}catch(x){}delete shareMemo[ck];return ''})(); // v129: the friend opens this link → the recipe AND its comments
   shareMemo[ck]=p;return p}
-async function shareRecipe(e){
+async function shareRecipe(e){track('share_recipe');
   const pic=e.ph&&!hasOwnImg(e)&&okU(e.ph.pg)?'\n\n📷 '+T().phBy+' '+(e.ph.by||'Unsplash')+' · Unsplash\n'+e.ph.pg:''; // the recipient gets the credit and the link of the SAME photo
   const slink=await Promise.race([shareLink(e),new Promise(r=>setTimeout(()=>r(''),2500))]); // already resolved when prepared: no wait, the tap is still « fresh »
   if(slink){const sid=slink.split('?s=')[1];if(sid)capi('POST','',{sid,hit:1},'/api/shared',true).catch(()=>{})} // v248: a REAL share (the copy above is prepared on every card): counts for the weekly menu
@@ -3865,7 +3873,7 @@ function mergeText(a,b){const pa=qParse(a),pb=qParse(b),v=Math.round((pa.n+pb.n)
 // v201: the same wording is added up silently; a NEAR match (« 5 jaunes d'œuf » + « 3 œufs ») is added as a pending line and the owner is asked when the list opens (resolveMerges)
 // v208: every line keeps the part of each recipe (x.c=[{r:recipe,t:text}]) so a recipe can be taken out of the list again
 function contribs(x){return x.c||[{r:x.r||'',t:x.t,old:1}]}
-function addMerge(items,txt,from){let i=items.findIndex(x=>sameItem(x.t,txt));if(i>=0&&items[i].d){items.splice(i,1);i=items.findIndex(x=>sameItem(x.t,txt))} /* v225: a line already bought is replaced, the ingredient has to be bought again */ const me={r:from||'',t:txt};if(i<0){items.unshift({t:txt,r:from||'',d:0,c:[me]});return}
+function addMerge(items,txt,from){track('shopping_add');let i=items.findIndex(x=>sameItem(x.t,txt));if(i>=0&&items[i].d){items.splice(i,1);i=items.findIndex(x=>sameItem(x.t,txt))} /* v225: a line already bought is replaced, the ingredient has to be bought again */ const me={r:from||'',t:txt};if(i<0){items.unshift({t:txt,r:from||'',d:0,c:[me]});return}
   const pa=qParse(items[i].t),pb=qParse(txt);if(!pa||!pb){items[i].c=contribs(items[i]).concat(me);return}
   if(qWord(pa.rest)===qWord(pb.rest)){items[i].c=contribs(items[i]).concat(me);items[i].t=mergeText(items[i].t,txt).t;return}
   if(!items[i].id)items[i].id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -4260,9 +4268,9 @@ function rateBox(id,vi){ // v252: « J'ai cuisiné » first, THEN 1 to 5 stars (
   const post=d=>capi('POST','',{key,title:vtit,lang,origin:originOf(loadH().find(x=>x.id===id)||e0),...d,...((d.cooked||d.stars)?adjOf()||{}:{})},'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
   sync();
   capi('GET','?key='+key,null,'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
-  ck.onclick=()=>{updEntry(id,setC);sync();toast(t.ckOk);post({cooked:1})};
+  ck.onclick=()=>{updEntry(id,setC);sync();toast(t.ckOk);track('cooked');post({cooked:1})};
   bs.forEach((b,i)=>b.onclick=()=>{const n=i+1;const cur=getS(loadH().find(x=>x.id===id));if(n===cur)return;
-    updEntry(id,z=>setS(z,n));sync();toast(t.rateOk.replace('{n}',n));post({stars:n})});
+    updEntry(id,z=>setS(z,n));sync();toast(t.rateOk.replace('{n}',n));track('rated',{stars:n});post({stars:n})});
   box.append(lb,ck,st,info);wrap.append(box,cb,tp);return wrap; /* v313: the « Un mot sur la recette » tag row is gone (tags already stored still feed the taste profile) */
 }
 // v115: Ingredients / Utensils / Preparation as three tabs (one section at a time) instead of one long scroll
@@ -4278,7 +4286,7 @@ function cardTabs(rt){
   const pick=k=>{order.forEach(o=>{groups[o].forEach(x=>{x.hidden=o!==k;if(o==='ut')x.classList.add('open')});btns[o].setAttribute('aria-selected',String(o===k));btns[o].classList.toggle('on',o===k)})};
   const btns={};order.forEach(k=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=lab[k];b.onclick=()=>pick(k);btns[k]=b;seg.appendChild(b)});
   rt.insertBefore(seg,first);pick(order[0])} // tabs go AFTER the chef's intro text (it stays visible above them)
-function openCard(id,vi){
+function openCard(id,vi){track('recipe_card_open');
   const e=loadH().find(x=>x.id===id);if(!e)return;
   if(e.qa){openQAEntry(e);return}
   const vm=vi!=null&&e.messages&&e.messages[vi]&&e.messages[vi].role==='assistant'&&looksLikeRecipe(e.messages[vi].content)?e.messages[vi]:null; // v126: a given (older) version of the recipe
@@ -4457,7 +4465,7 @@ function openChat(chef){
   showWelcome();qaUI();
   show('chat');
 }
-function openQA(){openChat(null);qaMode=true;log.innerHTML='';showWelcome();qaUI()}
+function openQA(){track('qa_open');openChat(null);qaMode=true;log.innerHTML='';showWelcome();qaUI()}
 function start(q){openChat(null);send(q,true)}
 // v254: personal taste profile, computed on the device from the user's own cookbook and sent with each chef request (api/_taste.js cleans it).
 function tasteProfile(){try{
@@ -4507,7 +4515,7 @@ async function completeReply(h,out){
 const errText=e=>e&&e.code==='rate_limited'?T().e429:e&&e.code==='banned'?T().eBan:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err;
 async function send(text,auto,ctx){
   const adjNow=pendAdj;pendAdj=null; /* v311 */
-  text=(text||inp.value).trim();if(!text||busy)return;
+  text=(text||inp.value).trim();if(!text||busy)return;track(auto===true?'chef_auto_request':'chat_message',{qa:!!qaMode});
   inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
   const tok=convTok;
@@ -4517,7 +4525,7 @@ async function send(text,auto,ctx){
     renderMsg(out,j.text);hist.push({role:'assistant',content:j.text,at:Date.now(),...(adjNow&&adjNow.length&&looksLikeRecipe(j.text)?{adj:adjNow}:{})});drawQuick();try{saveCurrent()}catch(e){}if(qaMode){qaSync();qaActions()}
     try{dishPic(out,j.text)}catch(e){}
     if(looksLikeRecipe(j.text))showStart(startOf(out));
-    cardAfter=false;if(!qaMode&&looksLikeRecipe(j.text)&&currentId&&loadH().some(x=>x.id===currentId))openCard(currentId); // v121: EVERY new / adapted / regenerated recipe is shown on the recipe card (tabs)
+    cardAfter=false;if(!qaMode&&looksLikeRecipe(j.text))track('recipe_received',{adapted:!!adjNow});if(!qaMode&&looksLikeRecipe(j.text)&&currentId&&loadH().some(x=>x.id===currentId))openCard(currentId); // v121: EVERY new / adapted / regenerated recipe is shown on the recipe card (tabs)
   }catch(e){
     cardAfter=false;if(tok!==convTok)return;
     hist.pop();
@@ -4534,7 +4542,7 @@ function impText(){const t=T();
   $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
 function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
 function openImp(){resetImp();show('imp')}
-async function apiPost(path,data){
+async function apiPost(path,data){track('import_request',{kind:/photo/.test(path)?'photo':'link'});
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
     return fetchT(path,{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify(data)},90000)};
   let r;try{r=await call()}catch(x){throw {code:'network'}}
@@ -4612,7 +4620,7 @@ function showPreview(st){
   o.scrollIntoView&&o.scrollIntoView({block:'start'});
 }
 function useImport(){
-  if(!imp)return;const t=T(),st=imp;
+  if(!imp)return;track('import_saved');const t=T(),st=imp;
   openChat(null);log.innerHTML='';
   const msg=st.src==='link'?t.imMsgL.replace('{x}',st.host):t.imMsgP,text=recipeToText(st.recipe,st);
   hist=[{role:'user',content:'[UI] '+msg},{role:'assistant',content:text}];
@@ -4775,7 +4783,7 @@ $('#n2').onclick=()=>{
   if(last)openCard(last.id);else openChat(null);
 };
 // « Surprends-moi »: opens the chat and the chef proposes the four courses as buttons, in the conversation
-function surpChat(){const t=T();openChat(null); // a surprise conversation does not need the Discuter / Questions switch
+function surpChat(){track('surprise_open');const t=T();openChat(null); // a surprise conversation does not need the Discuter / Questions switch
   log.querySelectorAll('.welcome').forEach(x=>x.remove()); // no duplicate: the welcome block is rebuilt with the four courses
   const crs=t.crs.split('|'),crsL=t.crsL.split('|');
   const d=welcomeEl();d.classList.add('surpq');
@@ -4808,7 +4816,7 @@ function addShared(d,meta){const t=T();
     else{e.csid=meta.sid;e.cby=meta.by||'';e.croot=d.rs||meta.sid;e.corig=d.by||meta.by||''}delete e.cgone} // v289: root copy + original author, kept when re-shared // v288: saved from my circle: remember its author and its shared copy
   if(!saveH(a))toast(t.stFull);
   return e}
-async function importShared(sid,meta){const t=T();try{
+async function importShared(sid,meta){track('shared_link_opened');const t=T();try{
   const r=await capi('GET','?sid='+sid,null,'/api/shared');if(!r.ok)throw 0;const e=addShared(await r.json(),meta?{...meta,sid}:null);
   try{history.replaceState(null,'',location.pathname)}catch(x){}
   drawHistory();openCard(e.id);toast('📥 '+t.impOk)}catch(x){toast(t.impErr)}}
@@ -4937,7 +4945,7 @@ async function inviteCircle(btn,mode){const t=T();if(!nick())await askNick();if(
     const v=await mk();
     if(navigator.share){try{await navigator.share({text:v.txt});return}catch(x){if(x&&x.name==='AbortError')return}} // v298: no « title »: the Mac glued it to the text (« Chef IA and Rejoins… »)
     let ok=false;try{await navigator.clipboard.writeText(v.txt);ok=true}catch(x){}toast(ok?t.ciCopied:v.link)}catch(x){toast(t.ciErr)}finally{btn.disabled=false}}
-async function joinCircle(code){const t=T();try{history.replaceState(null,'',location.pathname)}catch(x){}
+async function joinCircle(code){track('circle_join');const t=T();try{history.replaceState(null,'',location.pathname)}catch(x){}
   if(!nick())await askNick();if(nick())await syncNick();
   try{const r=await capi('POST','',{act:'join',code},'/api/circle');let d={};try{d=await r.json()}catch(x){}
     if(r.ok){toast((d.already?t.ciAlready:t.ciJoined).replace('{n}',d.name||t.ciNoName));drawCircle();show('circle');return}

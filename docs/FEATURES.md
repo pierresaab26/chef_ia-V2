@@ -428,3 +428,9 @@ Menu-card photo locked at 132 px square (no size change when the real photo load
 - `&invites=1` lists the invitations with their links; `&revoke=<name or token>` cancels them (effective within about 1 minute, positive checks are cached 60 s per server instance).
 - Storage: Redis hash `ak` (token → `{n:name, at:time}`), 100 invitations max. Needs `APP_PASSWORD` to be set, otherwise the app is open.
 - Not done: usage counter per link, expiry date, link creation from inside the app.
+
+## Usage analytics (v321)
+
+- PostHog (EU cloud) measures usage on the real site only (`chefia-v3.vercel.app`): pageviews, clicks (autocapture), heatmaps, web vitals and the named events listed in CLAUDE.md section 5 (v321). Anonymous (no link to the invitation name), no cookies (localStorage id), no session recording.
+- Code: `track(name,props)` and the loader at the top of the script in `index.html`; add a new event by calling `track('name',{...})` where the action happens. The project key `phc_…` is public; do not store any personal API key in the repo.
+- Dashboards are built in PostHog itself (insights by event name, per day; heatmaps from the toolbar).
