@@ -3003,7 +3003,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v327',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v328',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4979,6 +4979,19 @@ async function checkLive(id,dl){try{const e0=loadH().find(x=>x.id===id);if(!e0||
 // Shared link « /?q=question »: opens the cooking-questions screen on that question (the chef answers again; the comments are the shared ones for that question).
 {let sq='';try{sq=(new URLSearchParams(location.search).get('q')||'').trim().slice(0,200)}catch(e){}
   if(sq){try{history.replaceState(null,'',location.pathname)}catch(e){}openQA();send(sq)}}
+/* v328: every night at midnight (device time), and when the app is reopened on a new day, check whether a newer version is online; reload only when it differs AND nobody is typing or waiting for the chef */
+(function(){
+  if(!/^https?:$/.test(location.protocol)||typeof claude!=='undefined')return;
+  let day=new Date().toDateString(),pend=null,tm=null;
+  const idle=()=>!busy&&!document.querySelector('.dlgw')&&![...document.querySelectorAll('textarea,input')].some(x=>/^(text|search|textarea|)$/.test(x.type||'')&&x.value&&x.value.trim());
+  const go=()=>{if(!pend)return;if(!idle()){clearTimeout(tm);tm=setTimeout(go,30000);return}
+    try{const k='verReload',last=JSON.parse(sessionStorage.getItem(k)||'null');if(last&&last.v===pend&&Date.now()-last.t<600000)return;sessionStorage.setItem(k,JSON.stringify({v:pend,t:Date.now()}))}catch(e){}
+    location.reload()};
+  const check=async()=>{day=new Date().toDateString();try{const r=await fetch('/?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const m=(await r.text()).match(/const APP_VERSION='(v\d+)'/);if(m&&m[1]!==APP_VERSION){pend=m[1];go()}}catch(e){}};
+  const arm=()=>{const n=new Date(),next=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1,0,0,0,0);setTimeout(()=>{check();arm()},next-n+Math.floor(Math.random()*300000))};
+  arm();
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)return;if(new Date().toDateString()!==day)check();else if(pend)go()});
+})();
 </script>
 </body>
 </html>

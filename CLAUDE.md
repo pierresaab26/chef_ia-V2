@@ -3,7 +3,7 @@
 Read this first in every session. Keep it up to date when something important changes (state, decisions, rules).
 Never put secrets here (keys, passwords, tokens): this repository may be public.
 
-## 0. Resume here (state at the end of the session of 2026-11-10, app v327)
+## 0. Resume here (state at the end of the session of 2026-11-10, app v328)
 
 **State.** Live site https://chefia-v3.vercel.app runs the latest commit of `main` (v115 pushed; v116 exists only LOCALLY until the owner says « pousse »; the badge « ▲ Vercel · vN » and the browser console line `Chef IA vN` tell which version is loaded). Vercel deploys every push: check it with `gh api repos/pierresaab26/chef_ia-V2/commits/<sha>/statuses` (two Vercel projects deploy the same repo, `chef_ia-v3` = the real site and `chef_ia-v2`); the sandbox itself cannot open the site (proxy 403). A user who still sees an old version just needs to close the tab / app completely and reopen it.
 
@@ -121,6 +121,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (up to v149)
+
+v328 (owner: « un rafraîchissement tous les soirs à minuit pour que les gens prennent la dernière version »): at the end of the script in `index.html`, a block checks for a newer version at local midnight (random 0–5 min delay) and when the app is reopened on a new day: `fetch('/?_=…',{cache:'no-store'})`, compares `APP_VERSION` with the online one and, ONLY if it differs, reloads the page, but only when nobody is typing (any non-empty text field / textarea), no dialog is open and the chef is not answering (`busy`); otherwise it retries every 30 s. Never twice within 10 min for the same version (sessionStorage `verReload`). Off in the claude.ai preview. Users on a version older than v328 must reopen the app once. Tests (not in repo): /tmp/t328/t.py (Playwright + fake clock: same version no reload, new version reloads, typed text blocks until cleared, no JS error). Committed locally, NOT pushed.
 
 v327 (owner: « Mon pseudo, puis Donner l’accès à un ami, puis Membres de mon cercle, tout en haut »): « Mon cercle » now starts with 1) « Mon pseudo » (key `ciYou`, 6 languages), 2) « Donner l’accès à un ami », 3) « Membres de mon cercle », then 🔔 Nouveautés, then the rest; done by `box.prepend` in `drawCircle()`. Syntax checked only. Committed locally, NOT pushed.
 
