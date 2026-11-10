@@ -231,6 +231,17 @@ Every Monday at 9:00 (Paris) the chef proposes the SAME weekly menu to everybody
 - **Fix of v252.** v252 had read `imp` as « imported by the user » (it means « received by link »), so photo / link imports were logged as `chef` and received recipes as `import`. `api/ratings.js` now accepts `chef | import | remix | shared` (`manual` removed, nothing produces it yet).
 - **Not done.** Typed / pasted recipes without photo or link have no import flag yet, so they show « Chef IA » (the import step of the plan will set it). The label « Communauté » for public recipes comes with the public step.
 
+## v311 — Adjustments come back as tips on the original recipe (community plan, step 5, second half)
+
+When someone adapts a recipe with the quick filters of the chat (« Adapte la recette Chef ») and then cooks the new version, the filters used become **tips** shown on the recipe it comes from: « 💡 Aussi testée avec : Sans gluten ×2, Version végane ».
+
+- **Which adjustments.** Only the chips of « Sans » (gluten, lactose), « Régime » (vegetarian, vegan) and « Autres » (faster, low fat, high protein). Servings are not a tip. Free text (« avec de la crème ») and « Sans » / « Remplacer » on a struck ingredient give no tip: no model call and no free text on purpose.
+- **Stored on the version.** The chosen chips are saved as language-independent codes `<group>.<option>` (`1.0` = without gluten…) in the field `adj` of the chef's reply (max 3). It follows the version like `cooked`, `stars` and `tag`.
+- **Counted when cooked.** The tip is sent only when the person marks « J'ai cuisiné » or rates a LATER version (not the first one). One vote per person and code, so the same person cannot inflate a tip.
+- **Where it shows.** Under the stars of the first version (the original). For a recipe received from the circle or from the community the original has the author's key, so everybody who has the recipe sees the same tips.
+- **Server.** `api/ratings.js` (no new route): hash `ra:<parent>`, field `code:owner`; summaries return `tips` {code: people}. Deleting a recipe with « delete all » (`api/comments.js`) removes it.
+- **Not done.** The identity test (adjustment vs remix) still runs only at publication (v291). A « vegan » version counts as an adjustment here, but the chef's check can still call it a remix when the author publishes it.
+
 ## v254 — Personal taste profile (community plan, step 2)
 
 The chef now knows the user's cookbook and uses it to personalise ideas and suggestions.

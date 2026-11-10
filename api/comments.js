@@ -69,7 +69,7 @@ export default async function handler(req, res) {
         if (!owner || !/^u-[a-z0-9]{10,}$/.test(key)) return res.status(400).json({ error: "key" });
         const [cr] = await redis([["GET", "o:" + key]]);
         if (cr && cr !== owner) return res.status(403).json({ error: "forbidden" });
-        await redis([["DEL", listKey], ["DEL", "r:" + key], ["DEL", "rc:" + key], ["DEL", "rt:" + key], ["SREM", "r:index", key], ["DEL", "o:" + key], ["DEL", "s:" + key]]);
+        await redis([["DEL", listKey], ["DEL", "r:" + key], ["DEL", "rc:" + key], ["DEL", "rt:" + key], ["DEL", "ra:" + key], ["SREM", "r:index", key], ["DEL", "o:" + key], ["DEL", "s:" + key]]);
         return res.status(200).json({ ok: true });
       }
       // v129: ?mine=1 — erases only the comments written by the caller (old recipes, whose key is shared by title)

@@ -117,7 +117,7 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .rate{display:inline-flex;align-items:center;gap:4px;flex:none;margin:0;padding:3px 10px;background:var(--card);border:1px solid var(--bd);border-radius:999px;box-shadow:var(--sh)}.rate .rl{display:none}
 .rwrap{display:contents}.rate .rck{background:none;border:0;padding:4px 2px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap}
 .rtags{display:flex;flex-wrap:wrap;gap:6px;flex:1 0 100%;align-items:center}.cact .rtags{order:9}
-.obadge{display:inline-block;font-size:11px;font-weight:500;line-height:1.5;padding:1px 8px;margin-left:6px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--mut);white-space:nowrap;vertical-align:1px}.cdate .obadge{margin-left:0}.obadge.gone{white-space:normal}.rtags .rtl{font-size:13px;color:var(--mut);flex:1 0 100%}.rtag{background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;font-size:13px;color:var(--ink);cursor:pointer}.rtag.on{background:var(--pink);border-color:var(--pink);color:#fff}
+.obadge{display:inline-block;font-size:11px;font-weight:500;line-height:1.5;padding:1px 8px;margin-left:6px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--mut);white-space:nowrap;vertical-align:1px}.cdate .obadge{margin-left:0}.obadge.gone{white-space:normal}.rtips{flex:1 0 100%;font-size:12.5px;color:var(--mut);margin:6px 0 0}.rtips[hidden]{display:none}.rtags .rtl{font-size:13px;color:var(--mut);flex:1 0 100%}.rtag{background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;font-size:13px;color:var(--ink);cursor:pointer}.rtag.on{background:var(--pink);border-color:var(--pink);color:#fff}
 #totop{position:fixed;z-index:30;width:44px;height:44px;border-radius:50%;background:#fde6ee;background:color-mix(in srgb,var(--pink) 14%,var(--card));color:var(--pink);border:1px solid rgba(229,25,95,.22);font-size:22px;font-weight:700;line-height:1;display:none;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.12);padding:0}#totop.on{display:grid}
 .qgrid{padding:0;margin:0 0 14px}
 .dlgw{position:fixed;inset:0;z-index:60;background:rgba(10,8,20,.45);display:grid;place-items:center;padding:20px}.dlg{background:var(--card);color:var(--ink);border-radius:22px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.3)}.dlg p{margin:0 0 14px;line-height:1.4}.dlg input{width:100%;box-sizing:border-box;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--bg1);color:var(--ink);margin:0 0 14px}.dlgb{display:flex;gap:8px;justify-content:center}.dlgb .cbtn{border:1px solid var(--bd)}.dlgb .dlgok{background:var(--psoft);color:var(--pink);border-color:var(--psbd);font-weight:700}
@@ -722,6 +722,7 @@ fr:{
   ckB:"✅ J’ai cuisiné",
   ckOk:"Merci ! Donnez maintenant votre note.",
   tgT:"Un mot sur la recette (facultatif)",
+  tipsT:"💡 Aussi testée avec : {x}",
   tg_salty:"Trop salé",
   tg_easy:"Facile",
   tg_kids:"Plaît aux enfants",
@@ -1031,6 +1032,7 @@ en:{
   ckB:"✅ I cooked it",
   ckOk:"Thanks! Now give your rating.",
   tgT:"One word about the recipe (optional)",
+  tipsT:"💡 Also tried with: {x}",
   tg_salty:"Too salty",
   tg_easy:"Easy",
   tg_kids:"Kids loved it",
@@ -1340,6 +1342,7 @@ es:{
   ckB:"✅ La cociné",
   ckOk:"¡Gracias! Ahora pon tu nota.",
   tgT:"Una palabra sobre la receta (opcional)",
+  tipsT:"💡 También probada con: {x}",
   tg_salty:"Muy salada",
   tg_easy:"Fácil",
   tg_kids:"Gusta a los niños",
@@ -1649,6 +1652,7 @@ de:{
   ckB:"✅ Ich habe es gekocht",
   ckOk:"Danke! Gib jetzt deine Bewertung ab.",
   tgT:"Ein Wort zum Rezept (optional)",
+  tipsT:"💡 Auch ausprobiert mit: {x}",
   tg_salty:"Zu salzig",
   tg_easy:"Einfach",
   tg_kids:"Kinder mögen es",
@@ -1958,6 +1962,7 @@ it:{
   ckB:"✅ L’ho cucinata",
   ckOk:"Grazie! Ora dai il tuo voto.",
   tgT:"Una parola sulla ricetta (facoltativo)",
+  tipsT:"💡 Provata anche con: {x}",
   tg_salty:"Troppo salata",
   tg_easy:"Facile",
   tg_kids:"Piace ai bambini",
@@ -2267,6 +2272,7 @@ pt:{
   ckB:"✅ Cozinhei",
   ckOk:"Obrigado! Agora dê a sua nota.",
   tgT:"Uma palavra sobre a receita (opcional)",
+  tipsT:"💡 Também testada com: {x}",
   tg_salty:"Muito salgada",
   tg_easy:"Fácil",
   tg_kids:"As crianças gostam",
@@ -2635,7 +2641,7 @@ function add(cls,t){const d=document.createElement('div');d.className='m '+cls;i
 //  - a recipe is on screen (or on the recipe card) → « Adapt the recipe »;
 //  - nothing yet → « Suggest ideas ».
 // One choice per column, except « Without » (several). Filters reset after sending.
-let qf={},qOpen=true,cardAfter=false; // qOpen: chat filters open (default); after « Adapte la recette Chef » they fold and only the button stays. cardAfter: show the regenerated recipe on the recipe card
+let qf={},qOpen=true,cardAfter=false,pendAdj=null; /* v311: codes of the filters sent with the next « Adapte la recette Chef » request (group.option), stored on the resulting version as `adj` */ // qOpen: chat filters open (default); after « Adapte la recette Chef » they fold and only the button stays. cardAfter: show the regenerated recipe on the recipe card
 function ideaPicks(){ // every ideas list of the thread (they all stay usable) + the ticked ideas, in thread order
   const els=[...log.querySelectorAll('.m.a[data-ideas]')];if(!els.length)return null;
   const lastA=[...log.querySelectorAll('.m.a')].pop();
@@ -2670,7 +2676,7 @@ function quickCols(q,go,adaptMode){
   bMain.onclick=()=>{const f=sel().map(low),{I,mode}=state();
     if(mode==='adapt'&&q.id==='quick'){if(!f.length){qOpen=!qOpen;repaintQuick();return}cardAfter=true}
     if(mode==='ideas'){if(!I.picks.length)return;done();genRecipes(I.picks,f);return}
-    if(!f.length)return;done();go((mode==='adapt'?t.qAdaptMsg:t.qPropMsg).replace('{f}',f.join(', ')),mode==='adapt')};
+    if(!f.length)return;if(mode==='adapt')pendAdj=Object.keys(qf).flatMap(g=>+g>=1?qf[g].map(o=>g+'.'+groups[g][1].split('|').indexOf(o)):[]).filter(c=>!/\.-1$/.test(c)).slice(0,3);done();go((mode==='adapt'?t.qAdaptMsg:t.qPropMsg).replace('{f}',f.join(', ')),mode==='adapt')};
   bMore.onclick=()=>{const f=sel().map(low),{I}=state();if(!I)return;
     const like=I.picks.length?t.idLike.replace('{x}',I.picks.map(p=>p.label).join(' ; ')):'';
     I.picks.forEach(p=>{p.card.classList.remove('sel');p.card.setAttribute('aria-checked','false')}); // used as inspiration
@@ -2887,7 +2893,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v310',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v311',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -2928,7 +2934,7 @@ function looksLikeRecipe(txt){if(txt.length<60)return false;const L=txt.split('\
 function ownVers(e){return e&&e.messages?e.messages.filter(m=>m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id)).length:0} // v124: number of versions of a recipe written by the chef
 function vnOf(e,i){let cur=e&&e.vbase||0,r=null;(e&&e.messages||[]).forEach((m,j)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id)){cur=m.vn||cur+1;if(j===i)r=cur}});return r==null?cur||1:r} // v128: version number (frozen `vn` after a deletion, so the others keep their number)
 function verNum(e){return vnOf(e,lastVi(e))} // latest version number (variants continue the numbering of their original)
-function msgOut(m){const o={role:m.role,content:m.content};if(m.rid)o.rid=m.rid;if(m.at)o.at=m.at;if(m.stars)o.stars=m.stars;if(m.cooked)o.cooked=m.cooked;if(m.tag)o.tag=m.tag;if(m.vn)o.vn=m.vn;if(m.vk)o.vk=m.vk;return o}
+function msgOut(m){const o={role:m.role,content:m.content};if(m.rid)o.rid=m.rid;if(m.at)o.at=m.at;if(m.stars)o.stars=m.stars;if(m.cooked)o.cooked=m.cooked;if(m.tag)o.tag=m.tag;if(m.vn)o.vn=m.vn;if(m.vk)o.vk=m.vk;if(m.adj&&m.adj.length)o.adj=m.adj;return o}
 function originOf(e){return e&&e.from?'remix':e&&(e.src==='photo'||e.src==='link')?'import':e&&e.imp?'shared':'chef'} // v252/v253: where a recipe comes from: remix = variant of another recipe, import = photo / link, shared = received through a share link (`imp`), chef = written by the chef; sent with each rating
 function originBadge(e){if(!e||e.qa)return null;const k=originOf(e),b=document.createElement('span');b.className='obadge';b.dataset.o=k;b.textContent=k==='shared'&&e.cpub?T().pubFrom.replace('{n}',e.cby||T().ciNoName)+(e.corig&&e.corig!==e.cby?' · '+T().ciVia.replace('{n}',e.corig):''):k==='shared'&&e.cby?T().ciFrom.replace('{n}',e.cby)+(e.corig&&e.corig!==e.cby?' · '+T().ciVia.replace('{n}',e.corig):''):T()['org'+{chef:'C',import:'I',remix:'V',shared:'S'}[k]];if(k==='shared'&&e.cgone){b.textContent+=' · '+T().ciGone;b.classList.add('gone')}return b} // v253: small badge « Chef IA / Importée / Variante / Reçue » next to the date
 // v127: every version of a recipe has its OWN favorite, rating, comments and share
@@ -3026,7 +3032,7 @@ function saveCurrent(){
     currentId=e.id;
   }else{a.splice(a.indexOf(e),1)}
   hist.forEach(m=>{if(m.role==='assistant'&&!m.rid&&looksLikeRecipe(m.content))m.rid=currentId}); // recipe message → saved recipe
-  {const old=e.messages||[];e.messages=hist.map((m,i)=>{const o=msgOut(m),q=old[i];if(q&&q.content===m.content){if(q.stars)o.stars=q.stars;if(q.cooked)o.cooked=q.cooked;if(q.tag)o.tag=q.tag;if(q.vn)o.vn=q.vn;if(q.vk)o.vk=q.vk;if(q.fav)o.fav=true}return o});e.favV=1}e.updatedAt=Date.now();
+  {const old=e.messages||[];e.messages=hist.map((m,i)=>{const o=msgOut(m),q=old[i];if(q&&q.content===m.content){if(q.stars)o.stars=q.stars;if(q.cooked)o.cooked=q.cooked;if(q.tag)o.tag=q.tag;if(q.vn)o.vn=q.vn;if(q.vk)o.vk=q.vk;if(q.adj&&q.adj.length)o.adj=q.adj;if(q.fav)o.fav=true}return o});e.favV=1}e.updatedAt=Date.now();
   a.unshift(e);if(!saveH(a))toast(T().stFull);drawHistory();syncCardBtn();try{ensurePhoto(currentId)}catch(x){}menuAssign(e.id);
 }
 function rowFor(e,del,heart,sc,unarch){
@@ -3154,7 +3160,7 @@ function branchWith(src,ings,mode){ // v132: like the quick filters — same con
 function openBranch(id,ings,mode){const e=loadH().find(x=>x.id===id);if(e)branchWith({id,text:recipeText(e),title:e.title,k:e.k,lang:e.lang},ings,mode)}
 function openSaved(id){
   const e=loadH().find(x=>x.id===id);if(!e)return;
-  newConv();hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined),at:m.at,stars:m.stars,cooked:m.cooked,tag:m.tag,vn:m.vn,vk:m.vk}));log.innerHTML='';hiddenIdx=new Set();
+  newConv();hist=e.messages.map(m=>({role:m.role,content:m.content,rid:m.rid||(m.role==='assistant'&&looksLikeRecipe(m.content)?id:undefined),at:m.at,stars:m.stars,cooked:m.cooked,tag:m.tag,vn:m.vn,vk:m.vk,adj:m.adj}));log.innerHTML='';hiddenIdx=new Set();
   chefNow=e.k>=0&&CHEFS[e.k]?{...CHEFS[e.k],k:e.k}:null;qaMode=false;persona=chefNow?chefNow.p:"";currentId=id;branchFrom=null;
   hist.forEach(m=>add(m.role==='user'?'u':'a',shown(m.content)));
   refreshChat();drawQuick();show('chat');
@@ -4118,6 +4124,7 @@ function rateBox(id,vi){ // v252: « J'ai cuisiné » first, THEN 1 to 5 stars (
   const info=document.createElement('span');info.className='ri';
   const bs=[1,2,3,4,5].map(n=>{const b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('aria-label',n+'/5');b.title=n+'/5';st.appendChild(b);return b});
   const paint=n=>bs.forEach((b,i)=>{b.classList.toggle('on',i<n);b.setAttribute('aria-pressed',String(i+1===n))});
+  const tp=document.createElement('div');tp.className='rtips';tp.hidden=true; /* v311: adjustments others tested on this recipe */
   const tg=document.createElement('div');tg.className='rtags';
   {const tl=document.createElement('span');tl.className='rtl';tl.textContent=t.tgT;tg.appendChild(tl)}
   const tbs=['salty','easy','kids','long'].map(k=>{const b=document.createElement('button');b.type='button';b.className='rtag';b.dataset.k=k;b.textContent=t['tg_'+k];tg.appendChild(b);return b});
@@ -4128,20 +4135,22 @@ function rateBox(id,vi){ // v252: « J'ai cuisiné » first, THEN 1 to 5 stars (
   const isC=z=>!!z&&(getS(z)>0||!!getM(z).cooked),setC=z=>{getM(z).cooked=Date.now()}; // a rating always means « cooked » (ratings given before v252 count)
   const sync=()=>{const z=loadH().find(x=>x.id===id),c=isC(z);ck.style.display=c?'none':'';st.style.display=c?'':'none';tg.style.display=getS(z)>0?'':'none';paint(getS(z));paintT(getT(z))};
   const key=vKey(e0,mi),vtit=mi!=null?recipeTitle(e0.messages[mi].content)||e0.title:e0.title; // v127: own rating for each version
-  const show=j=>{if(!j)return;if(j.count)info.textContent=j.avg.toFixed(1).replace('.',T().sr&&/^(fr|es|de|it|pt)/.test(T().sr)?',':'.')+' ('+j.count+')'; // shared rating: average + number of votes, only when someone voted
+  const adjOf=()=>{const z=loadH().find(x=>x.id===id),o=z?ownIdx(z):[],m=z?getM(z):null;return m&&m.adj&&m.adj.length&&mi!=null&&o.length>1&&mi!==o[0]?{adj:m.adj,parent:vKey(z,o[0])}:null}; /* v311: a LATER version made with the filters: once cooked, its filters become tips of the first version */
+  const showTips=j=>{const L=[null,t.qD1o,t.qD2o,t.qO],a=Object.entries((j&&j.tips)||{}).filter(([c])=>/^[123]\.\d$/.test(c)&&L[+c[0]]&&L[+c[0]].split('|')[+c.slice(2)]).sort((x,y)=>y[1]-x[1]).map(([c,n])=>L[+c[0]].split('|')[+c.slice(2)]+(n>1?' ×'+n:''));tp.hidden=!a.length;tp.textContent=a.length?t.tipsT.replace('{x}',a.join(', ')):''};
+  const show=j=>{if(!j)return;showTips(j);if(j.count)info.textContent=j.avg.toFixed(1).replace('.',T().sr&&/^(fr|es|de|it|pt)/.test(T().sr)?',':'.')+' ('+j.count+')'; // shared rating: average + number of votes, only when someone voted
     const z=loadH().find(x=>x.id===id);
     if(j.mine&&!getS(z))updEntry(id,y=>setS(y,j.mine));
     if(j.mineTag&&!getT(z))updEntry(id,y=>setT(y,j.mineTag));
     if(j.mineCooked&&!isC(z))updEntry(id,y=>setC(y));
     sync()};
-  const post=d=>capi('POST','',{key,title:vtit,lang,origin:originOf(loadH().find(x=>x.id===id)||e0),...d},'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
+  const post=d=>capi('POST','',{key,title:vtit,lang,origin:originOf(loadH().find(x=>x.id===id)||e0),...d,...((d.cooked||d.stars)?adjOf()||{}:{})},'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
   sync();
   capi('GET','?key='+key,null,'/api/ratings').then(r=>r.ok?r.json():null).then(show).catch(()=>{});
   ck.onclick=()=>{updEntry(id,setC);sync();toast(t.ckOk);post({cooked:1})};
   bs.forEach((b,i)=>b.onclick=()=>{const n=i+1;const cur=getS(loadH().find(x=>x.id===id));if(n===cur)return;
     updEntry(id,z=>setS(z,n));sync();toast(t.rateOk.replace('{n}',n));post({stars:n})});
   tbs.forEach(b=>b.onclick=()=>{const k=b.dataset.k,v=getT(loadH().find(x=>x.id===id))===k?'':k;updEntry(id,z=>setT(z,v));paintT(v);post({tag:v||'none'})});
-  box.append(lb,ck,st,info);wrap.append(box,tg);return wrap;
+  box.append(lb,ck,st,info);wrap.append(box,tg,tp);return wrap;
 }
 // v115: Ingredients / Utensils / Preparation as three tabs (one section at a time) instead of one long scroll
 function cardTabs(rt){
@@ -4384,6 +4393,7 @@ async function completeReply(h,out){
 }
 const errText=e=>e&&e.code==='rate_limited'?T().e429:e&&e.code==='banned'?T().eBan:e&&e.code==='nokey'?T().nokey:e&&['credit','badkey','model','code'].includes(e.code)?T()['e_'+e.code]:T().err;
 async function send(text,auto,ctx){
+  const adjNow=pendAdj;pendAdj=null; /* v311 */
   text=(text||inp.value).trim();if(!text||busy)return;
   inp.value='';const wl=log.querySelector('.welcome');if(wl)wl.remove();add('u',text);hist.push({role:'user',content:(auto===true?'[UI] ':'')+text+(ctx?'\n\n§§ '+ctx:'')});
   const out=add('a','');out.classList.add('typing');out.innerHTML='<i></i><i></i><i></i>';out.setAttribute('aria-label','…');toBottom();busy=true;sendB.disabled=true;
@@ -4391,7 +4401,7 @@ async function send(text,auto,ctx){
   try{
     const j=await completeReply(hist,out);
     if(tok!==convTok){cardAfter=false;return} // the user opened another conversation meanwhile
-    renderMsg(out,j.text);hist.push({role:'assistant',content:j.text,at:Date.now()});drawQuick();try{saveCurrent()}catch(e){}if(qaMode){qaSync();qaActions()}
+    renderMsg(out,j.text);hist.push({role:'assistant',content:j.text,at:Date.now(),...(adjNow&&adjNow.length&&looksLikeRecipe(j.text)?{adj:adjNow}:{})});drawQuick();try{saveCurrent()}catch(e){}if(qaMode){qaSync();qaActions()}
     try{dishPic(out,j.text)}catch(e){}
     if(looksLikeRecipe(j.text))showStart(startOf(out));
     cardAfter=false;if(!qaMode&&looksLikeRecipe(j.text)&&currentId&&loadH().some(x=>x.id===currentId))openCard(currentId); // v121: EVERY new / adapted / regenerated recipe is shown on the recipe card (tabs)
