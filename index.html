@@ -3003,7 +3003,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v325',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v326',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4908,10 +4908,10 @@ function notesBlock(box,sec){const t=T();if(!ntData)return;const s0=sec(t.ntT),i
 let ciData=null;
 async function drawCircle(){const t=T(),box=$('#cilist');await loadNotes().catch(()=>{});$('#ciT').textContent=t.ciT;box.textContent='';
   const sec=(h)=>{const d=document.createElement('section');d.className='cisec';if(h){const x=document.createElement('h3');x.textContent=h;d.appendChild(x)}box.appendChild(d);return d};
-  notesBlock(box,sec);
-  // pseudo
   // v324: « Donner l’accès » first, right under the nickname
   const s25=sec(t.accT),ab=document.createElement('button');ab.type='button';ab.className='newbig';ab.style.marginBottom='0';ab.textContent=t.accB;ab.onclick=()=>accessInvite(ab);const al=document.createElement('p');al.className='cih';al.textContent=t.accH;s25.append(ab,al); // v323: give access to a friend (max 3)
+  notesBlock(box,sec);
+  // pseudo
   const s1=sec(t.ciYou),me=document.createElement('div');me.className='cime';const nb=document.createElement('b');nb.textContent=nick()||t.ciNoName;
   const eb=document.createElement('button');eb.type='button';eb.className='cbtn';eb.textContent='✏️ '+t.ciEdit;eb.onclick=async()=>{await askNick(true);drawCircle()};me.append(nb,eb);s1.appendChild(me);
   // invite
