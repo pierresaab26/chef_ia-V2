@@ -3,7 +3,7 @@
 Read this first in every session. Keep it up to date when something important changes (state, decisions, rules).
 Never put secrets here (keys, passwords, tokens): this repository may be public.
 
-## 0. Resume here (state at the end of the session of 2026-11-05, app v149)
+## 0. Resume here (state at the end of the session of 2026-11-10, app v325)
 
 **State.** Live site https://chefia-v3.vercel.app runs the latest commit of `main` (v115 pushed; v116 exists only LOCALLY until the owner says « pousse »; the badge « ▲ Vercel · vN » and the browser console line `Chef IA vN` tell which version is loaded). Vercel deploys every push: check it with `gh api repos/pierresaab26/chef_ia-V2/commits/<sha>/statuses` (two Vercel projects deploy the same repo, `chef_ia-v3` = the real site and `chef_ia-v2`); the sandbox itself cannot open the site (proxy 403). A user who still sees an old version just needs to close the tab / app completely and reopen it.
 
@@ -121,6 +121,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (up to v149)
+
+v325 (owner's screenshot: « Tu mets ce bloc tout en haut / Pour membres, tu mets Membres de mon cercle »): in « Mon cercle » the « 🎟️ Donner l’accès à un ami » block is now the very first block, ABOVE the nickname (`drawCircle()`), and the members heading reads « Membres de mon cercle » (key `ciMembers`, 6 languages). No server change. Checked: script syntax only; no Playwright run on this version. Committed locally, NOT pushed (waiting for « pousse »).
 
 v324 (owner: « cache inviter un proche pour le moment et mets Donner l’accès à un ami tout en haut, pousse »): in « Mon cercle » the « ➕ Inviter un proche » block (circle invite `/?c=`) is HIDDEN (`s2.hidden`, code kept), and « 🎟️ Donner l’accès » is the first section right under the nickname. No server change. Tests (not in repo): /tmp/t323/ui324.py (Playwright iPhone 13 / iPad: invite not visible, access button present, no JS error). Pushed.
 
