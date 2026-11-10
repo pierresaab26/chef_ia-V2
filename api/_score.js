@@ -2,7 +2,7 @@
 // A recipe with a single 5-star vote must not beat one with 40 votes averaging 4.6: the average is pulled toward a
 // neutral prior (PRIOR_AVG) with the weight of PRIOR_N imaginary votes (Bayesian average), so
 //   quality = (n * avg + PRIOR_N * PRIOR_AVG) / (n + PRIOR_N)
-// n = 0 gives the prior (3.5), 1 vote of 5 stars gives 3.75, 20 votes of 4.6 give 4.3, 100 votes of 4.6 give 4.5.
+// n = 0 gives the prior (3.5), 1 vote of 5 stars gives 3.75, 20 votes of 4.6 give 4.38, 100 votes of 4.6 give 4.55.
 // Popularity (number of shares) adds a small bonus that grows slowly (log) and is capped at 0.5, so it can break ties but never beat stars.
 export const PRIOR_AVG = 3.5;
 export const PRIOR_N = 5;
