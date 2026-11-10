@@ -536,6 +536,22 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hhgrid .htx .obadge{display:none}
 #menuHome.mhrich .mht1{white-space:nowrap}@media(max-width:360px){#menuHome.mhrich .mht1{font-size:15px}}
 @media(max-width:420px){.hhgrid .hdel{display:none}.hhgrid .hpic{width:46px;height:46px}#hhome .hhtabs .chip{padding:5px 10px;font-size:13px}#hhome .hhall{font-size:13px}}
+/* v318: no more tall cards — square menu photo, compact rows, inspirations as a row of small square cards */
+#menuHome .mhbody{grid-template-columns:132px minmax(0,1fr);align-items:start}
+#menuHome .mhimg{min-height:0;height:auto;aspect-ratio:1/1;align-self:start;font-size:32px}
+#menuHome .mhrow{padding:5px 0;gap:8px}
+#menuHome.mhrich .mhth{width:38px;height:38px;font-size:16px}
+#menuHome .mhtx b{-webkit-line-clamp:1;font-size:14px}
+@media(max-width:380px){#menuHome .mhbody{grid-template-columns:104px minmax(0,1fr);gap:10px}}
+#seasonBox .snsug.ph{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#seasonBox .snsug.ph>button{padding:6px 6px 8px;border-left-width:3px}
+#seasonBox .snsug.ph .snpimg{height:auto;aspect-ratio:4/3;margin-bottom:6px}
+#seasonBox .snsug.ph>button b{font-size:13px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+@media(max-width:520px){#seasonBox .snsug.ph{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:112px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#seasonBox .snsug.ph::-webkit-scrollbar{display:none}
+#seasonBox .snsug.ph>button{scroll-snap-align:start}
+#seasonBox .snsug.ph .snpimg{aspect-ratio:1/1}
+#seasonBox .snsug.ph>button b{font-size:13px}}
 </style>
 </head>
 <body>
@@ -2960,7 +2976,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v317',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v318',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}

@@ -412,3 +412,7 @@ The four chef cards (Giulia, Marcel, Hiro, Lina) show an original SVG bust drawn
 - **Dernières recettes**: the 2 latest recipes (or favorites) side by side in one white card; heart kept, no ✕ on the home.
 - **Inspirations de saison**: 4 ideas per row, photo + name only.
 Current charter kept (soft pink selection, cream background).
+
+
+### v318 — Less elongated home cards
+Square photo in the weekly-menu card, compact course rows; seasonal inspirations: 4:3 photos (tablet / computer), a sideways-scrolling row of small square cards on phones.
