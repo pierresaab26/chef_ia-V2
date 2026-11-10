@@ -391,3 +391,8 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 ## v313 — Quick-tag row removed
 
 The optional row « Un mot sur la recette » (Too salty / Easy / Kids loved it / Too long) under the stars is gone from the recipe card and the chat. Tags already given stay stored and still feed the taste profile (repeated tags); nothing new can be added from the app. The server route still accepts `tag`.
+
+
+## v314 — Weighted score (stars + number of votes)
+
+Recipes are ranked with `api/_score.js`: Bayesian average with a prior of 3.5 worth 5 votes, plus a small capped share bonus. A recipe with one 5-star vote does not beat one with many good votes. Used by the community search and the weekly menu's community picks; same-title variants collapse to one card, the best-ranked on top. The card still shows the raw average and vote count.

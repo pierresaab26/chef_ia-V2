@@ -2,6 +2,7 @@ import { authOk, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js"
 import { LANGS, norm } from "./_season.js";
 import { weekOf, MENU_SYS, menuPromptJ, parseMenuJ } from "./_week.js";
 import { PUB, dropOldIndex } from "./shared.js";
+import { rank } from "./_score.js";
 
 // « Chef's weekly menu »: the SAME 21 dishes (Monday … Sunday × starter, main, dessert) for everybody, renewed every Monday at 9:00 Paris time.
 // - GET /api/week-menu?lang=fr  (access code like the other routes) → { week:{id,from,to,until}, items:[[name,sentence]×21] }.
@@ -31,17 +32,16 @@ export async function community(lang, max = 12) {
     const list = all.slice(0, 300);
     if (!list.length) return [];
     const res = await redis(list.flatMap((c) => [["HGETALL", "r:" + c.ck], ["ZSCORE", "s:pop", c.ck]]));
-    const seen = new Set(), out = [];
+    const out = [];
     list.forEach((c, x) => {
       const h = res[x * 2] || [], v = [];
       for (let i = 1; i < h.length; i += 2) { const n = Number(h[i]); if (n >= 1 && n <= 5) v.push(n); }
       const n = v.length, a = n ? v.reduce((p, q) => p + q, 0) / n : 0, sh = Number(res[x * 2 + 1]) || 0;
       if (!((n && a >= 4) || sh >= 2)) return; // good stars, or shared by at least 2 people
-      const tk = c.t.toLowerCase();
-      if (seen.has(tk)) return; seen.add(tk);
-      out.push({ ...c, a: n ? a : 0, n, sh, score: (a * n + 3.5 * 2) / (n + 2) + 0.3 * Math.log2(1 + sh) });
+      out.push({ ...c, a: n ? a : 0, n, sh, score: rank(a, n, sh) });
     });
-    return out.sort((p, q) => q.score - p.score).slice(0, max).map((c, i) => ({ ...c, id: "C" + (i + 1) }));
+    const seen = new Set(); // v314: one card per dish, the best-ranked variant wins
+    return out.sort((p, q) => q.score - p.score).filter((c) => { const k = c.t.toLowerCase(); return !seen.has(k) && seen.add(k); }).slice(0, max).map((c, i) => ({ ...c, id: "C" + (i + 1) }));
   } catch (e) { console.error("week-menu: community recipes unavailable", e && e.message); return []; }
 }
 

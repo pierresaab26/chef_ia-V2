@@ -1,4 +1,5 @@
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { rank } from "./_score.js";
 
 // v129: shared recipes. The sender publishes a copy of the recipe ("s:<sid>") and gets a link /?s=<sid>.
 // The friend opens the link: the recipe lands in his app with the SAME comment key, so both see the same comments.
@@ -112,9 +113,8 @@ export async function searchShared(q, lang, max = 6) {
         const m = JSON.parse(flat[i + 1]);
         if (!m || !m.sid || !m.t || (m.l && lang && m.l !== lang)) continue;
         const nt = nz(m.t);
-        if (!words.every((w) => nt.includes(w)) || seen.has(nt)) continue;
-        seen.add(nt);
-        hit.push({ ck: m.ck || flat[i], sid: m.sid, t: String(m.t).slice(0, 80) });
+        if (!words.every((w) => nt.includes(w))) continue;
+        hit.push({ ck: m.ck || flat[i], sid: m.sid, t: String(m.t).slice(0, 80), nt });
       } catch {}
     }
     const list = hit.slice(0, 40);
@@ -124,7 +124,7 @@ export async function searchShared(q, lang, max = 6) {
       const h = res[x * 2] || [], v = [];
       for (let i = 1; i < h.length; i += 2) { const n = Number(h[i]); if (n >= 1 && n <= 5) v.push(n); }
       const n = v.length, a = n ? v.reduce((p, r) => p + r, 0) / n : 0, sh = Number(res[x * 2 + 1]) || 0;
-      return { sid: c.sid, t: c.t, a: Math.round(a * 10) / 10, n, score: (a * n + 3.5 * 2) / (n + 2) + 0.3 * Math.log2(1 + sh) };
-    }).sort((p, r) => r.score - p.score).slice(0, max).map(({ score, ...o }) => o);
+      return { sid: c.sid, t: c.t, nt: c.nt, a: Math.round(a * 10) / 10, n, score: rank(a, n, sh) };
+    }).sort((p, r) => r.score - p.score).filter((o) => !seen.has(o.nt) && seen.add(o.nt)).slice(0, max).map(({ score, nt, ...o }) => o); // v314: one card per dish, the best-ranked variant first
   } catch { return []; }
 }
