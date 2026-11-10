@@ -401,3 +401,7 @@ Recipes are ranked with `api/_score.js`: Bayesian average with a prior of 3.5 wo
 ## v315 — Weighted score made visible
 
 Community search items show the average, the number of votes and « Cuisinée par N personnes » (from 2 people), plus a « ⭐ Recommandée » pill when the recipe has at least 5 votes and a weighted quality of 4.2 or more (`recommended()` in `api/_score.js`). The recipe card and the chat bar show the same « Cuisinée par N personnes » line under the actions. Ordering still uses the weighted score (v314); the displayed average stays the real one.
+
+
+### v316 — Chef portraits on the home
+The four chef cards (Giulia, Marcel, Hiro, Lina) show an original SVG bust drawn in code by `chefSvg(k)` (hat, scarf and colours differ per chef), replacing the emoji. Same behaviour: tapping a card opens the course panel (Starters / Mains / Desserts / Drinks + « Discuter »). Portrait 54 px (46 px under 380 px).

@@ -59,9 +59,11 @@ h2 small{color:var(--pink);font-weight:600;font-size:12px}
 .snpanel .snmore{display:block;margin:0 auto 12px;font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.6);color:inherit}
 .snpanel.dk .snmore{background:rgba(255,255,255,.1)}
 .chefs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px} /* v224: same tiles as the row of shortcuts above */
-.chef{background:var(--card);border-radius:16px;padding:8px 4px;text-align:center;box-shadow:var(--sh);border:2px solid transparent;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
+.chef{background:var(--card);border-radius:var(--rc);padding:10px 4px 9px;text-align:center;box-shadow:var(--sh);border:2px solid transparent;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
 .chef.on{border-color:var(--pink)}
-.chef i{font-style:normal;font-size:20px;height:26px;width:100%;display:grid;place-items:center;line-height:1}
+.chef i{font-style:normal;height:54px;width:100%;display:grid;place-items:center;line-height:1}
+.chef i svg{width:54px;height:54px;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.12))}
+@media(max-width:380px){.chef i,.chef i svg{height:46px}.chef i svg{width:46px}}
 .chef b{display:block;font-size:12px;font-weight:600;line-height:1.25}
 .chef span{color:var(--mut);font-size:10.5px;line-height:1.2}
 .chpanel{grid-column:1/-1;background:var(--card);border-radius:var(--rc);padding:12px;box-shadow:var(--sh)}
@@ -2586,9 +2588,19 @@ function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML=
 let chefOpen=-1;
 function chefName(c){return c&&c.free?T().frN:c?"Chef "+c.n:"Chef IA"}
 function chefDesc(c){const t=T();return c&&c.free?t.frD:c&&c.k>=0?t.cu[c.k]:t.cd}
+/* v316: original code-drawn chef portraits (index = CHEFS index: 0 Giulia, 1 Hiro, 2 Marcel, 3 Lina) */
+function chefSvg(k){const sk=['#f6cfae','#f3d2b0','#f1c9a5','#c98f66'][k],bgc=['#ffe3e0','#e4ecff','#e3efff','#e4f5e6'][k];
+  const hat={0:'<path d="M20 25c-5-9 2-15 8-12 3-5 11-5 14 0 6-3 13 3 8 12z" fill="#fff" stroke="#e8e2dc"/><rect x="20" y="24" width="24" height="5" rx="2" fill="#fff" stroke="#e8e2dc"/>',
+   1:'<path d="M20 28c0-9 5-14 12-14s12 5 12 14z" fill="#2b2530"/><rect x="19" y="25" width="26" height="5" rx="2" fill="#e5195f"/><circle cx="32" cy="27.5" r="2" fill="#fff"/>',
+   2:'<path d="M21 26c-6-4-5-13 3-13 2-5 14-5 16 0 8 0 9 9 3 13z" fill="#fff" stroke="#e8e2dc"/><rect x="21" y="23" width="22" height="6" rx="2" fill="#fff" stroke="#e8e2dc"/>',
+   3:'<path d="M19 30c-1-11 6-17 13-17s14 6 13 17z" fill="#3a2a22"/><circle cx="18" cy="31" r="4" fill="#3a2a22"/><circle cx="46" cy="31" r="4" fill="#3a2a22"/><path d="M19 24c8-5 18-5 26 0v4c-8-4-18-4-26 0z" fill="#f5a623"/>'}[k];
+  const neck={0:'<path d="M26 47l6 6 6-6z" fill="#e5493f"/>',1:'<path d="M26 47l6 6 6-6z" fill="#3b5bdb"/>',2:'<path d="M25 47l7 7 7-7z" fill="#3b5bdb"/><path d="M29 50l3 4 3-4z" fill="#fff"/>',3:'<path d="M26 47l6 6 6-6z" fill="#2f9e5b"/>'}[k];
+  const face=(k===2?'<path d="M25 40c3 3 11 3 14 0-1 5-13 5-14 0z" fill="#8a7e86"/><path d="M26 39c3-2 5-1 6 0 1-1 3-2 6 0-3 2-9 2-12 0z" fill="#8a7e86"/>':'')+(k===0?'<path d="M28 41c2 2 6 2 8 0" stroke="#b5483f" stroke-width="1.6" fill="none" stroke-linecap="round"/>':k===2?'':'<path d="M28 41c2 2 6 2 8 0" stroke="#b5483f" stroke-width="1.6" fill="none" stroke-linecap="round"/>');
+  const hair=k===0?'<path d="M21 31c0-6 3-8 11-8s11 2 11 8c-3-3-6-5-11-5s-8 2-11 5z" fill="#4a2f24"/>':k===1?'':k===2?'<path d="M22 30c1-3 4-4 10-4s9 1 10 4c-4-2-6-2-10-2s-6 0-10 2z" fill="#8a7e86"/>':'';
+  return '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="31" fill="'+bgc+'"/><path d="M10 62c1-10 10-15 22-15s21 5 22 15z" fill="#fff" stroke="#e8e2dc"/>'+neck+'<circle cx="32" cy="35" r="11" fill="'+sk+'"/>'+hair+hat+'<circle cx="28" cy="35" r="1.5" fill="#2b2530"/><circle cx="36" cy="35" r="1.5" fill="#2b2530"/><circle cx="25.5" cy="39" r="2" fill="#f4a3a3" opacity=".6"/><circle cx="38.5" cy="39" r="2" fill="#f4a3a3" opacity=".6"/>'+face+'</svg>'}
 function drawChefs(){const t=T(),box=$('#chefs');box.innerHTML='';const crs=t.crs.split('|'),crsL=t.crsL.split('|');
   CHEF_ORDER.forEach(k=>{const c=CHEFS[k];const b=document.createElement('button');b.type='button';b.className='chef'+(k===chefOpen?' on':'');b.setAttribute('aria-expanded',k===chefOpen?'true':'false');
-    const i=document.createElement('i');i.textContent=c.e;const n=document.createElement('b');n.textContent=c.n;const d=document.createElement('span');d.textContent=t.cuS[k];
+    const i=document.createElement('i');i.innerHTML=chefSvg(k);const n=document.createElement('b');n.textContent=c.n;const d=document.createElement('span');d.textContent=t.cuS[k];
     b.append(i,n,d);b.onclick=()=>{chefOpen=chefOpen===k?-1:k;drawChefs()};box.appendChild(b);
     // the panel opens right after the row that holds the tapped chef
   });
@@ -2899,7 +2911,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v315',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v316',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
