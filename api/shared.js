@@ -7,7 +7,7 @@ import { rank, recommended } from "./_score.js";
 // v248: index « s:ck » (comment/rating key → {sid,t,l}) and counter « s:pop » (people who really shared it, POST {sid, hit:1}), read by the weekly menu (api/week-menu.js).
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
 
   const owner = clean(req.headers["x-owner"], 60);
   const q = req.query || {};

@@ -2,7 +2,12 @@
 // GET /api/moderation?key=<CRON_SECRET> → the last entries, newest first. Same secret as the crons.
 // &unblock=<id> (id shown in the log / email) lifts the block and resets the counters of that user (IP + device);
 // &unblock=all lifts every block and resets every counter.
+// v320 invitation links (one per friend, revocable; the shared code APP_PASSWORD stays private):
+//   &invite=<name>   → creates a personal link  https://<site>/?k=<token>  (answer: {name, link})
+//   &invites=1       → lists the invitations (name, date, link)
+//   &revoke=<name>   → removes every invitation of that name (or the one whose token is given); effective within 60 s
 import { fail, redis, hasRedis } from "./_lib.js";
+import { randomBytes } from "node:crypto";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return fail(res, "method");
@@ -12,7 +17,9 @@ export default async function handler(req, res) {
   if (key !== secret) return res.status(401).json({ error: "code" });
   if (!hasRedis()) return fail(res, "storage");
   const un = String((req.query && req.query.unblock) || "");
+  const q = req.query || {};
   try {
+    if (q.invite || q.invites || q.revoke) return res.status(200).json(await invites(q, req));
     if (un) return res.status(200).json(await unblock(un));
     const [rows] = await redis([["LRANGE", "mod:log", 0, 99]]);
     return res.status(200).json({ count: rows.length, entries: rows.map((r) => { try { return JSON.parse(r); } catch { return r; } }) });
@@ -44,4 +51,33 @@ async function unblock(un) {
   }
   for (let i = 0; i < keys.length; i += 100) await redis(keys.slice(i, i + 100).map((k) => ["DEL", k]));
   return { unblocked: un, keysCleared: keys.length };
+}
+
+const nameOf = (x) => String(x || "").replace(/[^\p{L}\p{N} _.-]/gu, "").trim().slice(0, 40);
+async function invites(q, req) {
+  const origin = "https://" + String((req && req.headers && (req.headers["x-forwarded-host"] || req.headers.host)) || "chefia-v3.vercel.app");
+  const rows = async () => {
+    const [h] = await redis([["HGETALL", "ak"]]);
+    const out = [];
+    for (let i = 0; i < (h || []).length; i += 2) {
+      let v = {}; try { v = JSON.parse(h[i + 1]); } catch {}
+      out.push({ token: h[i], name: v.n || "", at: v.at || 0 });
+    }
+    return out.sort((a, b) => b.at - a.at);
+  };
+  if (q.revoke) {
+    const w = String(q.revoke).trim().toLowerCase();
+    const del = (await rows()).filter((r) => r.token === w || r.name.toLowerCase() === w);
+    if (del.length) await redis(del.map((r) => ["HDEL", "ak", r.token]));
+    return { revoked: del.map((r) => r.name), count: del.length };
+  }
+  if (q.invite) {
+    const name = nameOf(q.invite);
+    if (!name) return { error: "name" };
+    if ((await rows()).length >= 100) return { error: "limit" };
+    const token = randomBytes(16).toString("hex");
+    await redis([["HSET", "ak", token, JSON.stringify({ n: name, at: Date.now() })]]);
+    return { name, link: origin + "/?k=" + token };
+  }
+  return { count: (await rows()).length, invites: (await rows()).map((r) => ({ name: r.name, at: new Date(r.at).toISOString().slice(0, 10), link: origin + "/?k=" + r.token })) };
 }

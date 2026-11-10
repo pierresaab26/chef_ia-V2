@@ -55,7 +55,7 @@ export const PARTS = { BASE, QA, GUARD, CHEFS, FLAGS };
 export default async function handler(req, res) {
   if (req.method !== "POST") return fail(res, "method");
 
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   // Protects the Anthropic credit: 20 chef messages per minute per IP address.
   if (await overLimit(req, "rl:c:", 20)) return fail(res, "rate");
 

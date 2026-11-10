@@ -136,7 +136,7 @@ export default async function handler(req, res) {
 
   if (q.status) return res.status(200).json(await status());
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   const lang = String(q.lang || ""), occ = String(q.occ || "");
   if (!LANGS.includes(lang) || !OCC[occ]) return res.status(400).json({ error: "messages" });
   if (await overLimit(req, "rl:si:", 30)) return fail(res, "rate");

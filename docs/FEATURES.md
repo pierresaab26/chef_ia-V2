@@ -420,3 +420,11 @@ Square photo in the weekly-menu card, compact course rows; seasonal inspirations
 
 ### v319 — Home fixes
 Menu-card photo locked at 132 px square (no size change when the real photo loads); recent block slightly wider; inspirations 2 by 2 on phones; chef cards horizontal and short (2 by 2 on phones).
+
+
+## Access and invitation links (v320)
+
+- The app is protected by the shared code `APP_PASSWORD` (asked once per device, stored in localStorage `code`). To let a friend in WITHOUT that code, the owner creates a personal link: `/api/moderation?key=<CRON_SECRET>&invite=<name>` returns `https://<site>/?k=<token>`. Opening it stores the token as the device's code; the address bar is cleaned.
+- `&invites=1` lists the invitations with their links; `&revoke=<name or token>` cancels them (effective within about 1 minute, positive checks are cached 60 s per server instance).
+- Storage: Redis hash `ak` (token → `{n:name, at:time}`), 100 invitations max. Needs `APP_PASSWORD` to be set, otherwise the app is open.
+- Not done: usage counter per link, expiry date, link creation from inside the app.

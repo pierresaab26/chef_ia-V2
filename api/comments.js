@@ -5,7 +5,7 @@ import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
 // Recipe comments, stored in Upstash Redis (list "c:<recipe>", last 100).
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
 
   const owner = clean(req.headers["x-owner"], 60);
   const q = req.query || {};

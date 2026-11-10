@@ -167,7 +167,7 @@ export default async function handler(req, res) {
   if (req.method === "GET" && q.status)
     return res.status(200).json({ unsplashKey: !!process.env.UNSPLASH_ACCESS_KEY, anthropicKey: !!process.env.ANTHROPIC_API_KEY, redis: hasRedis(), accessCode: !!process.env.APP_PASSWORD });
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   if (!process.env.UNSPLASH_ACCESS_KEY) return res.status(503).json({ error: "nokey" });
 
   const body = req.body && typeof req.body === "object" ? req.body : {};

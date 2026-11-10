@@ -16,7 +16,7 @@ export const cleanName = (s) => clean(s, 24).replace(/[<>"]/g, "").replace(/\s+/
 export default async function handler(req, res) {
   if (req.query && req.query.via === "pub") return publishHandler(req, res); // v293: /api/publish → /api/circle?via=pub
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   const owner = clean(req.headers["x-owner"], 60);
   if (!owner || owner.length < 8) return res.status(400).json({ error: "key" });
   if (await overLimit(req, "rl:ci:", 40)) return res.status(429).json({ error: "rate" });

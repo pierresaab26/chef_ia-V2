@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
   const q = req.query || {};
   if (req.method === "GET" && q.key != null) return admin(req, res, q);
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   const owner = clean(req.headers["x-owner"], 60);
   if (!owner || owner.length < 8) return res.status(400).json({ error: "key" });
   const me = pidOf(owner), body = req.body && typeof req.body === "object" ? req.body : {};

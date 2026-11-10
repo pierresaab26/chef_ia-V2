@@ -7,7 +7,7 @@ const SYSTEM =
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   // Protects the Anthropic credit (vision calls are the most expensive): 6 photo imports per minute per IP.
   if (await overLimit(req, "rl:ip:", 6)) return fail(res, "rate");
 

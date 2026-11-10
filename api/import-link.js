@@ -6,7 +6,7 @@ const SYSTEM =
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   // Protects the server and the Anthropic credit: 10 link imports per minute per IP.
   if (await overLimit(req, "rl:il:", 10)) return fail(res, "rate");
 

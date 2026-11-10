@@ -14,7 +14,7 @@ const TAGS = ["salty", "easy", "kids", "long"];
 const ORIGINS = ["chef", "import", "remix", "shared"]; // shared = received through a share link
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
 
   const owner = clean(req.headers["x-owner"], 60);
   const q = req.query || {};

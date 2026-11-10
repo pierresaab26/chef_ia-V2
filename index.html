@@ -716,6 +716,8 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </div>
 
 <script>
+// v320: personal invitation link « /?k=<token> »: the token becomes this device's access code, then leaves the address bar.
+{try{const p=new URLSearchParams(location.search),k=(p.get('k')||'').trim().toLowerCase();if(/^[a-f0-9]{32}$/.test(k)){localStorage.setItem('code',k);p.delete('k');const q=p.toString();history.replaceState(null,'',location.pathname+(q?'?'+q:'')+location.hash)}}catch(e){}}
 // ---------- Interface texts: ONE block per language, same keys in every language ----------
 // e_* keys are import/API error messages, read as t['e_'+code].
 const I18={
@@ -2993,7 +2995,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v319',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v320',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}

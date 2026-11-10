@@ -103,7 +103,7 @@ export default async function handler(req, res) {
   if (req.method !== "GET") return fail(res, "method");
   res.setHeader("Cache-Control", "no-store");
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!authOk(req, res)) return;
+  if (!(await authOk(req, res))) return;
   const lang = String((req.query || {}).lang || "");
   if (!LANGS.includes(lang)) return res.status(400).json({ error: "messages" });
   if (await overLimit(req, "rl:wm:", 30)) return fail(res, "rate");

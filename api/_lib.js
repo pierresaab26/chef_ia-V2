@@ -1,13 +1,27 @@
 // Helpers shared by all API routes (access code, errors, Claude calls, Redis, rate limit).
 // The "_" prefix tells Vercel this file is not a route.
 
-export function authOk(req, res) {
+// Access: the shared code (APP_PASSWORD) or a personal invitation token (v320: Redis hash `ak`, token -> {n:name, at}).
+// Invitations are created / listed / revoked with the admin key (see api/moderation.js). A revoked token stops working within 60 s.
+const akCache = new Map();
+async function inviteOk(tok) {
+  if (!/^[a-f0-9]{32}$/.test(tok) || !hasRedis()) return false;
+  const c = akCache.get(tok);
+  if (c && c > Date.now()) return true;
+  try {
+    const [v] = await redis([["HGET", "ak", tok]]);
+    if (v) { akCache.set(tok, Date.now() + 60000); return true; }
+  } catch {}
+  akCache.delete(tok);
+  return false;
+}
+export async function authOk(req, res) {
   const need = process.env.APP_PASSWORD;
-  if (need && req.headers["x-code"] !== need) {
-    res.status(401).json({ error: "code" });
-    return false;
-  }
-  return true;
+  if (!need) return true;
+  const got = String(req.headers["x-code"] || "");
+  if (got === need || (await inviteOk(got))) return true;
+  res.status(401).json({ error: "code" });
+  return false;
 }
 
 const STATUS = {
