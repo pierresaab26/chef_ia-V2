@@ -416,3 +416,7 @@ Current charter kept (soft pink selection, cream background).
 
 ### v318 — Less elongated home cards
 Square photo in the weekly-menu card, compact course rows; seasonal inspirations: 4:3 photos (tablet / computer), a sideways-scrolling row of small square cards on phones.
+
+
+### v319 — Home fixes
+Menu-card photo locked at 132 px square (no size change when the real photo loads); recent block slightly wider; inspirations 2 by 2 on phones; chef cards horizontal and short (2 by 2 on phones).

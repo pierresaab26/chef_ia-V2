@@ -552,6 +552,23 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #seasonBox .snsug.ph>button{scroll-snap-align:start}
 #seasonBox .snsug.ph .snpimg{aspect-ratio:1/1}
 #seasonBox .snsug.ph>button b{font-size:13px}}
+/* v319: fixed photo sizes in the menu card, wider recent block, inspirations 2 by 2 on phones, chef cards horizontal (less tall) */
+#menuHome .mhbody{grid-template-columns:132px minmax(0,1fr)}
+#menuHome .mhimg{width:132px!important;height:132px!important;min-width:132px;max-width:132px;min-height:132px;max-height:132px;aspect-ratio:auto;flex:none;background-size:cover!important;background-position:center!important}
+#menuHome.mhrich .mhth{width:38px!important;height:38px!important;min-width:38px;max-width:38px;min-height:38px;max-height:38px;flex:none;background-size:cover!important;background-position:center!important}
+@media(max-width:380px){#menuHome .mhbody{grid-template-columns:104px minmax(0,1fr)}#menuHome .mhimg{width:104px!important;height:104px!important;min-width:104px;max-width:104px;min-height:104px;max-height:104px}}
+#hhome{margin-left:-8px;margin-right:-8px;padding:10px}
+.hhgrid{gap:6px}
+@media(max-width:520px){#seasonBox .snsug.ph{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;scroll-snap-type:none}
+#seasonBox .snsug.ph .snpimg{aspect-ratio:4/3}}
+.chefs{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media(max-width:520px){.chefs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.chef{flex-direction:row;align-items:center;justify-content:flex-start;text-align:left;gap:8px;padding:8px 10px;display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px;row-gap:0}
+.chef i{grid-row:1/3;height:44px;width:44px}
+.chef i svg{width:44px!important;height:44px!important}
+.chef b{font-size:14px;align-self:end}
+.chef span{font-size:12px;align-self:start}
+#menuHome.mhrich .mhimg .mhcr{display:block;position:absolute;left:6px;bottom:6px;right:auto;max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;line-height:1;padding:4px 7px;color:#fff;background:rgba(0,0,0,.45);border-radius:999px}
 </style>
 </head>
 <body>
@@ -2674,7 +2691,7 @@ function drawChefs(){const t=T(),box=$('#chefs');box.innerHTML='';const crs=t.cr
     crs.forEach((lb,j)=>{const x=document.createElement('button');x.type='button';x.textContent=lb;
       x.onclick=()=>{chefOpen=-1;drawChefs();openChat({...c,k,d:t.cu[k]});send(t.crsMsg.replace('{c}',crsL[j]).replace('{k}',t.cu[k]),true)};g.appendChild(x)});
     const dc=document.createElement('button');dc.type='button';dc.className='chdisc';dc.textContent=t.disc;dc.onclick=()=>{chefOpen=-1;drawChefs();openChat({...c,k,d:t.cu[k]})};
-    pn.append(g,dc);const pos=CHEF_ORDER.indexOf(k),cols=4,after=box.children[Math.min(CHEF_ORDER.length,(Math.floor(pos/cols)+1)*cols)-1];after.after(pn)}
+    pn.append(g,dc);const pos=CHEF_ORDER.indexOf(k),cols=matchMedia('(max-width:520px)').matches?2:4,after=box.children[Math.min(CHEF_ORDER.length,(Math.floor(pos/cols)+1)*cols)-1];after.after(pn)}
   } // v211: « Chef libre » removed from the home (the « Que voulez-vous cuisiner ? » box does the same)
 
 function cap1(x){x=String(x||'');const m=x.match(/^([\s«“"'(¡¿]*)(\p{L})/u);return m?m[1]+m[2].toLocaleUpperCase(lang)+x.slice(m[0].length):x} // display only: first letter in upper case
@@ -2976,7 +2993,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v318',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v319',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
