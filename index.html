@@ -487,6 +487,55 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .welcome p{margin:0;color:var(--mut);font-size:14px;max-width:340px}
 .wex{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;width:100%}
 .wex .chip{font-size:14px;padding:9px 15px}
+
+/* v317: home presented like the mockup (menu strip + day dishes, 2 recent recipes side by side, 4 inspirations per row) — current charter */
+#menuHome.mhrich{display:block;padding:14px;cursor:default}
+#menuHome .mhh{margin-bottom:10px}
+#menuHome .mhall{background:none;border:0;color:var(--pink);font-weight:600;font-size:14px;padding:4px 2px;white-space:nowrap}
+#menuHome .mhdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-bottom:12px}
+#menuHome .mhd{display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 0;border-radius:14px;border:1px solid transparent;background:none;color:var(--ink);font-size:13px;line-height:1.2}
+#menuHome .mhd b{font-size:16px;font-weight:700}
+#menuHome .mhd.td{color:var(--pink)}
+#menuHome .mhd.on{background:var(--psoft);border-color:var(--psbd);color:var(--pink);box-shadow:0 0 0 2px var(--psbd)}
+#menuHome .mhbody{display:grid;grid-template-columns:minmax(0,38%) minmax(0,1fr);gap:12px;align-items:stretch}
+#menuHome .mhimg{height:auto;min-height:150px;border:0;padding:0;width:100%;font-size:40px;cursor:pointer}
+#menuHome .mhr{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+#menuHome .mhp{margin-bottom:4px}
+#menuHome .mhrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:7px 0;border-bottom:1px solid var(--bd);background:none;color:var(--ink)}
+#menuHome .mhrow:last-child{border-bottom:0}
+#menuHome .mhth{flex:none;width:48px;height:40px;border-radius:10px;background:var(--bg1) center/cover no-repeat;display:grid;place-items:center;font-size:18px;color:var(--mut);overflow:hidden}
+#menuHome .mhth .mhcr{display:none}
+#menuHome .mhtx{min-width:0;display:flex;flex-direction:column}
+#menuHome .mhtx small{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+#menuHome .mhtx b{font-size:14px;font-weight:600;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+#menuHome .mhe b{color:var(--mut);font-weight:500}
+@media(max-width:360px){#menuHome .mhd{font-size:11px}#menuHome .mhd b{font-size:14px}#menuHome .mhth{width:40px;height:36px}}
+#hhome{background:var(--card);border-radius:var(--rc);box-shadow:var(--sh);padding:12px}
+.hhgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.hhgrid .hrow{box-shadow:none;margin:0;background:none;align-items:center}
+.hhgrid .hopen{padding:4px 0;gap:8px;flex:1 1 auto}
+.hhgrid .hpic{width:52px;height:52px}
+.hhgrid .htx b{font-size:13px}
+.hhgrid .hdel{padding:6px 4px;font-size:15px}
+#hhome>.empty{margin:4px 0}
+#seasonBox .snsug.ph{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#seasonBox .snsug.ph>button{padding:5px 4px 8px;text-align:center;font-size:13px;border-left-width:3px;min-width:0}
+#seasonBox .snsug.ph>button b{font-size:13px;line-height:1.25;margin:0;overflow-wrap:break-word;hyphens:auto}
+#seasonBox .snsug.ph{gap:6px}@media(max-width:380px){#seasonBox .snsug.ph>button b{font-size:12px}#seasonBox .snsug.ph .snpimg{height:70px}}
+#seasonBox .snsug.ph .snds{display:none}
+#seasonBox .snsug.ph .snpimg{height:84px;margin-bottom:6px;font-size:24px}
+#seasonBox .snsug.ph .snpimg .mhcr{font-size:9px;padding:3px 5px;left:4px;bottom:4px;max-width:calc(100% - 8px)}
+@media(min-width:600px){#seasonBox .snsug.ph .snpimg{height:130px}}
+#menuHome.mhrich span{color:inherit;font-size:inherit;display:inline}
+#menuHome.mhrich .mht1{display:block;color:var(--ink);font-size:16px}
+#menuHome.mhrich .mhd span{display:block;color:var(--mut);font-size:12px}
+#menuHome.mhrich .mhd.on span,#menuHome.mhrich .mhd.td span{color:var(--pink)}
+#menuHome.mhrich .mhtx{display:flex}
+#menuHome.mhrich .mhth{display:grid}
+#menuHome.mhrich .mhp{display:inline-block;color:var(--pink);font-size:13px}
+.hhgrid .htx .obadge{display:none}
+#menuHome.mhrich .mht1{white-space:nowrap}@media(max-width:360px){#menuHome.mhrich .mht1{font-size:15px}}
+@media(max-width:420px){.hhgrid .hdel{display:none}.hhgrid .hpic{width:46px;height:46px}#hhome .hhtabs .chip{padding:5px 10px;font-size:13px}#hhome .hhall{font-size:13px}}
 </style>
 </head>
 <body>
@@ -529,7 +578,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <button class="impcard" id="fiveHome"><i class="five5">5</i><div><b id="fiveHT"></b><span id="fiveHS"></span></div></button>
       <button class="impcard" id="qHome"><i>💬</i><div><b id="qHomeT"></b><span id="qHomeS"></span></div></button>
       </div>
-      <button class="impcard" id="menuHome"><i>🗓️</i><div><b id="menuHT"></b><span id="menuHS"></span></div><em class="mgo">›</em></button>
+      <div class="impcard" id="menuHome" role="button" tabindex="0"><i>🗓️</i><div><b id="menuHT"></b><span id="menuHS"></span></div><em class="mgo">›</em></div>
       <div id="homesearch"><span class="hsico" aria-hidden="true">🔍</span><input id="hsq" type="search" autocomplete="off"><button type="button" class="chip" id="hsfav" hidden></button></div>
       <div class="hsbtns" id="hsbtns"><button type="button" id="hsHist"></button><button type="button" id="hsCirc"></button><button type="button" id="hsFavs"></button></div><!-- v212: Historique / Favoris under the search box -->
       <div id="hsres"></div>
@@ -2852,7 +2901,7 @@ function snFill(sg,more,o,ui){const t=T(),key=lang+'|'+o.k,hit=snCache()[key];le
     altSave=items=>{try{const a=JSON.parse(localStorage.getItem('snAlt')||'{}');a[key]={tok:altTok(),items:items||null};const ks=Object.keys(a);ks.slice(0,Math.max(0,ks.length-30)).forEach(k=>delete a[k]);localStorage.setItem('snAlt',JSON.stringify(a))}catch(e){}};
   const cards=(box,items,np)=>{box.innerHTML='';box.classList.toggle('ph',!np);items.forEach(([nm,ds])=>{const b=document.createElement('button');b.type='button';b.style.borderLeftColor=o.color; /* v308: a photo above each idea (not in the folded earlier series) */
     if(!np){const im=document.createElement('div');im.className='snpimg';mphoto(im,null,nm,'c');b.appendChild(im)}
-    const bb=document.createElement('b');bb.textContent=nm;b.append(bb,document.createTextNode(cap1(ds)));
+    const bb=document.createElement('b');bb.textContent=nm;const sd=document.createElement('span');sd.className='snds';sd.textContent=cap1(ds);b.append(bb,sd);if(!np)b.title=nm+' – '+cap1(ds);
     b.onclick=()=>{openChat(null);send(t.idGen.replace('{x}',nm),true)};box.appendChild(b)})};
   const wait=(box,txt,btn,fn)=>{box.innerHTML='';const w=document.createElement('div');w.className='snwait';w.textContent=txt;
     if(btn){const r=document.createElement('button');r.type='button';r.className='snmore';r.style.margin='8px 0 0';r.textContent=btn;r.onclick=fn;w.appendChild(r)}box.appendChild(w)};
@@ -2911,7 +2960,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v316',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v317',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3092,8 +3141,9 @@ function drawHistory(){
     [[false,t.hRecent],[true,'❤️ '+t.favs+' ('+hf.length+')']].forEach(([v,lab])=>{const b=document.createElement('button');b.type='button';b.className='chip'+(hhFav===v?' on':'');b.textContent=lab;b.onclick=()=>{hhFav=v;drawHistory()};tb.appendChild(b)});
     const all2=document.createElement('button');all2.type='button';all2.className='hhall';all2.textContent=t.hAll+' →';all2.onclick=()=>{hfav=hhFav;harch=false;goTo('history')};tb.appendChild(all2);
     h.appendChild(tb);
-    if(hhFav){if(!hf.length)empty(h,t.nofav);else hf.slice(0,2).forEach(e=>h.appendChild(rowFor(e,true,true)))}
-    else a.slice(0,2).forEach(e=>h.appendChild(rowFor(e,true)))}
+    const gr=document.createElement('div');gr.className='hhgrid'; /* v317: the 2 recipes side by side */
+    if(hhFav){if(!hf.length)empty(h,t.nofav);else hf.slice(0,2).forEach(e=>gr.appendChild(rowFor(e,false,true)))}
+    else a.slice(0,2).forEach(e=>gr.appendChild(rowFor(e,false,true)));if(gr.children.length)h.appendChild(gr)}
   const f=$('#hfilter');f.innerHTML='';
   const nFav=favItems(a.filter(e=>famFav(e))).length; // counters: « Toutes » and « Favoris » do not count the archived recipes
   const tabs=[['all',t.all+' ('+a.length+')'],['fav','❤️ '+t.favs+' ('+nFav+')']];if(ar.length)tabs.push(['arch','🗄️ '+t.hArch+' ('+ar.length+')']);
@@ -3286,24 +3336,38 @@ function dayRows(i,dn,onChange){const t=T(),m=readMenu(),rec=new Map(loadH().map
       if(items){const op=document.createElement('div');op.className='mopts';const op2=document.createElement('div');op2.className='mopts2';items.forEach(([ic,lb2,fn,danger],ix)=>{const ob=document.createElement('button');ob.type='button';ob.className='mopt'+(danger?' danger':'');ob.textContent=ic+' '+lb2;ob.onclick=ev=>{ev.stopPropagation();fn()};op2.appendChild(ob)});op.appendChild(op2);row.appendChild(op)} // v267: « Choisir moi-même » alone, the other options on the line below // v258: the options sit under the dish instead of behind a ⋯ menu
       sl.appendChild(row)});
   return sl}
-function paintMenuHome(m,rec,sug){ // v306: « Votre menu de la semaine » card: photo, name, course and status of today's dish, how many other days have something
-  const t=T(),b=$('#menuHome'),cs=t.mCourses.split('|'),PS=sug?wkPers(sug):{};
-  const slot=(i,j)=>{const id=m.d[i][j],e=id&&rec.get(id);if(e)return{e,name:e.title,own:true};
-    if(!sug)return null;const hk=sug.from+'|'+i+'|'+j;if(m.hid&&m.hid[hk])return null;const px=PS[i*3+j],pr=px&&rec.get(px.id);if(pr)return{e:pr,name:pr.title};
-    const it=sug.items[i*3+j];return it&&it[0]?{e:null,name:it[0]}:null};
+function paintMenuHome(m,rec,sug){ // v317: « Menu de la semaine » card: strip of the 7 days, photo of the chosen day's dish, its 3 courses with thumbnails
+  const t=T(),b=$('#menuHome'),cs=t.mCourses.split('|'),PS=sug?wkPers(sug):{},dn=t.mDays.split('|');
+  const slot=(i,j)=>{const id=m.d[i][j],e=id&&rec.get(id);if(e)return{e,name:e.title,go:()=>openCard(e.id)};
+    if(!sug)return null;const hk=sug.from+'|'+i+'|'+j;if(m.hid&&m.hid[hk])return null;const px=PS[i*3+j],pr=px&&rec.get(px.id);if(pr)return{e:pr,name:pr.title,go:()=>openCard(pr.id,px.vi)};
+    const it=sug.items[i*3+j];return it&&it[0]?{e:null,name:it[0],go:()=>menuOpen(i,j,it)}:null};
   const pick=i=>{for(const j of [1,0,2]){const x=slot(i,j);if(x){x.j=j;return x}}return null};
-  const td=pick(todayIdx);let others=0;for(let i=0;i<7;i++)if(i!==todayIdx&&pick(i))others++;
-  b.innerHTML='';b.classList.toggle('mhrich',!!td);
-  if(!td){let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));
+  let any=false;for(let i=0;i<7;i++)if(pick(i))any=true;
+  b.innerHTML='';b.classList.toggle('mhrich',any);
+  if(any){b.removeAttribute('role');b.removeAttribute('tabindex')}else{b.setAttribute('role','button');b.setAttribute('tabindex','0')}
+  if(!any){let n=0;m.d.forEach(r=>r.forEach(id=>{if(id&&rec.has(id))n++}));
     const i=document.createElement('i');i.textContent='🗓️';const d=document.createElement('div'),h=document.createElement('b'),sp=document.createElement('span');h.textContent=t.menuT;sp.textContent=n?(n>1?t.menuN:t.menu1).replace('{n}',n):t.menu0;d.append(h,sp);
     const g=document.createElement('em');g.className='mgo';g.textContent='›';b.append(i,d,g);return}
-  const hd=document.createElement('div');hd.className='mhh';const tt=document.createElement('span');tt.className='mht1';tt.textContent='🗓️ '+t.menuT;const all=document.createElement('em');all.textContent=t.hAll+' →';hd.append(tt,all);
-  const img=document.createElement('div');img.className='mhimg';mphoto(img,td.e&&td.e.ph?td.e:null,td.name,true);
-  const nm=document.createElement('div');nm.className='mhn';nm.textContent=td.name;
-  const mt=document.createElement('div');mt.className='mhm';const w=document.createElement('span');w.textContent=t.mToday+' · '+cs[td.j];const pl=document.createElement('span');pl.className='mhp';pl.textContent=td.own?t.mhPlan:t.mhIdea;mt.append(w,pl);
-  b.append(hd,img,nm,mt);
-  if(others){const o=document.createElement('div');o.className='mho';o.textContent=(others>1?t.mhOthers:t.mhOther1).replace('{n}',others);b.appendChild(o)}
+  if(mhDay==null||mhDay<0||mhDay>6)mhDay=todayIdx;const di=mhDay;
+  const stop=f=>ev=>{ev.stopPropagation();f()};
+  const hd=document.createElement('div');hd.className='mhh';const tt=document.createElement('span');tt.className='mht1';tt.textContent='🗓️ '+t.menuT;
+  const all=document.createElement('button');all.type='button';all.className='mhall';all.textContent=t.hAll+' →';all.onclick=stop(openMenuView);hd.append(tt,all);
+  const st=document.createElement('div');st.className='mhdays';const mon=new Date();mon.setHours(12,0,0,0);mon.setDate(mon.getDate()-todayIdx);
+  for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);const x=document.createElement('button');x.type='button';x.className='mhd'+(i===di?' on':'')+(i===todayIdx?' td':'');
+    const w=document.createElement('span');w.textContent=d.toLocaleDateString(lang,{weekday:'short'}).replace(/\.$/,'').replace(/^./,c=>c.toLocaleUpperCase(lang));const n=document.createElement('b');n.textContent=d.getDate();x.append(w,n);
+    x.setAttribute('aria-pressed',String(i===di));x.setAttribute('aria-label',dn[i]+' '+d.getDate());x.onclick=stop(()=>{mhDay=i;paintMenuHome(m,rec,sug)});st.appendChild(x)}
+  const bd=document.createElement('div');bd.className='mhbody';const main=pick(di);
+  const img=document.createElement('button');img.type='button';img.className='mhimg';img.setAttribute('aria-label',main?main.name:t.menuT);
+  if(main){mphoto(img,main.e&&main.e.ph?main.e:null,main.name,true);img.onclick=stop(main.go)}else{img.textContent='🍽️';img.onclick=stop(openMenuView)}
+  const rt=document.createElement('div');rt.className='mhr';const pl=document.createElement('span');pl.className='mhp';pl.textContent=di===todayIdx?t.mToday:dn[di];rt.appendChild(pl);
+  cs.forEach((cn,j)=>{const x=slot(di,j),r=document.createElement('button');r.type='button';r.className='mhrow'+(x?'':' mhe');
+    const th=document.createElement('span');th.className='mhth';if(x)mphoto(th,x.e&&x.e.ph?x.e:null,x.name);else th.textContent='+';
+    const tx=document.createElement('span');tx.className='mhtx';const lb=document.createElement('small');lb.textContent=cn;const nm=document.createElement('b');nm.textContent=x?x.name:t.mAdd;tx.append(lb,nm);
+    r.append(th,tx);r.onclick=stop(x?x.go:openMenuView);rt.appendChild(r)});
+  bd.append(img,rt);b.append(hd,st,bd);
 }
+function openMenuView(){drawMenu();show('menu')}
+var mhDay=null;
 function drawMenu(){
   const t=T(),box=$('#menuBox');box.innerHTML='';$('#menuT').textContent=t.menuT;
   const m=readMenu(),rec=new Map(loadH().map(e=>[e.id,e])),days=t.mDays.split('|'),cs=t.mCourses.split('|');
@@ -4666,7 +4730,7 @@ function updTop(){
 $('#tofav').onclick=()=>{if(qaMode){qaFav();return}if(currentId){const z=loadH().find(x=>x.id===currentId),f=toggleFav(currentId,z&&!z.qa&&!famFav(z)?lastVi(z):null);toast(f?'❤️ '+T().fav:'🤍 '+T().fav)}};
 $('#hmore').onclick=()=>{drawHistory();show('history')};
 $('#hsHist').onclick=()=>goTo('history');$('#hsCirc').onclick=()=>goTo('circle');$('#hsFavs').onclick=()=>goTo('favs');
-$('#menuHome').onclick=()=>{drawMenu();show('menu')};$('#mback').onclick=()=>show('home');
+$('#menuHome').onclick=()=>{if(!$('#menuHome').classList.contains('mhrich'))openMenuView()};$('#menuHome').onkeydown=ev=>{if((ev.key==='Enter'||ev.key===' ')&&ev.target===$('#menuHome')&&!$('#menuHome').classList.contains('mhrich')){ev.preventDefault();openMenuView()}};$('#mback').onclick=()=>show('home');
 $('#home2').onclick=()=>show('home');
 $('#n1').onclick=()=>show('home');
 // 💬 « Reprendre la recette ou la question »: the last thing generated in this session (recipe or question), else the latest saved one, else a new chat

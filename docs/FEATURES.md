@@ -405,3 +405,10 @@ Community search items show the average, the number of votes and « Cuisinée pa
 
 ### v316 — Chef portraits on the home
 The four chef cards (Giulia, Marcel, Hiro, Lina) show an original SVG bust drawn in code by `chefSvg(k)` (hat, scarf and colours differ per chef), replacing the emoji. Same behaviour: tapping a card opens the course panel (Starters / Mains / Desserts / Drinks + « Discuter »). Portrait 54 px (46 px under 380 px).
+
+
+### v317 — Home blocks laid out like the mockup
+- **Menu de la semaine** card: 7-day strip of the current week (tap a day), photo of that day's main dish, its 3 courses with thumbnails; « Tout voir → » opens the weekly menu page. Shown as soon as any day has a dish.
+- **Dernières recettes**: the 2 latest recipes (or favorites) side by side in one white card; heart kept, no ✕ on the home.
+- **Inspirations de saison**: 4 ideas per row, photo + name only.
+Current charter kept (soft pink selection, cream background).
