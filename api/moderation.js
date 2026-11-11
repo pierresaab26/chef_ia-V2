@@ -6,6 +6,7 @@
 //   &invite=<name>   → creates a personal link  https://<site>/?k=<token>  (answer: {name, link})
 //   &invites=1       → lists the invitations (name, date, link)
 //   &revoke=<name>   → removes every invitation of that name (or the one whose token is given); effective within 60 s
+// &stats=1 → counts of users (there are no accounts: a user = a device nickname) and activity, read-only.
 import { fail, redis, hasRedis } from "./_lib.js";
 import { randomBytes } from "node:crypto";
 
@@ -19,6 +20,7 @@ export default async function handler(req, res) {
   const un = String((req.query && req.query.unblock) || "");
   const q = req.query || {};
   try {
+    if (q.stats) return res.status(200).json(await stats());
     if (q.invite || q.invites || q.revoke) return res.status(200).json(await invites(q, req));
     if (un) return res.status(200).json(await unblock(un));
     const [rows] = await redis([["LRANGE", "mod:log", 0, 99]]);
@@ -26,6 +28,36 @@ export default async function handler(req, res) {
   } catch {
     return fail(res, "storage");
   }
+}
+
+// Number of keys matching a pattern (SCAN, capped at 50 000 keys).
+async function countKeys(pat) {
+  let cur = "0", n = 0, loops = 0;
+  do {
+    const [r] = await redis([["SCAN", cur, "MATCH", pat, "COUNT", 500]]);
+    cur = String(r[0]);
+    n += r[1].length;
+  } while (cur !== "0" && ++loops < 100);
+  return n;
+}
+
+// No accounts exist: "users" = devices that picked a nickname (cu:<pid>). Invitations = personal access links (hash ak).
+async function stats() {
+  const [[invitations], nicknames, inCircle, sharedAll, publicCopies] = await Promise.all([
+    redis([["HLEN", "ak"]]),
+    countKeys("cu:*"),
+    countKeys("cf:*"),
+    countKeys("s:*"),
+    countKeys("s:pub-*"),
+  ]);
+  return {
+    users: nicknames, // devices with a nickname (the closest thing to "registered")
+    inCircle, // of those, how many have at least one circle member
+    invitations: Number(invitations) || 0, // personal access links still active
+    sharedRecipes: Math.max(0, sharedAll - publicCopies),
+    publicRecipes: publicCopies,
+    note: "No accounts: a user is a device nickname. People who only use the shared code and never pick a nickname are not counted.",
+  };
 }
 
 async function unblock(un) {

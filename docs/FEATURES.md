@@ -438,3 +438,4 @@ Menu-card photo locked at 132 px square (no size change when the real photo load
 - Dashboards are built in PostHog itself (insights by event name, per day; heatmaps from the toolbar).
 
 - v322: `resume_click` event on the resume pill (`to` = chat / qa / card / new).
+- v330: `/api/moderation?key=<CRON_SECRET>&stats=1` returns the user counts (nicknames, people in a circle, active invitations, shared and public recipes). No accounts exist, so a user = a device nickname.
