@@ -1,4 +1,4 @@
-import { authOk, fail, askClaude, parseJsonLoose, overLimit, hasRedis, redis } from "./_lib.js";
+import { captchaOk, authOk, fail, askClaude, parseJsonLoose, overLimit, hasRedis, redis } from "./_lib.js";
 import { fetchPage, recipeFromJsonLd, pageText, looksBlocked, looksLogin } from "./_page.js";
 
 // v335: a link import keeps ONLY the title and the ingredients (no steps, times, servings, notes, site name or address),
@@ -69,6 +69,7 @@ export default async function handler(req, res) {
   if (req.body && req.body.report) return reportLink(req, res, req.body);
   // Protects the server and the Anthropic credit: 10 link imports per minute per IP.
   if (await overLimit(req, "rl:il:", 10)) return fail(res, "rate");
+  if (!(await captchaOk(req))) return fail(res, "captcha"); // v343
 
   const body = req.body || {};
   let target = String(body.url || "").trim();

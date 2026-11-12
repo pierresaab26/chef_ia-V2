@@ -165,7 +165,7 @@ export default async function handler(req, res) {
   if (req.method === "GET" && q.missing) return missingList(res);
   // Health check for the owner (no secret, only yes / no): open /api/photo?status=1 in a browser.
   if (req.method === "GET" && q.status)
-    return res.status(200).json({ unsplashKey: !!process.env.UNSPLASH_ACCESS_KEY, anthropicKey: !!process.env.ANTHROPIC_API_KEY, redis: hasRedis(), accessCode: !!process.env.APP_PASSWORD });
+    return res.status(200).json({ unsplashKey: !!process.env.UNSPLASH_ACCESS_KEY, anthropicKey: !!process.env.ANTHROPIC_API_KEY, redis: hasRedis(), accessCode: !!process.env.APP_PASSWORD, tsKey: process.env.TURNSTILE_SITE_KEY || "" }); // v343: tsKey = PUBLIC Turnstile site key (the app asks it before an import)
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
   if (!(await authOk(req, res))) return;
   if (!process.env.UNSPLASH_ACCESS_KEY) return res.status(503).json({ error: "nokey" });

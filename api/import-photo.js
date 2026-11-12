@@ -1,4 +1,4 @@
-import { authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES, overLimit } from "./_lib.js";
+import { captchaOk, authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES, overLimit } from "./_lib.js";
 
 // v330: two cases. (1) the image contains a WRITTEN recipe: faithful extraction (kind "text").
 // (2) the image shows a prepared dish or drink with no recipe text: the model recognises it and reconstructs a plausible recipe (kind "dish").
@@ -49,6 +49,7 @@ export default async function handler(req, res) {
   if (req.body && req.body.report) return reportImage(req, res, req.body);
   // Protects the Anthropic credit (vision calls are the most expensive): 6 photo imports per minute per IP.
   if (await overLimit(req, "rl:ip:", 6)) return fail(res, "rate");
+  if (!(await captchaOk(req))) return fail(res, "captcha"); // v343
 
   const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(String((req.body || {}).image || ""));
   if (!m) return fail(res, "badimage");

@@ -439,3 +439,6 @@ Menu-card photo locked at 132 px square (no size change when the real photo load
 
 - v322: `resume_click` event on the resume pill (`to` = chat / qa / card / new).
 - v330: `/api/moderation?key=<CRON_SECRET>&stats=1` returns the user counts (nicknames, people in a circle, active invitations, shared and public recipes). No accounts exist, so a user = a device nickname.
+
+### Import: human check (v343)
+Photo and link imports ask Cloudflare Turnstile for a fresh token first (invisible; a small modal only if Cloudflare asks for a click). The server verifies it before any model call (403 `captcha`). Active only when `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET` are set in Vercel. The manual form and the failure reports need no check.

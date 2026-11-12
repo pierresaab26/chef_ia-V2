@@ -32,10 +32,29 @@ export async function authOk(req, res) {
   return false;
 }
 
+// v343: Cloudflare Turnstile. Inactive (always true) while TURNSTILE_SECRET is not set in Vercel.
+// Otherwise the request must carry a fresh token in `ts`; a token works once. A network failure toward Cloudflare refuses the request.
+export async function captchaOk(req) {
+  const secret = process.env.TURNSTILE_SECRET;
+  if (!secret) return true;
+  const token = String((req.body || {}).ts || "").slice(0, 2100);
+  if (!token) return false;
+  try {
+    const f = new URLSearchParams({ secret, response: token });
+    const ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+    if (ip) f.set("remoteip", ip);
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: f, signal: AbortSignal.timeout(5000) });
+    const j = await r.json();
+    return j && j.success === true;
+  } catch (e) {
+    return false;
+  }
+}
+
 const STATUS = {
   badurl: 400, badimage: 400, private: 400, toobig: 413, nokey: 503, messages: 400, method: 405,
   norecipe: 422, nomail: 503, blocked: 422, banned: 403, login: 422, notfound: 422, rate: 429, daily: 429, storage: 502,
-  timeout: 504, unreachable: 502, upstream: 502, badkey: 502, credit: 502, model: 502,
+  captcha: 403, timeout: 504, unreachable: 502, upstream: 502, badkey: 502, credit: 502, model: 502,
 };
 export function fail(res, code) {
   return res.status(STATUS[code] || 502).json({ error: code });

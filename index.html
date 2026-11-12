@@ -1028,6 +1028,7 @@ fr:{
   imMsgL:"J’ai importé le titre et les ingrédients de cette recette.",
   imCheckL:"Vérifiez le titre et les ingrédients. Seuls ces deux éléments sont importés (pas les étapes). Rien n’a encore été modifié ni enregistré.",
   e_daily:"Limite atteinte : 3 imports par lien par jour. Cette limite garde Chef IA gratuit et rapide pour tout le monde. Seuls le titre et les ingrédients sont importés. Revenez demain (le compteur repart à minuit, heure de Paris).",
+  e_captcha:"Vérification impossible. Rechargez la page et réessayez.",
   srcP:"Importée d’une photo",
   e_badurl:"Ce lien n’est pas valide.",
   e_private:"Ce lien n’est pas accessible (adresse interne ou non autorisée).",
@@ -1362,6 +1363,7 @@ en:{
   imMsgL:"I imported the title and ingredients of this recipe.",
   imCheckL:"Check the title and the ingredients. Only these two are imported (no steps). Nothing has been changed or saved yet.",
   e_daily:"Limit reached: 3 link imports per day. This limit keeps Chef IA free and fast for everyone. Only the title and the ingredients are imported. Come back tomorrow (the counter resets at midnight, Paris time).",
+  e_captcha:"Verification failed. Reload the page and try again.",
   srcP:"Imported from a photo",
   e_badurl:"This link is not valid.",
   e_private:"This link can’t be reached (internal or disallowed address).",
@@ -1696,6 +1698,7 @@ es:{
   imMsgL:"He importado el título y los ingredientes de esta receta.",
   imCheckL:"Comprueba el título y los ingredientes. Solo se importan estos dos (sin pasos). Todavía no se ha modificado ni guardado nada.",
   e_daily:"Límite alcanzado: 3 importaciones por enlace al día. Este límite mantiene Chef IA gratis y rápido para todos. Solo se importan el título y los ingredientes. Vuelve mañana (el contador se reinicia a medianoche, hora de París).",
+  e_captcha:"No se pudo verificar. Recarga la página e inténtalo de nuevo.",
   srcP:"Importada de una foto",
   e_badurl:"Este enlace no es válido.",
   e_private:"No se puede acceder a este enlace (dirección interna o no permitida).",
@@ -2030,6 +2033,7 @@ de:{
   imMsgL:"Ich habe den Titel und die Zutaten dieses Rezepts importiert.",
   imCheckL:"Prüfe Titel und Zutaten. Nur diese beiden werden importiert (keine Schritte). Noch wurde nichts geändert oder gespeichert.",
   e_daily:"Limit erreicht: 3 Link-Importe pro Tag. Dieses Limit hält Chef IA für alle kostenlos und schnell. Es werden nur Titel und Zutaten importiert. Komm morgen wieder (der Zähler startet um Mitternacht Pariser Zeit neu).",
+  e_captcha:"Überprüfung fehlgeschlagen. Seite neu laden und erneut versuchen.",
   srcP:"Aus einem Foto importiert",
   e_badurl:"Dieser Link ist ungültig.",
   e_private:"Dieser Link ist nicht erreichbar (interne oder nicht erlaubte Adresse).",
@@ -2364,6 +2368,7 @@ it:{
   imMsgL:"Ho importato il titolo e gli ingredienti di questa ricetta.",
   imCheckL:"Controlla il titolo e gli ingredienti. Vengono importati solo questi due (senza passaggi). Per ora nulla è stato modificato o salvato.",
   e_daily:"Limite raggiunto: 3 importazioni da link al giorno. Questo limite mantiene Chef IA gratuito e veloce per tutti. Vengono importati solo il titolo e gli ingredienti. Torna domani (il contatore riparte a mezzanotte, ora di Parigi).",
+  e_captcha:"Verifica non riuscita. Ricarica la pagina e riprova.",
   srcP:"Importata da una foto",
   e_badurl:"Questo link non è valido.",
   e_private:"Questo link non è raggiungibile (indirizzo interno o non consentito).",
@@ -2698,6 +2703,7 @@ pt:{
   imMsgL:"Importei o título e os ingredientes desta receita.",
   imCheckL:"Verifique o título e os ingredientes. Só estes dois são importados (sem passos). Ainda nada foi alterado nem guardado.",
   e_daily:"Limite atingido: 3 importações por link por dia. Este limite mantém o Chef IA gratuito e rápido para todos. Só o título e os ingredientes são importados. Volte amanhã (o contador reinicia à meia-noite, hora de Paris).",
+  e_captcha:"Não foi possível verificar. Recarregue a página e tente de novo.",
   srcP:"Importada de uma foto",
   e_badurl:"Este link não é válido.",
   e_private:"Este link não está acessível (endereço interno ou não permitido).",
@@ -3159,7 +3165,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v342',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v343',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4709,6 +4715,21 @@ async function apiPost(path,data){track('import_request',{kind:/photo/.test(path
   if(r.status===413)throw {code:'toobig'};
   throw {code:(j&&j.error)||'upstream'};
 }
+/* v343: Cloudflare Turnstile before each photo / link import. The public site key comes from /api/photo?status=1; without it nothing is asked (the server only requires a token when TURNSTILE_SECRET is set). */
+let tsKeyP=null;
+function tsKey(){return tsKeyP||(tsKeyP=fetchT('/api/photo?status=1',{},8000).then(r=>r.ok?r.json():{}).then(j=>String(j&&j.tsKey||'')).catch(()=>''))}
+let tsLib=null;
+function tsLoad(){return tsLib||(tsLib=new Promise((ok,ko)=>{if(window.turnstile)return ok();const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';s.async=true;s.onload=()=>ok();s.onerror=()=>{tsLib=null;ko(0)};document.head.appendChild(s)}))}
+async function tsToken(){
+  const key=await tsKey();if(!key)return '';
+  try{await tsLoad()}catch(e){throw {code:'captcha'}}
+  return new Promise((ok,ko)=>{
+    const box=document.createElement('div');box.style.cssText='position:fixed;inset:0;z-index:99;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35)';
+    const card=document.createElement('div');card.style.cssText='background:var(--card);border-radius:var(--rc);padding:18px;box-shadow:var(--sh)';box.appendChild(card);document.body.appendChild(box);
+    let id=null,done=false;const end=(f,v)=>{if(done)return;done=true;clearTimeout(tm);try{window.turnstile.remove(id)}catch(e){}box.remove();f(v)};
+    const tm=setTimeout(()=>end(ko,{code:'captcha'}),45000);
+    try{id=window.turnstile.render(card,{sitekey:key,appearance:'interaction-only',callback:t=>end(ok,t),'error-callback':()=>end(ko,{code:'captcha'}),'before-interactive-callback':()=>{box.style.display='flex'},'after-interactive-callback':()=>{box.style.display='none'}})}catch(e){end(ko,{code:'captcha'})}
+  })}
 function impMsg(code){
   const t=T(),pv=typeof claude!=='undefined';
   if(pv&&(code==='network'||code==='noapi'))return t.e_noapi;
@@ -4742,8 +4763,8 @@ async function prepareImage(file){
 async function importPhoto(file){
   if(!file)return;const tok=++impTok;impBusy(true);imp=null;impStatus(T().imWait);
   try{
-    const pr=await prepareImage(file);impLast=pr.image;
-    const j=await apiPost('/api/import-photo',{image:pr.image,lang});
+    const pr=await prepareImage(file);impLast=pr.image;const ts=await tsToken();if(tok!==impTok)return;
+    const j=await apiPost('/api/import-photo',{image:pr.image,lang,ts});
     if(tok!==impTok)return;
     showPreview({recipe:j.recipe,src:'photo',thumb:pr.thumb,dish:j.kind==='dish'});
   }catch(e){if(tok===impTok){impStatus(impMsg(e&&e.code),true);if(e&&e.code==='norecipe')impReport()}}
@@ -4755,7 +4776,7 @@ async function importLink(){
   try{const x=new URL(u);if(!/^https?:$/.test(x.protocol)||!x.hostname.includes('.'))throw 0;u=x.href}catch(e){impStatus(T().e_badurl,true);return}
   const tok=++impTok;impBusy(true);imp=null;impStatus(T().imWait);
   try{
-    impUrlLast=u;const j=await apiPost('/api/import-link',{url:u,lang,dev:devId()});
+    impUrlLast=u;const ts=await tsToken();if(tok!==impTok)return;const j=await apiPost('/api/import-link',{url:u,lang,dev:devId(),ts});
     if(tok!==impTok)return;
     showPreview({recipe:j.recipe,src:'link'}); /* v335: title + ingredients only, no site name, no address */
   }catch(e){if(tok===impTok)impStatus(impMsg(e&&e.code),true)}
