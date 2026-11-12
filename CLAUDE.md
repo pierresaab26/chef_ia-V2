@@ -89,7 +89,7 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - `fl:<hash>` flag counter (7 days), `fl:last:<hash>` last flagged requests, `fl:sent:<hash>` email sent, `bk:<hash>` block (24 h), `mod:log` moderation log (200)
 - `rl:si:<ip>:<minute>` (seasonal ideas, 30/min), `rl:<ip>:<minute>` (comments, 5/min), `rl:r:<ip>:<minute>` (ratings, 30/min), `rl:c:<ip>:<minute>` (chat, 20/min), `rl:ip:<ip>:<minute>` (photo import, 6/min), `rl:il:<ip>:<minute>` (link import, 10/min), `rl:ph:<ip>:<minute>` (photos, 30/min) — rate limiting
 
-**Feature documentation:** see `docs/FEATURES.md` (one section per area: generation, history/favorites, weekly menu, seasonal menu, Chef IA). Update it whenever one of these areas changes.
+**Import documentation:** `docs/IMPORT.md` (complete). **Feature documentation:** see `docs/FEATURES.md` (one section per area: generation, history/favorites, weekly menu, seasonal menu, Chef IA). Update it whenever one of these areas changes.
 
 ## 3. Working rules (from the owner)
 
@@ -121,6 +121,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (up to v149)
+
+Docs (owner: « écris la doc complète pour l'import », no app change, no version bump): new `docs/IMPORT.md` = the complete import reference at v348 (three ways, import page, server rules, limits table, Turnstile, preview / saving, errors and appeals, env vars, code map, tests, history). FEATURES.md points to it. Keep it up to date when the import changes. Committed locally, NOT pushed.
 
 v348 (owner: « dans Importer, le même bouton déplier / replier pour l'import manuel »): the fold button of « ✍️ Saisie manuelle » (`.manhd .fbtn`) now has exactly the look of the History « ▴ Replier / ▾ Déplier » buttons (white card pill, 13 px, 600, ink text, thin border); replaces the v346 pink pill. CSS only. Committed locally, NOT pushed.
 
