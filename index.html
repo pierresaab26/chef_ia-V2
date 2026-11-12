@@ -336,8 +336,10 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .urlrow{display:flex;gap:8px}
 .urlrow input{flex:1;min-width:0;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:999px;padding:10px 14px;font:inherit;color:var(--ink);outline:0}
 .urlrow button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:10px 16px}
-.imstat{padding:14px;border-radius:16px;background:var(--card);font-size:14px;margin-bottom:12px}
-.imstat.err{border:1px solid var(--pink)}
+.imstat{padding:14px 16px;border-radius:var(--rc);background:var(--card);box-shadow:var(--sh);font-size:14px;line-height:1.45;margin-bottom:12px}
+.imstat.err{background:var(--psoft);border:1px solid var(--psbd);box-shadow:none} /* v333: error = soft-pink card of the charter, no hard pink outline */
+.imrep{background:var(--card);border-radius:var(--rc);box-shadow:var(--sh);padding:16px;margin-bottom:12px}.imrep p{margin:0 0 12px;color:var(--mut);font-size:13px;line-height:1.45}
+.imrep .cbtn{width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;box-shadow:none}.imrep .cbtn:disabled{opacity:.6}
 .imthumb{display:block;max-width:100%;max-height:200px;border-radius:16px;margin:0 auto 12px}
 .imcheck{background:var(--psoft);border:1px solid var(--psbd);border-radius:var(--rc);color:var(--ink);font-size:14px;line-height:1.45;padding:12px 14px;margin:14px 0 12px} /* v332: the warning is a soft-pink card (charter), not loose grey text */
 #impOut .cact{flex-direction:column;gap:10px}#impOut .cact .cbtn{flex:none;width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px 16px;border:1px solid var(--bd)}#impOut .cact .cbtn.go{border-color:var(--psbd)} /* v332: the two buttons have the same size, stacked */
@@ -990,7 +992,8 @@ fr:{
   imCheckD:"Plat reconnu sur la photo : cette recette est une reconstitution du chef (quantités et temps estimés). Vérifiez-la avant de l’utiliser. Rien n’a encore été enregistré.",
   imMsgD:"J’ai reconnu ce plat sur une photo et le chef en a reconstitué la recette.",
   imRep:"Photo ou image non reconnue, contactez-nous",
-  imRepOk:"Merci, l’image a été envoyée au support.",
+  imRepOk:"Merci ! Votre image a été envoyée pour un contrôle manuel, uniquement pour cela, puis elle sera supprimée.",
+  imRepN:"En cliquant, votre image est envoyée à notre équipe pour un contrôle manuel, uniquement pour ce contrôle, puis supprimée.",
   imRepKo:"L’envoi a échoué, réessayez plus tard.",
   imMsgL:"J’ai importé cette recette depuis {x}.",
   srcP:"Importée d’une photo",
@@ -1306,7 +1309,8 @@ en:{
   imCheckD:"Dish recognized from the photo: this recipe is the chef’s reconstruction (amounts and times are estimated). Check it before using it. Nothing has been saved yet.",
   imMsgD:"I recognized this dish from a photo and the chef reconstructed its recipe.",
   imRep:"Photo or image not recognized, contact us",
-  imRepOk:"Thank you, the image was sent to support.",
+  imRepOk:"Thank you! Your image was sent for a manual check, only for that, and will then be deleted.",
+  imRepN:"Your image will be sent to our team for a manual check, only for that check, then deleted.",
   imRepKo:"Sending failed, please try again later.",
   imMsgL:"I imported this recipe from {x}.",
   srcP:"Imported from a photo",
@@ -1622,7 +1626,8 @@ es:{
   imCheckD:"Plato reconocido en la foto: esta receta es una reconstrucción del chef (cantidades y tiempos estimados). Compruébala antes de usarla. Todavía no se ha guardado nada.",
   imMsgD:"He reconocido este plato en una foto y el chef ha reconstruido su receta.",
   imRep:"Foto o imagen no reconocida, contáctanos",
-  imRepOk:"Gracias, la imagen se ha enviado al soporte.",
+  imRepOk:"¡Gracias! Tu imagen se ha enviado para una revisión manual, solo para eso, y después se eliminará.",
+  imRepN:"Tu imagen se enviará a nuestro equipo para una revisión manual, solo para esa revisión, y después se eliminará.",
   imRepKo:"El envío ha fallado, inténtalo más tarde.",
   imMsgL:"He importado esta receta desde {x}.",
   srcP:"Importada de una foto",
@@ -1938,7 +1943,8 @@ de:{
   imCheckD:"Gericht auf dem Foto erkannt: Dieses Rezept ist eine Rekonstruktion des Kochs (Mengen und Zeiten geschätzt). Prüfe es vor der Verwendung. Noch wurde nichts gespeichert.",
   imMsgD:"Ich habe dieses Gericht auf einem Foto erkannt und der Koch hat das Rezept rekonstruiert.",
   imRep:"Foto oder Bild nicht erkannt, kontaktiere uns",
-  imRepOk:"Danke, das Bild wurde an den Support gesendet.",
+  imRepOk:"Danke! Dein Bild wurde zur manuellen Prüfung gesendet, nur dafür, und wird anschließend gelöscht.",
+  imRepN:"Dein Bild wird zur manuellen Prüfung an unser Team gesendet, nur für diese Prüfung, und danach gelöscht.",
   imRepKo:"Senden fehlgeschlagen, bitte später erneut versuchen.",
   imMsgL:"Ich habe dieses Rezept von {x} importiert.",
   srcP:"Aus einem Foto importiert",
@@ -2254,7 +2260,8 @@ it:{
   imCheckD:"Piatto riconosciuto nella foto: questa ricetta è una ricostruzione dello chef (quantità e tempi stimati). Controllala prima di usarla. Per ora nulla è stato salvato.",
   imMsgD:"Ho riconosciuto questo piatto da una foto e lo chef ne ha ricostruito la ricetta.",
   imRep:"Foto o immagine non riconosciuta, contattaci",
-  imRepOk:"Grazie, l’immagine è stata inviata al supporto.",
+  imRepOk:"Grazie! La tua immagine è stata inviata per un controllo manuale, solo per quello, e poi verrà eliminata.",
+  imRepN:"La tua immagine verrà inviata al nostro team per un controllo manuale, solo per quel controllo, e poi eliminata.",
   imRepKo:"Invio non riuscito, riprova più tardi.",
   imMsgL:"Ho importato questa ricetta da {x}.",
   srcP:"Importata da una foto",
@@ -2570,7 +2577,8 @@ pt:{
   imCheckD:"Prato reconhecido na foto: esta receita é uma reconstituição do chef (quantidades e tempos estimados). Verifique-a antes de a usar. Ainda nada foi guardado.",
   imMsgD:"Reconheci este prato numa foto e o chef reconstituiu a receita.",
   imRep:"Foto ou imagem não reconhecida, contacte-nos",
-  imRepOk:"Obrigado, a imagem foi enviada ao suporte.",
+  imRepOk:"Obrigado! A sua imagem foi enviada para uma verificação manual, apenas para isso, e será depois eliminada.",
+  imRepN:"A sua imagem será enviada à nossa equipa para uma verificação manual, apenas para essa verificação, e depois eliminada.",
   imRepKo:"O envio falhou, tente mais tarde.",
   imMsgL:"Importei esta receita de {x}.",
   srcP:"Importada de uma foto",
@@ -3034,7 +3042,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v332',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v333',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4592,12 +4600,12 @@ function impMsg(code){
 }
 let impLast=null; // v331: last photo (prepared JPEG) kept in memory only, so that « contactez-nous » can send it; never stored
 function impReport(){
-  if(!impLast)return;const t=T(),b=document.createElement('button');b.type='button';b.className='cbtn';b.style.marginTop='10px';b.textContent='✉️ '+t.imRep;
+  if(!impLast)return;const t=T(),w=document.createElement('div');w.className='imrep';const np=document.createElement('p');np.textContent=t.imRepN;const b=document.createElement('button');b.type='button';b.className='cbtn';b.textContent='✉️ '+t.imRep;w.append(np,b);
   b.onclick=async()=>{b.disabled=true;let ok=false;
     try{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
       const r=await fetchT('/api/import-photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify({report:1,image:impLast,lang})},90000);ok=r.ok}catch(x){}
-    if(ok){b.remove();impLast=null;toast(t.imRepOk)}else{b.disabled=false;toast(t.imRepKo)}};
-  $('#impOut').appendChild(b)}
+    if(ok){w.remove();impLast=null;toast(t.imRepOk)}else{b.disabled=false;toast(t.imRepKo)}};
+  $('#impOut').appendChild(w)}
 function impStatus(txt,err){const o=$('#impOut');o.innerHTML='';const d=document.createElement('div');d.className='imstat'+(err?' err':'');d.textContent=txt;o.appendChild(d);o.scrollIntoView&&o.scrollIntoView({block:'nearest'})}
 function impBusy(b){['#impGo','#impCamB','#impGalB'].forEach(s=>{$(s).disabled=b})}
 // Shrinks the photo before sending (Vercel limit ~4.5 MB) and fixes the orientation.

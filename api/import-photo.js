@@ -31,7 +31,7 @@ async function reportImage(req, res, body) {
         from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
         to: [to],
         subject: "Chef IA : photo ou image non reconnue",
-        text: "Un utilisateur signale une photo ou une image non reconnue à l'import (langue : " + (lang || "?") + "). L'image est en pièce jointe.",
+        text: "Un utilisateur signale une photo ou une image non reconnue à l'import (langue : " + (lang || "?") + "). L'image est en pièce jointe : elle a été envoyée pour un contrôle manuel uniquement, à supprimer une fois le contrôle fait.",
         attachments: [{ filename: "image-non-reconnue." + (m[1] === "jpeg" ? "jpg" : m[1]), content: m[2] }],
       }),
       signal: AbortSignal.timeout(15000),
