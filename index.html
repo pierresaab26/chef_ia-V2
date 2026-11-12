@@ -3166,7 +3166,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v344',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v345',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4746,7 +4746,7 @@ function impReport(){
     if(ok){w.remove();impLast=null;toast(t.imRepOk)}else{b.disabled=false;toast(t.imRepKo)}};
   $('#impOut').appendChild(w)}
 /* v344: the manual form can be folded */
-var manOpen=true;
+var manOpen=false;
 function manFoldPaint(){const f=$('#manForm'),b=$('#manFold');if(!f||!b)return;f.hidden=!manOpen;b.textContent=(manOpen?'▴ ':'▾ ')+(manOpen?T().hFold:T().hUnfold);b.setAttribute('aria-expanded',manOpen)}
 function impStatus(txt,err){const o=$('#impOut');o.innerHTML='';const d=document.createElement('div');d.className='imstat'+(err?' err':'');d.textContent=txt;o.appendChild(d);try{o.closest('.scroll').scrollTop=0}catch(e){}}
 function impBusy(b){['#impGo','#impCamB','#impGalB'].forEach(s=>{$(s).disabled=b})}
