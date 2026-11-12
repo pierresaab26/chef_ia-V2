@@ -3,7 +3,7 @@ import { fetchPage, recipeFromJsonLd, pageText, looksBlocked, looksLogin } from 
 
 // v335: a link import keeps ONLY the title and the ingredients (no steps, times, servings, notes, site name or address),
 // and each person may import 3 links per day.
-const DAILY_MAX = 3;
+const DAILY_MAX = 0; // TEMPORARILY OFF for owner tests (0 = no limit). Normal value: 3
 const SYSTEM =
   "You read the text of a web page (<page> tags) and extract the title and the ingredient list of the food or drink recipe it contains. " +
   'Reply ONLY with a JSON object, with no text around it, of the form: {"found":true,"title":"","ingredients":["quantity + ingredient"]}. ' +
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
   if (!/^https?:\/\//i.test(target)) target = "https://" + target;
   const lang = String(body.lang || "").slice(0, 5);
   const qk = quotaKeys(req, body);
-  if ((await quotaUsed(qk)) >= DAILY_MAX) return fail(res, "daily");
+  if (DAILY_MAX > 0 && (await quotaUsed(qk)) >= DAILY_MAX) return fail(res, "daily");
 
   let page;
   try {
