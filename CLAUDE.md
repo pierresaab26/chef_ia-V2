@@ -122,6 +122,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (up to v149)
 
+v348 (owner: « dans Importer, le même bouton déplier / replier pour l'import manuel »): the fold button of « ✍️ Saisie manuelle » (`.manhd .fbtn`) now has exactly the look of the History « ▴ Replier / ▾ Déplier » buttons (white card pill, 13 px, 600, ink text, thin border); replaces the v346 pink pill. CSS only. Committed locally, NOT pushed.
+
 v347 (owner: « sélectionner tout à gauche, Tout replier en haut à droite », colours left WHITE after he refused the pink): History view: ONE line in `#hfilter` (flex-wrap): « ☑️ Sélectionner » first (left), then Toutes / Favoris / Archivées, and on the « Favoris » tab « Tout replier / Tout déplier » at the right end (`.hfall`, plain white chip, `margin-left:auto`); when the phone is too narrow (French labels on small phones) « Tout replier » wraps to its own right-aligned line. Fold buttons keep their old white look (the soft-pink restyle was refused). Tests: Playwright iPhone SE / 13 / iPad (no overflow, no JS error). Committed locally, NOT pushed (v345, v346 also unpushed).
 
 v346 (owner: « fais-le en respectant la charte et comme les autres »): the fold button of « Saisie manuelle » uses the same soft-pink pill as the other import buttons (`.manhd .fbtn`: `--psoft`, pink text, `--psbd` border, bold 15 px, 10 × 16 padding). CSS only. Committed locally, NOT pushed.
