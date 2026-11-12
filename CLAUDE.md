@@ -122,6 +122,7 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (up to v149)
 
+v332 (owner: « ne garde pas la miniature de l’image, juste remplace », + bottom of the import preview not in line with the charter): imported photos are no longer stored (`pendingMeta.photo` empty), the recipe gets its Unsplash photo through `ensurePhoto()`; the import warning is a soft-pink card and the two buttons are stacked, same size. Tests: Playwright iPhone 13 / iPad on the preview build (sizes, save without `photo`, no JS error). Real Unsplash lookup NOT tested (sandbox). Committed locally, NOT pushed.
 v331 (owner: « on garde pas la photo, mais ajoute un bouton… contactez nous »): after a failed photo import, a button emails the image to the support (see FEATURES.md, Import). Optional env var `SUPPORT_EMAIL` (falls back to `MOD_EMAIL`). Not pushed.
 v330 (owner: « combien de users sont inscrits ? », backend only, APP_VERSION NOT bumped so nobody gets a reload): `GET /api/moderation?key=<CRON_SECRET>&stats=1` (read-only, same secret as the crons, no new route: stays within the 12 functions) → `{users, inCircle, invitations, sharedRecipes, publicRecipes}`. There are no accounts: `users` = devices that picked a nickname (Redis `cu:*`), `inCircle` = `cf:*`, `invitations` = `HLEN ak`, shared = `s:*` minus `s:pub-*`. People who use the shared code without choosing a nickname are not counted. Test (not in repo): /tmp/t330/t.mjs (fake Redis, count + 401). NOT tested with the real Redis. Committed locally, NOT pushed.
 
