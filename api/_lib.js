@@ -34,7 +34,7 @@ export async function authOk(req, res) {
 
 const STATUS = {
   badurl: 400, badimage: 400, private: 400, toobig: 413, nokey: 503, messages: 400, method: 405,
-  norecipe: 422, blocked: 422, banned: 403, login: 422, notfound: 422, rate: 429, storage: 502,
+  norecipe: 422, nomail: 503, blocked: 422, banned: 403, login: 422, notfound: 422, rate: 429, storage: 502,
   timeout: 504, unreachable: 502, upstream: 502, badkey: 502, credit: 502, model: 502,
 };
 export function fail(res, code) {

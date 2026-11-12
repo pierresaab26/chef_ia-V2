@@ -988,6 +988,9 @@ fr:{
   imMsgP:"J’ai importé cette recette depuis une photo.",
   imCheckD:"Plat reconnu sur la photo : cette recette est une reconstitution du chef (quantités et temps estimés). Vérifiez-la avant de l’utiliser. Rien n’a encore été enregistré.",
   imMsgD:"J’ai reconnu ce plat sur une photo et le chef en a reconstitué la recette.",
+  imRep:"Photo ou image non reconnue, contactez-nous",
+  imRepOk:"Merci, l’image a été envoyée au support.",
+  imRepKo:"L’envoi a échoué, réessayez plus tard.",
   imMsgL:"J’ai importé cette recette depuis {x}.",
   srcP:"Importée d’une photo",
   e_badurl:"Ce lien n’est pas valide.",
@@ -1301,6 +1304,9 @@ en:{
   imMsgP:"I imported this recipe from a photo.",
   imCheckD:"Dish recognized from the photo: this recipe is the chef’s reconstruction (amounts and times are estimated). Check it before using it. Nothing has been saved yet.",
   imMsgD:"I recognized this dish from a photo and the chef reconstructed its recipe.",
+  imRep:"Photo or image not recognized, contact us",
+  imRepOk:"Thank you, the image was sent to support.",
+  imRepKo:"Sending failed, please try again later.",
   imMsgL:"I imported this recipe from {x}.",
   srcP:"Imported from a photo",
   e_badurl:"This link is not valid.",
@@ -1614,6 +1620,9 @@ es:{
   imMsgP:"He importado esta receta desde una foto.",
   imCheckD:"Plato reconocido en la foto: esta receta es una reconstrucción del chef (cantidades y tiempos estimados). Compruébala antes de usarla. Todavía no se ha guardado nada.",
   imMsgD:"He reconocido este plato en una foto y el chef ha reconstruido su receta.",
+  imRep:"Foto o imagen no reconocida, contáctanos",
+  imRepOk:"Gracias, la imagen se ha enviado al soporte.",
+  imRepKo:"El envío ha fallado, inténtalo más tarde.",
   imMsgL:"He importado esta receta desde {x}.",
   srcP:"Importada de una foto",
   e_badurl:"Este enlace no es válido.",
@@ -1927,6 +1936,9 @@ de:{
   imMsgP:"Ich habe dieses Rezept aus einem Foto importiert.",
   imCheckD:"Gericht auf dem Foto erkannt: Dieses Rezept ist eine Rekonstruktion des Kochs (Mengen und Zeiten geschätzt). Prüfe es vor der Verwendung. Noch wurde nichts gespeichert.",
   imMsgD:"Ich habe dieses Gericht auf einem Foto erkannt und der Koch hat das Rezept rekonstruiert.",
+  imRep:"Foto oder Bild nicht erkannt, kontaktiere uns",
+  imRepOk:"Danke, das Bild wurde an den Support gesendet.",
+  imRepKo:"Senden fehlgeschlagen, bitte später erneut versuchen.",
   imMsgL:"Ich habe dieses Rezept von {x} importiert.",
   srcP:"Aus einem Foto importiert",
   e_badurl:"Dieser Link ist ungültig.",
@@ -2240,6 +2252,9 @@ it:{
   imMsgP:"Ho importato questa ricetta da una foto.",
   imCheckD:"Piatto riconosciuto nella foto: questa ricetta è una ricostruzione dello chef (quantità e tempi stimati). Controllala prima di usarla. Per ora nulla è stato salvato.",
   imMsgD:"Ho riconosciuto questo piatto da una foto e lo chef ne ha ricostruito la ricetta.",
+  imRep:"Foto o immagine non riconosciuta, contattaci",
+  imRepOk:"Grazie, l’immagine è stata inviata al supporto.",
+  imRepKo:"Invio non riuscito, riprova più tardi.",
   imMsgL:"Ho importato questa ricetta da {x}.",
   srcP:"Importata da una foto",
   e_badurl:"Questo link non è valido.",
@@ -2553,6 +2568,9 @@ pt:{
   imMsgP:"Importei esta receita a partir de uma foto.",
   imCheckD:"Prato reconhecido na foto: esta receita é uma reconstituição do chef (quantidades e tempos estimados). Verifique-a antes de a usar. Ainda nada foi guardado.",
   imMsgD:"Reconheci este prato numa foto e o chef reconstituiu a receita.",
+  imRep:"Foto ou imagem não reconhecida, contacte-nos",
+  imRepOk:"Obrigado, a imagem foi enviada ao suporte.",
+  imRepKo:"O envio falhou, tente mais tarde.",
   imMsgL:"Importei esta receita de {x}.",
   srcP:"Importada de uma foto",
   e_badurl:"Este link não é válido.",
@@ -3015,7 +3033,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v330',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v331',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4552,7 +4570,7 @@ function impText(){const t=T();
   $('#impHomeT').textContent=t.tileImp;$('#surpT').textContent=t.surpT;$('#fiveHT').textContent=t.fiveT;$('#fiveHS').textContent=t.fiveS;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.tileQ;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);$('#rT').textContent=t.resumeT;
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
   $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
-function resetImp(){impTok++;imp=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
+function resetImp(){impTok++;imp=null;impLast=null;$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
 function openImp(){resetImp();show('imp')}
 async function apiPost(path,data){track('import_request',{kind:/photo/.test(path)?'photo':'link'});
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
@@ -4571,6 +4589,14 @@ function impMsg(code){
   if(code==='rate')return t.e429; // too many imports in one minute (server limit)
   return t['e_'+code]||t.err;
 }
+let impLast=null; // v331: last photo (prepared JPEG) kept in memory only, so that « contactez-nous » can send it; never stored
+function impReport(){
+  if(!impLast)return;const t=T(),b=document.createElement('button');b.type='button';b.className='cbtn';b.style.marginTop='10px';b.textContent='✉️ '+t.imRep;
+  b.onclick=async()=>{b.disabled=true;let ok=false;
+    try{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
+      const r=await fetchT('/api/import-photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify({report:1,image:impLast,lang})},90000);ok=r.ok}catch(x){}
+    if(ok){b.remove();impLast=null;toast(t.imRepOk)}else{b.disabled=false;toast(t.imRepKo)}};
+  $('#impOut').appendChild(b)}
 function impStatus(txt,err){const o=$('#impOut');o.innerHTML='';const d=document.createElement('div');d.className='imstat'+(err?' err':'');d.textContent=txt;o.appendChild(d);o.scrollIntoView&&o.scrollIntoView({block:'nearest'})}
 function impBusy(b){['#impGo','#impCamB','#impGalB'].forEach(s=>{$(s).disabled=b})}
 // Shrinks the photo before sending (Vercel limit ~4.5 MB) and fixes the orientation.
@@ -4590,11 +4616,11 @@ async function prepareImage(file){
 async function importPhoto(file){
   if(!file)return;const tok=++impTok;impBusy(true);imp=null;impStatus(T().imWait);
   try{
-    const pr=await prepareImage(file);
+    const pr=await prepareImage(file);impLast=pr.image;
     const j=await apiPost('/api/import-photo',{image:pr.image,lang});
     if(tok!==impTok)return;
     showPreview({recipe:j.recipe,src:'photo',thumb:pr.thumb,dish:j.kind==='dish'});
-  }catch(e){if(tok===impTok)impStatus(impMsg(e&&e.code),true)}
+  }catch(e){if(tok===impTok){impStatus(impMsg(e&&e.code),true);if(e&&e.code==='norecipe')impReport()}}
   finally{if(tok===impTok)impBusy(false)}
 }
 async function importLink(){
