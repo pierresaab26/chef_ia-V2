@@ -36,9 +36,37 @@ async function quotaCount(keys) {
   try { await redis(keys.flatMap((k) => [["INCR", k], ["EXPIRE", k, 172800]])); } catch {}
 }
 
+// v337: « Mal reconnu ? Faire appel »: the link is emailed to the support for a manual check (Resend). Nothing is stored.
+async function reportLink(req, res, body) {
+  if (await overLimit(req, "rl:ilr:", 3)) return fail(res, "rate");
+  const u = String(body.url || "").trim();
+  if (!/^https?:\/\/[^\s]{3,1990}$/i.test(u)) return fail(res, "badurl");
+  const key = process.env.RESEND_API_KEY, to = process.env.SUPPORT_EMAIL || process.env.MOD_EMAIL;
+  if (!key || !to) return fail(res, "nomail");
+  const lang = String(body.lang || "").slice(0, 5).replace(/[^a-z-]/gi, "");
+  try {
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
+      body: JSON.stringify({
+        from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
+        to: [to],
+        subject: "Chef IA : lien mal reconnu (appel)",
+        text: "Un utilisateur signale un lien mal reconnu à l'import (langue : " + (lang || "?") + ").\n\nLien : " + u + "\n\nEnvoyé pour un contrôle manuel uniquement, à supprimer une fois le contrôle fait.",
+      }),
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!r.ok) return fail(res, "upstream");
+    return res.status(200).json({ ok: true });
+  } catch {
+    return fail(res, "upstream");
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
   if (!(await authOk(req, res))) return;
+  if (req.body && req.body.report) return reportLink(req, res, req.body);
   // Protects the server and the Anthropic credit: 10 link imports per minute per IP.
   if (await overLimit(req, "rl:il:", 10)) return fail(res, "rate");
 
