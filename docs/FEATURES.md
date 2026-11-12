@@ -357,6 +357,9 @@ Owner: « Annule tout ce que tu as fait pour cette histoire de vider le menu ».
 Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents (et idées par catégorie) », 6 languages.
 
 ## Identity and circle (v287, community plan steps 6–7)
+
+- **Page layout (v352)**: « Mon cercle » is one card with 3 tabs. **Recettes** = feed with photo, « Nouveau » pill, « Enregistrer » / « ✓ Enregistrée »; **Activité** = notifications (no save button); **Membres** = nickname, members (✕), invitation. The « Activité » dot and the « Nouveau » pills come from a snapshot taken when the page opens (`ciSnap`). The older notes below describing separate blocks (nickname, invite, members, 🔔 Nouveautés, feed) are now spread over these tabs.
+
 - **Invite on a computer (v298)**: « 🔗 Copier le lien » (+ « ↗ Partager » where the browser has a share menu); phones keep the single native-share button.
 - **Not the owner (v300)**: a received recipe, as its author wrote it, cannot be made « Publique » by the receiver (client `notMine()`, server `notOwner()`: 403 `notowner`); only his own later versions can, through the chef's remix check.
 - **Appeal answer (v301)**: the author of an appeal gets « ✅ Appel accepté … » or « ❌ Appel refusé … » in « 🔔 Nouveautés » (own note `appok` / `appno`, `notifyOne()`).
