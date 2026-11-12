@@ -333,6 +333,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .imsec h3{margin:0 0 10px;font-size:15px}
 .imbtns{display:flex;gap:10px;flex-wrap:wrap}
 .imbtns .cbtn{flex:1;min-width:140px;text-align:center;border:1px solid var(--bd)}
+.manhd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.manhd h3{margin:0}.manhd .fbtn{flex:none;font-size:13px;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;white-space:nowrap}.manform[hidden]{display:none}
 .manform{display:flex;flex-direction:column;gap:8px}
 .manform input,.manform textarea{width:100%;box-sizing:border-box;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:16px;padding:10px 14px;font:inherit;font-size:16px;line-height:22px;color:var(--ink);outline:0;resize:vertical}
 .manform input{border-radius:999px}.manrow{display:flex;gap:8px}.manrow input{flex:1;min-width:0}
@@ -670,6 +671,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     <div class="chead"><button class="menubtn" aria-label="Menu" aria-expanded="false">☰</button><button class="back" id="impback" aria-label="Home">🏠</button><b id="impT"></b></div>
     <div class="scroll">
       <p class="imhint" id="impHint"></p>
+      <div id="impOut"></div>
       <div class="imsec"><h3 id="impPh"></h3>
         <div class="imbtns"><button class="cbtn" id="impCamB"></button><button class="cbtn" id="impGalB"></button></div>
         <input type="file" id="fileCam" accept="image/*" capture="environment" hidden>
@@ -678,7 +680,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <div class="imsec"><h3 id="impLk"></h3>
         <div class="urlrow"><input id="impUrl" type="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="impGo"></button></div>
       </div>
-      <div class="imsec"><h3 id="impMan"></h3>
+      <div class="imsec"><div class="manhd"><h3 id="impMan"></h3><button type="button" class="fbtn" id="manFold"></button></div>
         <form id="manForm" class="manform" autocomplete="off">
           <input id="manT" type="text" maxlength="120">
           <div class="manrow"><input id="manS" type="text" maxlength="40"><input id="manTm" type="text" maxlength="40"></div>
@@ -688,7 +690,6 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
           <button type="submit" class="cbtn go" id="manGo"></button>
         </form>
       </div>
-      <div id="impOut"></div>
     </div>
   </section>
 
@@ -3165,7 +3166,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v343',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v344',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4701,7 +4702,7 @@ function impText(){const t=T();
   $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#impT').textContent=t.imT;
   $('#impHomeT').textContent=t.tileImp;$('#surpT').textContent=t.surpT;$('#fiveHT').textContent=t.fiveT;$('#fiveHS').textContent=t.fiveS;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.tileQ;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);$('#rT').textContent=t.resumeT;
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
-  $('#impLk').textContent=t.imLk;$('#impMan').textContent=t.imMan;$('#manT').placeholder=t.imManT;$('#manS').placeholder=t.imManS;$('#manTm').placeholder=t.imManTm;$('#manI').placeholder=t.imManI;$('#manP').placeholder=t.imManP;$('#manN').placeholder=t.imManN;$('#manGo').textContent=t.imManGo;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
+  $('#impLk').textContent=t.imLk;$('#impMan').textContent=t.imMan;$('#manT').placeholder=t.imManT;$('#manS').placeholder=t.imManS;$('#manTm').placeholder=t.imManTm;$('#manI').placeholder=t.imManI;$('#manP').placeholder=t.imManP;$('#manN').placeholder=t.imManN;$('#manGo').textContent=t.imManGo;manFoldPaint();$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
 function resetImp(){impTok++;imp=null;impLast=null;impUrlLast='';$('#impOut').innerHTML='';$('#impUrl').value='';['#manT','#manS','#manTm','#manI','#manP','#manN'].forEach(q=>$(q).value='');$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
 function openImp(){resetImp();show('imp')}
 async function apiPost(path,data){track('import_request',{kind:/photo/.test(path)?'photo':'link'});
@@ -4744,7 +4745,10 @@ function impReport(){
       const r=await fetchT('/api/import-photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':c},body:JSON.stringify({report:1,image:impLast,lang})},90000);ok=r.ok}catch(x){}
     if(ok){w.remove();impLast=null;toast(t.imRepOk)}else{b.disabled=false;toast(t.imRepKo)}};
   $('#impOut').appendChild(w)}
-function impStatus(txt,err){const o=$('#impOut');o.innerHTML='';const d=document.createElement('div');d.className='imstat'+(err?' err':'');d.textContent=txt;o.appendChild(d);o.scrollIntoView&&o.scrollIntoView({block:'nearest'})}
+/* v344: the manual form can be folded */
+var manOpen=true;
+function manFoldPaint(){const f=$('#manForm'),b=$('#manFold');if(!f||!b)return;f.hidden=!manOpen;b.textContent=(manOpen?'▴ ':'▾ ')+(manOpen?T().hFold:T().hUnfold);b.setAttribute('aria-expanded',manOpen)}
+function impStatus(txt,err){const o=$('#impOut');o.innerHTML='';const d=document.createElement('div');d.className='imstat'+(err?' err':'');d.textContent=txt;o.appendChild(d);try{o.closest('.scroll').scrollTop=0}catch(e){}}
 function impBusy(b){['#impGo','#impCamB','#impGalB'].forEach(s=>{$(s).disabled=b})}
 // Shrinks the photo before sending (Vercel limit ~4.5 MB) and fixes the orientation.
 async function prepareImage(file){
@@ -4814,7 +4818,7 @@ function showPreview(st){
   const ok=document.createElement('button');ok.className='cbtn go';ok.textContent='✓ '+t.imUse;ok.onclick=useImport;
   const no=document.createElement('button');no.className='cbtn';no.textContent=t.imCancel;no.onclick=resetImp;
   row.append(ok,no);o.appendChild(row);
-  o.scrollIntoView&&o.scrollIntoView({block:'start'});
+  try{o.closest('.scroll').scrollTop=0}catch(e){}
 }
 function useImport(){
   if(!imp)return;track('import_saved');const t=T(),st=imp;
@@ -4831,6 +4835,7 @@ $('#impHome').onclick=openImp;$('#impChat').onclick=openImp;$('#impback').onclic
 $('#impCamB').onclick=()=>$('#fileCam').click();$('#impGalB').onclick=()=>$('#fileGal').click();
 ['#fileCam','#fileGal'].forEach(s=>$(s).addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];e.target.value='';importPhoto(f)}));
 $('#impGo').onclick=importLink;
+$('#manFold').addEventListener('click',()=>{manOpen=!manOpen;manFoldPaint()});
 $('#manForm').addEventListener('submit',e=>{e.preventDefault(); /* v342: manual entry, nothing is sent to the server */
   const L=v=>v.split(/\r?\n/).map(x=>x.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim()).filter(Boolean);
   const title=$('#manT').value.trim(),ing=L($('#manI').value);if(!title||!ing.length){impStatus(T().imManNeed,true);return}
