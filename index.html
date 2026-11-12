@@ -333,6 +333,10 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .imsec h3{margin:0 0 10px;font-size:15px}
 .imbtns{display:flex;gap:10px;flex-wrap:wrap}
 .imbtns .cbtn{flex:1;min-width:140px;text-align:center;border:1px solid var(--bd)}
+.manform{display:flex;flex-direction:column;gap:8px}
+.manform input,.manform textarea{width:100%;box-sizing:border-box;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:16px;padding:10px 14px;font:inherit;font-size:16px;line-height:22px;color:var(--ink);outline:0;resize:vertical}
+.manform input{border-radius:999px}.manrow{display:flex;gap:8px}.manrow input{flex:1;min-width:0}
+.manform .cbtn.go{width:100%;min-height:48px;justify-content:center}
 .urlrow{display:flex;gap:8px}
 .urlrow input{flex:1;min-width:0;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:999px;padding:10px 14px;font:inherit;color:var(--ink);outline:0}
 .urlrow button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:10px 16px}
@@ -674,6 +678,16 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       <div class="imsec"><h3 id="impLk"></h3>
         <div class="urlrow"><input id="impUrl" type="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="impGo"></button></div>
       </div>
+      <div class="imsec"><h3 id="impMan"></h3>
+        <form id="manForm" class="manform" autocomplete="off">
+          <input id="manT" type="text" maxlength="120">
+          <div class="manrow"><input id="manS" type="text" maxlength="40"><input id="manTm" type="text" maxlength="40"></div>
+          <textarea id="manI" rows="5" maxlength="4000"></textarea>
+          <textarea id="manP" rows="5" maxlength="6000"></textarea>
+          <textarea id="manN" rows="2" maxlength="1500"></textarea>
+          <button type="submit" class="cbtn go" id="manGo"></button>
+        </form>
+      </div>
       <div id="impOut"></div>
     </div>
   </section>
@@ -975,6 +989,17 @@ fr:{
   imLk:"🔗 Lien internet",
   imUrl:"Collez le lien de la recette",
   imGo:"Importer",
+  imMan:"✍️ Saisie manuelle",
+  imManT:"Nom de la recette",
+  imManS:"Portions (facultatif)",
+  imManTm:"Temps (facultatif)",
+  imManI:"Ingrédients, un par ligne",
+  imManP:"Étapes, une par ligne (facultatif)",
+  imManN:"Notes (facultatif)",
+  imManGo:"Voir l’aperçu",
+  imManNeed:"Indiquez au moins le nom et un ingrédient.",
+  imCheckM:"Vérifiez que tout est correct. Rien n’a encore été enregistré.",
+  imMsgM:"J’ai saisi cette recette moi-même.",
   imWait:"Lecture de la recette en cours…",
   imUse:"Utiliser cette recette",
   imCancel:"Annuler",
@@ -1298,6 +1323,17 @@ en:{
   imLk:"🔗 Web link",
   imUrl:"Paste the recipe link",
   imGo:"Import",
+  imMan:"✍️ Manual entry",
+  imManT:"Recipe name",
+  imManS:"Servings (optional)",
+  imManTm:"Time (optional)",
+  imManI:"Ingredients, one per line",
+  imManP:"Steps, one per line (optional)",
+  imManN:"Notes (optional)",
+  imManGo:"Preview",
+  imManNeed:"Please enter at least the name and one ingredient.",
+  imCheckM:"Check that everything is correct. Nothing has been saved yet.",
+  imMsgM:"I typed this recipe myself.",
   imWait:"Reading the recipe…",
   imUse:"Use this recipe",
   imCancel:"Cancel",
@@ -1621,6 +1657,17 @@ es:{
   imLk:"🔗 Enlace web",
   imUrl:"Pega el enlace de la receta",
   imGo:"Importar",
+  imMan:"✍️ Entrada manual",
+  imManT:"Nombre de la receta",
+  imManS:"Raciones (opcional)",
+  imManTm:"Tiempo (opcional)",
+  imManI:"Ingredientes, uno por línea",
+  imManP:"Pasos, uno por línea (opcional)",
+  imManN:"Notas (opcional)",
+  imManGo:"Ver vista previa",
+  imManNeed:"Indica al menos el nombre y un ingrediente.",
+  imCheckM:"Comprueba que todo es correcto. Todavía no se ha guardado nada.",
+  imMsgM:"He escrito esta receta yo mismo.",
   imWait:"Leyendo la receta…",
   imUse:"Usar esta receta",
   imCancel:"Cancelar",
@@ -1944,6 +1991,17 @@ de:{
   imLk:"🔗 Weblink",
   imUrl:"Rezept-Link einfügen",
   imGo:"Importieren",
+  imMan:"✍️ Manuelle Eingabe",
+  imManT:"Name des Rezepts",
+  imManS:"Portionen (optional)",
+  imManTm:"Zeit (optional)",
+  imManI:"Zutaten, eine pro Zeile",
+  imManP:"Schritte, einer pro Zeile (optional)",
+  imManN:"Notizen (optional)",
+  imManGo:"Vorschau",
+  imManNeed:"Bitte mindestens den Namen und eine Zutat angeben.",
+  imCheckM:"Prüfe, ob alles stimmt. Es wurde noch nichts gespeichert.",
+  imMsgM:"Ich habe dieses Rezept selbst eingegeben.",
   imWait:"Rezept wird gelesen…",
   imUse:"Dieses Rezept verwenden",
   imCancel:"Abbrechen",
@@ -2267,6 +2325,17 @@ it:{
   imLk:"🔗 Link web",
   imUrl:"Incolla il link della ricetta",
   imGo:"Importa",
+  imMan:"✍️ Inserimento manuale",
+  imManT:"Nome della ricetta",
+  imManS:"Porzioni (facoltativo)",
+  imManTm:"Tempo (facoltativo)",
+  imManI:"Ingredienti, uno per riga",
+  imManP:"Passaggi, uno per riga (facoltativo)",
+  imManN:"Note (facoltativo)",
+  imManGo:"Anteprima",
+  imManNeed:"Indica almeno il nome e un ingrediente.",
+  imCheckM:"Controlla che tutto sia corretto. Non è ancora stato salvato nulla.",
+  imMsgM:"Ho scritto io questa ricetta.",
   imWait:"Lettura della ricetta in corso…",
   imUse:"Usa questa ricetta",
   imCancel:"Annulla",
@@ -2590,6 +2659,17 @@ pt:{
   imLk:"🔗 Link da internet",
   imUrl:"Cole o link da receita",
   imGo:"Importar",
+  imMan:"✍️ Entrada manual",
+  imManT:"Nome da receita",
+  imManS:"Porções (opcional)",
+  imManTm:"Tempo (opcional)",
+  imManI:"Ingredientes, um por linha",
+  imManP:"Passos, um por linha (opcional)",
+  imManN:"Notas (opcional)",
+  imManGo:"Pré-visualizar",
+  imManNeed:"Indique pelo menos o nome e um ingrediente.",
+  imCheckM:"Verifique se tudo está correto. Ainda não foi guardado nada.",
+  imMsgM:"Escrevi esta receita eu mesmo.",
   imWait:"A ler a receita…",
   imUse:"Usar esta receita",
   imCancel:"Cancelar",
@@ -3079,7 +3159,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v339',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v342',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3121,7 +3201,7 @@ function ownVers(e){return e&&e.messages?e.messages.filter(m=>m.role==='assistan
 function vnOf(e,i){let cur=e&&e.vbase||0,r=null;(e&&e.messages||[]).forEach((m,j)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id)){cur=m.vn||cur+1;if(j===i)r=cur}});return r==null?cur||1:r} // v128: version number (frozen `vn` after a deletion, so the others keep their number)
 function verNum(e){return vnOf(e,lastVi(e))} // latest version number (variants continue the numbering of their original)
 function msgOut(m){const o={role:m.role,content:m.content};if(m.rid)o.rid=m.rid;if(m.at)o.at=m.at;if(m.stars)o.stars=m.stars;if(m.cooked)o.cooked=m.cooked;if(m.tag)o.tag=m.tag;if(m.vn)o.vn=m.vn;if(m.vk)o.vk=m.vk;if(m.adj&&m.adj.length)o.adj=m.adj;return o}
-function originOf(e){return e&&e.from?'remix':e&&(e.src==='photo'||e.src==='link')?'import':e&&e.imp?'shared':'chef'} // v252/v253: where a recipe comes from: remix = variant of another recipe, import = photo / link, shared = received through a share link (`imp`), chef = written by the chef; sent with each rating
+function originOf(e){return e&&e.from?'remix':e&&(e.src==='photo'||e.src==='link'||e.src==='manual')?'import':e&&e.imp?'shared':'chef'} // v252/v253: where a recipe comes from: remix = variant of another recipe, import = photo / link, shared = received through a share link (`imp`), chef = written by the chef; sent with each rating
 function originBadge(e){if(!e||e.qa)return null;const k=originOf(e),b=document.createElement('span');b.className='obadge';b.dataset.o=k;b.textContent=k==='shared'&&e.cpub?T().pubFrom.replace('{n}',e.cby||T().ciNoName)+(e.corig&&e.corig!==e.cby?' · '+T().ciVia.replace('{n}',e.corig):''):k==='shared'&&e.cby?T().ciFrom.replace('{n}',e.cby)+(e.corig&&e.corig!==e.cby?' · '+T().ciVia.replace('{n}',e.corig):''):T()['org'+{chef:'C',import:'I',remix:'V',shared:'S'}[k]];if(k==='shared'&&e.cgone){b.textContent+=' · '+T().ciGone;b.classList.add('gone')}return b} // v253: small badge « Chef IA / Importée / Variante / Reçue » next to the date
 // v127: every version of a recipe has its OWN favorite, rating, comments and share
 function ownIdx(e){const r=[];(e&&e.messages||[]).forEach((m,i)=>{if(m.role==='assistant'&&looksLikeRecipe(m.content)&&(!m.rid||m.rid===e.id))r.push(i)});return r}
@@ -4615,8 +4695,8 @@ function impText(){const t=T();
   $('#impHomeT').textContent=t.imT;$('#impHomeS').textContent=t.imHomeS;$('#impT').textContent=t.imT;
   $('#impHomeT').textContent=t.tileImp;$('#surpT').textContent=t.surpT;$('#fiveHT').textContent=t.fiveT;$('#fiveHS').textContent=t.fiveS;$('#surpS').textContent=t.surpS;$('#qHomeT').textContent=t.tileQ;$('#qHomeS').textContent=t.qHomeS;$('#n2').title=t.resumeT;$('#n2').setAttribute('aria-label',t.resumeT);$('#rT').textContent=t.resumeT;
   $('#impHint').textContent=t.imHint;$('#impPh').textContent=t.imPh;$('#impCamB').textContent='📷 '+t.imCam;$('#impGalB').textContent='🖼️ '+t.imGal;
-  $('#impLk').textContent=t.imLk;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
-function resetImp(){impTok++;imp=null;impLast=null;impUrlLast='';$('#impOut').innerHTML='';$('#impUrl').value='';$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
+  $('#impLk').textContent=t.imLk;$('#impMan').textContent=t.imMan;$('#manT').placeholder=t.imManT;$('#manS').placeholder=t.imManS;$('#manTm').placeholder=t.imManTm;$('#manI').placeholder=t.imManI;$('#manP').placeholder=t.imManP;$('#manN').placeholder=t.imManN;$('#manGo').textContent=t.imManGo;$('#impUrl').placeholder=t.imUrl;$('#impGo').textContent=t.imGo;$('#impChat').setAttribute('aria-label',t.imT);$('#impChat').title=t.imT}
+function resetImp(){impTok++;imp=null;impLast=null;impUrlLast='';$('#impOut').innerHTML='';$('#impUrl').value='';['#manT','#manS','#manTm','#manI','#manP','#manN'].forEach(q=>$(q).value='');$('#impGo').disabled=false;$('#impCamB').disabled=false;$('#impGalB').disabled=false}
 function openImp(){resetImp();show('imp')}
 async function apiPost(path,data){track('import_request',{kind:/photo/.test(path)?'photo':'link'});
   const call=()=>{let c='';try{c=localStorage.getItem('code')||''}catch(x){}
@@ -4707,7 +4787,7 @@ function showPreview(st){
   if(st.thumb){const im=document.createElement('img');im.className='imthumb';im.alt='';im.src=st.thumb;o.appendChild(im)}
   const ht=document.createElement('h3');ht.className='imtitle';ht.textContent=st.recipe.title||t.imUntitled;o.appendChild(ht); /* v336: the recipe name is shown above the analysed content */
   const b=document.createElement('div');b.className='rbody rtext';renderRecipe(b,recipeToText(st.recipe,st),st.recipe.title||t.imUntitled);o.appendChild(b);
-  const c=document.createElement('p');c.className='imcheck';c.textContent=st.src==='link'?t.imCheckL:st.dish?t.imCheckD:t.imCheck;o.appendChild(c);
+  const c=document.createElement('p');c.className='imcheck';c.textContent=st.src==='manual'?t.imCheckM:st.src==='link'?t.imCheckL:st.dish?t.imCheckD:t.imCheck;o.appendChild(c);
   const ap=appealBlock(st);if(ap)o.appendChild(ap);
   const row=document.createElement('div');row.className='cact';
   const ok=document.createElement('button');ok.className='cbtn go';ok.textContent='✓ '+t.imUse;ok.onclick=useImport;
@@ -4718,7 +4798,7 @@ function showPreview(st){
 function useImport(){
   if(!imp)return;track('import_saved');const t=T(),st=imp;
   openChat(null);log.innerHTML='';
-  const msg=st.src==='link'?t.imMsgL:st.dish?t.imMsgD:t.imMsgP,text=recipeToText(st.recipe,st);
+  const msg=st.src==='manual'?t.imMsgM:st.src==='link'?t.imMsgL:st.dish?t.imMsgD:t.imMsgP,text=recipeToText(st.recipe,st);
   hist=[{role:'user',content:'[UI] '+msg},{role:'assistant',content:text}];
   add('u',msg);add('a',text);
   pendingMeta={src:st.src,dish:st.dish?1:0,srcUrl:st.url||'',srcHost:st.host||'',photo:''}; /* v332: the photo is NOT kept; the recipe gets its own Unsplash photo (ensurePhoto) */
@@ -4730,6 +4810,11 @@ $('#impHome').onclick=openImp;$('#impChat').onclick=openImp;$('#impback').onclic
 $('#impCamB').onclick=()=>$('#fileCam').click();$('#impGalB').onclick=()=>$('#fileGal').click();
 ['#fileCam','#fileGal'].forEach(s=>$(s).addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];e.target.value='';importPhoto(f)}));
 $('#impGo').onclick=importLink;
+$('#manForm').addEventListener('submit',e=>{e.preventDefault(); /* v342: manual entry, nothing is sent to the server */
+  const L=v=>v.split(/\r?\n/).map(x=>x.replace(/^\s*(?:[-•*]|\d+[.)])\s*/,'').trim()).filter(Boolean);
+  const title=$('#manT').value.trim(),ing=L($('#manI').value);if(!title||!ing.length){impStatus(T().imManNeed,true);return}
+  impTok++;imp=null;impLast=null;impUrlLast='';
+  showPreview({src:'manual',recipe:{title,servings:$('#manS').value.trim(),time:$('#manTm').value.trim(),temperature:'',ingredients:ing,steps:L($('#manP').value),notes:$('#manN').value.trim()}})});
 $('#impUrl').addEventListener('keydown',e=>{if(e.key==='Enter')importLink()});
 
 // ---------- Change a recipe's image (photo, gallery or link) ----------
