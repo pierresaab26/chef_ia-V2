@@ -341,6 +341,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .imrep{background:var(--card);border-radius:var(--rc);box-shadow:var(--sh);padding:16px;margin-bottom:12px}.imrep p{margin:0 0 12px;color:var(--mut);font-size:13px;line-height:1.45}
 .imrep .cbtn{width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;box-shadow:none}.imrep .cbtn:disabled{opacity:.6}
 .imthumb{display:block;max-width:100%;max-height:200px;border-radius:16px;margin:0 auto 12px}
+.imtitle{font-size:22px;line-height:1.25;font-weight:700;color:var(--ink);margin:14px 4px 10px}
 .imcheck{background:var(--psoft);border:1px solid var(--psbd);border-radius:var(--rc);color:var(--ink);font-size:14px;line-height:1.45;padding:12px 14px;margin:14px 0 12px} /* v332: the warning is a soft-pink card (charter), not loose grey text */
 #impOut .cact{flex-direction:column;gap:10px}#impOut .cact .cbtn{flex:none;width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px 16px;border:1px solid var(--bd)}#impOut .cact .cbtn.go{border-color:var(--psbd)} /* v332: the two buttons have the same size, stacked */
 .dphoto{flex:none;align-self:stretch;position:relative;width:100%;height:clamp(190px,34vw,300px);margin:6px 0 2px;border-radius:18px;overflow:hidden}
@@ -3054,7 +3055,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v335',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v336',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4669,6 +4670,7 @@ function recipeToText(r,st){
 function showPreview(st){
   imp=st;const t=T(),o=$('#impOut');o.innerHTML='';
   if(st.thumb){const im=document.createElement('img');im.className='imthumb';im.alt='';im.src=st.thumb;o.appendChild(im)}
+  const ht=document.createElement('h3');ht.className='imtitle';ht.textContent=st.recipe.title||t.imUntitled;o.appendChild(ht); /* v336: the recipe name is shown above the analysed content */
   const b=document.createElement('div');b.className='rbody rtext';renderRecipe(b,recipeToText(st.recipe,st),st.recipe.title||t.imUntitled);o.appendChild(b);
   const c=document.createElement('p');c.className='imcheck';c.textContent=st.src==='link'?t.imCheckL:st.dish?t.imCheckD:t.imCheck;o.appendChild(c);
   const row=document.createElement('div');row.className='cact';
