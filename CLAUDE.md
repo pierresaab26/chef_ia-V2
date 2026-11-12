@@ -122,6 +122,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (up to v149)
 
+v346 (owner: « fais-le en respectant la charte et comme les autres »): the fold button of « Saisie manuelle » uses the same soft-pink pill as the other import buttons (`.manhd .fbtn`: `--psoft`, pink text, `--psbd` border, bold 15 px, 10 × 16 padding). CSS only. Committed locally, NOT pushed.
+
 v345 (owner: « met le par défaut replier »): the « ✍️ Saisie manuelle » form is FOLDED by default (`manOpen=false`); « ▾ Déplier » opens it. Committed locally, NOT pushed.
 
 v344 (owner: after clicking Import the page jumped to the bottom, on « Saisie manuelle »): the result area `#impOut` (status, preview, errors) now sits at the TOP of the import page, right under the hint, and the page scrolls to the top (`scrollTop=0`) instead of scrolling to the result; the « ✍️ Saisie manuelle » section has a « ▴ Replier / ▾ Déplier » button (`#manFold`, `manOpen`, `manFoldPaint()`, reuses keys `hFold` / `hUnfold`; open by default, state kept until reload). Tests: Playwright iPhone SE / 13 / iPad (fold, unfold, result visible at the top after a link import, scrollTop 0, no JS error). Committed locally, NOT pushed.

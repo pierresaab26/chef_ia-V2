@@ -333,7 +333,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .imsec h3{margin:0 0 10px;font-size:15px}
 .imbtns{display:flex;gap:10px;flex-wrap:wrap}
 .imbtns .cbtn{flex:1;min-width:140px;text-align:center;border:1px solid var(--bd)}
-.manhd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.manhd h3{margin:0}.manhd .fbtn{flex:none;font-size:13px;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--bd);border-radius:999px;padding:5px 11px;white-space:nowrap}.manform[hidden]{display:none}
+.manhd{display:flex;align-items:center;justify-content:space-between;gap:8px}.manhd+.manform{margin-top:10px}.manhd h3{margin:0}.manhd .fbtn{flex:none;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;font-size:15px;border-radius:999px;padding:10px 16px;white-space:nowrap}.manform[hidden]{display:none}
 .manform{display:flex;flex-direction:column;gap:8px}
 .manform input,.manform textarea{width:100%;box-sizing:border-box;border:1px solid var(--bd);background:var(--bg,#fff);border-radius:16px;padding:10px 14px;font:inherit;font-size:16px;line-height:22px;color:var(--ink);outline:0;resize:vertical}
 .manform input{border-radius:999px}.manrow{display:flex;gap:8px}.manrow input{flex:1;min-width:0}
@@ -3166,7 +3166,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v345',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v346',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
