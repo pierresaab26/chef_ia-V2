@@ -122,6 +122,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (up to v149)
 
+v350 (owner: « ça doit être comme cette charte-là, arrête d'inventer », screenshot of the History buttons): the fold button of « Saisie manuelle » is EXACTLY the History button again (`--card` white, `1px solid var(--bd)`, 13 px, 600, ink, 5 × 11 padding): the v349 cream variant is cancelled. RULE: when the owner points at an existing style, copy it as is, do not invent a variant. CSS only. Committed locally, NOT pushed (v348, v349 and the docs commit also unpushed).
+
 v349 (owner: « dans importer, le replier et déplier ne ressemble pas à la charte comme dans historique »): the v348 button was white on the WHITE « Saisie manuelle » card, so it looked flat; in the History the same white button sits on the cream background. On the import card the fold button is now cream (`--bg1`) with a slightly stronger border (`rgba(0,0,0,.14)`), same size / font / weight as the History ones. CSS only. Committed locally, NOT pushed (v348 and the docs commit also unpushed).
 
 Docs (owner: « écris la doc complète pour l'import », no app change, no version bump): new `docs/IMPORT.md` = the complete import reference at v348 (three ways, import page, server rules, limits table, Turnstile, preview / saving, errors and appeals, env vars, code map, tests, history). FEATURES.md points to it. Keep it up to date when the import changes. Committed locally, NOT pushed.

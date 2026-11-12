@@ -21,7 +21,7 @@ Top to bottom:
 2. `#impOut` — result area: status line (« Analyse en cours… »), errors, preview. Since v344 it sits at the TOP of the page, and the page scrolls to the top (`scrollTop=0`) when a result or an error appears (before, the user was thrown down onto the manual form).
 3. Photo buttons (📷 camera `#impCamB` → `#fileCam`, 🖼️ gallery `#impGalB` → `#fileGal`).
 4. Link field `#impUrl` + button `#impGo` (Enter also starts it).
-5. « ✍️ Saisie manuelle » (`.manhd`, `#manForm`): FOLDED by default (v345); the « ▾ Déplier / ▴ Replier » button `#manFold` (`manOpen`, `manFoldPaint()`, keys `hUnfold` / `hFold`) has the size, font and shape of the History « Replier / Déplier » buttons, in cream with a thin border so it stands out on the white card (v348–v349). The state lasts until the page is reloaded.
+5. « ✍️ Saisie manuelle » (`.manhd`, `#manForm`): FOLDED by default (v345); the « ▾ Déplier / ▴ Replier » button `#manFold` (`manOpen`, `manFoldPaint()`, keys `hUnfold` / `hFold`) has the size, font and shape of the History « Replier / Déplier » buttons, identical to them (white, thin border; v348, v350). The state lasts until the page is reloaded.
 6. `resetImp()` clears everything when the page is opened (token `impTok`, preview, fields, `impLast`, `impUrlLast`).
 
 `impTok` is a request token: when the user cancels or starts another import, a late answer of the previous one is ignored.
