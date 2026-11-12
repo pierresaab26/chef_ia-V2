@@ -190,7 +190,7 @@ input,textarea,select{font-size:16px!important}
 .hchk{flex:none;width:22px;height:22px;margin-left:12px;border-radius:50%;border:1.5px solid var(--mut);display:grid;place-items:center;font-size:14px;font-weight:700;color:#fff;padding:0;line-height:1}
 .hchk[aria-checked=true]{background:var(--pink);border-color:var(--pink)}
 .hrow.hsel{outline:2px solid var(--pink)}
-#hfilter{flex-wrap:nowrap;gap:6px}#hfilter .chip{flex:0 1 auto;min-width:0;white-space:nowrap;padding-left:11px;padding-right:11px;font-size:14px}#hfilter .hselb{margin-left:auto;flex:none}@media(max-width:440px){#hfilter{padding-left:12px;padding-right:12px}#hfilter .chip{padding-left:9px;padding-right:9px;font-size:13px}}
+#hfilter{flex-wrap:wrap;gap:8px 6px;align-items:center}#hfilter .hfall{margin-left:auto}#hfilter .chip{flex:0 1 auto;min-width:0;white-space:nowrap;padding-left:11px;padding-right:11px;font-size:14px}#hfilter .hselb{flex:none}@media(max-width:440px){#hfilter{padding-left:12px;padding-right:12px}#hfilter .chip{padding-left:9px;padding-right:9px;font-size:13px}}
 #hselbar{display:none;position:absolute;left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--card);border-radius:22px;padding:10px;box-shadow:0 4px 18px rgba(0,0,0,.18);flex-direction:column;gap:8px}
 #app.selmode #hselbar{display:flex}#app.selmode nav{display:none}#app.selmode #hlist{padding-bottom:150px}
 #hselbar .hsr{display:flex;align-items:center;gap:6px}#hselbar .hsr b{flex:1;font-size:14px}
@@ -3166,7 +3166,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v346',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v347',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3354,10 +3354,11 @@ function drawHistory(){
   const nFav=favItems(a.filter(e=>famFav(e))).length; // counters: « Toutes » and « Favoris » do not count the archived recipes
   const tabs=[['all',t.all+' ('+a.length+')'],['fav','❤️ '+t.favs+' ('+nFav+')']];if(ar.length)tabs.push(['arch','🗄️ '+t.hArch+' ('+ar.length+')']);
   const cur=harch?'arch':hfav?'fav':'all';
-  tabs.forEach(([v,lab])=>{const b=document.createElement('button');b.className='chip'+(cur===v?' on':'');b.textContent=lab;
-    b.onclick=()=>{hfav=v==='fav';harch=v==='arch';if(hsel)hsel.clear();drawHistory()};f.appendChild(b)});
+  const top=f,tb=f; /* v347: ONE line: « Sélectionner » first (left), then the tabs; « Tout replier » at the right end (wraps to its own right-aligned line when the phone is too narrow) */
   const sb=document.createElement('button');sb.className='chip hselb'+(hsel?' on':'');sb.textContent=hsel?'✕ '+t.imCancel:'☑️ '+t.hSel;sb.setAttribute('aria-label',t.hSel);
   sb.onclick=()=>{hsel=hsel?null:new Set();drawHistory()};f.appendChild(sb);
+  tabs.forEach(([v,lab])=>{const b=document.createElement('button');b.className='chip'+(cur===v?' on':'');b.textContent=lab;
+    b.onclick=()=>{hfav=v==='fav';harch=v==='arch';if(hsel)hsel.clear();drawHistory()};tb.appendChild(b)});
   const nz=x=>x.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=nz($('#hsearch').value.trim());
   const base=harch?ar:a,shown=(!harch&&hfav?favItems(base.filter(e=>famFav(e))):base).filter(e=>(harch||!hfav||e.fav)&&(!q||nz(e.title).includes(q)));
   if(!shown.length)empty(l,q?t.noresult:(harch?t.hNoArch:hfav?t.nofav:t.empty));
@@ -3365,9 +3366,9 @@ function drawHistory(){
   if(!harch&&hfav){ // « Favoris » tab: the list is sorted by category (same order and names as the Favorites view); each category has a « Replier / Déplier » button
     const g={};shown.forEach(e=>{const k=recipeCat(e);(g[k]=g[k]||[]).push(e)});const names=t.cats.split('|'),order=[],ks=FAV_ORDER.filter(k=>g[k]);
     const fold=k=>!q&&hfold.has(k); // while searching, every match is shown
-    if(ks.length>1&&!q){const w=document.createElement('div');w.className='fgall';const ab=document.createElement('button');ab.type='button';
+    if(ks.length>1&&!q){const ab=document.createElement('button');ab.type='button';ab.className='chip hfall';
       const allOff=ks.every(k=>hfold.has(k));ab.textContent=allOff?t.hUnfoldAll:t.hFoldAll;
-      ab.onclick=()=>{if(allOff)ks.forEach(k=>hfold.delete(k));else ks.forEach(k=>hfold.add(k));saveFold();drawHistory()};w.appendChild(ab);l.appendChild(w)}
+      ab.onclick=()=>{if(allOff)ks.forEach(k=>hfold.delete(k));else ks.forEach(k=>hfold.add(k));saveFold();drawHistory()};top.appendChild(ab)}
     ks.forEach(k=>{const hd=document.createElement('div');hd.className='fgrp';const off=fold(k);
       const sp=document.createElement('span');sp.className='fnm';sp.textContent=names[k];const nb=document.createElement('b');nb.textContent=g[k].length;
       hd.append(sp,nb);
