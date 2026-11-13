@@ -518,3 +518,6 @@ v367: the home box shows ONE « Recette de la communauté » panel (published re
 - `docs/IMPORT.md`: imports.
 
 v368: SYNC of recipes, favorites, shopping lists, weekly menu and visibility maps across the devices of an account (`api/_sync.js`, `/api/sync`, drawer row « Synchroniser maintenant »). Details in `docs/USERS.md` (Sync across devices).
+
+## Family and shared shopping lists (v369)
+See `docs/CIRCLE.md` (« Family and shared shopping lists »): family request in Mon cercle → Membres, « Partager avec ma famille » in a list, instant item-by-item sync (~2.5 s).

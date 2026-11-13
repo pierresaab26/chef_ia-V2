@@ -4,6 +4,7 @@ import { notifyCircle, notifyOne, readNotes, markSeen } from "./_notify.js";
 import { indexPerson, searchPeople } from "./_index.js"; // v358: find people by pseudo / @
 import { isOffensive } from "./_words.js"; // v356
 import authHandler, { sessionUid } from "./_auth.js"; // v354: « /api/auth » (accounts, e-mail sign-in) is served by this route too
+import { famGet, famAct } from "./_family.js"; // v369: family status + shared shopping lists
 import syncHandler from "./_sync.js"; // v368: « /api/sync » (account data sync) is served by this route too
 import publishHandler from "./_publish.js"; // v293: « /api/publish » is served by this route (rewrite in vercel.json) to stay within 12 functions
 
@@ -46,9 +47,11 @@ export default async function handler(req, res) {
   if (!(await authOk(req, res))) return;
   const owner = clean(req.headers["x-owner"], 60);
   if (!owner || owner.length < 8) return res.status(400).json({ error: "key" });
-  if (await overLimit(req, "rl:ci:", 40)) return res.status(429).json({ error: "rate" });
   const me = pidOf(owner), q = req.query || {};
   const body = req.body && typeof req.body === "object" ? req.body : {};
+  // v369: shared shopping lists poll every ~2.5 s and several family phones can share one home IP, so they have their own, much larger, per-IP limit
+  const live = q.sl != null || q.sls != null || String(body.act || "").startsWith("sl_");
+  if (await overLimit(req, live ? "rl:sh:" : "rl:ci:", live ? 600 : 40)) return res.status(429).json({ error: "rate" });
   try {
     if (req.method === "GET") {
       if (q.feed) return res.status(200).json({ items: await feed(me) });
@@ -66,6 +69,10 @@ export default async function handler(req, res) {
           sids.forEach((sid, i) => { if (rs[i] && !ok.has(rs[i])) live[sid] = false; }); // v289: the author took it back
         } else sids.forEach((sid) => { live[sid] = false; });
         return res.status(200).json({ live });
+      }
+      if (q.sls != null || q.sl != null) { // v369: shared shopping lists (family)
+        if (!(await socialOk(req, me))) return res.status(401).json({ error: "session" });
+        return famGet(q, me, res);
       }
       if (q.search != null) { // v358: people search (accounts with an @ only), signed-in users only
         if (!(await socialOk(req, me))) return res.status(401).json({ error: "session" });
@@ -198,6 +205,7 @@ export default async function handler(req, res) {
       if (was == null && !body.quiet) await notifyCircle(me, { k: "circle", sid, t }); // v291: my circle is told once (not again on a re-post)
       return res.status(200).json({ ok: true });
     }
+    if (act.startsWith("fam_") || act.startsWith("sl_")) return famAct(act, body, me, res, { socialOk: () => socialOk(req, me), req }); // v369
     return res.status(400).json({ error: "act" });
   } catch (e) {
     return res.status(502).json({ error: "storage" });
@@ -272,7 +280,11 @@ async function whoami(me) {
   const rpids = []; for (let i = 0; i + 1 < (rq || []).length; i += 2) if (!list.includes(rq[i])) rpids.push(rq[i]);
   const rn = rpids.length ? await redis(rpids.slice(0, 30).flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p]])) : [];
   const reqs = rpids.slice(0, 30).map((p, i) => ({ pid: p, name: rn[i * 2] || "", h: rn[i * 2 + 1] || "" }));
-  return { reqs, name: name || "", h: h || "", members: list.map((p, i) => ({ pid: p, name: nh[i * 2] || "", h: nh[i * 2 + 1] || "" })).sort((a, b) => a.name.localeCompare(b.name)), left: Math.max(0, ACCESS_MAX - Number(used || 0)) };
+  const [fm] = await redis([["SMEMBERS", "fm:" + me]]), [fq] = await redis([["HGETALL", "fq:" + me]]);
+  const fpids = (Array.isArray(fm) ? fm : []).slice(0, 30), qp = []; for (let i = 0; i + 1 < (fq || []).length; i += 2) if (!fpids.includes(fq[i])) qp.push(fq[i]);
+  const fn = [...fpids, ...qp.slice(0, 30)].length ? await redis([...fpids, ...qp.slice(0, 30)].flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p]])) : [];
+  const fam = fpids.map((p, i) => ({ pid: p, name: fn[i * 2] || "", h: fn[i * 2 + 1] || "" })), famreqs = qp.slice(0, 30).map((p, i) => ({ pid: p, name: fn[(fpids.length + i) * 2] || "", h: fn[(fpids.length + i) * 2 + 1] || "" }));
+  return { fam, famreqs, reqs, name: name || "", h: h || "", members: list.map((p, i) => ({ pid: p, name: nh[i * 2] || "", h: nh[i * 2 + 1] || "" })).sort((a, b) => a.name.localeCompare(b.name)), left: Math.max(0, ACCESS_MAX - Number(used || 0)) };
 }
 
 // Recipes put in « Cercle » by the people of my circle, newest first. A copy deleted by its author (s:<sid> gone) is dropped.
