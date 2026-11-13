@@ -15,6 +15,20 @@ export async function notifyCircle(me, item) {
   } catch { return 0; } // a notification must never break the share itself
 }
 
+// v363: the FOLLOWERS of an author (set « fw:<pid> ») learn that he published. People already in his circle are skipped
+// (they got the « pub » note from notifyCircle). Following gives NO access to circle recipes, only to what is published.
+export async function notifyFollowers(me, item) {
+  try {
+    const [fw, cf, name, h] = await redis([["SMEMBERS", "fw:" + me], ["SMEMBERS", "cf:" + me], ["GET", "cu:" + me], ["GET", "hp:" + me]]);
+    const circle = new Set(Array.isArray(cf) ? cf : []);
+    const list = (Array.isArray(fw) ? fw : []).filter((p) => p !== me && !circle.has(p)).slice(0, 500);
+    if (!list.length) return 0;
+    const line = JSON.stringify({ k: "fpub", sid: item.sid, t: String(item.t || "").slice(0, 120), by: name || "", ...(h ? { bh: h } : {}), at: Date.now() });
+    await redis(list.flatMap((p) => [["LPUSH", "cn:" + p, line], ["LTRIM", "cn:" + p, "0", String(KEEP - 1)], ["EXPIRE", "cn:" + p, TTL]]));
+    return list.length;
+  } catch { return 0; }
+}
+
 // v301: a note for ONE person (the author of an appeal gets the answer of the review).
 export async function notifyOne(pid, item) {
   try {

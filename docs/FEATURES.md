@@ -485,7 +485,7 @@ Friends who use the app with a nickname but no account (sign-in mails only reach
 ## @mentions in comments (v360)
 
 - In any recipe comment field, typing « @ » shows suggestions: first the members of my circle who have an @, then (from 3 letters) the people search. Tap, Enter or Tab inserts « @handle ».
-- In published comments every @ is a pink link; tapping it opens « Mon cercle → Membres » with the search filled with that @ (a real profile page will come with « Suivre », v361).
+- In published comments every @ is a pink link; tapping it opens « Mon cercle → Membres » with the search filled with that @ (since v363 it opens the profile page).
 - Each person mentioned in a NEW comment (max 5 per comment, 30 a day per author; not on edits, never yourself) gets a line in « Mon cercle → Activité »: « X @x t’a mentionné dans un commentaire sur « recette » » with the comment. Tapping it opens the recipe if it is on that device.
 - Works for accounts and for friends who got an @ from the admin (v359). An @ that does not exist is just text.
 
@@ -497,3 +497,9 @@ Friends who use the app with a nickname but no account (sign-in mails only reach
 - Reports also count on the author: at 3 he gets a warning in « Mon cercle → Activité », at 10 he can no longer comment (notification + e-mail to the moderator with an unblock link).
 - Comments with offensive words are refused when published or edited (same lists as the nicknames, checked word by word).
 - Admin links (key = CRON_SECRET): `/api/moderation?key=…&creports=1` (list), `&cok=<key|id>`, `&cdel=<key|id>`, `&cunban=<pid>`.
+
+## Follow an author (v363)
+- Profile page of an author inside « Mon cercle » (opened from a member row, a search result, an @ in a comment or a « a publié » notification): name, @, followers, published recipes, « Suivre » / « ✓ Abonné » (unfollow asks a confirmation). Following gives no access to circle recipes: only what the author publishes publicly.
+- Tabs of « Mon cercle »: Recettes, Activité, Suivis (authors followed + their latest published recipes), Membres.
+- Server (`api/circle.js`): `GET ?profile=<@>`, `GET ?following=1`, `POST {act:follow|unfollow,pid}` (account or device @ needed, 200 follows max). Redis `fo:` `fw:` `pp:` `ppb:`. Publishing (`api/_publish.js`) fills `pp:` and notifies followers outside the circle (`fpub`, `api/_notify.js`).
+- Limits: not tested on the real Redis; older publications are added to an author's list the first time his profile is read.

@@ -12,6 +12,7 @@ import publishHandler from "./_publish.js"; // v293: « /api/publish » is serve
 // A recipe put in « Cercle » = its shared copy « s:<sid> » (api/shared.js) listed in the author's « cp:<pid> »;
 // the circle feed = the recipes listed by the people of my circle.
 // Redis: cu:<pid> pseudo · cf:<pid> set of circle pids · ci:<code> invite → pid (7 days) · cp:<pid> zset sid → time (max 100)
+const MAX_FOLLOW = 200; // v363
 const MAX_CIRCLE = 50, MAX_POSTS = 100, FEED = 60, INVITE_TTL = 7 * 86400;
 const ACCESS_MAX = 3; // v323: each person with access can give access to 3 friends (personal link in the shared "ak" table)
 export const pidOf = (owner) => createHash("sha256").update("circle|" + owner).digest("hex").slice(0, 16);
@@ -73,6 +74,22 @@ export default async function handler(req, res) {
         const items = pids.map((p, i) => { const [n, h, inC, sent, asked] = r.slice(i * 5, i * 5 + 5);
           return h ? { pid: p, name: n || "", h, state: Number(inC) ? "in" : Number(asked) ? "asked" : Number(sent) ? "sent" : "" } : null; }).filter(Boolean);
         return res.status(200).json({ items });
+      }
+      if (q.profile != null) { // v363: public profile of an author (name, @, published recipes, followers)
+        if (await overLimit(req, "rl:cp:", 40)) return res.status(429).json({ error: "rate" });
+        const h = String(q.profile).toLowerCase().replace(/^@+/, "");
+        if (!/^[a-z0-9_.]{3,20}$/.test(h)) return res.status(400).json({ error: "key" });
+        const pid = await pidOfHandle(h);
+        if (!pid) return res.status(404).json({ error: "notfound" });
+        const [name, nfol, nfo, inC, imF] = await redis([["GET", "cu:" + pid], ["SCARD", "fw:" + pid], ["SCARD", "fo:" + pid], ["SISMEMBER", "cf:" + me, pid], ["SISMEMBER", "fw:" + pid, me]]);
+        return res.status(200).json({ pid, name: name || "", h, followers: Number(nfol) || 0, following: Number(nfo) || 0, self: pid === me, inCircle: !!Number(inC), iFollow: !!Number(imF), recipes: await authorRecipes([pid], 30) });
+      }
+      if (q.following) { // v363: the authors I follow + their latest published recipes
+        const [pids, nfol] = await redis([["SMEMBERS", "fo:" + me], ["SCARD", "fw:" + me]]);
+        const list = (Array.isArray(pids) ? pids : []).slice(0, MAX_FOLLOW);
+        const nh = list.length ? await redis(list.flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p]])) : [];
+        const items = list.map((p, i) => ({ pid: p, name: nh[i * 2] || "", h: nh[i * 2 + 1] || "" })).sort((a, b) => a.name.localeCompare(b.name));
+        return res.status(200).json({ items, followers: Number(nfol) || 0, recipes: list.length ? await authorRecipes(list, 30) : [] });
       }
       try { await indexPerson(me); } catch {} // v358: accounts made before the index become findable
       return res.status(200).json(await whoami(me));
@@ -151,6 +168,18 @@ export default async function handler(req, res) {
       if (!Number(was)) await notifyOne(p, { k: "req", by: myName || "", bh: myH || "", p: me });
       return res.status(200).json({ ok: true, state: "sent" });
     }
+    // v363: follow an author (needs an @ for the follower too: signed-in account or device @). Following only shows what he PUBLISHES.
+    if (act === "follow" || act === "unfollow") {
+      if (!(await socialOk(req, me))) return res.status(401).json({ error: "session" });
+      const p = String(body.pid || "");
+      if (!/^[a-f0-9]{16}$/.test(p) || p === me) return res.status(400).json({ error: "key" });
+      if (act === "unfollow") { await redis([["SREM", "fo:" + me, p], ["SREM", "fw:" + p, me]]); return res.status(200).json({ ok: true, following: false }); }
+      const [hp, already, n] = await redis([["GET", "hp:" + p], ["SISMEMBER", "fo:" + me, p], ["SCARD", "fo:" + me]]);
+      if (!hp) return res.status(404).json({ error: "notfound" });
+      if (!Number(already) && Number(n) >= MAX_FOLLOW) return res.status(409).json({ error: "full" });
+      await redis([["SADD", "fo:" + me, p], ["SADD", "fw:" + p, me]]);
+      return res.status(200).json({ ok: true, following: true });
+    }
     if (act === "post" || act === "unpost") {
       const sid = String(body.sid || "");
       if (!/^[a-z0-9-]{8,64}$/.test(sid)) return res.status(400).json({ error: "key" });
@@ -184,6 +213,46 @@ export async function liveRoots(roots) {
   if (!chk.length) return new Set();
   const sc = await redis(chk.map(([r, p]) => ["ZSCORE", "cp:" + p, r]));
   return new Set(chk.filter((x, i) => sc[i] != null).map((x) => x[0]));
+}
+
+// v363: handle → pid (account: « ah:<h> » = uid → « au:<uid> ».o ; device handle: « p:<pid> »)
+async function pidOfHandle(h) {
+  const [v] = await redis([["GET", "ah:" + h]]);
+  if (!v) return "";
+  if (String(v).startsWith("p:")) return String(v).slice(2);
+  const [au] = await redis([["GET", "au:" + v]]);
+  try { const o = JSON.parse(au).o; return o ? pidOf(o) : ""; } catch { return ""; }
+}
+
+// v363: published (public) recipes of one or several authors, newest first. « pp:<pid> » (zset ps → time) is filled when a recipe is
+// published; the first read of an author whose list is empty rebuilds it from the public index (recipes published before v363).
+async function authorRecipes(pids, max) {
+  const rows = [];
+  for (const pid of pids) {
+    let z = (await redis([["ZREVRANGE", "pp:" + pid, "0", String(max - 1), "WITHSCORES"]]))[0] || [];
+    if (!z.length) {
+      const [done] = await redis([["GET", "ppb:" + pid]]);
+      if (!done) {
+        await redis([["SET", "ppb:" + pid, "1", "EX", "604800"]]);
+        const [all] = await redis([["HGETALL", "pub:ck"]]);
+        const ids = []; for (let i = 0; i + 1 < (all || []).length && ids.length < 300; i += 2) ids.push(all[i]);
+        const docs = ids.length ? await redis(ids.map((x) => ["GET", "s:" + x])) : [];
+        const add = [];
+        ids.forEach((x, i) => { try { const d = JSON.parse(docs[i]); if (d.o && pidOf(d.o) === pid) add.push(String(d.ts || Date.now()), x); } catch {} });
+        if (add.length) { await redis([["ZADD", "pp:" + pid, ...add]]); z = (await redis([["ZREVRANGE", "pp:" + pid, "0", String(max - 1), "WITHSCORES"]]))[0] || []; }
+      }
+    }
+    for (let k = 0; k + 1 < z.length; k += 2) rows.push({ ps: z[k], at: Number(z[k + 1]) || 0, pid });
+  }
+  rows.sort((a, b) => b.at - a.at);
+  const top = rows.slice(0, max);
+  if (!top.length) return [];
+  const [pubs] = [await redis(top.map((x) => ["HEXISTS", "pub:ck", x.ps]))]; // unpublished / hidden ones are skipped
+  const live = top.filter((x, i) => Number(pubs[i]));
+  if (!live.length) return [];
+  const r = await redis(live.flatMap((x) => [["GET", "s:" + x.ps], ["GET", "cu:" + x.pid], ["GET", "hp:" + x.pid]]));
+  return live.map((x, i) => { let d = null; try { d = JSON.parse(r[i * 3]); } catch {} if (!d) return null;
+    return { sid: x.ps, t: String(d.title || "").slice(0, 120), l: d.lang || "", at: x.at, by: r[i * 3 + 1] || "", bh: r[i * 3 + 2] || "", pid: x.pid, ph: d.ph && d.ph.t ? { t: d.ph.t } : null }; }).filter(Boolean);
 }
 
 // v359: search and requests need a signed-in account OR an @ on this device (given by the admin to friends without account).

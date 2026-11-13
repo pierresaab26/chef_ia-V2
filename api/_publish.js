@@ -1,6 +1,6 @@
 import { authOk, hasRedis, redis, overLimit, clean, callClaude, parseJsonLoose } from "./_lib.js";
 import { pidOf, liveRoots } from "./circle.js";
-import { notifyCircle, notifyOne } from "./_notify.js";
+import { notifyCircle, notifyOne, notifyFollowers } from "./_notify.js";
 import { PUB } from "./shared.js";
 import { sendModMail } from "./_mod.js";
 
@@ -124,6 +124,8 @@ async function makePublic(sid, d, me) {
   await redis([["SET", "s:" + ps, JSON.stringify(copy)], ["HSET", PUB, ps, JSON.stringify({ sid: ps, ck: d.ck, t: d.title, l: d.lang })],
     ["SET", "pb:" + sid, JSON.stringify({ st: "public", ps, at: Date.now() })], ["DEL", "pub:rep:" + ps]]);
   await notifyCircle(me, { k: "pub", sid: ps, t: d.title });
+  try { await redis([["ZADD", "pp:" + me, String(Date.now()), ps]]); } catch {} // v363: the author's public recipes (profile page)
+  await notifyFollowers(me, { k: "fpub", sid: ps, t: d.title }); // v363: people who follow him
   return ps;
 }
 
