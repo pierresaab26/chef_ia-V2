@@ -104,7 +104,7 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - `fl:<hash>` flag counter (7 days), `fl:last:<hash>` last flagged requests, `fl:sent:<hash>` email sent, `bk:<hash>` block (24 h), `mod:log` moderation log (200)
 - `rl:si:<ip>:<minute>` (seasonal ideas, 30/min), `rl:<ip>:<minute>` (comments, 5/min), `rl:r:<ip>:<minute>` (ratings, 30/min), `rl:c:<ip>:<minute>` (chat, 20/min), `rl:ip:<ip>:<minute>` (photo import, 6/min), `rl:il:<ip>:<minute>` (link import, 10/min), `rl:ph:<ip>:<minute>` (photos, 30/min) — rate limiting
 
-**Import documentation:** `docs/IMPORT.md` (complete). **Feature documentation:** see `docs/FEATURES.md` (one section per area: generation, history/favorites, weekly menu, seasonal menu, Chef IA). Update it whenever one of these areas changes.
+**Import documentation:** `docs/IMPORT.md` (complete). **PWA:** `docs/PWA.md`. **Users / accounts:** `docs/USERS.md`. **Circle, publishing, follow, notifications:** `docs/CIRCLE.md`. Keep them up to date when those areas change. **Feature documentation:** see `docs/FEATURES.md` (one section per area: generation, history/favorites, weekly menu, seasonal menu, Chef IA). Update it whenever one of these areas changes.
 
 ## 3. Working rules (from the owner)
 

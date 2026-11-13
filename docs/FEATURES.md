@@ -510,3 +510,9 @@ v365: a recipe I published myself shows « Publiée par toi-même » in the comm
 v366: « Mon cercle → Activité »: every notification that points to a recipe is a clickable row (« Voir la recette → » / « Voir le commentaire → »); a mention scrolls to and highlights the comment.
 
 v367: the home box shows ONE « Recette de la communauté » panel (published recipes that match, hint to choose one or tap Go); the chef column and its button are removed.
+
+## Other reference docs
+- `docs/PWA.md`: installable app, service worker, offline copy, install offer.
+- `docs/USERS.md`: device, nickname, e-mail account, @handle, filters, admin links.
+- `docs/CIRCLE.md`: circle, invitations, publishing, follow, comments, notifications.
+- `docs/IMPORT.md`: imports.
