@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { authOk, hasAccess, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { notifyCircle, readNotes, markSeen } from "./_notify.js";
+import { isOffensive } from "./_words.js"; // v356
 import authHandler from "./_auth.js"; // v354: « /api/auth » (accounts, e-mail sign-in) is served by this route too
 import publishHandler from "./_publish.js"; // v293: « /api/publish » is served by this route (rewrite in vercel.json) to stay within 12 functions
 
@@ -71,6 +72,7 @@ export default async function handler(req, res) {
     if (act === "name") {
       const n = cleanName(body.name);
       if (!n) return res.status(400).json({ error: "name" });
+      if (isOffensive(n)) return res.status(400).json({ error: "badword" }); // v356: offensive pseudo refused
       await redis([["SET", "cu:" + me, n]]);
       return res.status(200).json({ ok: true, name: n });
     }

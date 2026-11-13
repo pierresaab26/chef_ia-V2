@@ -1,5 +1,6 @@
 import { createHash, randomBytes, randomInt } from "node:crypto";
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { isOffensive } from "./_words.js"; // v356: offensive handles / e-mails refused
 
 // v354: user accounts, sign-in by e-mail (magic link + 6-digit code). Served as « /api/auth » by api/circle.js (rewrite in vercel.json),
 // to stay within the 12 functions of the Vercel Hobby plan.
@@ -20,11 +21,13 @@ const normMail = (s) => String(s || "").trim().toLowerCase().slice(0, 254);
 // v355: 3–20 chars, lower-case letters, digits, « _ » and « . » (no dot at the ends, no « .. »), not a reserved word.
 const RESERVED = new Set(["admin", "administrator", "root", "support", "help", "aide", "contact", "moderation", "moderator", "modo", "chef", "chefia", "chef_ia", "chef.ia", "claude", "anthropic", "system", "staff", "team", "official", "officiel", "null", "undefined", "me", "moi", "everyone", "all", "tous", "here"]);
 export const normHandle = (s) => String(s || "").trim().replace(/^@+/, "").toLowerCase();
-export const handleOk = (h) => /^[a-z0-9_.]{3,20}$/.test(h) && !/^\.|\.$|\.\./.test(h) && !RESERVED.has(h);
+export const handleOk = (h) => /^[a-z0-9_.]{3,20}$/.test(h) && !/^\.|\.$|\.\./.test(h) && !RESERVED.has(h) && !isOffensive(h);
+const handleBad = (h) => /^[a-z0-9_.]{3,20}$/.test(h) && !/^\.|\.$|\.\./.test(h) && (RESERVED.has(h) || isOffensive(h)); // right format, refused word
 // A starting point from a pseudo: accents removed, spaces → « . », other characters dropped, 3–20 chars.
 function seedFrom(name) {
   let b = String(name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, ".").replace(/[^a-z0-9_.]/g, "").replace(/\.+/g, ".").replace(/^\.|\.$/g, "").slice(0, 20).replace(/\.$/, "");
   if (b.length < 3) b = (b + "chef").slice(0, 20);
+  if (isOffensive(b)) b = "chef"; // v356: never suggest a name built on an offensive pseudo
   return b;
 }
 async function suggest(name) {
@@ -124,7 +127,7 @@ export default async function authHandler(req, res, pidOf) {
       const uid = await sessionUid(req);
       let free = false, mine = false;
       if (handleOk(hd)) { const [who] = await redis([["GET", "ah:" + hd]]); free = !who; mine = !!uid && who === uid; }
-      return res.status(200).json({ handle: hd, valid: handleOk(hd), free: free || mine, suggest: q.name != null ? await suggest(q.name) : "" });
+      return res.status(200).json({ handle: hd, valid: handleOk(hd), bad: handleBad(hd), free: free || mine, suggest: q.name != null ? await suggest(q.name) : "" });
     }
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
 
@@ -133,7 +136,7 @@ export default async function authHandler(req, res, pidOf) {
       if (!uid) return res.status(401).json({ error: "session" });
       if (await overLimit(req, "rl:ah:", 60)) return res.status(429).json({ error: "rate" });
       const hd = normHandle(body.handle);
-      if (!handleOk(hd)) return res.status(400).json({ error: "handle" });
+      if (!handleOk(hd)) return res.status(400).json({ error: handleBad(hd) ? "badword" : "handle" });
       const [raw] = await redis([["GET", "au:" + uid]]);
       const acc = JSON.parse(raw || "null");
       if (!acc) return res.status(401).json({ error: "session" });
@@ -162,6 +165,7 @@ export default async function authHandler(req, res, pidOf) {
       if (await overLimit(req, "rl:au:", 10)) return res.status(429).json({ error: "rate" });
       const email = normMail(body.email);
       if (!mailOk(email)) return res.status(400).json({ error: "email" });
+      if (isOffensive(email.split("@")[0])) return res.status(400).json({ error: "badword" }); // v356: no account for « nazi@… »
       const eh = h(email);
       const [sent] = await redis([["INCR", "am:" + eh], ["EXPIRE", "am:" + eh, "3600", "NX"]]);
       if (Number(sent) > MAX_MAILS) return res.status(429).json({ error: "rate" });

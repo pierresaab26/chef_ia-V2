@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { isOffensive } from "./_words.js";
 
 // Recipe comments, stored in Upstash Redis (list "c:<recipe>", last 100).
 export default async function handler(req, res) {
@@ -29,7 +30,8 @@ export default async function handler(req, res) {
 
     if (req.method === "POST") {
       const text = clean(body.text, 500);
-      const name = clean(body.name, 30) || "Anonymous";
+      let name = clean(body.name, 30) || "Anonymous";
+      if (isOffensive(name)) name = "Anonymous"; // v356: an offensive author name is replaced, the comment itself is kept
       if (!text) return res.status(400).json({ error: "text" });
 
       // Limit: 5 comments per minute per IP address
