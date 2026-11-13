@@ -488,3 +488,12 @@ Friends who use the app with a nickname but no account (sign-in mails only reach
 - In published comments every @ is a pink link; tapping it opens « Mon cercle → Membres » with the search filled with that @ (a real profile page will come with « Suivre », v361).
 - Each person mentioned in a NEW comment (max 5 per comment, 30 a day per author; not on edits, never yourself) gets a line in « Mon cercle → Activité »: « X @x t’a mentionné dans un commentaire sur « recette » » with the comment. Tapping it opens the recipe if it is on that device.
 - Works for accounts and for friends who got an @ from the admin (v359). An @ that does not exist is just text.
+
+
+## Report a comment (v361)
+
+- Every comment that is not mine has « 🚩 Signaler »: choose a reason (insulting or hateful, spam or advertising, inappropriate, other). Once per person and comment; the comment then disappears for me.
+- 3 reports on a comment → hidden for everybody; its author still sees it with « En cours de vérification »; the moderator gets an e-mail with « remettre en ligne » / « supprimer » links.
+- Reports also count on the author: at 3 he gets a warning in « Mon cercle → Activité », at 10 he can no longer comment (notification + e-mail to the moderator with an unblock link).
+- Comments with offensive words are refused when published or edited (same lists as the nicknames, checked word by word).
+- Admin links (key = CRON_SECRET): `/api/moderation?key=…&creports=1` (list), `&cok=<key|id>`, `&cdel=<key|id>`, `&cunban=<pid>`.

@@ -47,3 +47,18 @@ export function isOffensive(text) {
   for (const t of glued) if (t.length >= 3 && (LIST.has(t) || LIST.has(squeeze(t)) || PHRASES.has(t))) return true;
   return false;
 }
+
+// v361: free text (comments). Checking a whole sentence glued together would find roots across words (« Ana zigzag » → « anazig »):
+// each word is checked alone, and only 2–3 neighbouring words glued are compared with the EXACT phrase / imported lists (« gros con »).
+export function isOffensiveText(text) {
+  const ws = String(text || "").split(/\s+/).filter(Boolean).slice(0, 300);
+  for (const w of ws) if (isOffensive(w)) return true;
+  for (let i = 0; i < ws.length - 1; i++) {
+    for (const n of [2, 3]) {
+      if (i + n > ws.length) continue;
+      const g = normWord(ws.slice(i, i + n).join("")).replace(/[^a-z0-9]/g, "");
+      if (g.length >= 4 && (PHRASES.has(g) || LIST.has(g))) return true;
+    }
+  }
+  return false;
+}
