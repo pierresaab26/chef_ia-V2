@@ -1,5 +1,9 @@
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { createHash } from "node:crypto";
 import { rank, recommended } from "./_score.js";
+const pidOf = (owner) => createHash("sha256").update("circle|" + owner).digest("hex").slice(0, 16); // same as api/circle.js
+// v364: @ of the author of a public copy (the publisher's pid is stored as `bp`; older copies: derived from the owner key)
+const handleOf = async (docs) => { const ps = docs.map((d) => (d && d.pub ? d.bp || (d.o ? pidOf(d.o) : "") : "")); const hs = ps.some(Boolean) ? await redis(ps.map((p) => ["GET", "hp:" + (p || "none")])) : []; return ps.map((p, i) => (p && hs[i]) || ""); };
 
 // v129: shared recipes. The sender publishes a copy of the recipe ("s:<sid>") and gets a link /?s=<sid>.
 // The friend opens the link: the recipe lands in his app with the SAME comment key, so both see the same comments.
@@ -26,7 +30,8 @@ export default async function handler(req, res) {
       const [raw] = await redis([["GET", "s:" + sid]]);
       if (!raw) return res.status(404).json({ error: "notfound" });
       const d = JSON.parse(raw);
-      return res.status(200).json({ title: d.title, text: d.text, ck: d.ck, lang: d.lang, ph: d.ph || null, rs: d.rs || null, by: d.by || null });
+      const bh = d.pub ? (await handleOf([d]))[0] : "";
+      return res.status(200).json({ title: d.title, text: d.text, ck: d.ck, lang: d.lang, ph: d.ph || null, rs: d.rs || null, by: d.by || null, ...(d.pub ? { pub: 1, og: d.og || null, src: d.src || null, bh } : {}) });
     }
 
     if (req.method === "POST") {
@@ -101,6 +106,16 @@ export function searchWords(q) {
   return nz(q).split(/[^a-z0-9]+/).filter((w) => w.length >= 2 && !["au", "aux", "de", "du", "des", "la", "le", "les", "un", "une", "et", "en", "a", "the", "of", "al", "el", "con", "di", "da", "und", "mit"].includes(w)).slice(0, 6);
 }
 
+// v364: author name + @ on each result (so the app can open his profile)
+async function addAuthors(items) {
+  try {
+    const raws = await redis(items.map((o) => ["GET", "s:" + o.sid]));
+    const docs = raws.map((r) => { try { return JSON.parse(r); } catch { return null; } });
+    const hs = await handleOf(docs);
+    return items.map((o, i) => ({ ...o, by: (docs[i] && docs[i].by) || "", bh: hs[i] || "" }));
+  } catch { return items; }
+}
+
 export async function searchShared(q, lang, max = 6) {
   const words = searchWords(q);
   if (!words.length || words.join("").length < 3) return [];
@@ -120,11 +135,12 @@ export async function searchShared(q, lang, max = 6) {
     const list = hit.slice(0, 40);
     if (!list.length) return [];
     const res = await redis(list.flatMap((c) => [["HGETALL", "r:" + c.ck], ["ZSCORE", "s:pop", c.ck], ["HLEN", "rc:" + c.ck]]));
-    return list.map((c, x) => {
+    const out = list.map((c, x) => {
       const h = res[x * 3] || [], v = [];
       for (let i = 1; i < h.length; i += 2) { const n = Number(h[i]); if (n >= 1 && n <= 5) v.push(n); }
       const n = v.length, a = n ? v.reduce((p, r) => p + r, 0) / n : 0, sh = Number(res[x * 3 + 1]) || 0, cooked = Math.max(Number(res[x * 3 + 2]) || 0, n); // v315: people who cooked it (marked or rated)
       return { sid: c.sid, t: c.t, nt: c.nt, a: Math.round(a * 10) / 10, n, c: cooked, rec: recommended(a, n), score: rank(a, n, sh) };
     }).sort((p, r) => r.score - p.score).filter((o) => !seen.has(o.nt) && seen.add(o.nt)).slice(0, max).map(({ score, nt, ...o }) => o); // v314: one card per dish, the best-ranked variant first
+    return await addAuthors(out);
   } catch { return []; }
 }

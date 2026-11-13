@@ -120,7 +120,7 @@ export default async function handler(req, res) {
 async function makePublic(sid, d, me) {
   const ps = pubSid(sid);
   const [name] = await redis([["GET", "cu:" + me]]);
-  const copy = { title: d.title, text: d.text, ck: d.ck, lang: d.lang, ph: d.ph || null, o: d.o, ts: Date.now(), pub: 1, src: sid, by: name || "", og: d.by || "" };
+  const copy = { title: d.title, text: d.text, ck: d.ck, lang: d.lang, ph: d.ph || null, o: d.o, ts: Date.now(), pub: 1, src: sid, by: name || "", og: d.by || "", bp: me };
   await redis([["SET", "s:" + ps, JSON.stringify(copy)], ["HSET", PUB, ps, JSON.stringify({ sid: ps, ck: d.ck, t: d.title, l: d.lang })],
     ["SET", "pb:" + sid, JSON.stringify({ st: "public", ps, at: Date.now() })], ["DEL", "pub:rep:" + ps]]);
   await notifyCircle(me, { k: "pub", sid: ps, t: d.title });
