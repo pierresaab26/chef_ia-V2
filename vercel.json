@@ -20,6 +20,10 @@
       "destination": "/api/circle?via=pub"
     },
     {
+      "source": "/api/sync",
+      "destination": "/api/circle?via=sync"
+    },
+    {
       "source": "/api/auth",
       "destination": "/api/circle?via=auth"
     }

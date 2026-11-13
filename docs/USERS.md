@@ -31,14 +31,21 @@ The app itself is protected by `APP_PASSWORD` (shared code) OR a personal invita
 ## People search (v358)
 Only accounts / devices WITH an @ are findable. Index `api/_index.js`: sorted set `hx` (members `<key>|<pid>`: the @, the whole pseudo and each word), prefix search from 3 characters, 10 results, 30/min per IP. Searching and sending requests needs a session or a device @ (401 `session` otherwise).
 
+## Sync across devices (v368)
+Accounts only (header `x-session`); without an account nothing is sent and data stays on the device. Route `POST /api/sync` (`api/_sync.js`, served by `api/circle.js` with `?via=sync`, rewrite in `vercel.json`; still 12 functions).
+- **Entities** (field `<kind>:<id>` of the Redis hash `sy:<uid>`, counter `sy:<uid>:c`): `r` recipe (favorites and stars live in its messages), `l` shopping list, `m` weekly menu, `c` circle map (`chefCirc`), `p` publication map (`chefPub`). Value JSON `{u, t, d | x:1}` (`u` = client time of the change, `t` = server counter, `x` = deletion tombstone).
+- **Rule**: last write wins per entity (the server keeps the newest `u`; an older edit can never bring back a deleted recipe). `POST {since, items}` stores the pushed items, then returns the items changed by other pushes after `since` (40 per page, `more`, new `since`). Limits: 120 items per push, 400 KB per item, 3000 fields per account (413 `full`), 60 calls/min per IP.
+- **Client** (`index.html`, block « v368: SYNC »): each entity is hashed; a hash different from the last synced one = changed, pushed with `u` = now; a key known as synced and gone locally = deletion. State in `localStorage chefSync` (`since`, `h`, `mail`; reset when another account signs in). Own pictures over 150 KB are not sent and the local one is kept. A new, empty singleton (menu, maps) is never pushed over the remote one. More than 10 deletions that are over half the known keys are refused (storage read error guard). The entry open in the chat is not overwritten.
+- **Triggers**: 3.5 s after start, return to the app, 4 s after any local save (`syncSoon()` called by `saveH`, `saveLists`, `saveMenu`, `circSave`, `pubSave`), after sign-in, and the drawer row « Synchroniser maintenant » (last sync time shown).
+- **Known limits**: the automatic 50-recipe trimming of `saveH` counts as a deletion for the other devices; two devices editing the same recipe at once keep the later one; ratings are server-side by version key already (shared); iOS install still off.
+
 ## Redis keys
-`ae:<h(email)>` → uid, `au:<uid>` JSON `{e,o,at,m,h}`, `al:` link, `ac:` code, `as:` session → uid, `aS:<uid>` sessions, `am:` mail counter, `ah:<handle>` → uid or `p:<pid>`, `hp:<pid>` → handle, `cu:<pid>` pseudo, `hx` / `hxn:<pid>` search index, `ak` invitation tokens, `ai:<pid>` access given. Reserved: `ap:<provider>:<sub>`.
+`ae:<h(email)>` → uid, `au:<uid>` JSON `{e,o,at,m,h}`, `al:` link, `ac:` code, `as:` session → uid, `aS:<uid>` sessions, `am:` mail counter, `sy:<uid>` / `sy:<uid>:c` synced data (v368), `ah:<handle>` → uid or `p:<pid>`, `hp:<pid>` → handle, `cu:<pid>` pseudo, `hx` / `hxn:<pid>` search index, `ak` invitation tokens, `ai:<pid>` access given. Reserved: `ap:<provider>:<sub>`.
 
 ## Admin links (`CRON_SECRET`)
 `GET /api/moderation?key=<CRON_SECRET>` with `&stats=1` (counts), `&invite=<name>`, `&invites=1`, `&revoke=`, `&handles=1[&apply=1]`, `&creports=1`, `&cok=`, `&cdel=`, `&cunban=`, `&unblock=`.
 
 ## Not done
-- Sync of recipes, favorites, ratings and shopping lists across devices.
 - A « famille » status to share the shopping list.
 - Changing the @ from the interface (the server supports it).
 - Account deletion from the interface.

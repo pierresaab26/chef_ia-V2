@@ -516,3 +516,5 @@ v367: the home box shows ONE « Recette de la communauté » panel (published re
 - `docs/USERS.md`: device, nickname, e-mail account, @handle, filters, admin links.
 - `docs/CIRCLE.md`: circle, invitations, publishing, follow, comments, notifications.
 - `docs/IMPORT.md`: imports.
+
+v368: SYNC of recipes, favorites, shopping lists, weekly menu and visibility maps across the devices of an account (`api/_sync.js`, `/api/sync`, drawer row « Synchroniser maintenant »). Details in `docs/USERS.md` (Sync across devices).
