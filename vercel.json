@@ -16,6 +16,10 @@
   ],
   "rewrites": [
     {
+      "source": "/r/:sid",
+      "destination": "/api/shared?og=:sid"
+    },
+    {
       "source": "/api/publish",
       "destination": "/api/circle?via=pub"
     },

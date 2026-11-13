@@ -12,6 +12,41 @@ const handleOf = async (docs) => { const ps = docs.map((d) => (d && d.pub ? d.bp
 // v248: index « s:ck » (comment/rating key → {sid,t,l}) and counter « s:pop » (people who really shared it, POST {sid, hit:1}), read by the weekly menu (api/week-menu.js).
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
+  // v372: PUBLIC preview page of a shared link (/r/<sid> → here, see vercel.json): the Open Graph card WhatsApp / iMessage show (title, photo, rating), then the browser is sent to the app (/?s=<sid>). Only the title, the photo and the rating are exposed, like the link itself.
+  if (req.method === "GET" && req.query && req.query.og != null) {
+    const osid = String(req.query.og || "");
+    const host = String(req.headers["x-forwarded-host"] || req.headers.host || "").replace(/[^a-z0-9.:-]/gi, "");
+    const base = host ? "https://" + host : "";
+    const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    let title = "Chef IA", desc = "", img = "";
+    if (/^[a-z0-9-]{8,64}$/.test(osid)) {
+      try {
+        const [raw] = await redis([["GET", "s:" + osid]]);
+        const d = raw ? JSON.parse(raw) : null;
+        if (d) {
+          title = String(d.title || "Chef IA").slice(0, 120);
+          const fr = !d.lang || /^fr/.test(d.lang);
+          desc = fr ? "Recette partagée sur Chef IA. Touchez pour l’ouvrir dans l’app." : "Recipe shared on Chef IA. Tap to open it in the app.";
+          if (d.ck && /^[a-z0-9-]{1,60}$/.test(d.ck)) {
+            const [h] = await redis([["HGETALL", "r:" + d.ck]]);
+            const v = [];
+            for (let i = 1; h && i < h.length; i += 2) { const n = Number(h[i]); if (n >= 1 && n <= 5) v.push(n); }
+            if (v.length) desc = "⭐ " + (v.reduce((a, b) => a + b, 0) / v.length).toFixed(1) + "/5 (" + v.length + ") · " + desc;
+          }
+          const u = d.ph && (d.ph.u || d.ph.t);
+          if (typeof u === "string" && /^https:\/\/images\.unsplash\.com\//.test(u)) img = u;
+        }
+      } catch {}
+    }
+    const target = "/?s=" + encodeURIComponent(osid);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
+    return res.status(200).send('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>' + esc(title) + ' – Chef IA</title><meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<meta property="og:type" content="article"><meta property="og:site_name" content="Chef IA"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
+      + (img ? '<meta property="og:image" content="' + esc(img) + '"><meta name="twitter:card" content="summary_large_image">' : (base ? '<meta property="og:image" content="' + esc(base + "/icons/icon-512.png") + '">' : ""))
+      + (base ? '<meta property="og:url" content="' + esc(base + "/r/" + osid) + '">' : "")
+      + '<meta http-equiv="refresh" content="0;url=' + esc(target) + '"></head><body><script>location.replace(' + JSON.stringify(target) + ')</script><p><a href="' + esc(target) + '">Ouvrir dans Chef IA</a></p></body></html>');
+  }
   if (!(await authOk(req, res))) return;
 
   const owner = clean(req.headers["x-owner"], 60);
