@@ -1,7 +1,8 @@
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
 
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { isOffensive } from "./_words.js";
+import { notifyOne } from "./_notify.js";
 
 // Recipe comments, stored in Upstash Redis (list "c:<recipe>", last 100).
 export default async function handler(req, res) {
@@ -39,7 +40,9 @@ export default async function handler(req, res) {
 
       const c = { id: randomUUID(), name, text, ts: Date.now(), o: owner };
       await redis([["LPUSH", listKey, JSON.stringify(c)], ["LTRIM", listKey, 0, 99]]);
-      return res.status(201).json({ comment: { id: c.id, name, text, ts: c.ts, mine: true } });
+      let mentioned = 0;
+      try { mentioned = await notifyMentions(text, owner, name, key, clean(body.title, 120)); } catch {} // v360: never blocks the comment
+      return res.status(201).json({ comment: { id: c.id, name, text, ts: c.ts, mine: true }, mentioned });
     }
 
     // v129: the author edits his own comment (the server checks that he is the author)
@@ -102,4 +105,44 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(502).json({ error: "storage" });
   }
+}
+
+// v360: @mentions. Every « @handle » of a NEW comment (max 5) notifies that person in « Mon cercle → Activité »
+// (kind "men": author name + @, recipe title, start of the comment, comment key). A handle is an account
+// (ah:<h> → uid → au.o) or a device given an @ by the admin (ah:<h> → "p:<pid>"). Unknown @, my own @ and
+// people over the limit are skipped silently. 30 mention notifications a day per author (mn:<pid>:<day>).
+export const MENTION_RE = /(^|[^a-z0-9_.@])@([a-z0-9_.]{3,20})/gi;
+export function mentionsIn(text) {
+  const out = [];
+  for (const m of String(text || "").matchAll(MENTION_RE)) {
+    const h = m[2].toLowerCase().replace(/\.+$/, "");
+    if (h.length >= 3 && !out.includes(h)) out.push(h);
+    if (out.length >= 5) break;
+  }
+  return out;
+}
+const pidOf = (owner) => createHash("sha256").update("circle|" + owner).digest("hex").slice(0, 16); // same as api/circle.js
+async function notifyMentions(text, owner, name, key, title) {
+  const hs = mentionsIn(text);
+  if (!hs.length || !owner) return 0;
+  const me = pidOf(owner);
+  const day = new Date().toISOString().slice(0, 10);
+  const [used] = await redis([["GET", "mn:" + me + ":" + day]]);
+  let left = 30 - Number(used || 0);
+  if (left <= 0) return 0;
+  const vals = await redis(hs.map((h) => ["GET", "ah:" + h]));
+  const [myName, myH] = await redis([["GET", "cu:" + me], ["GET", "hp:" + me]]);
+  let n = 0;
+  for (let i = 0; i < hs.length && left > 0; i++) {
+    const v = vals[i];
+    if (!v) continue;
+    let pid = "";
+    if (String(v).startsWith("p:")) pid = String(v).slice(2);
+    else { const [raw] = await redis([["GET", "au:" + v]]); try { pid = pidOf(JSON.parse(raw).o); } catch {} }
+    if (!pid || pid === me) continue;
+    await notifyOne(pid, { k: "men", by: myName || name || "", bh: myH || "", t: title || "", x: text, ck: key });
+    n++; left--;
+  }
+  if (n) { try { await redis([["INCRBY", "mn:" + me + ":" + day, String(n)], ["EXPIRE", "mn:" + me + ":" + day, "90000"]]); } catch {} }
+  return n;
 }

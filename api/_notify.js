@@ -19,7 +19,7 @@ export async function notifyCircle(me, item) {
 export async function notifyOne(pid, item) {
   try {
     if (!pid) return 0;
-    const line = JSON.stringify({ k: item.k, sid: item.sid || "", t: String(item.t || "").slice(0, 120), by: String(item.by || "").slice(0, 24), at: Date.now(), ...(item.bh ? { bh: item.bh } : {}), ...(item.p ? { p: item.p } : {}), ...(item.m ? { m: String(item.m).slice(0, 300) } : {}) }); // v302: m = moderator's comment; v358: by / bh / p for circle requests
+    const line = JSON.stringify({ k: item.k, sid: item.sid || "", t: String(item.t || "").slice(0, 120), by: String(item.by || "").slice(0, 24), at: Date.now(), ...(item.bh ? { bh: item.bh } : {}), ...(item.p ? { p: item.p } : {}), ...(item.x ? { x: String(item.x).slice(0, 160) } : {}), ...(item.ck ? { ck: String(item.ck).slice(0, 60) } : {}), ...(item.m ? { m: String(item.m).slice(0, 300) } : {}) }); // v302: m = moderator's comment; v358: by / bh / p for circle requests
     await redis([["LPUSH", "cn:" + pid, line], ["LTRIM", "cn:" + pid, "0", String(KEEP - 1)], ["EXPIRE", "cn:" + pid, TTL]]);
     return 1;
   } catch { return 0; }

@@ -480,3 +480,11 @@ Friends who use the app with a nickname but no account (sign-in mails only reach
 - Add `&apply=1` to give them. Each @ is built from the nickname (« Marie Dupont » → `@marie.dupont`, digits added if already taken). Nicknames that already have an @ are skipped; running it again does nothing.
 - With that @ the friend shows as « Name · @name » in circles, is found by « Rechercher un ami », can search, send and accept requests, and has his @ in the QR dialog, without account.
 - If he signs in later, his account keeps that @ automatically.
+
+
+## @mentions in comments (v360)
+
+- In any recipe comment field, typing « @ » shows suggestions: first the members of my circle who have an @, then (from 3 letters) the people search. Tap, Enter or Tab inserts « @handle ».
+- In published comments every @ is a pink link; tapping it opens « Mon cercle → Membres » with the search filled with that @ (a real profile page will come with « Suivre », v361).
+- Each person mentioned in a NEW comment (max 5 per comment, 30 a day per author; not on edits, never yourself) gets a line in « Mon cercle → Activité »: « X @x t’a mentionné dans un commentaire sur « recette » » with the comment. Tapping it opens the recipe if it is on that device.
+- Works for accounts and for friends who got an @ from the admin (v359). An @ that does not exist is just text.
