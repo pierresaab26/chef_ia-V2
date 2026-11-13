@@ -508,3 +508,5 @@ Friends who use the app with a nickname but no account (sign-in mails only reach
 v365: a recipe I published myself shows « Publiée par toi-même » in the community search (`mine` flag from `api/shared.js`).
 
 v366: « Mon cercle → Activité »: every notification that points to a recipe is a clickable row (« Voir la recette → » / « Voir le commentaire → »); a mention scrolls to and highlights the comment.
+
+v367: the home box shows ONE « Recette de la communauté » panel (published recipes that match, hint to choose one or tap Go); the chef column and its button are removed.

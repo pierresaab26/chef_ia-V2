@@ -931,7 +931,7 @@ fr:{
   csChefD:"Le chef écrit une recette de « {x} » rien que pour toi.",
   csChefB:"Demander au chef",
   csCom:"Recette de la communauté",
-  csNone:"Pas encore de recette partagée pour ça.",
+  csNone:"Pas encore de recette partagée pour ça.",csHint:"Choisis une recette de la communauté, ou touche Go pour que le chef écrive la tienne.",
   recB:"⭐ Recommandée",ckBy:"Cuisinée par {n} personnes",
   csMore:"Voir plus",
   hsPh:"Trouver mes recettes",
@@ -1274,7 +1274,7 @@ en:{
   csChefD:"The chef writes a “{x}” recipe just for you.",
   csChefB:"Ask the chef",
   csCom:"Community recipe",
-  csNone:"No shared recipe for this yet.",
+  csNone:"No shared recipe for this yet.",csHint:"Pick a community recipe, or tap Go to have the chef write your own.",
   recB:"⭐ Recommended",ckBy:"Cooked by {n} people",
   csMore:"See more",
   hsPh:"Find your recipes",
@@ -1617,7 +1617,7 @@ es:{
   csChefD:"El chef escribe una receta de «{x}» solo para ti.",
   csChefB:"Pedir al chef",
   csCom:"Receta de la comunidad",
-  csNone:"Aún no hay receta compartida para esto.",
+  csNone:"Aún no hay receta compartida para esto.",csHint:"Elige una receta de la comunidad, o toca Go para que el chef escriba la tuya.",
   recB:"⭐ Recomendada",ckBy:"Cocinada por {n} personas",
   csMore:"Ver más",
   hsPh:"Encuentra tus recetas",
@@ -1960,7 +1960,7 @@ de:{
   csChefD:"Der Chef schreibt dir ein Rezept für „{x}“.",
   csChefB:"Den Chef fragen",
   csCom:"Rezept der Community",
-  csNone:"Dafür gibt es noch kein geteiltes Rezept.",
+  csNone:"Dafür gibt es noch kein geteiltes Rezept.",csHint:"Wähle ein Rezept der Community oder tippe auf Go, damit der Chef dein eigenes schreibt.",
   recB:"⭐ Empfohlen",ckBy:"Von {n} Personen gekocht",
   csMore:"Mehr anzeigen",
   hsPh:"Finde deine Rezepte",
@@ -2303,7 +2303,7 @@ it:{
   csChefD:"Lo chef scrive una ricetta di «{x}» solo per te.",
   csChefB:"Chiedi allo chef",
   csCom:"Ricetta della community",
-  csNone:"Nessuna ricetta condivisa per ora.",
+  csNone:"Nessuna ricetta condivisa per ora.",csHint:"Scegli una ricetta della community, oppure tocca Go perché lo chef scriva la tua.",
   recB:"⭐ Consigliata",ckBy:"Cucinata da {n} persone",
   csMore:"Mostra altre",
   hsPh:"Trova le tue ricette",
@@ -2646,7 +2646,7 @@ pt:{
   csChefD:"O chef escreve uma receita de «{x}» só para ti.",
   csChefB:"Pedir ao chef",
   csCom:"Receita da comunidade",
-  csNone:"Ainda não há receita partilhada para isto.",
+  csNone:"Ainda não há receita partilhada para isto.",csHint:"Escolhe uma receita da comunidade, ou toca em Go para o chef escrever a tua.",
   recB:"⭐ Recomendada",ckBy:"Cozinhada por {n} pessoas",
   csMore:"Ver mais",
   hsPh:"Encontra as tuas receitas",
@@ -3245,7 +3245,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v366',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v367',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -5011,24 +5011,17 @@ const csMem={};let csTimer=0;const COMMUNITY_ON=true; // v290: back to true when
 function drawTopCs(){const l=$('#hqcs');l.innerHTML='';const raw=$('#hq').value.trim();if(raw.length>=3)csDraw(l,raw,true,drawTopCs)}
 function csDraw(l,raw,on,redraw){
   if(!on)return;const t=T(),key=lang+'|'+raw.toLowerCase(),nz=x=>String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-  const g=document.createElement('div');g.className='csg';
-  const c1=document.createElement('div');c1.className='csc';
-  const h1=document.createElement('div');h1.className='csh';h1.textContent='👨‍🍳 '+t.csChef;
-  const p1=document.createElement('p');p1.className='csp';p1.textContent=t.csChefD.replace('{x}',raw);
-  const b1=document.createElement('button');b1.type='button';b1.className='csb';b1.textContent=t.csChefB;b1.onclick=()=>{$('#hq').value='';drawTopCs();openChat(null);send(t.idGen.replace('{x}',raw),true)};
-  c1.append(h1,p1,b1);
-  if(!COMMUNITY_ON){g.classList.add('one');g.append(c1);l.appendChild(g);return} // v290: no public recipes yet (palier 3): the « community » column is hidden
+  const g=document.createElement('div');g.className='csg one'; /* v367: ONE panel « Recette de la communauté »; « Go » still makes the chef write the user's own recipe */
+  if(!COMMUNITY_ON)return;
   const c2=document.createElement('div');c2.className='csc';
-  const h2=document.createElement('div');h2.className='csh';h2.textContent='👥 '+t.csCom;c2.appendChild(h2);
+  const h2=document.createElement('div');h2.className='csh';h2.textContent='👥 '+t.csCom;
   const own=new Set(loadH().filter(e=>!e.qa).map(e=>nz(e.title))),it=(csMem[key]||[]).filter(x=>!own.has(nz(x.t)));
-  if(csMem[key]===undefined){const p=document.createElement('p');p.className='csp';p.textContent='…';c2.appendChild(p);
+  if(csMem[key]===undefined){
     clearTimeout(csTimer);csTimer=setTimeout(async()=>{let items=[];try{const r=await capi('GET','?q='+encodeURIComponent(raw)+'&lang='+lang,null,'/api/shared',true);if(r.ok)items=(await r.json()).items||[]}catch(x){}
       csMem[key]=items;if($('#hq').value.trim()===raw)redraw()},450)}
-  else if(!it.length){const p=document.createElement('p');p.className='csp';p.textContent=t.csNone;c2.appendChild(p)}
-  else it.slice(0,4).forEach(x=>{const r=document.createElement('button');r.type='button';r.className='csi';
+  else if(it.length){const hp=document.createElement('p');hp.className='csp';hp.textContent=t.csHint;c2.append(h2,hp);it.slice(0,4).forEach(x=>{const r=document.createElement('button');r.type='button';r.className='csi';
     const n=document.createElement('b');n.textContent=x.t;const st=document.createElement('span');st.textContent=(x.n?'★ '+String(x.a).replace('.',',')+' ('+x.n+')':'')+(x.c>=2?(x.n?' · ':'')+t.ckBy.replace('{n}',x.c):'');
-    r.append(n,st);if(x.mine){const au=document.createElement('span');au.className='csau';au.textContent=t.ciMine;r.appendChild(au)}else if(x.by){const au=document.createElement('span');au.className='csau'+(x.bh?' lnk':'');au.textContent=t.ciBy.replace('{n}',x.by);if(x.bh){au.setAttribute('role','link');au.onclick=ev=>{ev.stopPropagation();profOpen(x.bh)}}r.appendChild(au)}if(x.rec){const rb=document.createElement('span');rb.className='csrec';rb.textContent=t.recB;r.appendChild(rb)} /* v315: « Recommandée » = enough votes and a high weighted score */r.onclick=()=>importShared(x.sid,{pub:1});c2.appendChild(r)});
-  g.append(c1,c2);l.appendChild(g)}
+    r.append(n,st);if(x.mine){const au=document.createElement('span');au.className='csau';au.textContent=t.ciMine;r.appendChild(au)}else if(x.by){const au=document.createElement('span');au.className='csau'+(x.bh?' lnk':'');au.textContent=t.ciBy.replace('{n}',x.by);if(x.bh){au.setAttribute('role','link');au.onclick=ev=>{ev.stopPropagation();profOpen(x.bh)}}r.appendChild(au)}if(x.rec){const rb=document.createElement('span');rb.className='csrec';rb.textContent=t.recB;r.appendChild(rb)} /* v315: « Recommandée » = enough votes and a high weighted score */r.onclick=()=>importShared(x.sid,{pub:1});c2.appendChild(r)});g.append(c2);l.appendChild(g)}}
 $('#hsq').addEventListener('input',drawHomeSearch);drawHomeSearch();
 $('#fsearch').addEventListener('input',()=>{favCat=null;drawFavs()});
 $('#fback').onclick=()=>show('home');
