@@ -12,9 +12,29 @@ import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
 //   ae:<h(email)> → uid                       au:<uid> → JSON {e, o, at, m}         ap:<provider>:<sub> → uid (reserved for Google / Apple)
 //   al:<h(link token)> → JSON {e, ch} 15 min    ac:<h(email)> → JSON {ch, n, lt} 15 min (code hash, tries, link token hash)
 //   as:<h(session)> → uid 1 year              aS:<uid> set of session hashes        am:<h(email)> mails sent this hour
+// v355: unique « @handle » chosen at the first sign-in (accounts only): ah:<handle> → uid (reservation), hp:<pid of the account owner> → handle
+//   (read by api/circle.js and api/_notify.js to show « @handle » next to the pseudo), account field au.h.
 const TTL_LOGIN = 15 * 60, TTL_SESSION = 365 * 86400, MAX_MAILS = 5, MAX_TRIES = 5, MAX_SESSIONS = 20;
 const h = (s) => createHash("sha256").update("auth|" + s).digest("hex").slice(0, 32);
 const normMail = (s) => String(s || "").trim().toLowerCase().slice(0, 254);
+// v355: 3–20 chars, lower-case letters, digits, « _ » and « . » (no dot at the ends, no « .. »), not a reserved word.
+const RESERVED = new Set(["admin", "administrator", "root", "support", "help", "aide", "contact", "moderation", "moderator", "modo", "chef", "chefia", "chef_ia", "chef.ia", "claude", "anthropic", "system", "staff", "team", "official", "officiel", "null", "undefined", "me", "moi", "everyone", "all", "tous", "here"]);
+export const normHandle = (s) => String(s || "").trim().replace(/^@+/, "").toLowerCase();
+export const handleOk = (h) => /^[a-z0-9_.]{3,20}$/.test(h) && !/^\.|\.$|\.\./.test(h) && !RESERVED.has(h);
+// A starting point from a pseudo: accents removed, spaces → « . », other characters dropped, 3–20 chars.
+function seedFrom(name) {
+  let b = String(name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, ".").replace(/[^a-z0-9_.]/g, "").replace(/\.+/g, ".").replace(/^\.|\.$/g, "").slice(0, 20).replace(/\.$/, "");
+  if (b.length < 3) b = (b + "chef").slice(0, 20);
+  return b;
+}
+async function suggest(name) {
+  const b = seedFrom(name), c = [b];
+  for (let i = 0; i < 6; i++) c.push(b.slice(0, 17) + String(randomInt(10, 1000)));
+  const ok = c.filter(handleOk);
+  if (!ok.length) return "";
+  const taken = await redis(ok.map((x) => ["EXISTS", "ah:" + x]));
+  return ok.find((x, i) => !Number(taken[i])) || "";
+}
 const mailOk = (s) => /^[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}$/i.test(s);
 
 export function providers() {
@@ -81,7 +101,7 @@ async function openSession(email, owner, pidOf) {
     if (drop.length) await redis([["SREM", "aS:" + uid, ...drop], ...drop.map((x) => ["DEL", "as:" + x])]);
   }
   const [name] = await redis([["GET", "cu:" + pidOf(acc.o)]]);
-  return { ok: true, session: tok, owner: acc.o, email: acc.e, created, name: name || "" };
+  return { ok: true, session: tok, owner: acc.o, email: acc.e, created, name: name || "", handle: acc.h || "" };
 }
 
 export default async function authHandler(req, res, pidOf) {
@@ -95,10 +115,35 @@ export default async function authHandler(req, res, pidOf) {
       if (!uid) return res.status(401).json({ error: "session" });
       const [raw] = await redis([["GET", "au:" + uid]]);
       const acc = JSON.parse(raw || "{}");
-      return res.status(200).json({ email: acc.e || "", methods: Object.keys(acc.m || {}), providers: providers() });
+      return res.status(200).json({ email: acc.e || "", handle: acc.h || "", methods: Object.keys(acc.m || {}), providers: providers() });
+    }
+    if (req.method === "GET" && q.handle != null) { // v355: is this @handle free? + a free suggestion from « name »
+      if (!(await authOk(req, res))) return;
+      if (await overLimit(req, "rl:ah:", 60)) return res.status(429).json({ error: "rate" });
+      const hd = normHandle(q.handle);
+      const uid = await sessionUid(req);
+      let free = false, mine = false;
+      if (handleOk(hd)) { const [who] = await redis([["GET", "ah:" + hd]]); free = !who; mine = !!uid && who === uid; }
+      return res.status(200).json({ handle: hd, valid: handleOk(hd), free: free || mine, suggest: q.name != null ? await suggest(q.name) : "" });
     }
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
 
+    if (body.act === "handle") { // v355: choose (or change) the @handle of the signed-in account
+      const uid = await sessionUid(req);
+      if (!uid) return res.status(401).json({ error: "session" });
+      if (await overLimit(req, "rl:ah:", 60)) return res.status(429).json({ error: "rate" });
+      const hd = normHandle(body.handle);
+      if (!handleOk(hd)) return res.status(400).json({ error: "handle" });
+      const [raw] = await redis([["GET", "au:" + uid]]);
+      const acc = JSON.parse(raw || "null");
+      if (!acc) return res.status(401).json({ error: "session" });
+      if (acc.h === hd) return res.status(200).json({ ok: true, handle: hd });
+      const [got] = await redis([["SET", "ah:" + hd, uid, "NX"]]);
+      if (!got) return res.status(409).json({ error: "taken" });
+      const old = acc.h; acc.h = hd;
+      await redis([["SET", "au:" + uid, JSON.stringify(acc)], ["SET", "hp:" + pidOf(acc.o), hd], ...(old ? [["DEL", "ah:" + old]] : [])]);
+      return res.status(200).json({ ok: true, handle: hd });
+    }
     if (body.act === "logout" || body.act === "logoutAll") {
       const s = String(req.headers["x-session"] || "");
       const uid = await sessionUid(req);

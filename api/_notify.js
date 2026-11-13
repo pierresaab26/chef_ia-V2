@@ -6,10 +6,10 @@ const KEEP = 50, TTL = String(30 * 86400);
 
 export async function notifyCircle(me, item) {
   try {
-    const [pids, name] = await redis([["SMEMBERS", "cf:" + me], ["GET", "cu:" + me]]);
+    const [pids, name, h] = await redis([["SMEMBERS", "cf:" + me], ["GET", "cu:" + me], ["GET", "hp:" + me]]);
     const list = Array.isArray(pids) ? pids.slice(0, 50) : [];
     if (!list.length) return 0;
-    const line = JSON.stringify({ k: item.k, sid: item.sid, t: String(item.t || "").slice(0, 120), by: name || "", at: Date.now() });
+    const line = JSON.stringify({ k: item.k, sid: item.sid, t: String(item.t || "").slice(0, 120), by: name || "", ...(h ? { bh: h } : {}), at: Date.now() }); // v355: bh = @handle
     await redis(list.flatMap((p) => [["LPUSH", "cn:" + p, line], ["LTRIM", "cn:" + p, "0", String(KEEP - 1)], ["EXPIRE", "cn:" + p, TTL]]));
     return list.length;
   } catch { return 0; } // a notification must never break the share itself

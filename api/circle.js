@@ -141,10 +141,10 @@ export async function liveRoots(roots) {
 }
 
 async function whoami(me) {
-  const [name, pids, used] = await redis([["GET", "cu:" + me], ["SMEMBERS", "cf:" + me], ["GET", "ai:" + me]]);
+  const [name, pids, used, h] = await redis([["GET", "cu:" + me], ["SMEMBERS", "cf:" + me], ["GET", "ai:" + me], ["GET", "hp:" + me]]);
   const list = Array.isArray(pids) ? pids.slice(0, MAX_CIRCLE) : [];
-  const names = list.length ? await redis(list.map((p) => ["GET", "cu:" + p])) : [];
-  return { name: name || "", members: list.map((p, i) => ({ pid: p, name: names[i] || "" })).sort((a, b) => a.name.localeCompare(b.name)), left: Math.max(0, ACCESS_MAX - Number(used || 0)) };
+  const nh = list.length ? await redis(list.flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p]])) : []; // v355: + @handle (accounts only)
+  return { name: name || "", h: h || "", members: list.map((p, i) => ({ pid: p, name: nh[i * 2] || "", h: nh[i * 2 + 1] || "" })).sort((a, b) => a.name.localeCompare(b.name)), left: Math.max(0, ACCESS_MAX - Number(used || 0)) };
 }
 
 // Recipes put in « Cercle » by the people of my circle, newest first. A copy deleted by its author (s:<sid> gone) is dropped.
@@ -152,11 +152,11 @@ async function feed(me) {
   const [pids] = await redis([["SMEMBERS", "cf:" + me]]);
   const list = Array.isArray(pids) ? pids.slice(0, MAX_CIRCLE) : [];
   if (!list.length) return [];
-  const out = await redis(list.flatMap((p) => [["ZREVRANGE", "cp:" + p, "0", "29", "WITHSCORES"], ["GET", "cu:" + p]]));
+  const out = await redis(list.flatMap((p) => [["ZREVRANGE", "cp:" + p, "0", "29", "WITHSCORES"], ["GET", "cu:" + p], ["GET", "hp:" + p]]));
   const posts = [];
   list.forEach((p, i) => {
-    const z = out[i * 2] || [], by = out[i * 2 + 1] || "";
-    for (let k = 0; k + 1 < z.length; k += 2) posts.push({ sid: z[k], at: Number(z[k + 1]) || 0, by, pid: p });
+    const z = out[i * 3] || [], by = out[i * 3 + 1] || "", bh = out[i * 3 + 2] || "";
+    for (let k = 0; k + 1 < z.length; k += 2) posts.push({ sid: z[k], at: Number(z[k + 1]) || 0, by, bh, pid: p });
   });
   posts.sort((a, b) => b.at - a.at);
   const top = posts.slice(0, FEED);
@@ -167,6 +167,6 @@ async function feed(me) {
   return top.map((x, i) => {
     const d = docs[i];
     if (!d || (d.rs && !live.has(d.rs))) return null;
-    return { sid: x.sid, t: String(d.title || "").slice(0, 120), l: d.lang || "", by: x.by, og: d.by || "", rs: d.rs || "", at: x.at, ph: d.ph && d.ph.t ? { t: d.ph.t } : null };
+    return { sid: x.sid, t: String(d.title || "").slice(0, 120), l: d.lang || "", by: x.by, bh: x.bh, og: d.by || "", rs: d.rs || "", at: x.at, ph: d.ph && d.ph.t ? { t: d.ph.t } : null };
   }).filter(Boolean);
 }
