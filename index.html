@@ -3258,7 +3258,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v370',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v371',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -4351,7 +4351,7 @@ function renderShop(){
     hd.onclick=()=>{aisleToggle(aid);try{localStorage.setItem('chefAisleHint','1')}catch(e){}renderShop()};
     box.appendChild(hd);
     if(colp[aid])return;
-    grp.sort((a,b)=>(a.x.d?1:0)-(b.x.d?1:0)||a.i-b.i).forEach(({x,i})=>{
+    grp.forEach(g=>{g.n=qKey(g.x.t)});grp.sort((a,b)=>(a.x.d?1:0)-(b.x.d?1:0)||a.n.localeCompare(b.n,lang,{sensitivity:'base'})||a.i-b.i).forEach(({x,i})=>{
     const row=document.createElement('div');row.className='shop-row'+(x.d?' done':'');
     const ck=document.createElement('span');ck.className='sck';ck.textContent=x.d?'✓':'';
     const st=document.createElement('span');st.className='st';st.textContent=x.t;
