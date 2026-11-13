@@ -12,6 +12,27 @@ const handleOf = async (docs) => { const ps = docs.map((d) => (d && d.pub ? d.bp
 // v248: index « s:ck » (comment/rating key → {sid,t,l}) and counter « s:pop » (people who really shared it, POST {sid, hit:1}), read by the weekly menu (api/week-menu.js).
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
+  // v373: PUBLIC preview page of a shared cooking QUESTION (/q/<id> → here): the card shows the question and the start of the answer. The text comes from a record the app stored (POST {qa:1}), never from the URL, so nobody can print arbitrary text under our address.
+  if (req.method === "GET" && req.query && req.query.ogq != null) {
+    const qid = String(req.query.ogq || "");
+    const host = String(req.headers["x-forwarded-host"] || req.headers.host || "").replace(/[^a-z0-9.:-]/gi, "");
+    const base = host ? "https://" + host : "";
+    const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    let qq = "", aa = "", ll = "fr";
+    if (/^q[a-f0-9]{11,31}$/.test(qid)) {
+      try { const [raw] = await redis([["GET", "sq:" + qid]]); const d = raw ? JSON.parse(raw) : null; if (d) { qq = String(d.q || "").slice(0, 200); aa = String(d.a || "").slice(0, 220); ll = String(d.l || "fr"); } } catch {}
+    }
+    const fr = /^fr/.test(ll);
+    const title = qq ? "❓ " + qq : "Chef IA";
+    const desc = qq ? (aa ? aa + " " : "") + (fr ? "Touchez pour lire la réponse du chef sur Chef IA." : "Tap to read the chef’s answer on Chef IA.") : (fr ? "Une question de cuisine sur Chef IA." : "A cooking question on Chef IA.");
+    const target = qq ? "/?q=" + encodeURIComponent(qq) : "/";
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
+    return res.status(200).send('<!DOCTYPE html><html lang="' + (fr ? "fr" : "en") + '"><head><meta charset="utf-8"><title>' + esc(title) + ' – Chef IA</title><meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<meta property="og:type" content="article"><meta property="og:site_name" content="Chef IA"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
+      + (base ? '<meta property="og:image" content="' + esc(base + "/icons/icon-512.png") + '"><meta property="og:url" content="' + esc(base + "/q/" + qid) + '">' : "")
+      + '<meta http-equiv="refresh" content="0;url=' + esc(target) + '"></head><body><script>location.replace(' + JSON.stringify(target) + ')</script><p><a href="' + esc(target) + '">Chef IA</a></p></body></html>');
+  }
   // v372: PUBLIC preview page of a shared link (/r/<sid> → here, see vercel.json): the Open Graph card WhatsApp / iMessage show (title, photo, rating), then the browser is sent to the app (/?s=<sid>). Only the title, the photo and the rating are exposed, like the link itself.
   if (req.method === "GET" && req.query && req.query.og != null) {
     const osid = String(req.query.og || "");
@@ -57,6 +78,16 @@ export default async function handler(req, res) {
   if (req.method === "GET" && q.q != null && q.sid == null) {
     if (await overLimit(req, "rl:cs:", 30)) return res.status(429).json({ error: "rate" });
     return res.status(200).json({ items: await searchShared(String(q.q), clean(q.lang, 5), 6, owner) });
+  }
+  // v373: store a shared cooking question (question + start of the answer) for its preview card; id = hash of the text, 90 days
+  if (req.method === "POST" && body.qa) {
+    if (!owner) return res.status(400).json({ error: "key" });
+    if (await overLimit(req, "rl:sq:", 20)) return res.status(429).json({ error: "rate" });
+    const qq = clean(body.q, 200), aa = clean(body.a, 220), ll = clean(body.lang, 5) || "fr";
+    if (!qq) return res.status(400).json({ error: "key" });
+    const id = "q" + createHash("sha256").update("qa|" + qq + "|" + aa).digest("hex").slice(0, 16);
+    await redis([["SET", "sq:" + id, JSON.stringify({ q: qq, a: aa, l: ll }), "EX", "7776000"]]);
+    return res.status(200).json({ ok: true, id });
   }
   const sid = String((req.method === "POST" ? body.sid : q.sid) || "");
   if (!/^[a-z0-9-]{8,64}$/.test(sid)) return res.status(400).json({ error: "key" });
