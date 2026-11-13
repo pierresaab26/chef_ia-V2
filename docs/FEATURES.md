@@ -504,3 +504,5 @@ Friends who use the app with a nickname but no account (sign-in mails only reach
 - Server (`api/circle.js`): `GET ?profile=<@>`, `GET ?following=1`, `POST {act:follow|unfollow,pid}` (account or device @ needed, 200 follows max). Redis `fo:` `fw:` `pp:` `ppb:`. Publishing (`api/_publish.js`) fills `pp:` and notifies followers outside the circle (`fpub`, `api/_notify.js`).
 - Limits: not tested on the real Redis; older publications are added to an author's list the first time his profile is read.
 - v364: on the community search results (« Recette de la communauté ») and on the badge of a saved community recipe, the author's name is a link to his profile, where « Suivre » is. Results carry `by` / `bh` (`api/shared.js`); authors without an @ are plain text.
+
+v365: a recipe I published myself shows « Publiée par toi-même » in the community search (`mine` flag from `api/shared.js`).
