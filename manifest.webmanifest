@@ -1,7 +1,10 @@
 {
+  "id": "/",
   "name": "Chef IA",
   "short_name": "Chef IA",
   "description": "Votre chef de poche, propulsé par l'IA",
+  "lang": "fr",
+  "categories": ["food", "lifestyle"],
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

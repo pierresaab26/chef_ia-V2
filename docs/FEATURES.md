@@ -390,7 +390,8 @@ Seasonal menu labels `snPrevT` / `snFold`: « Recettes des 3 jours précédents 
 
 ## Install on the home screen (v295–v296)
 
-- `manifest.webmanifest`, `icons/*`, `sw.js` (no cache, offline page only) make the site installable.
+- `manifest.webmanifest`, `icons/*`, `sw.js` make the site installable.
+- Offline (v353): `sw.js` keeps a copy of the app page in the cache `chef-ia-shell`. Pages are network first (6 s timeout), so a connected user always gets the newest version; offline, or too slow, the last good copy opens (also from an invitation link `/?c=`). Icons and manifest are refreshed in the background. `/api/*`, POST requests and remote images (Unsplash) are never cached: chat, imports, circle and photos need the network; the history, favorites and shopping lists (device storage) stay readable offline.
 - Android only (v296): when the browser fires `beforeinstallprompt` (installable, not installed), a thin bottom pop-up `#a2pop` « Installe Chef IA sur ton téléphone · Installer · ✕ » and a drawer item `#dA2hs` open the native install prompt. ✕ or a refused install hides it for 3 days (localStorage `a2Hide`). Hidden while typing and on the recipe card.
 - iOS: nothing is offered (the installed app would have its own storage, separate from Safari: no history, no circle).
 
