@@ -1,8 +1,9 @@
 import { createHash, randomBytes } from "node:crypto";
 import { authOk, hasAccess, hasRedis, redis, overLimit, clean } from "./_lib.js";
-import { notifyCircle, readNotes, markSeen } from "./_notify.js";
+import { notifyCircle, notifyOne, readNotes, markSeen } from "./_notify.js";
+import { indexPerson, searchPeople } from "./_index.js"; // v358: find people by pseudo / @
 import { isOffensive } from "./_words.js"; // v356
-import authHandler from "./_auth.js"; // v354: « /api/auth » (accounts, e-mail sign-in) is served by this route too
+import authHandler, { sessionUid } from "./_auth.js"; // v354: « /api/auth » (accounts, e-mail sign-in) is served by this route too
 import publishHandler from "./_publish.js"; // v293: « /api/publish » is served by this route (rewrite in vercel.json) to stay within 12 functions
 
 // v287: identity (pseudo) and circle (community plan steps 6 and 7).
@@ -63,6 +64,17 @@ export default async function handler(req, res) {
         } else sids.forEach((sid) => { live[sid] = false; });
         return res.status(200).json({ live });
       }
+      if (q.search != null) { // v358: people search (accounts with an @ only), signed-in users only
+        if (!(await sessionUid(req))) return res.status(401).json({ error: "session" });
+        if (await overLimit(req, "rl:cs:", 30)) return res.status(429).json({ error: "rate" });
+        const pids = (await searchPeople(q.search, 11)).filter((p) => p !== me).slice(0, 10);
+        if (!pids.length) return res.status(200).json({ items: [] });
+        const r = await redis(pids.flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p], ["SISMEMBER", "cf:" + me, p], ["HEXISTS", "cr:" + p, me], ["HEXISTS", "cr:" + me, p]]));
+        const items = pids.map((p, i) => { const [n, h, inC, sent, asked] = r.slice(i * 5, i * 5 + 5);
+          return h ? { pid: p, name: n || "", h, state: Number(inC) ? "in" : Number(asked) ? "asked" : Number(sent) ? "sent" : "" } : null; }).filter(Boolean);
+        return res.status(200).json({ items });
+      }
+      try { await indexPerson(me); } catch {} // v358: accounts made before the index become findable
       return res.status(200).json(await whoami(me));
     }
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
@@ -74,6 +86,7 @@ export default async function handler(req, res) {
       if (!n) return res.status(400).json({ error: "name" });
       if (isOffensive(n)) return res.status(400).json({ error: "badword" }); // v356: offensive pseudo refused
       await redis([["SET", "cu:" + me, n]]);
+      try { await indexPerson(me); } catch {} // v358
       return res.status(200).json({ ok: true, name: n });
     }
     if (act === "invite") {
@@ -106,6 +119,37 @@ export default async function handler(req, res) {
       if (!/^[a-f0-9]{16}$/.test(p)) return res.status(400).json({ error: "key" });
       await redis([["SREM", "cf:" + me, p], ["SREM", "cf:" + p, me]]); // both sides: nobody stays in a circle he left
       return res.status(200).json({ ok: true });
+    }
+    // v358: circle REQUESTS (found by search): « cr:<target> » hash requester pid → time (30 days). Accepting makes the circle mutual.
+    if (act === "request" || act === "accept" || act === "decline") {
+      if (!(await sessionUid(req))) return res.status(401).json({ error: "session" });
+      const p = String(body.pid || "");
+      if (!/^[a-f0-9]{16}$/.test(p) || p === me) return res.status(400).json({ error: "key" });
+      const [myName, myH] = await redis([["GET", "cu:" + me], ["GET", "hp:" + me]]);
+      const join = async () => {
+        const [already, mine, theirs] = await redis([["SISMEMBER", "cf:" + me, p], ["SCARD", "cf:" + me], ["SCARD", "cf:" + p]]);
+        if (!Number(already) && (Number(mine) >= MAX_CIRCLE || Number(theirs) >= MAX_CIRCLE)) return false;
+        await redis([["SADD", "cf:" + me, p], ["SADD", "cf:" + p, me], ["HDEL", "cr:" + me, p], ["HDEL", "cr:" + p, me]]);
+        await notifyOne(p, { k: "reqok", by: myName || "", bh: myH || "", p: me });
+        return true;
+      };
+      if (act === "decline") { await redis([["HDEL", "cr:" + me, p]]); return res.status(200).json({ ok: true }); }
+      if (act === "accept") {
+        const [asked] = await redis([["HEXISTS", "cr:" + me, p]]);
+        if (!Number(asked)) return res.status(404).json({ error: "notfound" });
+        return (await join()) ? res.status(200).json({ ok: true, state: "in" }) : res.status(409).json({ error: "full" });
+      }
+      const [inC, theyAsked, hp] = await redis([["SISMEMBER", "cf:" + me, p], ["HEXISTS", "cr:" + me, p], ["GET", "hp:" + p]]);
+      if (!hp) return res.status(404).json({ error: "notfound" }); // only accounts with an @ can be asked
+      if (Number(inC)) return res.status(200).json({ ok: true, state: "in" });
+      if (Number(theyAsked)) return (await join()) ? res.status(200).json({ ok: true, state: "in" }) : res.status(409).json({ error: "full" }); // both asked: done
+      const day = new Date().toISOString().slice(0, 10);
+      const [cnt] = await redis([["INCR", "crq:" + me + ":" + day], ["EXPIRE", "crq:" + me + ":" + day, "90000"]]);
+      if (Number(cnt) > 20) return res.status(429).json({ error: "limit" }); // 20 requests a day
+      const [was] = await redis([["HEXISTS", "cr:" + p, me]]);
+      await redis([["HSET", "cr:" + p, me, String(Date.now())], ["EXPIRE", "cr:" + p, String(30 * 86400)]]);
+      if (!Number(was)) await notifyOne(p, { k: "req", by: myName || "", bh: myH || "", p: me });
+      return res.status(200).json({ ok: true, state: "sent" });
     }
     if (act === "post" || act === "unpost") {
       const sid = String(body.sid || "");
@@ -146,7 +190,11 @@ async function whoami(me) {
   const [name, pids, used, h] = await redis([["GET", "cu:" + me], ["SMEMBERS", "cf:" + me], ["GET", "ai:" + me], ["GET", "hp:" + me]]);
   const list = Array.isArray(pids) ? pids.slice(0, MAX_CIRCLE) : [];
   const nh = list.length ? await redis(list.flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p]])) : []; // v355: + @handle (accounts only)
-  return { name: name || "", h: h || "", members: list.map((p, i) => ({ pid: p, name: nh[i * 2] || "", h: nh[i * 2 + 1] || "" })).sort((a, b) => a.name.localeCompare(b.name)), left: Math.max(0, ACCESS_MAX - Number(used || 0)) };
+  const [rq] = await redis([["HGETALL", "cr:" + me]]); // v358: pending requests to me
+  const rpids = []; for (let i = 0; i + 1 < (rq || []).length; i += 2) if (!list.includes(rq[i])) rpids.push(rq[i]);
+  const rn = rpids.length ? await redis(rpids.slice(0, 30).flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p]])) : [];
+  const reqs = rpids.slice(0, 30).map((p, i) => ({ pid: p, name: rn[i * 2] || "", h: rn[i * 2 + 1] || "" }));
+  return { reqs, name: name || "", h: h || "", members: list.map((p, i) => ({ pid: p, name: nh[i * 2] || "", h: nh[i * 2 + 1] || "" })).sort((a, b) => a.name.localeCompare(b.name)), left: Math.max(0, ACCESS_MAX - Number(used || 0)) };
 }
 
 // Recipes put in « Cercle » by the people of my circle, newest first. A copy deleted by its author (s:<sid> gone) is dropped.

@@ -462,3 +462,12 @@ Photo and link imports ask Cloudflare Turnstile for a fresh token first (invisib
 - Offensive names (v356): `api/_words.js` refuses offensive words (6 languages, look-alike digits and separators caught, ambiguous words only as whole words) in the @handle (live message « Cet identifiant n’est pas autorisé », « Valider » disabled), the e-mail of a sign-in (« Cette adresse e-mail ne peut pas être utilisée », no mail sent), the pseudo (refused and asked again) and the author name of a comment (shown as « Anonymous », the comment stays). Comment texts and recipe titles are not filtered yet.
 - Imported word lists (v357): on top of the hand-made lists, `api/_wordlist.js` holds 5,781 offensive words from public lists (LDNOOBW in all latin-script languages, cuss, profane-words, 2toad English), checked as whole words only. Everyday and cooking words found in them were removed after scanning the app's own vocabulary and the 30,000 most common words of the 6 languages. A lone « con » (« arroz con leche »), « bite », « retard » or « bâtard » is allowed; « gros con », « sale con »… and « pédé » (with accents) are refused.
 
+
+
+## Find a friend, circle requests, invitation QR (v358)
+
+In « Mon cercle » → « Membres »:
+- « Mon pseudo » box: « ✏️ Modifier » and « ▦ QR ». The QR is the same invitation link as « Inviter » (`/?c=<code>`, 7 days): the friend scans it with the phone camera and joins as with the link (if he has no access yet, it counts on the inviter's 3 new friends, v329).
+- « Demandes reçues »: people who asked to join my circle, with Accepter / Refuser. Accepting makes the circle mutual, like an invitation link; the requester gets « X a accepté » in Activité.
+- « Rechercher un ami »: one field for the pseudo OR the @ (3 characters minimum, any word of the pseudo, 10 results). Only accounts with an @ can be found and can search; without an account the app shows « Connecte-toi… » and the invite link / QR still work. Each result: Inviter → « Demande envoyée »; « ✓ Dans ton cercle »; « Accepter » when that person already asked. If both ask each other, they are joined at once. 20 requests a day per person; a request expires after 30 days.
+- Server: `api/_index.js` (index `hx`), `GET /api/circle?search=`, `POST act:request|accept|decline`, `cr:<pid>` pending requests, notifications `req` / `reqok`. No e-mail and no recipe is ever searchable.

@@ -1,6 +1,7 @@
 import { createHash, randomBytes, randomInt } from "node:crypto";
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
-import { isOffensive } from "./_words.js"; // v356: offensive handles / e-mails refused
+import { isOffensive } from "./_words.js";
+import { indexPerson } from "./_index.js"; // v358: people search index // v356: offensive handles / e-mails refused
 
 // v354: user accounts, sign-in by e-mail (magic link + 6-digit code). Served as « /api/auth » by api/circle.js (rewrite in vercel.json),
 // to stay within the 12 functions of the Vercel Hobby plan.
@@ -145,6 +146,7 @@ export default async function authHandler(req, res, pidOf) {
       if (!got) return res.status(409).json({ error: "taken" });
       const old = acc.h; acc.h = hd;
       await redis([["SET", "au:" + uid, JSON.stringify(acc)], ["SET", "hp:" + pidOf(acc.o), hd], ...(old ? [["DEL", "ah:" + old]] : [])]);
+      try { await indexPerson(pidOf(acc.o)); } catch {} // v358: findable by @ and pseudo
       return res.status(200).json({ ok: true, handle: hd });
     }
     if (body.act === "logout" || body.act === "logoutAll") {
