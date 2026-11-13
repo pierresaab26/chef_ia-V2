@@ -61,3 +61,5 @@ The same invitation link lets a person WITHOUT access in: `POST /api/circle {act
 - Ratings / comment counts on the circle feed rows.
 - Read-only comments are enforced in the browser only.
 - Not tested on the real Redis for v355–v363.
+
+**v370:** the server, not the clients' clocks, orders the changes of a shared list: every item / deletion received is stamped with the server time and the last one received wins (a phone with a wrong clock no longer loses its edits).

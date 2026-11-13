@@ -4,8 +4,8 @@ import { notifyOne } from "./_notify.js";
 // v369: « famille » status + shared shopping lists (served by api/circle.js, no new route).
 // Redis: fm:<pid> set of my family pids (mutual) · fq:<target> hash requester pid → time (pending family requests, 30 days)
 //        sl:<id> JSON {id, o: owner pid, name, nts, items:[{k, i, ts}], gone:{k: ts}, v, m:[pids]} · sm:<pid> set of list ids I am in.
-// A shared list is merged item by item (key = lower-case item text, ts = client time of its last change, newest wins; a deleted item is
-// remembered in « gone » so an older copy cannot bring it back). Every change bumps v; clients poll GET ?sl=<id>&v=<v> (cheap « same »).
+// A shared list is merged item by item (key = lower-case item text, ts = SERVER time of its last change (v370: client clocks are never trusted); a deleted item is
+// remembered in « gone »). Every change bumps v; clients poll GET ?sl=<id>&v=<v> (cheap « same »).
 const MAX_FAM = 30, MAX_ITEMS = 300, MAX_MEMBERS = 8, MAX_LISTS = 30, ID = /^[A-Za-z0-9_.-]{4,40}$/, PID = /^[a-f0-9]{16}$/;
 const cut = (s, n) => String(s == null ? "" : s).slice(0, n);
 
@@ -27,20 +27,22 @@ function cleanItem(it) {
   return { k, i, ts };
 }
 function merge(l, items, gone) {
+  // v370: the SERVER decides the order of changes (its own clock), never the clients' clocks: every item or deletion a client sends is
+  // a change it made on purpose (it only sends what differs from its last sync), so it is applied and stamped now.
   let changed = false;
+  const now = Date.now();
   for (const raw of items.slice(0, MAX_ITEMS)) {
     const it = cleanItem(raw); if (!it) continue;
-    if ((l.gone[it.k] || 0) >= it.ts) continue;
     const at = l.items.findIndex((x) => x.k === it.k);
-    if (at >= 0) { if (it.ts > l.items[at].ts) { l.items[at] = it; changed = true; } }
-    else if (l.items.length < MAX_ITEMS) { l.items.push(it); changed = true; }
+    if (at >= 0) {
+      if (JSON.stringify(l.items[at].i) === JSON.stringify(it.i)) continue;
+      l.items[at] = { k: it.k, i: it.i, ts: Math.max(now, l.items[at].ts + 1) }; changed = true;
+    } else if (l.items.length < MAX_ITEMS) { l.items.push({ k: it.k, i: it.i, ts: now }); delete l.gone[it.k]; changed = true; }
   }
-  for (const [k0, t] of Object.entries(gone && typeof gone === "object" ? gone : {}).slice(0, MAX_ITEMS)) {
-    const k = cut(k0, 200).toLowerCase().trim(), ts = Number(t);
-    if (!k || !Number.isFinite(ts)) continue;
+  for (const k0 of Object.keys(gone && typeof gone === "object" ? gone : {}).slice(0, MAX_ITEMS)) {
+    const k = cut(k0, 200).toLowerCase().trim(); if (!k) continue;
     const at = l.items.findIndex((x) => x.k === k);
-    if (at >= 0 && l.items[at].ts <= ts) { l.items.splice(at, 1); changed = true; }
-    if ((l.gone[k] || 0) < ts) { l.gone[k] = ts; changed = true; }
+    if (at >= 0) { l.items.splice(at, 1); l.gone[k] = now; changed = true; }
   }
   const keys = Object.keys(l.gone);
   if (keys.length > MAX_ITEMS) keys.sort((a, b) => l.gone[a] - l.gone[b]).slice(0, keys.length - MAX_ITEMS).forEach((k) => delete l.gone[k]);
@@ -133,9 +135,9 @@ export async function famAct(act, body, me, res, ctx) {
   if (!l || !l.m.includes(me)) return res.status(404).json({ error: "gone" });
   if (act === "sl_sync") {
     const ch = merge(l, Array.isArray(body.items) ? body.items : [], body.gone);
-    const nts = Number(body.nts) || 0, nm = cut(body.name, 80);
+    const nm = cut(body.name, 80);
     let rn = false;
-    if (nm && nts > (l.nts || 0)) { l.name = nm; l.nts = nts; rn = true; }
+    if (nm && nm !== l.name) { l.name = nm; l.nts = Date.now(); rn = true; }
     if (ch || rn) { l.v++; await save(l); }
     return res.status(200).json(await state(l, me));
   }
