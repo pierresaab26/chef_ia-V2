@@ -448,3 +448,14 @@ Menu-card photo locked at 132 px square (no size change when the real photo load
 
 ### Import: human check (v343)
 Photo and link imports ask Cloudflare Turnstile for a fresh token first (invisible; a small modal only if Cloudflare asks for a click). The server verifies it before any model call (403 `captcha`). Active only when `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET` are set in Vercel. The manual form and the failure reports need no check.
+
+## Account (v354)
+
+- Optional. Drawer row « 👤 Se connecter » (subtitle « Retrouver mes recettes sur tous mes appareils »); once signed in it shows « Mon compte » and the e-mail; tapping it offers « Se déconnecter ».
+- Sign-in without password: the person types an e-mail and receives a mail (Resend) with a 6-digit code and a link `/?login=<token>`, both valid 15 minutes. The code is typed in the app (useful in an installed iPhone app, where mail links open in Safari); the link signs in the device that opens it, once.
+- Limits: 5 wrong codes then a new mail is needed; 5 mails per address per hour; starting a sign-in needs the app access code like any feature.
+- The account keeps the device identity (`owner`) of its first device. Signing in on another device gives it that identity: same pseudo, same circle, same ratings and publications. If the device had another pseudo, it asks first.
+- Session: one token per device (1 year, max 20 devices), ended by « Se déconnecter » (this device) or `logoutAll` (all devices, no button yet).
+- Google and Apple sign-in are prepared (account model, switches `AUTH_GOOGLE` / `AUTH_APPLE` + client ids) but not active.
+- Not yet: recipes, favorites, ratings and shopping lists stay on each device (sync planned next). Until a domain is verified in Resend, sign-in mails only reach the Resend account owner's address.
+

@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { authOk, hasAccess, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { notifyCircle, readNotes, markSeen } from "./_notify.js";
+import authHandler from "./_auth.js"; // v354: « /api/auth » (accounts, e-mail sign-in) is served by this route too
 import publishHandler from "./_publish.js"; // v293: « /api/publish » is served by this route (rewrite in vercel.json) to stay within 12 functions
 
 // v287: identity (pseudo) and circle (community plan steps 6 and 7).
@@ -16,6 +17,7 @@ export const cleanName = (s) => clean(s, 24).replace(/[<>"]/g, "").replace(/\s+/
 
 export default async function handler(req, res) {
   if (req.query && req.query.via === "pub") return publishHandler(req, res); // v293: /api/publish → /api/circle?via=pub
+  if (req.query && req.query.via === "auth") return authHandler(req, res, pidOf); // v354: /api/auth → /api/circle?via=auth
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
   // v329: ONE invitation link (/?c=<code>) = join my circle AND, for a friend who has no access yet, get in.
   // « redeem » is the only call allowed without access: someone who already has access gets nothing new (free, unlimited);
