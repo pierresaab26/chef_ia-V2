@@ -506,3 +506,5 @@ Friends who use the app with a nickname but no account (sign-in mails only reach
 - v364: on the community search results (« Recette de la communauté ») and on the badge of a saved community recipe, the author's name is a link to his profile, where « Suivre » is. Results carry `by` / `bh` (`api/shared.js`); authors without an @ are plain text.
 
 v365: a recipe I published myself shows « Publiée par toi-même » in the community search (`mine` flag from `api/shared.js`).
+
+v366: « Mon cercle → Activité »: every notification that points to a recipe is a clickable row (« Voir la recette → » / « Voir le commentaire → »); a mention scrolls to and highlights the comment.

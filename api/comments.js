@@ -54,7 +54,7 @@ export default async function handler(req, res) {
       const c = { id: randomUUID(), name, text, ts: Date.now(), o: owner };
       await redis([["LPUSH", listKey, JSON.stringify(c)], ["LTRIM", listKey, 0, 99]]);
       let mentioned = 0;
-      try { mentioned = await notifyMentions(text, owner, name, key, clean(body.title, 120)); } catch {} // v360: never blocks the comment
+      try { mentioned = await notifyMentions(text, owner, name, key, clean(body.title, 120), clean(body.sid, 64), c.id); } catch {} // v360: never blocks the comment
       return res.status(201).json({ comment: { id: c.id, name, text, ts: c.ts, mine: true }, mentioned });
     }
 
@@ -135,10 +135,11 @@ export function mentionsIn(text) {
   return out;
 }
 const pidOf = (owner) => createHash("sha256").update("circle|" + owner).digest("hex").slice(0, 16); // same as api/circle.js
-async function notifyMentions(text, owner, name, key, title) {
+async function notifyMentions(text, owner, name, key, title, sid, cid) {
   const hs = mentionsIn(text);
   if (!hs.length || !owner) return 0;
   const me = pidOf(owner);
+  if (!/^[a-z0-9-]{8,64}$/.test(sid || "")) sid = ""; else { const [ex] = await redis([["EXISTS", "s:" + sid]]); if (!Number(ex)) sid = ""; } // v366: link to the recipe only if its shared copy exists
   const day = new Date().toISOString().slice(0, 10);
   const [used] = await redis([["GET", "mn:" + me + ":" + day]]);
   let left = 30 - Number(used || 0);
@@ -153,7 +154,7 @@ async function notifyMentions(text, owner, name, key, title) {
     if (String(v).startsWith("p:")) pid = String(v).slice(2);
     else { const [raw] = await redis([["GET", "au:" + v]]); try { pid = pidOf(JSON.parse(raw).o); } catch {} }
     if (!pid || pid === me) continue;
-    await notifyOne(pid, { k: "men", by: myName || name || "", bh: myH || "", t: title || "", x: text, ck: key });
+    await notifyOne(pid, { k: "men", by: myName || name || "", bh: myH || "", t: title || "", x: text, ck: key, sid, cid });
     n++; left--;
   }
   if (n) { try { await redis([["INCRBY", "mn:" + me + ":" + day, String(n)], ["EXPIRE", "mn:" + me + ":" + day, "90000"]]); } catch {} }
