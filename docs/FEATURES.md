@@ -471,3 +471,12 @@ In « Mon cercle » → « Membres »:
 - « Demandes reçues »: people who asked to join my circle, with Accepter / Refuser. Accepting makes the circle mutual, like an invitation link; the requester gets « X a accepté » in Activité.
 - « Rechercher un ami »: one field for the pseudo OR the @ (3 characters minimum, any word of the pseudo, 10 results). Only accounts with an @ can be found and can search; without an account the app shows « Connecte-toi… » and the invite link / QR still work. Each result: Inviter → « Demande envoyée »; « ✓ Dans ton cercle »; « Accepter » when that person already asked. If both ask each other, they are joined at once. 20 requests a day per person; a request expires after 30 days.
 - Server: `api/_index.js` (index `hx`), `GET /api/circle?search=`, `POST act:request|accept|decline`, `cr:<pid>` pending requests, notifications `req` / `reqok`. No e-mail and no recipe is ever searchable.
+
+
+## An @ for friends without account (v359)
+
+Friends who use the app with a nickname but no account (sign-in mails only reach the owner until a Resend domain is verified) can get an @ from the admin:
+- `https://chefia-v3.vercel.app/api/moderation?key=<CRON_SECRET>&handles=1` shows the @ that would be given (nothing is written).
+- Add `&apply=1` to give them. Each @ is built from the nickname (« Marie Dupont » → `@marie.dupont`, digits added if already taken). Nicknames that already have an @ are skipped; running it again does nothing.
+- With that @ the friend shows as « Name · @name » in circles, is found by « Rechercher un ami », can search, send and accept requests, and has his @ in the QR dialog, without account.
+- If he signs in later, his account keeps that @ automatically.

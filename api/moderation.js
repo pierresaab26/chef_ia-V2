@@ -9,6 +9,8 @@
 // &stats=1 → counts of users (there are no accounts: a user = a device nickname) and activity, read-only.
 import { fail, redis, hasRedis } from "./_lib.js";
 import { randomBytes } from "node:crypto";
+import { suggest, handleOk } from "./_auth.js";
+import { indexPerson } from "./_index.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return fail(res, "method");
@@ -21,6 +23,7 @@ export default async function handler(req, res) {
   const q = req.query || {};
   try {
     if (q.stats) return res.status(200).json(await stats());
+    if (q.handles) return res.status(200).json(await deviceHandles(!!q.apply));
     if (q.invite || q.invites || q.revoke) return res.status(200).json(await invites(q, req));
     if (un) return res.status(200).json(await unblock(un));
     const [rows] = await redis([["LRANGE", "mod:log", 0, 99]]);
@@ -112,4 +115,35 @@ async function invites(q, req) {
     return { name, link: origin + "/?k=" + token };
   }
   return { count: (await rows()).length, invites: (await rows()).map((r) => ({ name: r.name, at: new Date(r.at).toISOString().slice(0, 10), link: origin + "/?k=" + r.token })) };
+}
+
+// v359: give an @ to every device that has a nickname (cu:<pid>) but no @ yet (hp:<pid>), so friends without account
+// show « Name · @name » and can be found. Dry run by default (proposed @ only); &apply=1 reserves them:
+// ah:<h> → "p:<pid>" (taken over by the account if that person signs in later), hp:<pid> → h, search index.
+async function deviceHandles(apply) {
+  const pids = [];
+  let cur = "0", loops = 0;
+  do {
+    const [r] = await redis([["SCAN", cur, "MATCH", "cu:*", "COUNT", 500]]);
+    cur = String(r[0]);
+    for (const k of r[1]) pids.push(k.slice(3));
+  } while (cur !== "0" && ++loops < 100);
+  const out = [], skipped = [];
+  for (const pid of pids.slice(0, 2000)) {
+    const [name, has] = await redis([["GET", "cu:" + pid], ["GET", "hp:" + pid]]);
+    if (has) { skipped.push({ name, handle: has, why: "has" }); continue; }
+    if (!name) continue;
+    let h = "";
+    for (let i = 0; i < 4 && !h; i++) {
+      const c = await suggest(name);
+      if (!c || !handleOk(c)) break;
+      if (!apply) { h = c; break; }
+      const [ok] = await redis([["SET", "ah:" + c, "p:" + pid, "NX"]]);
+      if (ok) h = c;
+    }
+    if (!h) { skipped.push({ name, why: "none" }); continue; }
+    if (apply) { await redis([["SET", "hp:" + pid, h]]); try { await indexPerson(pid); } catch {} }
+    out.push({ name, handle: h });
+  }
+  return { applied: apply, count: out.length, handles: out, skipped };
 }

@@ -65,7 +65,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ live });
       }
       if (q.search != null) { // v358: people search (accounts with an @ only), signed-in users only
-        if (!(await sessionUid(req))) return res.status(401).json({ error: "session" });
+        if (!(await socialOk(req, me))) return res.status(401).json({ error: "session" });
         if (await overLimit(req, "rl:cs:", 30)) return res.status(429).json({ error: "rate" });
         const pids = (await searchPeople(q.search, 11)).filter((p) => p !== me).slice(0, 10);
         if (!pids.length) return res.status(200).json({ items: [] });
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
     }
     // v358: circle REQUESTS (found by search): « cr:<target> » hash requester pid → time (30 days). Accepting makes the circle mutual.
     if (act === "request" || act === "accept" || act === "decline") {
-      if (!(await sessionUid(req))) return res.status(401).json({ error: "session" });
+      if (!(await socialOk(req, me))) return res.status(401).json({ error: "session" });
       const p = String(body.pid || "");
       if (!/^[a-f0-9]{16}$/.test(p) || p === me) return res.status(400).json({ error: "key" });
       const [myName, myH] = await redis([["GET", "cu:" + me], ["GET", "hp:" + me]]);
@@ -184,6 +184,13 @@ export async function liveRoots(roots) {
   if (!chk.length) return new Set();
   const sc = await redis(chk.map(([r, p]) => ["ZSCORE", "cp:" + p, r]));
   return new Set(chk.filter((x, i) => sc[i] != null).map((x) => x[0]));
+}
+
+// v359: search and requests need a signed-in account OR an @ on this device (given by the admin to friends without account).
+async function socialOk(req, me) {
+  if (await sessionUid(req)) return true;
+  const [h] = await redis([["GET", "hp:" + me]]);
+  return !!h;
 }
 
 async function whoami(me) {

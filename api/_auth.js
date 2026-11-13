@@ -31,7 +31,7 @@ function seedFrom(name) {
   if (isOffensive(b)) b = "chef"; // v356: never suggest a name built on an offensive pseudo
   return b;
 }
-async function suggest(name) {
+export async function suggest(name) {
   const b = seedFrom(name), c = [b];
   for (let i = 0; i < 6; i++) c.push(b.slice(0, 17) + String(randomInt(10, 1000)));
   const ok = c.filter(handleOk);
@@ -104,8 +104,22 @@ async function openSession(email, owner, pidOf) {
     const drop = (all || []).filter((x) => x !== th).slice(0, Number(n) - MAX_SESSIONS);
     if (drop.length) await redis([["SREM", "aS:" + uid, ...drop], ...drop.map((x) => ["DEL", "as:" + x])]);
   }
+  await adoptDeviceHandle(acc, uid, pidOf);
   const [name] = await redis([["GET", "cu:" + pidOf(acc.o)]]);
   return { ok: true, session: tok, owner: acc.o, email: acc.e, created, name: name || "", handle: acc.h || "" };
+}
+
+// v359: an @ given by the admin to a device without account is stored as ah:<h> → "p:<pid>". When that person
+// signs in (the account owner is that device), the account takes it over: ah:<h> → uid, au.h = h. No dialog.
+async function adoptDeviceHandle(acc, uid, pidOf) {
+  if (!acc || acc.h) return;
+  const pid = pidOf(acc.o);
+  const [hd] = await redis([["GET", "hp:" + pid]]);
+  if (!hd) return;
+  const [who] = await redis([["GET", "ah:" + hd]]);
+  if (who !== "p:" + pid) return;
+  acc.h = hd;
+  await redis([["SET", "ah:" + hd, uid], ["SET", "au:" + uid, JSON.stringify(acc)]]);
 }
 
 export default async function authHandler(req, res, pidOf) {
@@ -127,7 +141,7 @@ export default async function authHandler(req, res, pidOf) {
       const hd = normHandle(q.handle);
       const uid = await sessionUid(req);
       let free = false, mine = false;
-      if (handleOk(hd)) { const [who] = await redis([["GET", "ah:" + hd]]); free = !who; mine = !!uid && who === uid; }
+      if (handleOk(hd)) { const [who] = await redis([["GET", "ah:" + hd]]); const own = String(req.headers["x-owner"] || ""); free = !who; mine = (!!uid && who === uid) || (!!own && who === "p:" + pidOf(own)); }
       return res.status(200).json({ handle: hd, valid: handleOk(hd), bad: handleBad(hd), free: free || mine, suggest: q.name != null ? await suggest(q.name) : "" });
     }
     if (req.method !== "POST") return res.status(405).json({ error: "method" });
@@ -142,9 +156,10 @@ export default async function authHandler(req, res, pidOf) {
       const acc = JSON.parse(raw || "null");
       if (!acc) return res.status(401).json({ error: "session" });
       if (acc.h === hd) return res.status(200).json({ ok: true, handle: hd });
-      const [got] = await redis([["SET", "ah:" + hd, uid, "NX"]]);
+      let [got] = await redis([["SET", "ah:" + hd, uid, "NX"]]);
+      if (!got) { const [who] = await redis([["GET", "ah:" + hd]]); if (who === "p:" + pidOf(acc.o)) { await redis([["SET", "ah:" + hd, uid]]); got = "OK"; } } // v359: own device @
       if (!got) return res.status(409).json({ error: "taken" });
-      const old = acc.h; acc.h = hd;
+      let old = acc.h; if (!old) { const [ph] = await redis([["GET", "hp:" + pidOf(acc.o)]]); const [pw] = ph ? await redis([["GET", "ah:" + ph]]) : [null]; if (ph && ph !== hd && pw === "p:" + pidOf(acc.o)) old = ph; } acc.h = hd;
       await redis([["SET", "au:" + uid, JSON.stringify(acc)], ["SET", "hp:" + pidOf(acc.o), hd], ...(old ? [["DEL", "ah:" + old]] : [])]);
       try { await indexPerson(pidOf(acc.o)); } catch {} // v358: findable by @ and pseudo
       return res.status(200).json({ ok: true, handle: hd });
