@@ -521,3 +521,7 @@ v368: SYNC of recipes, favorites, shopping lists, weekly menu and visibility map
 
 ## Family and shared shopping lists (v369)
 See `docs/CIRCLE.md` (« Family and shared shopping lists »): family request in Mon cercle → Membres, « Partager avec ma famille » in a list, instant item-by-item sync (~2.5 s).
+
+
+### v376 — « 5 ingrédients » wording and complete mains
+The user's bubble shows only a short sentence (`fiveV`); the rules go as hidden context. A main dish = protein + side (vegetable or starch) within the 5 or 6 ingredients; `fiveCheck()` checks the side with `FIVE_SIDE` (keyword list, one re-ask).
