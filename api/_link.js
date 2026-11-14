@@ -198,8 +198,9 @@ function ask(force){var w=document.createElement('div');w.className='sheetw';w.i
  w.querySelector('h2').textContent=L.who;w.querySelector('p').textContent=L.whoH;var i=w.querySelector('input');i.placeholder=L.name;i.value=me;w.querySelector('.lt').textContent=L.later;w.querySelector('.go').textContent=L.ok;
  var end=function(save){if(save){var v=i.value.replace(/[<>"]/g,'').replace(/\\s+/g,' ').trim().slice(0,24);if(v){me=v;try{localStorage.setItem('lkName',v)}catch(e){}}}else if(!force){try{localStorage.setItem('lkAsked','1')}catch(e){}}w.remove();who()};
  w.querySelector('.go').onclick=function(){end(1)};w.querySelector('.lt').onclick=function(){end(0)};i.onkeydown=function(e){if(e.key==='Enter')end(1)};document.body.appendChild(w);setTimeout(function(){i.focus()},60)}
-function poll(){if(document.hidden||busy||pend.length||gonep.length)return;fetch(POST+'?j=1&v='+S.v,{cache:'no-store'}).then(function(r){if(r.status===404){location.reload();throw 0}if(!r.ok)throw 1;return r.json()}).then(function(st){setOff(0);if(!st.same)adopt(st)}).catch(function(e){if(e!==0)setOff(1)})}
-setInterval(poll,2500);document.addEventListener('visibilitychange',function(){if(!document.hidden)poll()});window.addEventListener('online',poll);
+var act=Date.now(),IDLE=180000;function wake(){var was=Date.now()-act>IDLE;act=Date.now();if(was)poll()}
+function poll(){if(document.hidden||Date.now()-act>IDLE||busy||pend.length||gonep.length)return;fetch(POST+'?j=1&v='+S.v,{cache:'no-store'}).then(function(r){if(r.status===404){location.reload();throw 0}if(!r.ok)throw 1;return r.json()}).then(function(st){setOff(0);if(!st.same)adopt(st)}).catch(function(e){if(e!==0)setOff(1)})}
+setInterval(poll,2500);document.addEventListener('visibilitychange',function(){if(!document.hidden){act=Date.now();poll()}});['pointerdown','keydown','touchstart','scroll','mousemove'].forEach(function(n){window.addEventListener(n,wake,{passive:true})});window.addEventListener('online',poll);
 render();who();var asked=0;try{asked=localStorage.getItem('lkAsked')}catch(e){}if(!me&&!asked)setTimeout(function(){ask(false)},700);
 })();
 `;
