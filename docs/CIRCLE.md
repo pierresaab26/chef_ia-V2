@@ -63,3 +63,9 @@ The same invitation link lets a person WITHOUT access in: `POST /api/circle {act
 - Not tested on the real Redis for v355–v363.
 
 **v370:** the server, not the clients' clocks, orders the changes of a shared list: every item / deletion received is stamped with the server time and the last one received wins (a phone with a wrong clock no longer loses its edits).
+
+## Shopping list link (v378)
+- **Owner**: `POST /api/circle {act:'sl_link', id, name, items, regen?}` creates the shared list if needed and returns its state with `lk` (24-char secret code, only the owner receives it). `sl_unlink` switches it off. Both owner-only (403 otherwise), need an account session or a device @. Redis: `sk:<code>` → list id (30 days, renewed at every use), `l.lk` on the list `sl:<id>`.
+- **Guests**: `GET /l/<code>` (HTML, state embedded), `GET /l/<code>?j=1&v=<v>` (JSON, `{same:true}`), `POST /l/<code> {items:[{t,d}], gone:[keys], by}`. Rewrite `/l/:code` → `/api/circle?via=lnk&c=<code>` (`vercel.json`); handled by `api/_link.js` without any access code. 600 requests / min per IP (`rl:lk:`). A guest only sets `d` (done), `b` (who ticked) and `u` (who added); never renames or deletes the list, never writes recipe fields. 20 changes per request.
+- The list remains a v369 shared list: guest changes are stamped by the server and reach the owner through the normal sync. Ending the shared list (`sl_leave` by the owner) deletes the link.
+- Links are public to whoever has the address: renew or switch it off from the list dialog.

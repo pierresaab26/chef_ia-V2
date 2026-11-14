@@ -5,6 +5,7 @@ import { indexPerson, searchPeople } from "./_index.js"; // v358: find people by
 import { isOffensive } from "./_words.js"; // v356
 import authHandler, { sessionUid } from "./_auth.js"; // v354: « /api/auth » (accounts, e-mail sign-in) is served by this route too
 import { famGet, famAct } from "./_family.js"; // v369: family status + shared shopping lists
+import linkHandler from "./_link.js"; // v378: public shopping-list link « /l/<code> »
 import syncHandler from "./_sync.js"; // v368: « /api/sync » (account data sync) is served by this route too
 import publishHandler from "./_publish.js"; // v293: « /api/publish » is served by this route (rewrite in vercel.json) to stay within 12 functions
 
@@ -25,6 +26,7 @@ export default async function handler(req, res) {
   if (req.query && req.query.via === "pub") return publishHandler(req, res); // v293: /api/publish → /api/circle?via=pub
   if (req.query && req.query.via === "auth") return authHandler(req, res, pidOf); // v354: /api/auth → /api/circle?via=auth
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
+  if (req.query && req.query.via === "lnk") return linkHandler(req, res); // v378: /l/<code> → /api/circle?via=lnk&c=<code> (no access code: the secret code is the key)
   // v329: ONE invitation link (/?c=<code>) = join my circle AND, for a friend who has no access yet, get in.
   // « redeem » is the only call allowed without access: someone who already has access gets nothing new (free, unlimited);
   // someone without access receives a personal token (table "ak") counted on the inviter's quota (ACCESS_MAX new people).

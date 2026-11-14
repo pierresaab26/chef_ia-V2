@@ -24,6 +24,10 @@
       "destination": "/api/shared?og=:sid"
     },
     {
+      "source": "/l/:code",
+      "destination": "/api/circle?via=lnk&c=:code"
+    },
+    {
       "source": "/api/publish",
       "destination": "/api/circle?via=pub"
     },

@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { redis, overLimit } from "./_lib.js";
 import { notifyOne } from "./_notify.js";
 
@@ -6,17 +7,19 @@ import { notifyOne } from "./_notify.js";
 //        sl:<id> JSON {id, o: owner pid, name, nts, items:[{k, i, ts}], gone:{k: ts}, v, m:[pids]} · sm:<pid> set of list ids I am in.
 // A shared list is merged item by item (key = lower-case item text, ts = SERVER time of its last change (v370: client clocks are never trusted); a deleted item is
 // remembered in « gone »). Every change bumps v; clients poll GET ?sl=<id>&v=<v> (cheap « same »).
+// v378: « Partager par lien »: l.lk = secret code of a public link /l/<code> (Redis sk:<code> → list id, 30 days, renewed on every use) served by api/_link.js.
+export const LINK_TTL = 30 * 86400;
 const MAX_FAM = 30, MAX_ITEMS = 300, MAX_MEMBERS = 8, MAX_LISTS = 30, ID = /^[A-Za-z0-9_.-]{4,40}$/, PID = /^[a-f0-9]{16}$/;
-const cut = (s, n) => String(s == null ? "" : s).slice(0, n);
+export const cut = (s, n) => String(s == null ? "" : s).slice(0, n);
 
-async function load(id) { const [raw] = await redis([["GET", "sl:" + id]]); try { return raw ? JSON.parse(raw) : null; } catch { return null; } }
-const save = (l) => redis([["SET", "sl:" + l.id, JSON.stringify(l), "EX", String(400 * 86400)]]);
+export async function load(id) { const [raw] = await redis([["GET", "sl:" + id]]); try { return raw ? JSON.parse(raw) : null; } catch { return null; } }
+export const save = (l) => redis([["SET", "sl:" + l.id, JSON.stringify(l), "EX", String(400 * 86400)]]);
 async function names(pids) {
   if (!pids.length) return [];
   const r = await redis(pids.flatMap((p) => [["GET", "cu:" + p], ["GET", "hp:" + p]]));
   return pids.map((p, i) => ({ pid: p, name: r[i * 2] || "", h: r[i * 2 + 1] || "" }));
 }
-const state = async (l, me) => ({ id: l.id, name: l.name, nts: l.nts || 0, v: l.v, mine: l.o === me, items: l.items, gone: l.gone, members: await names(l.m) });
+const state = async (l, me) => ({ id: l.id, name: l.name, nts: l.nts || 0, v: l.v, mine: l.o === me, lk: l.o === me ? l.lk || "" : "", items: l.items, gone: l.gone, members: await names(l.m) });
 
 function cleanItem(it) {
   if (!it || typeof it !== "object") return null;
@@ -26,7 +29,7 @@ function cleanItem(it) {
   if (!i || JSON.stringify(i).length > 3000) return null;
   return { k, i, ts };
 }
-function merge(l, items, gone) {
+export function merge(l, items, gone) {
   // v370: the SERVER decides the order of changes (its own clock), never the clients' clocks: every item or deletion a client sends is
   // a change it made on purpose (it only sends what differs from its last sync), so it is applied and stamped now.
   let changed = false;
@@ -131,6 +134,23 @@ export async function famAct(act, body, me, res, ctx) {
     for (const p of added) await notifyOne(p, { k: "slsh", by: myName || "", bh: myH || "", p: me, t: l.name });
     return res.status(200).json(await state(l, me));
   }
+  if (act === "sl_link" || act === "sl_unlink") { // v378
+    let l = await load(id);
+    if (l && l.o !== me) return res.status(403).json({ error: "forbidden" });
+    if (!l) {
+      if (act === "sl_unlink") return res.status(404).json({ error: "gone" });
+      const [n] = await redis([["SCARD", "sm:" + me]]);
+      if (Number(n) >= MAX_LISTS) return res.status(409).json({ error: "full" });
+      l = { id, o: me, name: cut(body.name, 80) || "Liste", nts: Date.now(), items: [], gone: {}, v: 1, m: [me] };
+      merge(l, Array.isArray(body.items) ? body.items : [], {});
+    }
+    if (l.lk && (act === "sl_unlink" || body.regen)) { await redis([["DEL", "sk:" + l.lk]]); l.lk = ""; }
+    if (act === "sl_link" && !l.lk) l.lk = randomBytes(18).toString("base64url");
+    l.v++;
+    await save(l);
+    await redis([["SADD", "sm:" + me, id], ...(l.lk ? [["SET", "sk:" + l.lk, id, "EX", String(LINK_TTL)]] : [])]);
+    return res.status(200).json(await state(l, me));
+  }
   const l = await load(id);
   if (!l || !l.m.includes(me)) return res.status(404).json({ error: "gone" });
   if (act === "sl_sync") {
@@ -142,7 +162,7 @@ export async function famAct(act, body, me, res, ctx) {
     return res.status(200).json(await state(l, me));
   }
   if (act === "sl_leave") {
-    if (l.o === me) { await redis([["DEL", "sl:" + id], ...l.m.map((p) => ["SREM", "sm:" + p, id])]); return res.status(200).json({ ok: true, ended: true }); }
+    if (l.o === me) { await redis([["DEL", "sl:" + id], ...(l.lk ? [["DEL", "sk:" + l.lk]] : []), ...l.m.map((p) => ["SREM", "sm:" + p, id])]); return res.status(200).json({ ok: true, ended: true }); }
     l.m = l.m.filter((p) => p !== me); l.v++; await save(l); await redis([["SREM", "sm:" + me, id]]);
     return res.status(200).json({ ok: true });
   }

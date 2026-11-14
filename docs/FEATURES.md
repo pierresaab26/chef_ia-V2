@@ -525,3 +525,6 @@ See `docs/CIRCLE.md` (« Family and shared shopping lists »): family request in
 
 ### v376 — « 5 ingrédients » wording and complete mains
 The user's bubble shows only a short sentence (`fiveV`); the rules go as hidden context. A main dish = protein + side (vegetable or starch) within the 5 or 6 ingredients; `fiveCheck()` checks the side with `FIVE_SIDE` (keyword list, one re-ask).
+
+### v378 — Shopping list shared by link
+A list can be shared with anyone through `https://<site>/l/<code>` (button « 🔗 Partager par lien » in the list). The page needs no app and no account: tick, add, remove items, live (2.5 s). Owner can copy / send, renew or switch off the link; the link lives 30 days after its last use. See `docs/CIRCLE.md` (« Shopping list link ») and CLAUDE.md v378.
