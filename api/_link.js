@@ -1,6 +1,7 @@
 import { redis, overLimit, clean } from "./_lib.js";
 import { load, save, merge, cut, LINK_TTL } from "./_family.js";
 import { isOffensive } from "./_words.js";
+import { aisleData } from "./_aisle.js";
 
 // v378: PUBLIC shopping-list link. https://<site>/l/<code> (rewrite in vercel.json → /api/circle?via=lnk&c=<code>, so still 12 functions).
 // No app, no account, no access code: the secret code in the address is the key (144 random bits, 30 days, renewed at every use,
@@ -173,14 +174,21 @@ function row(i){var li=document.createElement('li');if(i.d)li.className='d';
  var t=document.createElement('div');t.className='tx';var a=document.createElement('span');a.textContent=cap(i.t);t.appendChild(a);var s=sub(i);if(s){var m=document.createElement('small');m.textContent=s;t.appendChild(m)}
  var x=document.createElement('button');x.type='button';x.className='x';x.setAttribute('aria-label',L.del+' '+i.t);x.textContent='\\u2715';
  c.onclick=t.onclick=function(){tog(i)};x.onclick=function(){rm(i)};li.append(c,t,x);return li}
-function render(){var items=S.items||[],buy=items.filter(function(i){return!i.d}),got=items.filter(function(i){return i.d});
+var AR={o:D.A.o.map(function(x){return[x[0],new RegExp(x[1])]}),h:new RegExp(D.A.h)};
+function rank(line){var s=String(line).normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/\u0153/g,'oe').replace(/\\bnoix(?: de)? muscade/g,'muscade');if(AR.h.test(s))return 11;var best=null,pos=1e9;AR.o.forEach(function(x){var m=x[1].exec(s);if(m&&m.index<pos){pos=m.index;best=x[0]}});return best===null?-1:best}
+function aisleOf(t){var r=rank(t);for(var k=0;k<D.A.a.length;k++){if(D.A.a[k][2].indexOf(r)>=0)return k}return D.A.a.length-1}
+function nm(t){return String(t).toLowerCase().replace(/^\\s*[\\d.,\\/\\s]+(kg|g|gr|cl|ml|l|c\\.?\\s?[a-z]+)?\\b\\s*/,'').replace(/^(de |d'|du |des |of )/,'').trim()}
+function render(){var items=S.items||[],got=items.filter(function(i){return i.d});
  $('#ttl').textContent=S.name||'';document.title=(S.name||'Chef IA')+' \\u00b7 Chef IA';
  $('#sub').textContent=items.length===1?L.n1:f(L.nN,{n:items.length});
  var p=items.length?Math.round(got.length*100/items.length):0;$('#fill').style.width=p+'%';$('#prog').textContent=items.length?f(L.prog,{d:got.length,n:items.length}):'';
  $('#hero .bar').style.display=items.length?'':'none';
- var b=$('#buy'),g=$('#got');b.textContent='';g.textContent='';buy.forEach(function(i){b.appendChild(row(i))});got.forEach(function(i){g.appendChild(row(i))});
- $('#sbuy').hidden=!buy.length;$('#sgot').hidden=!got.length;$('#nb').textContent=buy.length;$('#ng').textContent=got.length;
- $('#empty').hidden=items.length>0;$('#alld').hidden=!(items.length&&!buy.length)}
+ var box=$('#aisles'),g=[];box.textContent='';D.A.a.forEach(function(){g.push([])});
+ items.forEach(function(i){g[aisleOf(i.t)].push(i)});
+ g.forEach(function(arr,k){if(!arr.length)return;arr.sort(function(a,b){return(a.d?1:0)-(b.d?1:0)||nm(a.t).localeCompare(nm(b.t),D.l)});
+  var a=D.A.a[k],h=document.createElement('div');h.className='sec';var e=document.createElement('span');e.textContent=a[1];var lb=document.createElement('span');lb.textContent=a[3][D.i]||a[3][0];var c=document.createElement('em');c.textContent=arr.filter(function(i){return i.d}).length+'/'+arr.length;h.append(e,lb,c);
+  var ul=document.createElement('ul');arr.forEach(function(i){ul.appendChild(row(i))});box.append(h,ul)});
+ $('#empty').hidden=items.length>0;$('#alld').hidden=!(items.length&&got.length===items.length)}
 function adopt(st){if(pend.length||gonep.length||!st||!st.items)return;S=st;render();setOff(0)}
 function setOff(v){off=v;var e=$('#live');e.className='live'+(v?' off':'');$('#livet').textContent=v?L.off:L.live}
 function send(){if(busy||(!pend.length&&!gonep.length))return;busy=1;var body={items:pend,gone:gonep,by:me};pend=[];gonep=[];
@@ -208,7 +216,7 @@ render();who();var asked=0;try{asked=localStorage.getItem('lkAsked')}catch(e){}i
 function page(lang, st, req) {
   const t = T[lang], host = String(req.headers["x-forwarded-host"] || req.headers.host || "").replace(/[^a-z0-9.:-]/gi, "");
   const proto = String(req.headers["x-forwarded-proto"] || "https").split(",")[0] === "http" ? "http" : "https";
-  const init = JSON.stringify({ L: t, s: st }).replace(/</g, "\\u003c").split(String.fromCharCode(8232)).join("\\u2028").split(String.fromCharCode(8233)).join("\\u2029");
+  const init = JSON.stringify({ L: t, s: st, A: aisleData(), i: LANGS.indexOf(lang), l: lang }).replace(/</g, "\\u003c").split(String.fromCharCode(8232)).join("\\u2028").split(String.fromCharCode(8233)).join("\\u2029");
   const head = `<title>${esc(st.name)} · Chef IA</title><meta property="og:title" content="🛒 ${esc(st.name)}"><meta property="og:description" content="${esc(t.ogd)} · Chef IA"><meta property="og:type" content="website">${host ? `<meta property="og:image" content="${proto}://${host}/icons/icon-512.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">` : ""}`;
   const body = `<div class="w">
 <header class="top"><div class="logo">${HAT}</div><div class="brand">Chef IA<small>${esc(t.shared)}</small></div><div class="live" id="live"><i></i><span id="livet">${esc(t.live)}</span></div></header>
@@ -216,8 +224,7 @@ function page(lang, st, req) {
 <div class="who" id="who"></div>
 <form class="add" id="add" autocomplete="off"><input id="in" type="text" maxlength="120" enterkeyhint="done" placeholder="${esc(t.add)}" aria-label="${esc(t.add)}"><button type="submit" aria-label="+">+</button></form>
 <div class="alld" id="alld" hidden><span class="big">🎉</span><b>${esc(t.done)}</b><span>${esc(t.doneH)}</span></div>
-<div class="sec" id="sbuy">${esc(t.buy)} <em id="nb"></em></div><ul id="buy"></ul>
-<div class="sec" id="sgot">${esc(t.cart)} <em id="ng"></em></div><ul id="got"></ul>
+<div id="aisles"></div>
 <div class="empty" id="empty" hidden><span class="big">🧺</span><b>${esc(t.empty)}</b><span>${esc(t.emptyH)}</span></div>
 <footer class="foot">${esc(t.foot)}<br><a href="/">${esc(t.cta)}</a></footer></div>
 <script type="application/json" id="init">${init}</script><script>${JS}</script>`;
