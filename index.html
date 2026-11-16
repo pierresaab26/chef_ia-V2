@@ -201,7 +201,7 @@ input,textarea,select{font-size:16px!important}
 #hselbar .hsr:first-child button{flex:none;padding:6px 12px}
 #hselbar button:disabled{opacity:.4}#hselbar button.dng{color:var(--pink)}
 
-#homesearch{margin:10px 0 0;position:relative}.hsico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}#homesearch input{width:100%;font:inherit;padding:10px 14px 10px 40px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}#hsfav{position:absolute;right:7px;top:50%;transform:translateY(-50%);padding:5px 11px;font-size:13px}#homesearch{margin-top:18px}.hsbtns{display:flex;gap:8px;margin-top:8px}.hsbtns button{flex:1;padding:9px 10px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-size:14px;font-weight:600}.hscnt{font-size:13px;color:var(--mut);margin:2px 4px 8px}#hsres:empty{display:none}#hsres{margin-top:10px}
+#homesearch{margin:10px 0 0;position:relative}.hsico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}#homesearch input{width:100%;font:inherit;padding:13px 14px 13px 40px;border-radius:var(--rc);border:1px solid var(--bd);box-shadow:var(--sh);background:var(--card);color:var(--ink)}#hsfav{position:absolute;right:7px;top:50%;transform:translateY(-50%);padding:5px 11px;font-size:13px}#homesearch{margin-top:18px}.hsbtns{display:flex;gap:8px;margin-top:8px}.hsbtns button{flex:1;padding:9px 10px;border-radius:999px;background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-size:14px;font-weight:600}.hscnt{font-size:13px;color:var(--mut);margin:2px 4px 8px}#hsres:empty{display:none}#hsres{margin-top:10px}
 #hsearch,#fsearch{width:100%;font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink)}
 .mchips{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:0 0 16px}
 .mchip{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 10px;border-radius:16px;border:1px solid var(--bd);background:var(--card);color:var(--ink);font:inherit;cursor:pointer;box-shadow:var(--sh);-webkit-tap-highlight-color:transparent}
@@ -760,7 +760,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   <div id="hselbar" role="toolbar"></div>
   <nav>
-    <button id="n1" class="on" aria-label="Home"><span class="ni" aria-hidden="true">🏠</span><span class="nl" id="nlHome">Accueil</span></button>
+    <button id="n1" class="on" aria-label="Home"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h4.5v-5.5h4v5.5h4.5V10"/></svg></span><span class="nl" id="nlHome">Accueil</span></button>
     <button id="nFav" aria-label="Favorites"><span class="ni" aria-hidden="true">❤️</span><span class="nl" id="nlFav">Favoris</span></button>
     <button class="rp" id="n2" aria-label="Chat"><span class="ni" aria-hidden="true">💬</span><span class="nl" id="rT">Cheffe</span></button>
     <button id="nShop" aria-label="Shopping list"><span class="ni" aria-hidden="true">🛒</span><span class="nl" id="nlShop">Courses</span><b class="nbd" id="nShopN" hidden></b></button>
@@ -3280,7 +3280,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v390',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v392',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
