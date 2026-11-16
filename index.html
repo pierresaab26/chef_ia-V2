@@ -254,7 +254,7 @@ nav{position:absolute;left:12px;right:12px;bottom:calc(10px + env(safe-area-inse
 nav button{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;width:auto;height:auto;padding:4px 0 2px;border-radius:14px;background:transparent;color:var(--mut);line-height:1.1}
 nav button .ni{font-size:22px;line-height:1.15;opacity:.55}
 nav button .nl{font-size:11px;font-weight:600;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-nav button.on{color:var(--pink)}nav button.on .ni{opacity:1}
+nav button.on{color:var(--pink)}nav #nFav .ni{color:var(--pink);opacity:1}nav button.on .ni{opacity:1}
 nav #n2 .ni{display:grid;place-items:center;width:50px;height:50px;margin-top:-22px;border-radius:50%;background:var(--pink);border:4px solid var(--card);box-shadow:0 4px 12px rgba(229,25,95,.4);font-size:22px;opacity:1}
 nav #n2 .nl{color:var(--pink);font-weight:700}
 nav .nbd{position:absolute;top:0;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--pink);color:#fff;font-size:10px;font-weight:700;line-height:17px;text-align:center;box-sizing:border-box}nav .nbd[hidden]{display:none}
@@ -761,7 +761,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   <div id="hselbar" role="toolbar"></div>
   <nav>
     <button id="n1" class="on" aria-label="Home"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h4.5v-5.5h4v5.5h4.5V10"/></svg></span><span class="nl" id="nlHome">Accueil</span></button>
-    <button id="nFav" aria-label="Favorites"><span class="ni" aria-hidden="true">❤️</span><span class="nl" id="nlFav">Favoris</span></button>
+    <button id="nFav" aria-label="Favorites"><span class="ni" aria-hidden="true"><svg viewBox="0 0 24 24" width="25" height="25" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.7 4.5 6.3 4.5c2.1 0 3.9 1.2 5.7 3.3 1.8-2.1 3.6-3.3 5.7-3.3 3.6 0 5.4 3.7 3.9 7.2C19.5 16.4 12 21 12 21z"/></svg></span><span class="nl" id="nlFav">Favoris</span></button>
     <button class="rp" id="n2" aria-label="Chat"><span class="ni" aria-hidden="true">💬</span><span class="nl" id="rT">Cheffe</span></button>
     <button id="nShop" aria-label="Shopping list"><span class="ni" aria-hidden="true">🛒</span><span class="nl" id="nlShop">Courses</span><b class="nbd" id="nShopN" hidden></b></button>
     <button id="nCirc" aria-label="Circle"><span class="ni" aria-hidden="true">👥</span><span class="nl" id="nlCirc">Cercle</span></button>
@@ -3280,7 +3280,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v392',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v393',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
