@@ -2941,7 +2941,7 @@ function fitAsk(){const i=$('#hq');if(!i)return;const t=T();i.placeholder=t.ask;
 addEventListener('resize',()=>{try{fitAsk()}catch(x){}});
 function show(id){track('view',{v:id});if(id==='home')setTimeout(()=>{try{fitAsk()}catch(x){}},0);const a2p=document.getElementById('a2pop');if(a2p)a2p.classList.toggle('oncard',id==='card');if(id!=='history'&&typeof hsel!=='undefined'&&hsel){hsel=null;try{selBar()}catch(x){}}if(id!=='circle')ciSnap=null;curView=id;document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));navOn(id);markDrawer();try{updTop()}catch(x){}if(id==='home'){try{drawHomeSearch();drawMenu()}catch(x){}}}
 function navOn(id){const m={n1:id==='home',nFav:id==='favs'||id==='history',nShop:id==='shop',nCirc:id==='circle'};for(const k in m){const b=document.getElementById(k);if(b)b.classList.toggle('on',m[k])}try{navPaint()}catch(x){}}
-function navPaint(){const b=document.getElementById('nShopN');if(!b)return;let n=0;try{loadLists().forEach(l=>(l.items||[]).forEach(i=>{if(!i.d)n++}))}catch(x){}b.textContent=n>99?'99+':String(n);b.hidden=!n}
+function navPaint(){const b=document.getElementById('nShopN');if(!b)return;let n=0;try{(JSON.parse(localStorage.getItem('chefLists')||'[]')||[]).forEach(l=>(l.items||[]).forEach(i=>{if(!i.d)n++}))}catch(x){}b.textContent=n>99?'99+':String(n);b.hidden=!n}
 function markDrawer(){document.querySelectorAll('.ditem').forEach(b=>b.classList.toggle('on',b.dataset.go===curView))}
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
