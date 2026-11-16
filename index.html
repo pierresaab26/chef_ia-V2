@@ -639,13 +639,14 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 <symbol id="mascot" viewBox="0 0 512 512">
 <rect width="512" height="512" rx="112" fill="#e4e1ff"/>
 <path d="M120 520 Q130 405 256 396 Q382 405 392 520 Z" fill="#fff"/>
-<g class="gfem" display="none"><path d="M158 300 Q150 210 256 200 Q362 210 354 300 Q362 380 342 444 L170 444 Q150 380 158 300Z" fill="#7a4a2b"/></g>
+<g class="gfem" display="none"><path d="M148 304 Q140 214 256 204 Q372 214 364 304 Q374 392 346 452 Q330 470 256 458 Q182 470 166 452 Q138 392 148 304Z" fill="#6b3d22"/><path d="M176 300 Q172 380 186 436" fill="none" stroke="#8a5530" stroke-width="7" stroke-linecap="round" opacity=".7"/><path d="M336 300 Q340 380 326 436" fill="none" stroke="#8a5530" stroke-width="7" stroke-linecap="round" opacity=".7"/></g>
 <path d="M214 392 Q256 420 298 392 L290 418 Q256 440 222 418 Z" fill="#e5195f"/>
 <circle cx="256" cy="302" r="92" fill="#ffdcbf"/>
+<g class="gfem" display="none"><path d="M166 256 Q168 330 176 360 Q198 346 202 306 Q206 276 236 258 Z" fill="#6b3d22"/><path d="M346 256 Q344 330 336 360 Q314 346 310 306 Q306 276 276 258 Z" fill="#6b3d22"/><path d="M236 258 Q256 290 276 258 Z" fill="#6b3d22"/><path d="M196 276 Q206 268 222 262" fill="none" stroke="#8a5530" stroke-width="5" stroke-linecap="round"/><path d="M316 276 Q306 268 290 262" fill="none" stroke="#8a5530" stroke-width="5" stroke-linecap="round"/></g>
 <ellipse cx="222" cy="306" rx="10" ry="14" fill="#2a2420"/><ellipse cx="290" cy="306" rx="10" ry="14" fill="#2a2420"/>
 <ellipse cx="196" cy="338" rx="16" ry="10" fill="#ff9aa8" opacity=".6"/><ellipse cx="316" cy="338" rx="16" ry="10" fill="#ff9aa8" opacity=".6"/>
 <path d="M232 340 Q256 366 280 340" fill="none" stroke="#2a2420" stroke-width="6" stroke-linecap="round"/>
-<g class="gfem" display="none" fill="none" stroke="#2a2420" stroke-width="6" stroke-linecap="round"><path d="M204 284 l-12 -8 M214 280 l-6 -12 M300 284 l12 -8 M290 280 l6 -12"/><path d="M236 344 Q256 360 276 344" stroke="#e5195f" stroke-width="9"/></g>
+<g class="gfem" display="none" fill="none" stroke="#2a2420" stroke-width="6" stroke-linecap="round"><path d="M206 298 l-13 -7 M306 298 l13 -7" stroke-width="5"/><path d="M232 342 Q256 366 280 342" stroke="#e5195f" stroke-width="10"/></g>
 <g fill="#fff" stroke="#d9ddf0" stroke-width="3"><circle cx="186" cy="168" r="52"/><circle cx="326" cy="168" r="52"/><circle cx="256" cy="136" r="66"/><rect x="170" y="176" width="172" height="78" rx="18"/></g>
 <rect x="170" y="228" width="172" height="26" rx="12" fill="#e5195f"/>
 <g id="sz-rentree" display="none"><g fill="none" stroke="#2b2b2b" stroke-width="7"><circle cx="222" cy="306" r="26"/><circle cx="290" cy="306" r="26"/><path d="M248 304 q8-8 16 0"/></g><g transform="rotate(30 340 190)"><rect x="332" y="110" width="22" height="100" fill="#ffc107"/><path d="M332 210 h22 l-11 28z" fill="#f5d7a8"/><path d="M338 226 h10 l-5 12z" fill="#333"/><rect x="332" y="96" width="22" height="16" rx="4" fill="#ff8fb1"/><rect x="332" y="110" width="22" height="8" fill="#b0b0b0"/></g></g>
@@ -3332,7 +3333,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v412',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v413',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('CheffeEvalie',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
