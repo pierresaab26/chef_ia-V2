@@ -616,6 +616,9 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rsec .selbtn.full{width:calc(100% + 36px);margin:-4px -18px 12px}
 #quick .qgo:not([hidden]){margin-left:2px;margin-right:2px}@media (max-width:380px){#quick .qgo:not([hidden]){margin-left:6px;margin-right:6px}}
 @media (min-width:768px){#cardcta{width:min(728px,calc(100vw - 32px))}}
+
+/* v410: the dish photo of the weekly-menu card starts level with the first course (under the « Aujourd’hui » pill), not with the pill */
+#menuHome .mhr>.mhp{box-sizing:border-box;height:26px;line-height:24px;padding-top:0;padding-bottom:0;margin-bottom:8px}#menuHome .mhbody>.mhimg{margin-top:39px}
 </style>
 </head>
 <body>
@@ -3308,7 +3311,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v409',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v410',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
