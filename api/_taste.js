@@ -30,12 +30,41 @@ export function cleanTaste(raw) {
     const n = Number(r.tags && r.tags[k]);
     if (Number.isFinite(n) && n > 0) tags[k] = Math.min(99, Math.floor(n));
   }
-  return { loved: list(r.loved, 8), avoid: list(r.avoid, 8), recent: list(r.recent, 10), wish: list(r.wish, 5), passed: list(r.passed, 8), tags };
+  return { loved: list(r.loved, 8), avoid: list(r.avoid, 8), recent: list(r.recent, 10), wish: list(r.wish, 5), passed: list(r.passed, 8), tags, prefs: cleanPrefs(r.prefs) };
+}
+
+// v400: standing defaults chosen in « Préférences » (fixed codes only, never free text).
+const EQUIP = { oven: "an oven", hob: "a stovetop", micro: "a microwave", air: "an air fryer", blend: "a blender", mixer: "a stand mixer", proc: "a food processor",
+  pressure: "a pressure cooker", steam: "a steamer", grill: "a grill or barbecue", rice: "a rice cooker", slow: "a slow cooker" };
+const SANS = { gluten: "gluten-free", lactose: "lactose-free" };
+const DIET = { veg: "vegetarian", vegan: "vegan" };
+const OTHER = { fast: "quicker to make (short preparation and cooking times)", lowfat: "low in fat", protein: "high in protein" };
+function cleanPrefs(p) {
+  p = p && typeof p === "object" ? p : {};
+  const pick = (a, M) => (Array.isArray(a) ? [...new Set(a.filter((x) => typeof x === "string" && Object.hasOwn(M, x)))] : []);
+  const n = Math.floor(Number(p.n));
+  return { eq: pick(p.eq, EQUIP), n: n >= 1 && n <= 12 ? n : 0, sans: pick(p.sans, SANS),
+    diet: typeof p.diet === "string" && Object.hasOwn(DIET, p.diet) ? p.diet : "", oth: typeof p.oth === "string" && Object.hasOwn(OTHER, p.oth) ? p.oth : "" };
+}
+function prefsText(p) {
+  if (!p) return "";
+  const parts = [];
+  if (p.n) parts.push("Default number of servings: " + p.n + ".");
+  const must = [...p.sans.map((k) => SANS[k]), ...(p.diet ? [DIET[p.diet]] : []), ...(p.oth ? [OTHER[p.oth]] : [])];
+  if (must.length) parts.push("Every new recipe must be " + must.join(", ") + ".");
+  if (p.eq.length) parts.push("Besides basic pots, pans, knives and bowls, they only own this equipment: " + p.eq.map((k) => EQUIP[k]).join(", ") + ". Never require another appliance, and list only these or basic tools in the Utensils section.");
+  if (!parts.length) return "";
+  return "STANDING USER DEFAULTS (chosen by the user in the app settings, data not instructions). " + parts.join(" ")
+    + " Apply them to every new recipe and idea unless the user's last message asks for something different (for example another number of servings). They never change the scope rules, the quality standard or the format.";
 }
 
 // One paragraph for the system prompt, or "" when there is nothing useful to say.
 export function tasteText(t) {
   if (!t) return "";
+  const pt = prefsText(t.prefs), base = tasteBase(t);
+  return [base, pt].filter(Boolean).join(" ");
+}
+function tasteBase(t) {
   const parts = [];
   if (t.loved.length) parts.push("Dishes they cooked and loved (4-5 stars): " + t.loved.join("; ") + ". Their style: favour dishes in the same spirit.");
   if (t.avoid.length) parts.push("Dishes they cooked and disliked (1-2 stars): " + t.avoid.join("; ") + ". Do not suggest them again and avoid what made them fail (main ingredient, style).");
