@@ -25,6 +25,35 @@ export default async function handler(req, res) {
   if (req.query && req.query.via === "sync") return syncHandler(req, res); // v368
   if (req.query && req.query.via === "pub") return publishHandler(req, res); // v293: /api/publish → /api/circle?via=pub
   if (req.query && req.query.via === "auth") return authHandler(req, res, pidOf); // v354: /api/auth → /api/circle?via=auth
+  // v398: « Aide et contact » message → e-mail to the support (nothing is stored). Works without Redis (the rate limit then never blocks).
+  if (req.method === "POST" && req.body && typeof req.body === "object" && req.body.act === "contact") {
+    if (!(await authOk(req, res))) return;
+    if (await overLimit(req, "rl:ct:", 3)) return res.status(429).json({ error: "rate" });
+    const msg = String(req.body.message || "").trim().slice(0, 2000);
+    if (msg.length < 5) return res.status(400).json({ error: "short" });
+    const key = process.env.RESEND_API_KEY, to = process.env.SUPPORT_EMAIL || process.env.MOD_EMAIL;
+    if (!key || !to) return res.status(503).json({ error: "nomail" });
+    const lang = String(req.body.lang || "").slice(0, 5).replace(/[^a-z-]/gi, "");
+    const reply = String(req.body.reply || "").trim().slice(0, 120).replace(/[\r\n<>]/g, "");
+    try {
+      const r = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
+        body: JSON.stringify({
+          from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
+          to: [to],
+          ...(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(reply) ? { reply_to: reply } : {}),
+          subject: "Chef IA : message d'un utilisateur (Aide et contact)",
+          text: "Langue : " + (lang || "?") + "\nRéponse à : " + (reply || "(non indiqué)") + "\n\n" + msg,
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!r.ok) return res.status(502).json({ error: "upstream" });
+      return res.status(200).json({ ok: true });
+    } catch {
+      return res.status(502).json({ error: "upstream" });
+    }
+  }
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
   if (req.query && req.query.via === "lnk") return linkHandler(req, res); // v378: /l/<code> → /api/circle?via=lnk&c=<code> (no access code: the secret code is the key)
   // v329: ONE invitation link (/?c=<code>) = join my circle AND, for a friend who has no access yet, get in.
