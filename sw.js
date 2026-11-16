@@ -5,7 +5,7 @@ const CACHE = 'chef-ia-shell';
 const SHELL = ['/', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'];
 const STATIC = /^\/(icons\/|manifest\.webmanifest$)/;
 const TIMEOUT = 6000;
-const OFFLINE = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chef IA</title><body style="font:16px system-ui;padding:40px 24px;text-align:center;background:#fffaf2;color:#16121a"><p style="font-size:40px">🍳</p><p>Pas de connexion internet.<br>No internet connection.</p><button onclick="location.reload()" style="font:inherit;padding:10px 20px;border-radius:999px;border:1px solid rgba(229,25,95,.22);background:#fde6ee;color:#e5195f">↻</button></body>';
+const OFFLINE = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CheffeEvalie</title><body style="font:16px system-ui;padding:40px 24px;text-align:center;background:#fffaf2;color:#16121a"><p style="font-size:40px">🍳</p><p>Pas de connexion internet.<br>No internet connection.</p><button onclick="location.reload()" style="font:inherit;padding:10px 20px;border-radius:999px;border:1px solid rgba(229,25,95,.22);background:#fde6ee;color:#e5195f">↻</button></body>';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).catch(() => {}).then(() => self.skipWaiting()));

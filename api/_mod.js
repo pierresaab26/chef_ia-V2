@@ -63,9 +63,9 @@ async function notify(ids, n, lang) {
       method: "POST",
       headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
       body: JSON.stringify({
-        from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
+        from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>",
         to: [to],
-        subject: "Chef IA : utilisateur bloqué (" + n + " demandes non conformes)",
+        subject: "CheffeEvalie : utilisateur bloqué (" + n + " demandes non conformes)",
         text: "Un utilisateur (id " + ids.join(" / ") + ", langue " + entry.lang + ") a envoyé " + n + " demandes farfelues, dangereuses ou illégales en 7 jours.\nIl est bloqué " + entry.blockedHours + " h.\nPour le débloquer : /api/moderation?key=<CRON_SECRET>&unblock=" + id + "\n\nDernières demandes (type|texte) :\n" + lastReq.join("\n"),
       }),
       signal: AbortSignal.timeout(5000),
@@ -81,7 +81,7 @@ export async function sendModMail(subject, text) {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
-      body: JSON.stringify({ from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>", to: [to], subject, text }),
+      body: JSON.stringify({ from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>", to: [to], subject, text }),
       signal: AbortSignal.timeout(5000),
     });
     return r.ok;

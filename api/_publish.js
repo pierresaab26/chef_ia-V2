@@ -54,7 +54,7 @@ export default async function handler(req, res) {
       if (Number(n) >= REPORTS_TO_HIDE) {
         const [was] = await redis([["HDEL", PUB, ps]]);
         if (d.src) await redis([["SET", "pb:" + d.src, JSON.stringify({ st: "hidden", ps, at: Date.now() })]]);
-        if (Number(was)) await sendModMail("Chef IA : recette masquée après " + n + " signalements", // once, when it leaves the public index
+        if (Number(was)) await sendModMail("CheffeEvalie : recette masquée après " + n + " signalements", // once, when it leaves the public index
           "La recette publique « " + d.title + " » (par " + (d.by || "?") + ") a été signalée par " + n + " personnes : elle est masquée.\n\n" +
           "✅ La remettre en ligne : " + adminLink(req, "&restore=" + ps) + "\n❌ La retirer définitivement : " + adminLink(req, "&remove=" + ps) +
           "\n\nToute la file : " + adminLink(req, "") + "\n\nRecette :\n" + String(d.text || "").slice(0, 3000));
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
       await redis([["SET", "pb:" + sid, JSON.stringify({ ...s, st: "pending", at: Date.now() })],
         ["LPUSH", "pub:queue", JSON.stringify({ k: "appeal", sid, t: d.title, reason: s.reason, at: Date.now() })], ["LTRIM", "pub:queue", "0", "199"]]);
       const [nm] = await redis([["GET", "cu:" + me]]);
-      await sendModMail("Chef IA : appel de publication « " + d.title + " »",
+      await sendModMail("CheffeEvalie : appel de publication « " + d.title + " »",
         (nm || "Un utilisateur") + " fait appel du refus de publication de « " + d.title + " ».\nRaison du chef : " + (s.reason || "?") + (d.rs ? "\n(Recette reçue et modifiée : remix d'une autre recette.)" : "") +
         "\n\n👉 Répondre (avec un commentaire pour l'auteur) : " + adminLink(req, "&review=" + sid) +
         "\n\nOu directement, sans commentaire :\n✅ Publier : " + adminLink(req, "&approve=" + sid) + "\n❌ Laisser refusée : " + adminLink(req, "&reject=" + sid) +
@@ -166,7 +166,7 @@ function page(res, code, title, body) {
 const card = (h) => `<section style="background:#fff;border-radius:22px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:18px;margin:0 0 14px">${h}</section>`;
 function answer(res, q, code, json, msg) {
   if (!q.html) return res.status(code).json(json);
-  return page(res, code, "Chef IA", card(`<p style="font-size:18px;font-weight:600;margin:0">${esc(msg)}</p>`));
+  return page(res, code, "CheffeEvalie", card(`<p style="font-size:18px;font-weight:600;margin:0">${esc(msg)}</p>`));
 }
 
 async function admin(req, res, q) {
@@ -178,7 +178,7 @@ async function admin(req, res, q) {
       const sid = String(q.review);
       const [raw, st] = await redis([["GET", "s:" + sid], ["GET", "pb:" + sid]]);
       let d = null, s = null; try { d = JSON.parse(raw); } catch {} try { s = JSON.parse(st); } catch {}
-      if (!d) return page(res, 404, "Chef IA", card("<p>Recette introuvable (supprimée par son auteur ?).</p>"));
+      if (!d) return page(res, 404, "CheffeEvalie", card("<p>Recette introuvable (supprimée par son auteur ?).</p>"));
       const [nm] = d.o ? await redis([["GET", "cu:" + pidOf(d.o)]]) : [null];
       const done = s && s.st !== "pending" ? `<p style="color:#b5645e;margin:0 0 10px">Déjà traité : ${esc(s.st === "public" ? "publiée" : s.st === "refused" ? "refusée" : s.st)}.</p>` : "";
       const b = "padding:12px 18px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer;flex:1";

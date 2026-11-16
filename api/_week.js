@@ -56,7 +56,7 @@ export function menuPrompt(avoid = [], lang = "", now = new Date()) {
 
 // v248: the menu no longer uses the chef's recipe instructions (13 000 characters that impose « ## Title, Servings… » and made the
 // chef answer with headings the parser could not read). Short dedicated instructions + a JSON answer instead.
-export const MENU_SYS = "You are Chef IA, a Michelin-starred chef who plans weekly home menus. You answer ONLY with the JSON object that is asked for: no text before or after it, no code fence.";
+export const MENU_SYS = "You are CheffeEvalie, a Michelin-starred chef who plans weekly home menus. You answer ONLY with the JSON object that is asked for: no text before or after it, no code fence.";
 
 // picks: community recipes [{ id:"C1", t:title, a:avg, n:votes }] that the chef may place in the menu (the best rated and shared ones).
 export function menuPromptJ(avoid = [], lang = "", picks = [], now = new Date()) {

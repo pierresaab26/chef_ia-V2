@@ -23,15 +23,15 @@ export default async function handler(req, res) {
       try { const [raw] = await redis([["GET", "sq:" + qid]]); const d = raw ? JSON.parse(raw) : null; if (d) { qq = String(d.q || "").slice(0, 200); aa = String(d.a || "").slice(0, 220); ll = String(d.l || "fr"); } } catch {}
     }
     const fr = /^fr/.test(ll);
-    const title = qq ? "❓ " + qq : "Chef IA";
-    const desc = qq ? (aa ? aa + " " : "") + (fr ? "Touchez pour lire la réponse du chef sur Chef IA." : "Tap to read the chef’s answer on Chef IA.") : (fr ? "Une question de cuisine sur Chef IA." : "A cooking question on Chef IA.");
+    const title = qq ? "❓ " + qq : "CheffeEvalie";
+    const desc = qq ? (aa ? aa + " " : "") + (fr ? "Touchez pour lire la réponse du chef sur CheffeEvalie." : "Tap to read the chef’s answer on CheffeEvalie.") : (fr ? "Une question de cuisine sur CheffeEvalie." : "A cooking question on CheffeEvalie.");
     const target = qq ? "/?q=" + encodeURIComponent(qq) : "/";
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
-    return res.status(200).send('<!DOCTYPE html><html lang="' + (fr ? "fr" : "en") + '"><head><meta charset="utf-8"><title>' + esc(title) + ' – Chef IA</title><meta name="viewport" content="width=device-width,initial-scale=1">'
-      + '<meta property="og:type" content="article"><meta property="og:site_name" content="Chef IA"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
+    return res.status(200).send('<!DOCTYPE html><html lang="' + (fr ? "fr" : "en") + '"><head><meta charset="utf-8"><title>' + esc(title) + ' – CheffeEvalie</title><meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<meta property="og:type" content="article"><meta property="og:site_name" content="CheffeEvalie"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
       + (base ? '<meta property="og:image" content="' + esc(base + "/icons/icon-512.png") + '"><meta property="og:url" content="' + esc(base + "/q/" + qid) + '">' : "")
-      + '<meta http-equiv="refresh" content="0;url=' + esc(target) + '"></head><body><script>location.replace(' + JSON.stringify(target) + ')</script><p><a href="' + esc(target) + '">Chef IA</a></p></body></html>');
+      + '<meta http-equiv="refresh" content="0;url=' + esc(target) + '"></head><body><script>location.replace(' + JSON.stringify(target) + ')</script><p><a href="' + esc(target) + '">CheffeEvalie</a></p></body></html>');
   }
   // v372: PUBLIC preview page of a shared link (/r/<sid> → here, see vercel.json): the Open Graph card WhatsApp / iMessage show (title, photo, rating), then the browser is sent to the app (/?s=<sid>). Only the title, the photo and the rating are exposed, like the link itself.
   if (req.method === "GET" && req.query && req.query.og != null) {
@@ -39,15 +39,15 @@ export default async function handler(req, res) {
     const host = String(req.headers["x-forwarded-host"] || req.headers.host || "").replace(/[^a-z0-9.:-]/gi, "");
     const base = host ? "https://" + host : "";
     const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-    let title = "Chef IA", desc = "", img = "";
+    let title = "CheffeEvalie", desc = "", img = "";
     if (/^[a-z0-9-]{8,64}$/.test(osid)) {
       try {
         const [raw] = await redis([["GET", "s:" + osid]]);
         const d = raw ? JSON.parse(raw) : null;
         if (d) {
-          title = String(d.title || "Chef IA").slice(0, 120);
+          title = String(d.title || "CheffeEvalie").slice(0, 120);
           const fr = !d.lang || /^fr/.test(d.lang);
-          desc = fr ? "Recette partagée sur Chef IA. Touchez pour l’ouvrir dans l’app." : "Recipe shared on Chef IA. Tap to open it in the app.";
+          desc = fr ? "Recette partagée sur CheffeEvalie. Touchez pour l’ouvrir dans l’app." : "Recipe shared on CheffeEvalie. Tap to open it in the app.";
           if (d.ck && /^[a-z0-9-]{1,60}$/.test(d.ck)) {
             const [h] = await redis([["HGETALL", "r:" + d.ck]]);
             const v = [];
@@ -62,11 +62,11 @@ export default async function handler(req, res) {
     const target = "/?s=" + encodeURIComponent(osid);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
-    return res.status(200).send('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>' + esc(title) + ' – Chef IA</title><meta name="viewport" content="width=device-width,initial-scale=1">'
-      + '<meta property="og:type" content="article"><meta property="og:site_name" content="Chef IA"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
+    return res.status(200).send('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>' + esc(title) + ' – CheffeEvalie</title><meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<meta property="og:type" content="article"><meta property="og:site_name" content="CheffeEvalie"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
       + (img ? '<meta property="og:image" content="' + esc(img) + '"><meta name="twitter:card" content="summary_large_image">' : (base ? '<meta property="og:image" content="' + esc(base + "/icons/icon-512.png") + '">' : ""))
       + (base ? '<meta property="og:url" content="' + esc(base + "/r/" + osid) + '">' : "")
-      + '<meta http-equiv="refresh" content="0;url=' + esc(target) + '"></head><body><script>location.replace(' + JSON.stringify(target) + ')</script><p><a href="' + esc(target) + '">Ouvrir dans Chef IA</a></p></body></html>');
+      + '<meta http-equiv="refresh" content="0;url=' + esc(target) + '"></head><body><script>location.replace(' + JSON.stringify(target) + ')</script><p><a href="' + esc(target) + '">Ouvrir dans CheffeEvalie</a></p></body></html>');
   }
   if (!(await authOk(req, res))) return;
 

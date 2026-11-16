@@ -11,8 +11,8 @@ import { CASES } from "./_selftest-cases.js";
 const MODEL = () => process.env.MODEL || "claude-haiku-5-5";
 const day = () => new Date().toISOString().slice(0, 10);
 
-// The chef's standard refusal always names « Chef IA » (template in api/chat.js) and is short.
-const isRefusal = (t) => /Chef IA/i.test(t) && t.length < 700 && !/```/.test(t);
+// The chef's standard refusal always names « CheffeEvalie » (template in api/chat.js) and is short.
+const isRefusal = (t) => /CheffeEvalie|Chef IA/i.test(t) && t.length < 700 && !/```/.test(t);
 
 const JUDGE =
   'You check a cooking assistant that must only handle food, cooking and drinks. The user message mixes a food question and a non-food question. Reply with JSON only: {"did_offtopic":bool,"gave_food_help":bool}. did_offtopic = the answer actually answers or helps with the NON-food part (a short sentence saying it only handles cooking does not count). gave_food_help = the answer gives useful help on the food part.';

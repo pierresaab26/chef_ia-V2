@@ -54,12 +54,12 @@ export async function sessionUid(req) {
 }
 
 const MAIL = {
-  fr: ["Votre connexion à Chef IA", "Bonjour,\n\nVotre code de connexion : {code}\n\nOu ouvrez ce lien sur l'appareil à connecter :\n{link}\n\nLe code et le lien sont valables 15 minutes. Si vous n'avez rien demandé, ignorez ce message.\n\nChef IA"],
-  en: ["Your Chef IA sign-in", "Hello,\n\nYour sign-in code: {code}\n\nOr open this link on the device to sign in:\n{link}\n\nThe code and the link are valid for 15 minutes. If you did not ask for this, ignore this message.\n\nChef IA"],
-  es: ["Tu acceso a Chef IA", "Hola:\n\nTu código de acceso: {code}\n\nO abre este enlace en el dispositivo que quieres conectar:\n{link}\n\nEl código y el enlace son válidos 15 minutos. Si no lo has pedido, ignora este mensaje.\n\nChef IA"],
-  de: ["Deine Anmeldung bei Chef IA", "Hallo,\n\nDein Anmeldecode: {code}\n\nOder öffne diesen Link auf dem Gerät, das du anmelden willst:\n{link}\n\nCode und Link sind 15 Minuten gültig. Wenn du nichts angefordert hast, ignoriere diese Nachricht.\n\nChef IA"],
-  it: ["Il tuo accesso a Chef IA", "Ciao,\n\nIl tuo codice di accesso: {code}\n\nOppure apri questo link sul dispositivo da collegare:\n{link}\n\nCodice e link valgono 15 minuti. Se non hai chiesto nulla, ignora questo messaggio.\n\nChef IA"],
-  pt: ["O teu acesso ao Chef IA", "Olá,\n\nO teu código de acesso: {code}\n\nOu abre este link no dispositivo a ligar:\n{link}\n\nO código e o link são válidos durante 15 minutos. Se não pediste nada, ignora esta mensagem.\n\nChef IA"],
+  fr: ["Votre connexion à CheffeEvalie", "Bonjour,\n\nVotre code de connexion : {code}\n\nOu ouvrez ce lien sur l'appareil à connecter :\n{link}\n\nLe code et le lien sont valables 15 minutes. Si vous n'avez rien demandé, ignorez ce message.\n\nCheffeEvalie"],
+  en: ["Your CheffeEvalie sign-in", "Hello,\n\nYour sign-in code: {code}\n\nOr open this link on the device to sign in:\n{link}\n\nThe code and the link are valid for 15 minutes. If you did not ask for this, ignore this message.\n\nCheffeEvalie"],
+  es: ["Tu acceso a CheffeEvalie", "Hola:\n\nTu código de acceso: {code}\n\nO abre este enlace en el dispositivo que quieres conectar:\n{link}\n\nEl código y el enlace son válidos 15 minutos. Si no lo has pedido, ignora este mensaje.\n\nCheffeEvalie"],
+  de: ["Deine Anmeldung bei CheffeEvalie", "Hallo,\n\nDein Anmeldecode: {code}\n\nOder öffne diesen Link auf dem Gerät, das du anmelden willst:\n{link}\n\nCode und Link sind 15 Minuten gültig. Wenn du nichts angefordert hast, ignoriere diese Nachricht.\n\nCheffeEvalie"],
+  it: ["Il tuo accesso a CheffeEvalie", "Ciao,\n\nIl tuo codice di accesso: {code}\n\nOppure apri questo link sul dispositivo da collegare:\n{link}\n\nCodice e link valgono 15 minuti. Se non hai chiesto nulla, ignora questo messaggio.\n\nCheffeEvalie"],
+  pt: ["O teu acesso ao CheffeEvalie", "Olá,\n\nO teu código de acesso: {code}\n\nOu abre este link no dispositivo a ligar:\n{link}\n\nO código e o link são válidos durante 15 minutos. Se não pediste nada, ignora esta mensagem.\n\nCheffeEvalie"],
 };
 
 async function sendLoginMail(to, code, link, lang) {
@@ -70,7 +70,7 @@ async function sendLoginMail(to, code, link, lang) {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
-      body: JSON.stringify({ from: process.env.AUTH_FROM || process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>", to: [to], subject, text: body.replace("{code}", code).replace("{link}", link) }),
+      body: JSON.stringify({ from: process.env.AUTH_FROM || process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>", to: [to], subject, text: body.replace("{code}", code).replace("{link}", link) }),
       signal: AbortSignal.timeout(8000),
     });
     return r.ok;

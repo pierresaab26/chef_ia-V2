@@ -28,9 +28,9 @@ async function reportImage(req, res, body) {
       method: "POST",
       headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
       body: JSON.stringify({
-        from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
+        from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>",
         to: [to],
-        subject: body.appeal ? "Chef IA : photo mal reconnue (appel)" : "Chef IA : photo ou image non reconnue",
+        subject: body.appeal ? "CheffeEvalie : photo mal reconnue (appel)" : "CheffeEvalie : photo ou image non reconnue",
         text: "Un utilisateur signale une photo ou une image " + (body.appeal ? "mal reconnue" : "non reconnue") + " à l'import (langue : " + (lang || "?") + "). L'image est en pièce jointe : elle a été envoyée pour un contrôle manuel uniquement, à supprimer une fois le contrôle fait.",
         attachments: [{ filename: "image-non-reconnue." + (m[1] === "jpeg" ? "jpg" : m[1]), content: m[2] }],
       }),

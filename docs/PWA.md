@@ -3,7 +3,7 @@
 State at v367. Code: `manifest.webmanifest`, `sw.js`, `icons/`, the head of `index.html`, the install code at the end of the script (`a2*` functions).
 
 ## What it is
-Chef IA is a web app that can be added to the home screen and opened like an app (full screen, own icon). It is **step 1** of the PWA plan: installable + an offline copy of the app itself. Data is still device-only (see `docs/USERS.md` for accounts); there is no sync yet.
+CheffeEvalie (formerly Chef IA) is a web app that can be added to the home screen and opened like an app (full screen, own icon). It is **step 1** of the PWA plan: installable + an offline copy of the app itself. Data is still device-only (see `docs/USERS.md` for accounts); there is no sync yet.
 
 ## Files
 | File | Role |

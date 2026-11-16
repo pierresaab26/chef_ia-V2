@@ -49,9 +49,9 @@ async function reportLink(req, res, body) {
       method: "POST",
       headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
       body: JSON.stringify({
-        from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
+        from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>",
         to: [to],
-        subject: "Chef IA : lien mal reconnu (appel)",
+        subject: "CheffeEvalie : lien mal reconnu (appel)",
         text: "Un utilisateur signale un lien mal reconnu à l'import (langue : " + (lang || "?") + ").\n\nLien : " + u + "\n\nEnvoyé pour un contrôle manuel uniquement, à supprimer une fois le contrôle fait.",
       }),
       signal: AbortSignal.timeout(15000),

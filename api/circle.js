@@ -40,10 +40,10 @@ export default async function handler(req, res) {
         method: "POST",
         headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
         body: JSON.stringify({
-          from: process.env.MOD_FROM || "Chef IA <onboarding@resend.dev>",
+          from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>",
           to: [to],
           ...(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(reply) ? { reply_to: reply } : {}),
-          subject: "Chef IA : message d'un utilisateur (Aide et contact)",
+          subject: "CheffeEvalie : message d'un utilisateur (Aide et contact)",
           text: "Langue : " + (lang || "?") + "\nRéponse à : " + (reply || "(non indiqué)") + "\n\n" + msg,
         }),
         signal: AbortSignal.timeout(15000),

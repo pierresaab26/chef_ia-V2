@@ -190,7 +190,7 @@ async function report(req, res, key, listKey, owner, body) {
   if (hideNow) c.h = 1;
   await redis([["LSET", listKey, idx, JSON.stringify(c)], ["HSET", "cmq", ref, JSON.stringify({ key, id, name: c.name, text: c.text, n: c.rp, hidden: !!c.h, why: reasons || [], at: Date.now(), title: String(body.title || "").slice(0, 120) })]]);
   if (hideNow) {
-    await sendModMail("Chef IA : commentaire masqué après " + c.rp + " signalements",
+    await sendModMail("CheffeEvalie : commentaire masqué après " + c.rp + " signalements",
       "Commentaire de " + c.name + (body.title ? " sur « " + body.title + " »" : "") + " :\n\n" + c.text + "\n\nMotifs : " + (reasons || []).join(", ") +
       "\n\n✅ Remettre en ligne : " + adm("cok=" + encodeURIComponent(ref)) + "\n❌ Supprimer définitivement : " + adm("cdel=" + encodeURIComponent(ref)));
   }
@@ -201,7 +201,7 @@ async function report(req, res, key, listKey, owner, body) {
     if (Number(cnt) === 10) {
       await redis([["SET", "cbk:" + ap, "1"]]);
       await notifyOne(ap, { k: "cban" });
-      await sendModMail("Chef IA : " + c.name + " ne peut plus commenter (10 signalements)",
+      await sendModMail("CheffeEvalie : " + c.name + " ne peut plus commenter (10 signalements)",
         "Dernier commentaire signalé :\n\n" + c.text + "\n\n🔓 Le débloquer : " + adm("cunban=" + ap) + "\n📋 Tous les signalements : " + adm("creports=1"));
     }
   }
