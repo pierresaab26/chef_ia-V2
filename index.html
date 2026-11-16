@@ -281,7 +281,7 @@ nav #nCirc.nt::after{content:'';position:absolute;top:3px;left:calc(50% + 9px);w
 #card .chead #cardT{opacity:0;transition:opacity .2s}
 #card .chead.solid{background:var(--card);background:color-mix(in srgb,var(--card) 82%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-bottom-color:var(--bd)}
 #card .chead.solid .back,#card .chead.solid .menubtn{background:transparent;box-shadow:none}
-#card .chead.solid #cardT{opacity:1}
+#card .chead.solid.ttl #cardT{opacity:1} /* v403: the header title shows only once the big title has scrolled under it */
 :root{--hh:64px}
 #cardbody{padding-top:0;padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));scroll-padding-top:var(--hh)}
 #cardbody .cphoto{margin:0 -18px;border-radius:0 0 28px 28px;height:clamp(300px,56vw,400px)}
@@ -3296,7 +3296,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v402',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v403',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -5121,7 +5121,7 @@ $('#toorig').onclick=resetToOriginal;
 {const w=$('#cardmore'),b=w.querySelector('.back');
   b.onclick=ev=>{ev.stopPropagation();const o=!w.classList.contains('open');w.classList.toggle('open',o);b.setAttribute('aria-expanded',String(o))};
   document.addEventListener('click',ev=>{if(!ev.target.closest('#cardmore')){w.classList.remove('open');b.setAttribute('aria-expanded','false')}});
-  const cb=$('#cardbody'),hd=$('#card .chead'),upd=()=>{const ph=cb.querySelector('.cphoto'),lim=(ph?ph.offsetHeight:300)-(hd.offsetHeight||64)-8;hd.classList.toggle('solid',cb.scrollTop>lim)};
+  const cb=$('#cardbody'),hd=$('#card .chead'),upd=()=>{const ph=cb.querySelector('.cphoto'),lim=(ph?ph.offsetHeight:300)-(hd.offsetHeight||64)-8;hd.classList.toggle('solid',cb.scrollTop>lim);const tt=cb.querySelector('.ctitle');hd.classList.toggle('ttl',!tt||tt.getBoundingClientRect().bottom<hd.getBoundingClientRect().bottom)};
   cb.addEventListener('scroll',upd,{passive:true});window.cardHdr=upd}
 // « Back to top » button: shown in the chat and on the recipe card once the reader has scrolled down.
 function topScroller(){return $('#chat').classList.contains('on')?log:$('#card').classList.contains('on')?$('#cardbody'):$('#history').classList.contains('on')?$('#hlist'):$('#favs').classList.contains('on')?$('#flist'):null}
