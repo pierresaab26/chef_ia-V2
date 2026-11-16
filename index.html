@@ -3293,7 +3293,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v400',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v401',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('Chef IA',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -5314,7 +5314,7 @@ $('#dHelpB').onclick=contactFlow;
 const PF_EQ=['oven','hob','micro','air','blend','mixer','proc','pressure','steam','grill','rice','slow'],PF_SANS=['gluten','lactose'],PF_DIET=['veg','vegan'],PF_OTH=['fast','lowfat','protein'];
 function prefsGet(){const z={eq:[],n:0,sans:[],diet:'',oth:''};try{const p=JSON.parse(localStorage.getItem('chefPrefs')||'{}');
   return {eq:Array.isArray(p.eq)?p.eq.filter(x=>PF_EQ.includes(x)):[],n:+p.n>=1&&+p.n<=12?Math.floor(+p.n):0,sans:Array.isArray(p.sans)?p.sans.filter(x=>PF_SANS.includes(x)):[],diet:PF_DIET.includes(p.diet)?p.diet:'',oth:PF_OTH.includes(p.oth)?p.oth:''}}catch(x){return z}}
-function prefsSet(p){try{localStorage.setItem('chefPrefs',JSON.stringify(p))}catch(x){}}
+function prefsSet(p){try{localStorage.setItem('chefPrefs',JSON.stringify(p));syncSoon()}catch(x){}}
 function prefsOut(){const p=prefsGet();return p.eq.length||p.n||p.sans.length||p.diet||p.oth?p:undefined}
 function tasteAll(){const t=tasteProfile()||{},p=prefsOut();if(p)t.prefs=p;return Object.keys(t).length?t:undefined}
 function prefsFlow(){closeDrawer();const t=T(),P=prefsGet(),w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg pfdlg';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
@@ -5356,7 +5356,7 @@ function syncLocal(){const o={};const put=(k,d,empty)=>{o[k]={d,h:syncHash(JSON.
   loadH().forEach(e=>{if(!e||!/^[A-Za-z0-9_.-]{1,64}$/.test(String(e.id||'')))return;const c={...e};if(typeof c.img==='string'&&c.img.length>SYNC_IMG)delete c.img;put('r:'+e.id,c)});
   loadLists().forEach(l=>{if(l&&!l.sh&&/^[A-Za-z0-9_.-]{1,64}$/.test(String(l.id||'')))put('l:'+l.id,l)});
   const m=readMenu();put('m:m',m,m.d.every(r=>r.every(x=>!x))&&!m.o.length);
-  const c=circMap();put('c:c',c,!Object.keys(c).length);const p=pubMap();put('p:p',p,!Object.keys(p).length);return o}
+  const c=circMap();put('c:c',c,!Object.keys(c).length);const p=pubMap();put('p:p',p,!Object.keys(p).length);const f=prefsGet();put('f:f',f,!(f.eq.length||f.n||f.sans.length||f.diet||f.oth));return o}
 function syncApply(list,st){ // remote items → local data; keys applied are returned
   const done=[];if(!list.length)return done;syncApplying=true;
   try{let a=null,L=null,rch=false,lch=false;const chatOn=!!document.querySelector('#chat.on');
@@ -5367,7 +5367,7 @@ function syncApply(list,st){ // remote items → local data; keys applied are re
       else if(kind==='l'){if(!L)L=loadLists().slice();const i=L.findIndex(x=>x&&x.id===id);if(i>=0&&L[i].sh){done.push(r.k);return}if(r.d&&r.d.sh){done.push(r.k);return}
         if(r.x){if(i>=0){L.splice(i,1);lch=true}done.push(r.k);return}
         if(!r.d||typeof r.d!=='object')return;if(i>=0)L[i]=r.d;else L.unshift(r.d);lch=true;done.push(r.k)}
-      else if(r.d&&typeof r.d==='object'&&!r.x){try{if(kind==='m')localStorage.setItem(MENU_KEY,JSON.stringify(r.d));else if(kind==='c')localStorage.setItem(CIRC_KEY,JSON.stringify(r.d));else if(kind==='p')localStorage.setItem(PUB_KEY,JSON.stringify(r.d));else return;done.push(r.k)}catch(x){}}});
+      else if(r.d&&typeof r.d==='object'&&!r.x){try{if(kind==='m')localStorage.setItem(MENU_KEY,JSON.stringify(r.d));else if(kind==='c')localStorage.setItem(CIRC_KEY,JSON.stringify(r.d));else if(kind==='p')localStorage.setItem(PUB_KEY,JSON.stringify(r.d));else if(kind==='f')localStorage.setItem('chefPrefs',JSON.stringify(r.d));else return;done.push(r.k)}catch(x){}}});
     if(rch){a.sort((x,y)=>(y.updatedAt||0)-(x.updatedAt||0));saveH(a)}if(lch)saveLists(L);
     if(done.length){setTimeout(()=>{for(const f of ['drawHistory','drawFavs','drawHomeSearch','drawMenu','renderShop']){try{if(typeof window[f]==='function')window[f]()}catch(x){}}},0)}
   }finally{syncApplying=false}return done}

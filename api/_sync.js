@@ -3,12 +3,12 @@ import { sessionUid } from "./_auth.js";
 
 // v368: sync of the personal data of an ACCOUNT across devices (served as /api/sync by api/circle.js, ?via=sync).
 // Delta sync, last write wins per entity. One entity = one field of the hash sy:<uid>:
-//   field "<kind>:<id>" (r = recipe, l = shopping list, m = weekly menu, c = circle map, p = publication map)
+//   field "<kind>:<id>" (r = recipe, l = shopping list, m = weekly menu, c = circle map, p = publication map, f = preferences v401)
 //   value JSON {u: client time of the last change, t: server counter, d: data | x: 1 for a deletion}
 // POST {since, items:[{k,u,d|x}]}: the items are stored when newer (u) than the stored one, then everything changed
 // by OTHER pushes after `since` is returned (max PAGE items, `more` = call again with the returned `since`).
 const MAX_FIELDS = 3000, MAX_ITEM = 400000, MAX_PUSH = 120, PAGE = 40;
-const KEY = /^[rlmcp]:[A-Za-z0-9_.-]{1,64}$/;
+const KEY = /^[rlmcpf]:[A-Za-z0-9_.-]{1,64}$/;
 
 export default async function syncHandler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
