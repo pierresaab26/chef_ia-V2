@@ -564,3 +564,6 @@ The chef adapts the version shown on the card (original or variant), not the new
 
 ## v430
 Chat opened from a card: laid out like the card (pills, Variantes badge), no history button, no « Masquer cette recette »; « Commencer la recette » hidden for now.
+
+## v431
+Chat from a card: same order and same action row as the card.
