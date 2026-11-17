@@ -561,3 +561,6 @@ Variantes badge same size as CheffeEvalie; « Ajuster avec le chef » starts at 
 
 ## v429
 The chef adapts the version shown on the card (original or variant), not the newest one.
+
+## v430
+Chat opened from a card: laid out like the card (pills, Variantes badge), no history button, no « Masquer cette recette »; « Commencer la recette » hidden for now.
