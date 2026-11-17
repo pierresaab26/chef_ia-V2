@@ -839,7 +839,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     <button class="ditem" id="dPrefB"><svg class="di" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg><span id="dPref"></span><svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
     <div class="dlang"><svg class="di" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.6 5.2 3.6 8.5s-1.2 6.1-3.6 8.5c-2.4-2.4-3.6-5.2-3.6-8.5s1.2-6.1 3.6-8.5z"/></svg><label for="lang" id="dLangL"></label><select id="lang" aria-label="Language"></select></div>
     <button class="ditem" id="dHelpB"><svg class="di" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1.1.9-1.1 1.6M12 16.6v.1"/></svg><span id="dHelp"></span><svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
-    <button class="ditem" id="dCk"><svg class="di" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5 4 4 0 0 1-4-4 4 4 0 0 1-4.5-4.5Z"/><circle cx="9" cy="11" r="1"/><circle cx="12.5" cy="15.5" r="1"/><circle cx="15.5" cy="12" r=".6"/></svg><span id="dCkT"></span></button>
+    <button class="ditem" id="dCk" hidden style="display:none"><svg class="di" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5 4 4 0 0 1-4-4 4 4 0 0 1-4.5-4.5Z"/><circle cx="9" cy="11" r="1"/><circle cx="12.5" cy="15.5" r="1"/><circle cx="15.5" cy="12" r=".6"/></svg><span id="dCkT"></span></button>
     <button class="ditem" id="dLegal"><svg class="di" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg><span id="dLegalT"></span></button>
     <button class="ditem" id="dA2hs" hidden><svg class="di" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg><span id="dA2hsT"></span></button>
     <div class="dver" id="dver"></div>
@@ -931,7 +931,7 @@ fr:{
   verN:"{n}ème recette",
   allV:"Afficher toutes les variantes",
   ckPriv:"Confidentialité et cookies",
-  lgl:"Mentions légales et confidentialité",
+  lgl:"Infos légales",
   pubB:"Publier",
   histB:"Voir l’historique",
   verP:"Version {n}",varsT:"Variantes",varAll:"Voir toutes les variantes",varAdd:"+ Adapter",rateV:"Noter cette variante",moreA:"Plus d’actions",rateB:"Noter", /* v419 */
@@ -1286,7 +1286,7 @@ en:{
   verN:"Version {n}",
   allV:"Show all versions",
   ckPriv:"Privacy and cookies",
-  lgl:"Legal notice and privacy",
+  lgl:"Legal info",
   pubB:"Publish",
   histB:"Show history",
   verP:"Version {n}",varsT:"Variants",varAll:"View all variants",varAdd:"+ Adapt",rateV:"Rate this variant",moreA:"More actions",rateB:"Rate", /* v419 */
@@ -1641,7 +1641,7 @@ es:{
   verN:"Versión {n}",
   allV:"Ver todas las versiones",
   ckPriv:"Privacidad y cookies",
-  lgl:"Aviso legal y privacidad",
+  lgl:"Info legal",
   pubB:"Publicar",
   histB:"Ver el historial",
   verP:"Versión {n}",varsT:"Variantes",varAll:"Ver todas las variantes",varAdd:"+ Adaptar",rateV:"Valorar esta variante",moreA:"Más acciones",rateB:"Valorar", /* v419 */
@@ -1996,7 +1996,7 @@ de:{
   verN:"Version {n}",
   allV:"Alle Versionen anzeigen",
   ckPriv:"Datenschutz und Cookies",
-  lgl:"Impressum und Datenschutz",
+  lgl:"Rechtliches",
   pubB:"Veröffentlichen",
   histB:"Verlauf anzeigen",
   verP:"Version {n}",varsT:"Varianten",varAll:"Alle Varianten ansehen",varAdd:"+ Anpassen",rateV:"Diese Variante bewerten",moreA:"Weitere Aktionen",rateB:"Bewerten", /* v419 */
@@ -2351,7 +2351,7 @@ it:{
   verN:"Versione {n}",
   allV:"Mostra tutte le versioni",
   ckPriv:"Privacy e cookie",
-  lgl:"Note legali e privacy",
+  lgl:"Info legali",
   pubB:"Pubblica",
   histB:"Mostra la cronologia",
   verP:"Versione {n}",varsT:"Varianti",varAll:"Vedi tutte le varianti",varAdd:"+ Adatta",rateV:"Valuta questa variante",moreA:"Altre azioni",rateB:"Valuta", /* v419 */
@@ -2706,7 +2706,7 @@ pt:{
   verN:"Versão {n}",
   allV:"Ver todas as versões",
   ckPriv:"Privacidade e cookies",
-  lgl:"Aviso legal e privacidade",
+  lgl:"Info legal",
   pubB:"Publicar",
   histB:"Ver o histórico",
   verP:"Versão {n}",varsT:"Variantes",varAll:"Ver todas as variantes",varAdd:"+ Adaptar",rateV:"Avaliar esta variante",moreA:"Mais ações",rateB:"Avaliar", /* v419 */
@@ -3413,7 +3413,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v445',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v446',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
