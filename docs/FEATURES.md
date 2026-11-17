@@ -579,3 +579,6 @@ Row order Favori, Noter, Publier, Partager; rating panel centred.
 
 ## v435
 Rating panel closes after J’ai cuisiné or a star.
+
+## v436
+Rating panel: J’ai cuisiné and the 5 stars shown together, closes after a tap.
