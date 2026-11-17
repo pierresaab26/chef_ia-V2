@@ -558,3 +558,6 @@ Variantes badge same size as CheffeEvalie; « Ajuster avec le chef » starts at 
 
 ## v428
 « Ajuster avec le chef » shows only the displayed version (before and after folded behind « Voir l’historique »).
+
+## v429
+The chef adapts the version shown on the card (original or variant), not the newest one.
