@@ -16,6 +16,10 @@
   ],
   "rewrites": [
     {
+      "source": "/legal",
+      "destination": "/legal.html"
+    },
+    {
       "source": "/q/:id",
       "destination": "/api/shared?ogq=:id"
     },

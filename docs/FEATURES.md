@@ -603,3 +603,6 @@ Cookie banner and panel redesigned (cream floating card, pink buttons, friendly 
 
 ## v443
 Cookie banner: « See details » link centred.
+
+## Legal page (v444)
+`legal.html`, served at `/legal`: legal notice, terms of use, privacy policy, cookies. French only, draft with fields to complete (see CLAUDE.md v444). Linked from the drawer (`#dLegal`) and from the cookie panel (`privacyUrl`).
