@@ -573,3 +573,6 @@ Card / chat-from-card actions: separate « Publier » (visibility) and link-shar
 
 ## v433
 Card actions: Favori, Noter, Publier, Partager (labelled grid); no ⋯ menu; share sheet prepared before the tap.
+
+## v434
+Row order Favori, Noter, Publier, Partager; rating panel centred.
