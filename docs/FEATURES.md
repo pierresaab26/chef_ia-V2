@@ -582,3 +582,6 @@ Rating panel closes after J’ai cuisiné or a star.
 
 ## v436
 Rating panel: J’ai cuisiné and the 5 stars shown together, closes after a tap.
+
+## v437
+Rating panel: Noter → J’ai cuisiné → 5 stars → a star closes it; no publish dialog in between.
