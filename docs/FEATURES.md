@@ -576,3 +576,6 @@ Card actions: Favori, Noter, Publier, Partager (labelled grid); no ⋯ menu; sha
 
 ## v434
 Row order Favori, Noter, Publier, Partager; rating panel centred.
+
+## v435
+Rating panel closes after J’ai cuisiné or a star.

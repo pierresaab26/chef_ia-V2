@@ -3353,7 +3353,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v434',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v435',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('CheffeEvalie',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3667,7 +3667,7 @@ function chatCardBar(e,vi){ /* v431: the action row of the card, for the chat op
   const sh=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,vi,'pub'),sl=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,vi,'link');
   const rw=rateBox(id,vi),rb=document.createElement('button'),rp=document.createElement('div');rb.type='button';rb.className='cbtn rtb';rp.className='rpanel';rp.hidden=true;rp.appendChild(rw);
   const rl=()=>{const ri=rw.querySelector('.ri'),x=ri&&ri.textContent.trim();actIc(rb,'★',x||t.rateB)};rl();{const ri=rw.querySelector('.ri');if(ri&&window.MutationObserver)new MutationObserver(rl).observe(ri,{childList:true,characterData:true,subtree:true})}
-  rb.onclick=()=>{rp.hidden=!rp.hidden};act.append(fv,rb,sh,sl);
+  rb.onclick=()=>{rp.hidden=!rp.hidden};rw.addEventListener('click',ev=>{if(ev.target.closest&&ev.target.closest('.rck,.stars button'))setTimeout(()=>{rp.hidden=true},400)}); /* v435: the panel closes after « J'ai cuisiné » or a star */act.append(fv,rb,sh,sl);
   w.append(act,rp);if(e.cpub&&e.csid)w.appendChild(reportLink(e)); /* v433: no ⋯ menu any more (delete = the ✕ of the pills); the report link of a published recipe stays at the bottom */
   return w}
 function onlyThisVersion(vi,id){ /* v427-v430: « Ajuster avec le chef » from a card: the chat shows ONLY that version, laid out like the card (date line with « Variantes · N », the row of version pills above); what comes before AND after it stays in the conversation, hidden (no button to show it, no « Masquer cette recette »); the chef still has it all as context. New messages appear normally. */
@@ -4772,7 +4772,7 @@ function openCard(id,vi){track('recipe_card_open');
   { /* v420: the rating is a button next to Partager; it opens the rating panel under the row */
     const rw=rateBox(id,cvi),rb3=document.createElement('button');var rp=document.createElement('div');rb3.type='button';rb3.className='cbtn rtb';rb3.setAttribute('aria-expanded','false');rp.className='rpanel';rp.hidden=true;rp.appendChild(rw);
     const rl=()=>{const ri=rw.querySelector('.ri'),x=ri&&ri.textContent.trim();actIc(rb3,'★',x||t.rateB)};rl();{const ri=rw.querySelector('.ri');if(ri&&window.MutationObserver)new MutationObserver(rl).observe(ri,{childList:true,characterData:true,subtree:true})}
-    rb3.onclick=()=>{rp.hidden=!rp.hidden;rb3.setAttribute('aria-expanded',String(!rp.hidden))};act.append(fv,rb3,sh,sl)}
+    rb3.onclick=()=>{rp.hidden=!rp.hidden;rb3.setAttribute('aria-expanded',String(!rp.hidden))};rw.addEventListener('click',ev=>{if(ev.target.closest&&ev.target.closest('.rck,.stars button'))setTimeout(()=>{rp.hidden=true;rb3.setAttribute('aria-expanded','false')},400)}); /* v435 */act.append(fv,rb3,sh,sl)}
   setTimeout(()=>{try{if(cardId===id)shareLink(verOf(loadH().find(x=>x.id===id)||e,cvi),true);setTimeout(()=>{try{if(cardId===id)prepShare(verOf(loadH().find(x=>x.id===id)||e,cvi))}catch(x){}},900)}catch(x){}},500); // v139: prepare the shared link (iOS cancels a share that waits for the server)
   {const cta=$('#cardcta');cta.textContent='💬 '+t.cont;cta.onclick=()=>openSaved(id,cvi)} // sticky main button at the bottom of the card
   {const ri=resetInfoFor(id,e.messages||[]),rb=$('#cardorig');rb.textContent='🗑️ '+t.origDel; // « ↺ Recette originale » at the top, like in the chat
