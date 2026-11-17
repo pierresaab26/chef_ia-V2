@@ -588,3 +588,6 @@ Rating panel: Noter → J’ai cuisiné → 5 stars → a star closes it; no pub
 
 ## v438
 Rating panel centred with « Cuisinée par N personnes »; Publier button shows Privée / Cercle / Publique with its icon.
+
+## v439
+Error monitoring with Sentry (Android and iOS), self-hosted bundle, privacy-scrubbed; active once a DSN is set.
