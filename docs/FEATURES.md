@@ -534,3 +534,6 @@ Order on the card: photo, title, date line, **variants row** (only with 2+ versi
 
 ### v420 — Recipe card adjustments
 « ★ Noter » sits next to Partager and opens the rating panel; the chef's tip stays open; the first pill reads « Originale » and the others « V2 · express change » (`chgExpress`: first bullet of the « what changed » section); the « Toutes » button and the « Toutes les versions » dialog were restyled (cards with badge, date, title and the express change).
+
+## v421
+Card: no version badge next to the origin, 4 centred compact actions (share = icon only), « + Adapter » pill removed, « Toutes » renamed « Voir les versions ».

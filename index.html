@@ -370,7 +370,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rsec.fk:not(.open)>:not(h3){display:none}.cvar{margin:0 0 12px}.cvh{display:flex;align-items:center;justify-content:space-between;margin:0 0 2px}.cvh span{font-size:13px;color:var(--mut)}.cvh button{min-height:44px;padding:0 4px;background:none;border:0;font-weight:600;font-size:14px;color:var(--pink);cursor:pointer}.cvrow{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.cvrow::-webkit-scrollbar{display:none}.cvp{flex:none;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);font-size:14px;white-space:nowrap;cursor:pointer}.cvp.on{border-color:var(--pink);background:var(--psoft);color:var(--pink);font-weight:700}.cvp.add{border:1.5px dashed var(--pink);background:transparent;color:var(--pink);font-weight:700}
 .cfold{background:var(--card);border-radius:18px;box-shadow:var(--sh);margin:0 0 8px}.cfh{width:100%;min-height:48px;display:flex;align-items:center;gap:8px;padding:0 16px;background:none;border:0;font-size:17px;font-weight:700;color:var(--ink);text-align:left;cursor:pointer}.cfh .cfn{margin-left:auto;font-weight:400;font-size:13px;color:var(--mut)}.cfh .cfs{font-weight:400;color:var(--mut);width:14px;text-align:center}.cfh .cfn:empty{display:none}.cfh .cfn:empty+.cfs,.cfh>span:first-child+.cfs{margin-left:auto}.cfn+.cfs{margin-left:0}.cfb{padding:0 16px 14px}.cfb[hidden]{display:none}.cfb .coms>h2{display:none}.cfb .coms{margin:0}.cfc .cfh{padding-right:62px}.cfb .rwrap{display:block}
 .cact .shr{flex:1;display:flex;align-items:center;justify-content:center}.cact .cmbtn{min-width:44px;font-size:18px}.mpop .delv{display:flex;flex:none;justify-content:flex-start;align-items:center;gap:8px;width:100%;margin:0;padding:11px 12px;font-size:15px;font-weight:600;text-align:left;color:#c04a42}.mpop .repv{color:var(--ink)!important}
-.cvh .cvall{display:flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;margin:0;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);border-radius:999px;font-size:13px;font-weight:700}.cact .rtb{white-space:nowrap;display:flex;align-items:center}.rpanel{background:var(--card);border-radius:18px;box-shadow:var(--sh);padding:12px 16px;margin:-6px 0 14px}.rpanel[hidden]{display:none}
+.cact.c4{justify-content:center;gap:10px}.cact.c4 .cbtn{flex:none;min-width:56px;padding-left:14px;padding-right:14px}.cact.c4 .shr{flex:none}.cact.c4 .shr .shl{display:none}.cvh .cvall{display:flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;margin:0;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);border-radius:999px;font-size:13px;font-weight:700}.cact .rtb{white-space:nowrap;display:flex;align-items:center}.rpanel{background:var(--card);border-radius:18px;box-shadow:var(--sh);padding:12px 16px;margin:-6px 0 14px}.rpanel[hidden]{display:none}
 .dlg:has(.verl){max-width:380px}.verl button{display:flex;flex-direction:column;align-items:stretch;gap:4px;flex-wrap:nowrap;padding:12px 14px;border-radius:16px}.verl .vtop{display:flex;align-items:center;justify-content:space-between;gap:8px}.verl .vt{flex:none;font-weight:700;font-size:15px;line-height:1.3}.verl .vex{font-size:13px;line-height:1.35;color:var(--mut)}.verl button.on .vex{color:var(--ink)}.dlg .verl~.cbtn{display:block;width:100%;text-align:center;border:1px solid var(--bd);margin-top:6px}
 .rsec ul,.rsec ol{list-style:none;padding:0;margin:0}
 .ring li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -882,7 +882,7 @@ fr:{
   verO:"Originale",
   verN:"{n}ème recette",
   allV:"Afficher toutes les variantes",
-  varsT:"Variantes",varAll:"Toutes",varAdd:"+ Adapter",rateV:"Noter cette variante",moreA:"Plus d’actions",rateB:"Noter", /* v419 */
+  varsT:"Variantes",varAll:"Voir les versions",varAdd:"+ Adapter",rateV:"Noter cette variante",moreA:"Plus d’actions",rateB:"Noter", /* v419 */
   delV:"Supprimer cette version",
   delVQ:"Supprimer cette version de la recette ? Les autres versions sont gardées.",
   delVOk:"Supprimer",
@@ -1233,7 +1233,7 @@ en:{
   verO:"Original",
   verN:"Version {n}",
   allV:"Show all versions",
-  varsT:"Variants",varAll:"All",varAdd:"+ Adapt",rateV:"Rate this variant",moreA:"More actions",rateB:"Rate", /* v419 */
+  varsT:"Variants",varAll:"View versions",varAdd:"+ Adapt",rateV:"Rate this variant",moreA:"More actions",rateB:"Rate", /* v419 */
   delV:"Delete this version",
   delVQ:"Delete this version of the recipe? The other versions are kept.",
   delVOk:"Delete",
@@ -1584,7 +1584,7 @@ es:{
   verO:"Original",
   verN:"Versión {n}",
   allV:"Ver todas las versiones",
-  varsT:"Variantes",varAll:"Todas",varAdd:"+ Adaptar",rateV:"Valorar esta variante",moreA:"Más acciones",rateB:"Valorar", /* v419 */
+  varsT:"Variantes",varAll:"Ver versiones",varAdd:"+ Adaptar",rateV:"Valorar esta variante",moreA:"Más acciones",rateB:"Valorar", /* v419 */
   delV:"Borrar esta versión",
   delVQ:"¿Borrar esta versión de la receta? Las demás versiones se conservan.",
   delVOk:"Borrar",
@@ -1935,7 +1935,7 @@ de:{
   verO:"Original",
   verN:"Version {n}",
   allV:"Alle Versionen anzeigen",
-  varsT:"Varianten",varAll:"Alle",varAdd:"+ Anpassen",rateV:"Diese Variante bewerten",moreA:"Weitere Aktionen",rateB:"Bewerten", /* v419 */
+  varsT:"Varianten",varAll:"Versionen ansehen",varAdd:"+ Anpassen",rateV:"Diese Variante bewerten",moreA:"Weitere Aktionen",rateB:"Bewerten", /* v419 */
   delV:"Diese Version löschen",
   delVQ:"Diese Version des Rezepts löschen? Die anderen Versionen bleiben erhalten.",
   delVOk:"Löschen",
@@ -2286,7 +2286,7 @@ it:{
   verO:"Originale",
   verN:"Versione {n}",
   allV:"Mostra tutte le versioni",
-  varsT:"Varianti",varAll:"Tutte",varAdd:"+ Adatta",rateV:"Valuta questa variante",moreA:"Altre azioni",rateB:"Valuta", /* v419 */
+  varsT:"Varianti",varAll:"Vedi versioni",varAdd:"+ Adatta",rateV:"Valuta questa variante",moreA:"Altre azioni",rateB:"Valuta", /* v419 */
   delV:"Elimina questa versione",
   delVQ:"Eliminare questa versione della ricetta? Le altre versioni restano.",
   delVOk:"Elimina",
@@ -2637,7 +2637,7 @@ pt:{
   verO:"Original",
   verN:"Versão {n}",
   allV:"Ver todas as versões",
-  varsT:"Variantes",varAll:"Todas",varAdd:"+ Adaptar",rateV:"Avaliar esta variante",moreA:"Mais ações",rateB:"Avaliar", /* v419 */
+  varsT:"Variantes",varAll:"Ver versões",varAdd:"+ Adaptar",rateV:"Avaliar esta variante",moreA:"Mais ações",rateB:"Avaliar", /* v419 */
   delV:"Apagar esta versão",
   delVQ:"Apagar esta versão da receita? As outras versões são mantidas.",
   delVOk:"Apagar",
@@ -3340,7 +3340,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v420',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v421',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('CheffeEvalie',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3481,7 +3481,6 @@ function cardVars(e,cvi){ /* v419: « Variantes · N » + « Toutes » + a row o
   const h=document.createElement('div');h.className='cvh';const l=document.createElement('span');l.textContent=t.varsT+' · '+vs.length;
   const all=document.createElement('button');all.type='button';all.className='cvall';all.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>';all.append(document.createTextNode(t.varAll));all.onclick=()=>showVersions(e,{eid:e.id,idx:cvi});h.append(l,all);
   const row=document.createElement('div');row.className='cvrow';
-  const ad=document.createElement('button');ad.type='button';ad.className='cvp add';ad.textContent=t.varAdd;ad.onclick=()=>openSaved(e.id);row.appendChild(ad);
   let on=null;vs.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='cvp';b.textContent=varShort(v,root,t);
     if(v.eid===e.id&&v.idx===cvi){b.classList.add('on');b.setAttribute('aria-current','true');on=b}else b.onclick=()=>openCard(v.eid,v.idx);row.appendChild(b)});
   w.append(h,row);setTimeout(()=>{if(on)row.scrollLeft=on.offsetLeft-(row.clientWidth-on.offsetWidth)/2},0);return w}
@@ -4714,9 +4713,9 @@ function openCard(id,vi){track('recipe_card_open');
   const h=document.createElement('h1');h.className='ctitle';h.textContent=curT;body.appendChild(h);
   const txt=RTX,hd=headInfo(txt),info=infoChips(hd.txt);
   {const own=(e.messages||[]).map((m,i)=>({m,i})).filter(o=>o.m.role==='assistant'&&looksLikeRecipe(o.m.content)&&(!o.m.rid||o.m.rid===e.id)),k=vm?own.findIndex(o=>o.i===vi):own.length-1,lt=own[k];
-   const dl=verLine(e,vm&&k>=0?vnOf(e,vi):verNum(e),lt&&lt.m.at,lt?{eid:e.id,idx:lt.i}:null);const so=e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:'';if(so){const sp=document.createElement('span');sp.textContent=so;dl.insertBefore(sp,dl.children[1])}{const av=dl.querySelector('.allv');if(av)av.remove()} /* v419: the variant pills replace this button */body.appendChild(dl)} // v125: date, version badge, « all versions », source
+   const dl=verLine(e,vm&&k>=0?vnOf(e,vi):verNum(e),lt&&lt.m.at,lt?{eid:e.id,idx:lt.i}:null);const so=e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:'';if(so){const sp=document.createElement('span');sp.textContent=so;dl.insertBefore(sp,dl.children[1])}{const av=dl.querySelector('.allv');if(av)av.remove()} /* v419: the variant pills replace this button */{const vb=dl.querySelector('.vbadge');if(vb&&famVersions(e).length>1)vb.remove()} /* v421: no « Originale » / « V2 » badge next to the origin, the pills say it */body.appendChild(dl)} // v125: date, version badge, « all versions », source
   const mb=metaBar(hd,info.find(x=>x.startsWith('🍽️'))||'',(info.find(x=>x.startsWith('⏱'))||'')); // v117: shown AFTER the action row
-  const act=document.createElement('div');act.className='cact';
+  const act=document.createElement('div');act.className='cact c4'; /* v421: 4 compact options, centred */
   const cvi=vm?vi:lastVi(e),cf=favAt(e,cvi);const fv=document.createElement('button');fv.className='cbtn'+(cf?' on':'');fv.textContent=cf?'❤️':'🤍';fv.setAttribute('aria-label',t.fav);
   fv.onclick=()=>{const f=toggleFav(id,cvi);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f);if(f)offerVis(id,cvi)};
   const sh=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,cvi); // v404: Partager ▾ holds the visibility (Privée / Cercle / Publique)
