@@ -537,3 +537,6 @@ Order on the card: photo, title, date line, **variants row** (only with 2+ versi
 
 ## v421
 Card: no version badge next to the origin, 4 centred compact actions (share = icon only), « + Adapter » pill removed, « Toutes » renamed « Voir les versions ».
+
+## v422
+Card: « Variantes · N » on the date line; 2-line variant bubbles (V2 + express change); last bubble « Voir toutes les variantes ».
