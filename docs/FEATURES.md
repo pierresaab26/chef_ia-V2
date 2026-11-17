@@ -567,3 +567,6 @@ Chat opened from a card: laid out like the card (pills, Variantes badge), no his
 
 ## v431
 Chat from a card: same order and same action row as the card.
+
+## v432
+Card / chat-from-card actions: separate « Publier » (visibility) and link-share buttons.
