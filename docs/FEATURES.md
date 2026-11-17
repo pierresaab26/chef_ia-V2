@@ -528,3 +528,6 @@ The user's bubble shows only a short sentence (`fiveV`); the rules go as hidden 
 
 ### v378 — Shopping list shared by link
 A list can be shared with anyone through `https://<site>/l/<code>` (button « 🔗 Partager par lien » in the list). The page needs no app and no account: tick, add, remove items, live (2.5 s). Owner can copy / send, renew or switch off the link; the link lives 30 days after its last use. See `docs/CIRCLE.md` (« Shopping list link ») and CLAUDE.md v378.
+
+### v419 — Simplified recipe card (variants row, 3 actions, folded blocks)
+Order on the card: photo, title, date line, **variants row** (only with 2+ versions: « Variantes · N », « Toutes », pills « + Adapter » then V1, V2…), info bubbles, **❤️ / Partager / ⋯**, ingredient / utensil / preparation tabs, folded « Astuce du chef » and « Ce qui a changé », folded « Noter cette variante » and « Commentaires », sticky « Ajuster avec le chef ». Heart, rating and comments belong to the version shown (`vKey`). The ⋯ menu holds the secondary actions (original recipe, 5 stars again, reset, report, delete this version). Code: `cardVars`, `varShort`, `cfold`, `.cvar` / `.cvp` / `.cfold` / `.cmore` CSS. The autumn background tint was removed (cream stays).

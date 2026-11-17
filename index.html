@@ -367,6 +367,9 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rsec{background:var(--card);border-radius:22px;padding:16px 18px;margin:0 0 14px;box-shadow:var(--sh)}
 .rsec h3{color:var(--ink);font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:8px}
 .rsec.fold h3{cursor:pointer;margin:0;-webkit-tap-highlight-color:transparent}.rsec.fold.open h3{margin-bottom:8px}.rsec.fold h3 .arr{margin-left:auto;font-size:16px;transition:transform .2s;transform:rotate(-90deg)}.rsec.fold.open h3 .arr{transform:none}.rsec.fold .rut{display:none}.rsec.fold.open .rut{display:flex}
+.rsec.fk:not(.open)>:not(h3){display:none}.cvar{margin:0 0 12px}.cvh{display:flex;align-items:center;justify-content:space-between;margin:0 0 2px}.cvh span{font-size:13px;color:var(--mut)}.cvh button{min-height:44px;padding:0 4px;background:none;border:0;font-weight:600;font-size:14px;color:var(--pink);cursor:pointer}.cvrow{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.cvrow::-webkit-scrollbar{display:none}.cvp{flex:none;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--ink);font-size:14px;white-space:nowrap;cursor:pointer}.cvp.on{border-color:var(--pink);background:var(--psoft);color:var(--pink);font-weight:700}.cvp.add{border:1.5px dashed var(--pink);background:transparent;color:var(--pink);font-weight:700}
+.cfold{background:var(--card);border-radius:18px;box-shadow:var(--sh);margin:0 0 8px}.cfh{width:100%;min-height:48px;display:flex;align-items:center;gap:8px;padding:0 16px;background:none;border:0;font-size:17px;font-weight:700;color:var(--ink);text-align:left;cursor:pointer}.cfh .cfn{margin-left:auto;font-weight:400;font-size:13px;color:var(--mut)}.cfh .cfs{font-weight:400;color:var(--mut);width:14px;text-align:center}.cfh .cfn:empty{display:none}.cfh .cfn:empty+.cfs,.cfh>span:first-child+.cfs{margin-left:auto}.cfn+.cfs{margin-left:0}.cfb{padding:0 16px 14px}.cfb[hidden]{display:none}.cfb .coms>h2{display:none}.cfb .coms{margin:0}.cfc .cfh{padding-right:62px}.cfb .rwrap{display:block}
+.cact .shr{flex:1;display:flex;align-items:center;justify-content:center}.cact .cmbtn{min-width:44px;font-size:18px}.mpop .delv{display:flex;flex:none;justify-content:flex-start;align-items:center;gap:8px;width:100%;margin:0;padding:11px 12px;font-size:15px;font-weight:600;text-align:left;color:#c04a42}.mpop .repv{color:var(--ink)!important}
 .rsec ul,.rsec ol{list-style:none;padding:0;margin:0}
 .ring li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);line-height:1.4;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ring li:last-child{border-bottom:0}
@@ -877,6 +880,7 @@ fr:{
   verO:"Originale",
   verN:"{n}ème recette",
   allV:"Afficher toutes les variantes",
+  varsT:"Variantes",varAll:"Toutes",varAdd:"+ Adapter",rateV:"Noter cette variante",moreA:"Plus d’actions", /* v419 */
   delV:"Supprimer cette version",
   delVQ:"Supprimer cette version de la recette ? Les autres versions sont gardées.",
   delVOk:"Supprimer",
@@ -1227,6 +1231,7 @@ en:{
   verO:"Original",
   verN:"Version {n}",
   allV:"Show all versions",
+  varsT:"Variants",varAll:"All",varAdd:"+ Adapt",rateV:"Rate this variant",moreA:"More actions", /* v419 */
   delV:"Delete this version",
   delVQ:"Delete this version of the recipe? The other versions are kept.",
   delVOk:"Delete",
@@ -1577,6 +1582,7 @@ es:{
   verO:"Original",
   verN:"Versión {n}",
   allV:"Ver todas las versiones",
+  varsT:"Variantes",varAll:"Todas",varAdd:"+ Adaptar",rateV:"Valorar esta variante",moreA:"Más acciones", /* v419 */
   delV:"Borrar esta versión",
   delVQ:"¿Borrar esta versión de la receta? Las demás versiones se conservan.",
   delVOk:"Borrar",
@@ -1927,6 +1933,7 @@ de:{
   verO:"Original",
   verN:"Version {n}",
   allV:"Alle Versionen anzeigen",
+  varsT:"Varianten",varAll:"Alle",varAdd:"+ Anpassen",rateV:"Diese Variante bewerten",moreA:"Weitere Aktionen", /* v419 */
   delV:"Diese Version löschen",
   delVQ:"Diese Version des Rezepts löschen? Die anderen Versionen bleiben erhalten.",
   delVOk:"Löschen",
@@ -2277,6 +2284,7 @@ it:{
   verO:"Originale",
   verN:"Versione {n}",
   allV:"Mostra tutte le versioni",
+  varsT:"Varianti",varAll:"Tutte",varAdd:"+ Adatta",rateV:"Valuta questa variante",moreA:"Altre azioni", /* v419 */
   delV:"Elimina questa versione",
   delVQ:"Eliminare questa versione della ricetta? Le altre versioni restano.",
   delVOk:"Elimina",
@@ -2627,6 +2635,7 @@ pt:{
   verO:"Original",
   verN:"Versão {n}",
   allV:"Ver todas as versões",
+  varsT:"Variantes",varAll:"Todas",varAdd:"+ Adaptar",rateV:"Avaliar esta variante",moreA:"Mais ações", /* v419 */
   delV:"Apagar esta versão",
   delVQ:"Apagar esta versão da receita? As outras versões são mantidas.",
   delVOk:"Apagar",
@@ -3223,7 +3232,7 @@ function snCurrent(d,c){d=d||new Date();c=c||snCountry();
   return m===11||m<2?'hiver':m<5?'printemps':m<8?'ete':'automne'}
 // Seasonal background: only --bg1/--bg2 change (light mode); Halloween and Christmas switch to their own dark palette.
 (function(){const st=document.createElement('style');let css='';
-  SN.forEach(x=>{const sel=':root[data-amb="'+x[0]+'"]';
+  SN.forEach(x=>{if(x[0]==='automne')return; /* v419: no autumn tint, the cream background stays */const sel=':root[data-amb="'+x[0]+'"]';
     if(x[6]){const card=x[0]==='halloween'?'#3a2414':'#174a39',mut=x[0]==='halloween'?'#c9a98a':'#9fc3b3',ink=x[0]==='halloween'?'#f8ece0':'#e6f2ec';
       css+=sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+';--card:'+card+';--ink:'+ink+';--mut:'+mut+';--dark:#060403;--bd:rgba(255,255,255,.1)'+(x[0]==='halloween'?';--pink:#ff8a1f':'')+'}'}
     else css+='@media (prefers-color-scheme:light){'+sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+'}}'+'@media (prefers-color-scheme:light){'+sel+'{--bg1:color-mix(in srgb,'+x[3]+' 38%,#fffaf2);--bg2:color-mix(in srgb,'+x[4]+' 38%,#f9eddc)}}'}); // v115: the season only TINTS the cream (browsers without color-mix keep the full season colour)
@@ -3329,7 +3338,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v418',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v419',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 try{console.log('CheffeEvalie',APP_VERSION)}catch(e){} // version check in the browser console
 function deviceId(){try{let d=localStorage.getItem('deviceId');if(!d){d=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',d)}return d}catch(e){return ''}}
 function migrateOne(e){return {...e,fav:!!e.fav,updatedAt:e.updatedAt||Date.parse(e.date)||Date.now(),lang:e.lang||''}}
@@ -3455,6 +3464,26 @@ function verLine(e,n,at,cur,inChat){ // date + version badge (+ « all versions 
   dl.append(ds);if(!solo){dl.appendChild(verBadge(n));const ob=originBadge(e);if(ob)dl.appendChild(ob)}
   if(!inChat&&famVersions(e).length>1){const b=document.createElement('button');b.type='button';b.className='allv';b.textContent=T().allV;b.onclick=()=>openFamily(e);dl.appendChild(b)}
   return dl}
+function varShort(v,root,t){ /* v419: short label of a variant in the card row: « V3 sans gluten » (words of its title that the original title does not have) */
+  const nz=x=>String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  const base=new Set(nz(root).concat(nz(t.variant)));
+  let r=String(v.title||'').replace(/[()]/g,' ').split(/\s+/).filter(w=>w&&!nz(w).every(q=>base.has(q))).join(' ').trim();
+  if(v.n<=1)r=t.verO;if(r.length>16)r=r.slice(0,15).trimEnd()+'…';r=r.charAt(0).toUpperCase()+r.slice(1);return 'V'+v.n+(r?' '+r:'')}
+function cardVars(e,cvi){ /* v419: « Variantes · N » + « Toutes » + a row of pills (+ Adapter first, then V1, V2…); only when the recipe has several versions */
+  const vs=famVersions(e);if(vs.length<2)return null;const t=T(),root=(famRoot(e,loadH())||e).title,w=document.createElement('section');w.className='cvar';
+  const h=document.createElement('div');h.className='cvh';const l=document.createElement('span');l.textContent=t.varsT+' · '+vs.length;
+  const all=document.createElement('button');all.type='button';all.textContent=t.varAll;all.onclick=()=>showVersions(e,{eid:e.id,idx:cvi});h.append(l,all);
+  const row=document.createElement('div');row.className='cvrow';
+  const ad=document.createElement('button');ad.type='button';ad.className='cvp add';ad.textContent=t.varAdd;ad.onclick=()=>openSaved(e.id);row.appendChild(ad);
+  let on=null;vs.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='cvp';b.textContent=varShort(v,root,t);
+    if(v.eid===e.id&&v.idx===cvi){b.classList.add('on');b.setAttribute('aria-current','true');on=b}else b.onclick=()=>openCard(v.eid,v.idx);row.appendChild(b)});
+  w.append(h,row);setTimeout(()=>{if(on)row.scrollLeft=on.offsetLeft-(row.clientWidth-on.offsetWidth)/2},0);return w}
+function cfold(label,node){ /* v419: a folded block (title + « + » / « – »), opens on tap; .note(text) shows a small text on the right (count, rating) */
+  const w=document.createElement('section');w.className='cfold';const b=document.createElement('button');b.type='button';b.className='cfh';b.setAttribute('aria-expanded','false');
+  const l=document.createElement('span');l.textContent=label;const n=document.createElement('span');n.className='cfn';const sg=document.createElement('span');sg.className='cfs';sg.textContent='+';b.append(l,n,sg);
+  const c=document.createElement('div');c.className='cfb';c.hidden=true;c.appendChild(node);
+  const set=o=>{c.hidden=!o;b.setAttribute('aria-expanded',String(o));sg.textContent=o?'–':'+'};b.onclick=()=>set(c.hidden);
+  w.append(b,c);w.note=x=>{n.textContent=x||''};w.openIt=()=>set(true);return w}
 function verBadge(n){const b=document.createElement('span');b.className='vbadge';b.textContent=n<=1?T().verO:T().verN.replace('{n}',n);return b}
 function saveCurrent(){
   const a=loadH();let e=currentId?a.find(x=>x.id===currentId):null;
@@ -4586,8 +4615,8 @@ function renderRecipe(el,txt,title,chat,swap,prevTxt){
       }else{close();const p=document.createElement('p');p.className='rp';p.textContent=l;box.appendChild(p)}
     });
     if(ingS&&ingEls.length)addSelectBar(box,ingEls,String(title||''),rk);
-    if(utS){ // utensils section: title always visible, the list opens on tap
-      box.classList.add('fold');h.setAttribute('role','button');h.tabIndex=0;h.setAttribute('aria-expanded','false');
+    if(utS||(!chat&&(tipS||(noteS&&/chang|modif|adapt|cambi|ände|alter/i.test(sec.h))))){ /* utensils; v419: on the recipe card the chef's tip and « what changed » are folded too */
+      box.classList.add('fold');if(!utS)box.classList.add('fk');h.setAttribute('role','button');h.tabIndex=0;h.setAttribute('aria-expanded','false');
       const ar=document.createElement('span');ar.className='arr';ar.textContent='▾';ar.setAttribute('aria-hidden','true');h.appendChild(ar);
       const tg=()=>{const o=box.classList.toggle('open');h.setAttribute('aria-expanded',String(o))};
       h.onclick=tg;h.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tg()}};
@@ -4678,22 +4707,35 @@ function openCard(id,vi){track('recipe_card_open');
   const h=document.createElement('h1');h.className='ctitle';h.textContent=curT;body.appendChild(h);
   const txt=RTX,hd=headInfo(txt),info=infoChips(hd.txt);
   {const own=(e.messages||[]).map((m,i)=>({m,i})).filter(o=>o.m.role==='assistant'&&looksLikeRecipe(o.m.content)&&(!o.m.rid||o.m.rid===e.id)),k=vm?own.findIndex(o=>o.i===vi):own.length-1,lt=own[k];
-   const dl=verLine(e,vm&&k>=0?vnOf(e,vi):verNum(e),lt&&lt.m.at,lt?{eid:e.id,idx:lt.i}:null);const so=e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:'';if(so){const sp=document.createElement('span');sp.textContent=so;dl.insertBefore(sp,dl.children[1])}body.appendChild(dl)} // v125: date, version badge, « all versions », source
+   const dl=verLine(e,vm&&k>=0?vnOf(e,vi):verNum(e),lt&&lt.m.at,lt?{eid:e.id,idx:lt.i}:null);const so=e.src==='link'&&e.srcHost?'🔗 '+e.srcHost:'';if(so){const sp=document.createElement('span');sp.textContent=so;dl.insertBefore(sp,dl.children[1])}{const av=dl.querySelector('.allv');if(av)av.remove()} /* v419: the variant pills replace this button */body.appendChild(dl)} // v125: date, version badge, « all versions », source
   const mb=metaBar(hd,info.find(x=>x.startsWith('🍽️'))||'',(info.find(x=>x.startsWith('⏱'))||'')); // v117: shown AFTER the action row
   const act=document.createElement('div');act.className='cact';
   const cvi=vm?vi:lastVi(e),cf=favAt(e,cvi);const fv=document.createElement('button');fv.className='cbtn'+(cf?' on':'');fv.textContent=cf?'❤️':'🤍';fv.setAttribute('aria-label',t.fav);
   fv.onclick=()=>{const f=toggleFav(id,cvi);fv.textContent=f?'❤️':'🤍';fv.classList.toggle('on',!!f);if(f)offerVis(id,cvi)};
   const sh=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,cvi); // v404: Partager ▾ holds the visibility (Privée / Cercle / Publique)
-  act.append(fv,rateBox(id,cvi),sh); // v139: heart on every version again
+  act.append(fv,sh); /* v419: ❤️, Partager and ⋯ only; the rating moved to a folded block */
   setTimeout(()=>{try{if(cardId===id)shareLink(verOf(loadH().find(x=>x.id===id)||e,cvi),true)}catch(x){}},500); // v139: prepare the shared link (iOS cancels a share that waits for the server)
   {const cta=$('#cardcta');cta.textContent='💬 '+t.cont;cta.onclick=()=>openSaved(id)} // sticky main button at the bottom of the card
   {const ri=resetInfoFor(id,e.messages||[]),rb=$('#cardorig');rb.textContent='🗑️ '+t.origDel; // « ↺ Recette originale » at the top, like in the chat
     {const cm=$('#cardmore');cm.classList.toggle('on',false);cm.classList.remove('open')}rb.onclick=ri&&ri.kind==='cut'?async()=>{$('#cardmore').classList.remove('open');if(await eraseToOriginal(ri))openCard(id)}:null}
-  if(e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openCard(e.from);act.appendChild(og)}if(e.five){const fb=document.createElement('button');fb.className='cbtn go';fb.textContent='🔄 '+t.fiveAgain;fb.onclick=()=>{const f=e.five;openChat(null);fiveGo(f.j,f.not)};act.appendChild(fb)}if(e.ideas){const ib=document.createElement('button');ib.className='cbtn';ib.textContent=t.ideasBack;ib.onclick=()=>openIdeas(loadH().find(x=>x.id===id));act.appendChild(ib)}
+  { /* v419: ⋯ menu = the secondary actions (original recipe, 5 stars again, ideas, reset, report, delete) */
+    const mi=[];if(e.from&&loadH().some(x=>x.id===e.from))mi.push([t.origB,()=>openCard(e.from)]);
+    if(e.five)mi.push(['🔄 '+t.fiveAgain,()=>{const f=e.five;openChat(null);fiveGo(f.j,f.not)}]);
+    if(e.ideas)mi.push([t.ideasBack,()=>openIdeas(loadH().find(x=>x.id===id))]);
+    const ri2=resetInfoFor(id,e.messages||[]);if(ri2&&ri2.kind==='cut')mi.push(['🗑️ '+t.origDel,async()=>{if(await eraseToOriginal(ri2))openCard(id)}]);
+    const more=document.createElement('div');more.className='mw on cmore';const mb2=document.createElement('button');mb2.type='button';mb2.className='cbtn cmbtn';mb2.textContent='⋯';mb2.setAttribute('aria-label',t.moreA);mb2.setAttribute('aria-haspopup','true');mb2.setAttribute('aria-expanded','false');
+    const pop=document.createElement('div');pop.className='mpop';
+    mi.forEach(([lb,fn])=>{const b=document.createElement('button');b.type='button';b.textContent=lb;b.onclick=()=>{more.classList.remove('open');fn()};pop.appendChild(b)});
+    if(e.cpub&&e.csid)pop.appendChild(reportLink(e));{const dv=delLink(e,cvi);if(dv)pop.appendChild(dv)}
+    more.append(mb2,pop);mb2.onclick=ev=>{ev.stopPropagation();const o=!more.classList.contains('open');more.classList.toggle('open',o);mb2.setAttribute('aria-expanded',String(o))};
+    if(pop.children.length)act.appendChild(more)}
   const live=e.imp&&e.csid&&!e.cpub?checkLive(e.id,body.querySelector('.cdate')):null;
-  body.appendChild(act);if(e.cpub&&e.csid)body.appendChild(reportLink(e));{const dv=delLink(e,cvi);if(dv){dv.classList.add('cdelv');body.appendChild(dv)}}if(mb)body.appendChild(mb);
+  {const vr=cardVars(e,cvi);if(vr)body.appendChild(vr)}if(mb)body.appendChild(mb);body.appendChild(act); /* v419: variants, then the chips, then the 3 actions */
   const rt=document.createElement('div');rt.className='rbody rtext';renderRecipe(rt,txt,curT,false,(ings,m)=>openBranch(id,ings,m),prevVerOf(e.messages,txt));cardTabs(rt);body.appendChild(rt);
-  {const cm=buildComments(body,vKey(e,cvi),{closed:comClosed(e),title:e.title,sid:()=>e.csid||e.croot||sidFor(vKey(e,cvi))});if(live)live.then(()=>cm.setClosed(comClosed(loadH().find(x=>x.id===e.id))))} // v297: comments closed once the recipe is no longer shared
+  { /* v419: « Noter cette variante » and « Commentaires » are folded blocks */
+    const rw=rateBox(id,cvi),rf=cfold(t.rateV,rw);{const ri=rw.querySelector('.ri');if(ri&&window.MutationObserver)new MutationObserver(()=>rf.note(ri.textContent?'★ '+ri.textContent:'')).observe(ri,{childList:true,characterData:true,subtree:true})}body.appendChild(rf);
+    const cbx=document.createElement('div'),cf2=cfold(t.com,cbx);cf2.classList.add('cfc');body.appendChild(cf2);
+    const cm=buildComments(cbx,vKey(e,cvi),{closed:comClosed(e),title:e.title,sid:()=>e.csid||e.croot||sidFor(vKey(e,cvi)),onCount:n=>cf2.note(n?String(n):'')});if(live)live.then(()=>cm.setClosed(comClosed(loadH().find(x=>x.id===e.id)))) /* v297: comments closed once the recipe is no longer shared */}
   show('card');body.scrollTop=0;try{window.cardHdr()}catch(x){}
 }
 // ----- Comments (stored server-side: /api/comments) -----
@@ -5154,6 +5196,7 @@ $('#cardback').onclick=()=>show('home');
 $('#cardhist').onclick=()=>{show('history');const l=$('#hlist');l.scrollTop=hScroll;try{updTop()}catch(x){}}; // back to the History list exactly where it was (same tab, same position)
 $('#toorig').onclick=resetToOriginal;
 // recipe card: « ⋯ » menu, and the header turns solid (title visible) once the photo has scrolled away
+document.addEventListener('click',ev=>{document.querySelectorAll('.cmore.open').forEach(m=>{if(!m.contains(ev.target)){m.classList.remove('open');const q=m.querySelector('.cmbtn');if(q)q.setAttribute('aria-expanded','false')}})}); /* v419: closes the card ⋯ menu */
 {const w=$('#cardmore'),b=w.querySelector('.back');
   b.onclick=ev=>{ev.stopPropagation();const o=!w.classList.contains('open');w.classList.toggle('open',o);b.setAttribute('aria-expanded',String(o))};
   document.addEventListener('click',ev=>{if(!ev.target.closest('#cardmore')){w.classList.remove('open');b.setAttribute('aria-expanded','false')}});
@@ -5175,7 +5218,7 @@ function updTop(){
     if(nb){const n=nv.getBoundingClientRect(),c=nb.getBoundingClientRect();b.style.left=Math.round(c.left+c.width/2-22)+'px';b.style.top=Math.round(n.top-44-12)+'px'}
     else if($('#app').classList.contains('selmode')){const hb=$('#hselbar').getBoundingClientRect();b.style.left=Math.round(r.right-62)+'px';b.style.top=Math.round(hb.top-44-10)+'px'} // History selection mode: just above the action bar, on the right
     else if($('#card').classList.contains('on')){ // recipe card: on the same line as the « Commentaires » title while it is on screen (never on « Publier »), otherwise above the sticky button
-      const cs=sc.querySelector('.coms'),ch=cs&&cs.querySelector('h2'),hr=ch?ch.getBoundingClientRect():null,ctaTop=($('#cardcta').getBoundingClientRect().top)||r.bottom;
+      const cs=sc.querySelector('.cfc'),ch=cs&&cs.querySelector('.cfh'),hr=ch?ch.getBoundingClientRect():null,ctaTop=($('#cardcta').getBoundingClientRect().top)||r.bottom;
       b.style.left=Math.round(r.right-62)+'px';
       if(hr&&hr.top>r.top+70&&hr.bottom<ctaTop-8)b.style.top=Math.round(hr.top+hr.height/2-22)+'px';
       else if(cs&&cs.getBoundingClientRect().top<r.top+70)b.style.top=Math.round(r.top+72)+'px'; // comments already scrolled past the top
@@ -5778,7 +5821,7 @@ function menText(el,text){el.textContent='';const s=String(text||'');let last=0;
 function menOpen(h){profOpen(h)} /* v363: the @ opens the author's profile (v360: the search) */
 function ntFind(x){if(x.ck){const l=menFind(x.ck);if(l)return l}if(x.sid){const e=loadH().find(h=>h.csid===x.sid||h.croot===x.sid);if(e)return{id:e.id};for(const[k,v]of Object.entries(pubMap()))if(v&&v.sid===x.sid){const l=menFind(k);if(l)return l}}return null}
 function ntLink(x){return !!(x&&(x.sid||x.ck)&&['circle','pub','fpub','appok','men'].includes(x.k))} /* v366: a notification that can open its recipe */
-function ntToComment(cid){let n=0;const go=()=>{const c=cid&&document.querySelector('.com[data-cid="'+cid+'"]'),w=document.querySelector('#cardbody .coms');if(c){c.scrollIntoView({block:'center',behavior:'smooth'});c.classList.add('chl');setTimeout(()=>c.classList.remove('chl'),2800);return}if(++n<14)setTimeout(go,400);else if(w)w.scrollIntoView({block:'center',behavior:'smooth'})};setTimeout(go,500)}
+function ntToComment(cid){let n=0;const go=()=>{const c=cid&&document.querySelector('.com[data-cid="'+cid+'"]'),w=document.querySelector('#cardbody .coms');if(c){const cfo=c.closest('.cfold');if(cfo&&cfo.openIt)cfo.openIt();c.scrollIntoView({block:'center',behavior:'smooth'});c.classList.add('chl');setTimeout(()=>c.classList.remove('chl'),2800);return}if(++n<14)setTimeout(go,400);else if(w)w.scrollIntoView({block:'center',behavior:'smooth'})};setTimeout(go,500)}
 async function ntOpen(x){const loc=ntFind(x);if(loc)openCard(loc.id,loc.vi);else if(x.sid)await importShared(x.sid,['pub','fpub','appok'].includes(x.k)?{pub:1}:{by:x.by});else return;if(x.k==='men')ntToComment(x.cid)}
 function menFind(ck){for(const e of loadH()){const ms=e.messages||[];for(let i=0;i<ms.length;i++)if(ms[i].role==='assistant'&&vKey(e,i)===ck)return{id:e.id,vi:i}}return null}
 async function menMembers(){if(menPool&&Date.now()-menPoolAt<120000)return menPool;let m=(ciData&&ciData.members)||[];
