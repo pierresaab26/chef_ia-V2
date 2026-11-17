@@ -549,3 +549,6 @@ Variant pills 28px high.
 
 ## v425
 Variant pills « Version N ✕ »; every version (Originale too) can be deleted; variants are re-attached when an original goes.
+
+## v426
+Variant pills fill the full row width.

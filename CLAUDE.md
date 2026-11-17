@@ -139,6 +139,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (changelog, newest first, up to v348)
 
+v426 (owner: « ajuste à toute la longueur de la page »): the variant pills grow (`flex:1 0 auto`, content centred) to fill the full width of the page when they fit; when there are too many they still scroll. Committed locally, not pushed.
+
 v425 (owner: « Version 2 avec X et version 3 avec X, ça rentre ? » then « il faut pouvoir toutes les supprimer »): the variant pills read « Originale ✕ · Version 2 ✕ · Version 3 ✕ » (new i18n key `verP`, 6 languages; 3 pills fit an iPhone SE, more scroll); the ✕ runs the existing `delVersion` (confirmation dialog). `canDelV` now allows EVERY version, the Originale too. In `delVersion`, when the last version of an entry goes: its variants are re-attached (to its parent, or the first variant becomes the new original), and if nothing is left of the recipe the app goes to the home page. Pill numbers: `v.n`, but a variant whose number is already taken (the old `vbase` collision) gets the next free number. Test: Playwright iPhone SE / 13 (fr-FR), deleting the Originale of a family keeps the variant and the other versions, no JS error. Committed locally, not pushed.
 
 v424 (owner: « rétrécis la hauteur des boutons »): the variant pills are 28px high (was 36), 13px font, 13px side padding. His other questions (« Version 2 » labels, quick delete button, does it fit?) were answered, not coded, waiting for « go ». Committed locally, not pushed.
