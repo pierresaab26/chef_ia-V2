@@ -141,6 +141,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (changelog, newest first, up to v348)
 
+v447 (owner: « tu n'as pas réparé ça », screenshot of the cookie panel on iPad): the library wrapper `#tarteaucitronScrollbarAdjust` shifted the big buttons 15 px left (flush against the panel edge, 31 px gap on the right); reset to margin 0 / width 100% so « Tout autoriser » / « Non merci » are centred (16 px each side); the « Politique de confidentialité » button (`#tarteaucitronPrivacyUrlDialog`, white box) is now a pink underlined link; « Enregistrer » margin 0. CSS only. Test: Playwright iPhone 13 / iPad (measured edges 146–674 in 130–690, screenshot). Not pushed.
+
 v446 (owner: « met tout dans legal »): the drawer has ONE row « Infos légales » (key `lgl`, 6 languages) → `/legal`; the « Confidentialité et cookies » row `#dCk` is hidden (code kept); cookie choices are reached from the section « Cookies » of `/legal` (link `/#tarteaucitron`, which opens the tarteaucitron panel: tested). Test: Playwright iPhone 13 (panel opens from the hash, row hidden, label). Not pushed.
 
 v445 (owner screenshot of the cookie panel: « répare »): in the tarteaucitron panel the label and icon touched (« Tout autoriser✓ », « Non merci✗ ») and « Fermer » showed a dashed blue focus ring. CSS only: `gap:8px` + `inline-flex` on the allow / deny buttons (global and per service), `outline:none` on the panel buttons. Test: Playwright iPhone 13 / iPad screenshots (no JS error). Not pushed.
