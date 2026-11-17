@@ -597,3 +597,6 @@ Sentry active (DSN set): Android and iOS errors reported.
 
 ## v441
 Cookie banner (tarteaucitron, self-hosted); Sentry only runs after consent; Privacy and cookies item in the menu.
+
+## v442
+Cookie banner and panel redesigned (cream floating card, pink buttons, friendly 6-language texts); hidden while app dialogs are open.
