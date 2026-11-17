@@ -546,3 +546,6 @@ Card: variants on ONE line of short pills; « Variantes · N ▾ » button on th
 
 ## v424
 Variant pills 28px high.
+
+## v425
+Variant pills « Version N ✕ »; every version (Originale too) can be deleted; variants are re-attached when an original goes.
