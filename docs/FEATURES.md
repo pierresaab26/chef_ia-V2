@@ -531,3 +531,6 @@ A list can be shared with anyone through `https://<site>/l/<code>` (button « �
 
 ### v419 — Simplified recipe card (variants row, 3 actions, folded blocks)
 Order on the card: photo, title, date line, **variants row** (only with 2+ versions: « Variantes · N », « Toutes », pills « + Adapter » then V1, V2…), info bubbles, **❤️ / Partager / ⋯**, ingredient / utensil / preparation tabs, folded « Astuce du chef » and « Ce qui a changé », folded « Noter cette variante » and « Commentaires », sticky « Ajuster avec le chef ». Heart, rating and comments belong to the version shown (`vKey`). The ⋯ menu holds the secondary actions (original recipe, 5 stars again, reset, report, delete this version). Code: `cardVars`, `varShort`, `cfold`, `.cvar` / `.cvp` / `.cfold` / `.cmore` CSS. The autumn background tint was removed (cream stays).
+
+### v420 — Recipe card adjustments
+« ★ Noter » sits next to Partager and opens the rating panel; the chef's tip stays open; the first pill reads « Originale » and the others « V2 · express change » (`chgExpress`: first bullet of the « what changed » section); the « Toutes » button and the « Toutes les versions » dialog were restyled (cards with badge, date, title and the express change).
