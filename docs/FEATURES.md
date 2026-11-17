@@ -585,3 +585,6 @@ Rating panel: J’ai cuisiné and the 5 stars shown together, closes after a tap
 
 ## v437
 Rating panel: Noter → J’ai cuisiné → 5 stars → a star closes it; no publish dialog in between.
+
+## v438
+Rating panel centred with « Cuisinée par N personnes »; Publier button shows Privée / Cercle / Publique with its icon.
