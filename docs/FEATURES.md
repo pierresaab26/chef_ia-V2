@@ -594,3 +594,6 @@ Error monitoring with Sentry (Android and iOS), self-hosted bundle, privacy-scru
 
 ## v440
 Sentry active (DSN set): Android and iOS errors reported.
+
+## v441
+Cookie banner (tarteaucitron, self-hosted); Sentry only runs after consent; Privacy and cookies item in the menu.
