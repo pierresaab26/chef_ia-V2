@@ -555,3 +555,6 @@ Variant pills fill the full row width.
 
 ## v427
 Variantes badge same size as CheffeEvalie; « Ajuster avec le chef » starts at the displayed version, earlier history behind « Voir l’historique ».
+
+## v428
+« Ajuster avec le chef » shows only the displayed version (before and after folded behind « Voir l’historique »).
