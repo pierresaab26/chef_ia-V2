@@ -543,3 +543,6 @@ Card: « Variantes · N » on the date line; 2-line variant bubbles (V2 + expres
 
 ## v423
 Card: variants on ONE line of short pills; « Variantes · N ▾ » button on the date line opens the versions dialog.
+
+## v424
+Variant pills 28px high.

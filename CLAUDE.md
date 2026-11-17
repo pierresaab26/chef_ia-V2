@@ -139,6 +139,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (changelog, newest first, up to v348)
 
+v424 (owner: « rétrécis la hauteur des boutons »): the variant pills are 28px high (was 36), 13px font, 13px side padding. His other questions (« Version 2 » labels, quick delete button, does it fit?) were answered, not coded, waiting for « go ». Committed locally, not pushed.
+
 v423 (owner: « essaie de caler en ligne : Originale, V1, et 2 puis la suite » after he found « 2 bubbles then Voir toutes les variantes » ugly): the variants row is ONE line of short pills « Originale · V2 · V3 … » (36px, no wrap, the active one centred, the rest scrolls); the « Voir toutes les variantes » bubble and the 2-line bubbles are gone (`varTwo` removed; `varAll` unused). « Variantes · N ▾ » on the date line is now a pink button that opens the versions dialog (details + express changes). Test: Playwright iPhone SE / 13 / iPad, one line, no overflow, no JS error. Committed locally, not pushed.
 
 v422 (owner: « mets Variantes 4 à côté de CheffeEvalie · pas beau les variantes là · mets les bulles sur 2 lignes avec plus d'infos puis voir toutes les variantes sur la même ligne »): (1) « Variantes · N » (`.vcount`) moved to the date line, next to the origin badge; the `.cvh` header is gone. (2) Bubbles (`.cvp`, 148px) on 2 lines: `.cv1` = « Originale » / « V2 », `.cv2` = express change (up to 2 bullets, 34 chars, 2-line clamp; for the original the title); built by new `varTwo()` (`varShort` now unused). (3) Last bubble in the same row = « Voir toutes les variantes » (`varAll` changed in 6 languages, list icon) → `showVersions`. Test: Playwright iPhone SE / 13 / iPad (fr-FR), no overflow, no JS error. Committed locally, not pushed.
