@@ -540,3 +540,6 @@ Card: no version badge next to the origin, 4 centred compact actions (share = ic
 
 ## v422
 Card: « Variantes · N » on the date line; 2-line variant bubbles (V2 + express change); last bubble « Voir toutes les variantes ».
+
+## v423
+Card: variants on ONE line of short pills; « Variantes · N ▾ » button on the date line opens the versions dialog.
