@@ -552,3 +552,6 @@ Variant pills « Version N ✕ »; every version (Originale too) can be deleted;
 
 ## v426
 Variant pills fill the full row width.
+
+## v427
+Variantes badge same size as CheffeEvalie; « Ajuster avec le chef » starts at the displayed version, earlier history behind « Voir l’historique ».
