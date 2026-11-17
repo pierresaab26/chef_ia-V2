@@ -64,7 +64,7 @@ const MAIL = {
 
 async function sendLoginMail(to, code, link, lang) {
   const key = process.env.RESEND_API_KEY;
-  if (!key) return false;
+  if (!key) { console.error("sendLoginMail: RESEND_API_KEY missing"); return false; }
   const [subject, body] = MAIL[lang] || MAIL.fr;
   try {
     const r = await fetch("https://api.resend.com/emails", {
@@ -73,8 +73,12 @@ async function sendLoginMail(to, code, link, lang) {
       body: JSON.stringify({ from: process.env.AUTH_FROM || process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>", to: [to], subject, text: body.replace("{code}", code).replace("{link}", link) }),
       signal: AbortSignal.timeout(8000),
     });
+    if (!r.ok) { // v449: say WHY in the Vercel logs (no secret, no code, no address)
+      let why = ""; try { why = (await r.text()).slice(0, 300); } catch {}
+      console.error("sendLoginMail failed", r.status, "from=" + (process.env.AUTH_FROM ? "AUTH_FROM" : process.env.MOD_FROM ? "MOD_FROM" : "default"), why);
+    }
     return r.ok;
-  } catch { return false; }
+  } catch (e) { console.error("sendLoginMail error", String((e && e.message) || e)); return false; }
 }
 
 function appUrl(req) {
