@@ -591,3 +591,6 @@ Rating panel centred with « Cuisinée par N personnes »; Publier button shows 
 
 ## v439
 Error monitoring with Sentry (Android and iOS), self-hosted bundle, privacy-scrubbed; active once a DSN is set.
+
+## v440
+Sentry active (DSN set): Android and iOS errors reported.
