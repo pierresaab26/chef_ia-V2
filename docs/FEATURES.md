@@ -570,3 +570,6 @@ Chat from a card: same order and same action row as the card.
 
 ## v432
 Card / chat-from-card actions: separate « Publier » (visibility) and link-share buttons.
+
+## v433
+Card actions: Favori, Noter, Publier, Partager (labelled grid); no ⋯ menu; share sheet prepared before the tap.
