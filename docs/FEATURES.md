@@ -600,3 +600,6 @@ Cookie banner (tarteaucitron, self-hosted); Sentry only runs after consent; Priv
 
 ## v442
 Cookie banner and panel redesigned (cream floating card, pink buttons, friendly 6-language texts); hidden while app dialogs are open.
+
+## v443
+Cookie banner: « See details » link centred.
