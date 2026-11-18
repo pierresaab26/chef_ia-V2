@@ -1,4 +1,4 @@
-import { authOk, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js";
+import { authOk, hasAccess, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js";
 import { systemFor, PARTS } from "./chat.js";
 import { LANGS, OCC, periodOf, periodById, occasionNowFR, parseIdeas, ideasPrompt, norm } from "./_season.js";
 
@@ -59,7 +59,7 @@ async function generate(lang, occ, avoid, banned) {
 }
 
 // Series of the current period (generated when missing) and the previous ones, for one language and one occasion.
-export async function getSeries(lang, occ, per = periodOf()) {
+export async function getSeries(lang, occ, per = periodOf(), readOnly = false) {
   const ids = [per.id];
   for (let i = 1; i <= KEEP_PREVIOUS; i++) if (per.id - i >= 0) ids.push(per.id - i);
   const [found, seen] = await Promise.all([readSeries(lang, occ, ids), readSeen(lang)]);
@@ -68,6 +68,7 @@ export async function getSeries(lang, occ, per = periodOf()) {
     return f && f.items ? { from: p.from, to: p.to, items: f.items } : null;
   }).filter(Boolean);
   let current = found[0] && found[0].items;
+  if (!current && readOnly) return { period: per, current: null, previous, seen: [] }; // v485: visitors without access code never trigger a generation
   if (!current) {
     const avoid = [...new Set([...previous.flatMap((p) => p.items.map((x) => x[0])), ...seen.slice(-PROMPT_SEEN)])];
     let items;
@@ -137,13 +138,14 @@ export default async function handler(req, res) {
   if (q.status) return res.status(200).json(await status());
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
   const lang = String(q.lang || ""), occ = String(q.occ || "");
-  // v484: the chef's ideas of the CURRENT occasion are the same for everybody and are public (visitors from social networks see the menu without an access code);
-  // any other occasion still needs the access code.
-  if (occ !== occasionNowFR() && !(await authOk(req, res))) return;
+  // v485: the chef's ideas of the CURRENT occasion are public to READ (visitors from social networks); they can never trigger a generation.
+  // Any other occasion still needs the access code.
+  const access = await hasAccess(req);
+  if (!access && occ !== occasionNowFR()) return res.status(401).json({ error: "code" });
   if (!LANGS.includes(lang) || !OCC[occ]) return res.status(400).json({ error: "messages" });
   if (await overLimit(req, "rl:si:", 30)) return fail(res, "rate");
   try {
-    return res.status(200).json(await getSeries(lang, occ));
+    return res.status(200).json(await getSeries(lang, occ, undefined, !access));
   } catch (e) {
     if (e && e.code) return fail(res, e.code);
     return res.status(502).json({ error: "storage" });

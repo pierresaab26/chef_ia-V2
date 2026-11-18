@@ -1,4 +1,4 @@
-import { authOk, hasRedis, redis, overLimit, clean, askClaude, parseJsonLoose } from "./_lib.js";
+import { hasAccess, hasRedis, redis, overLimit, clean, askClaude, parseJsonLoose } from "./_lib.js";
 
 // Photo of a recipe, found on Unsplash (free licence; the photographer and Unsplash are credited in the app).
 //   POST { title, lang, skip:[photo ids already used] } -> { photo:{id,u,t,by,bu,pg} } | { none:true, why }
@@ -167,7 +167,7 @@ export default async function handler(req, res) {
   if (req.method === "GET" && q.status)
     return res.status(200).json({ unsplashKey: !!process.env.UNSPLASH_ACCESS_KEY, anthropicKey: !!process.env.ANTHROPIC_API_KEY, redis: hasRedis(), accessCode: !!process.env.APP_PASSWORD, tsKey: process.env.TURNSTILE_SITE_KEY || "" }); // v343: tsKey = PUBLIC Turnstile site key (the app asks it before an import)
   if (req.method !== "POST") return res.status(405).json({ error: "method" });
-  if (!(await authOk(req, res))) return;
+  const access = await hasAccess(req); // v485: without access code only photos already in the cache are served (no search, no model call)
   if (!process.env.UNSPLASH_ACCESS_KEY) return res.status(503).json({ error: "nokey" });
 
   const body = req.body && typeof req.body === "object" ? req.body : {};
@@ -188,6 +188,7 @@ export default async function handler(req, res) {
         if (!ranked && no) return res.status(200).json({ none: true, why: no === "1" ? "rejected" : String(no) });
       } catch {}
     }
+    if (!ranked && !access) return res.status(200).json({ none: true, why: "locked" });
     if (!ranked) {
       ({ ranked, why } = await findPhotos(title));
       if (hasRedis()) {

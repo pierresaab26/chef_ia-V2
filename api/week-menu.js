@@ -1,4 +1,4 @@
-import { authOk, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js";
+import { hasAccess, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js";
 import { LANGS, norm } from "./_season.js";
 import { weekOf, MENU_SYS, menuPromptJ, parseMenuJ } from "./_week.js";
 import { PUB, dropOldIndex } from "./shared.js";
@@ -88,8 +88,9 @@ async function generate(lang, avoid) {
   return best;
 }
 
-export async function getWeek(lang, wk = weekOf()) {
+export async function getWeek(lang, wk = weekOf(), readOnly = false) {
   let items = await read(lang, wk.id);
+  if (!items && readOnly) throw Object.assign(new Error("none"), { code: "none" }); // v485: visitors without access code only READ the stored menu, they never trigger a generation
   if (!items) {
     const prev = wk.id > 0 ? await read(lang, wk.id - 1) : null;
     items = await generate(lang, prev ? prev.filter(Boolean).map((x) => x[0]) : []);
@@ -103,15 +104,15 @@ export default async function handler(req, res) {
   if (req.method !== "GET") return fail(res, "method");
   res.setHeader("Cache-Control", "no-store");
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!(await authOk(req, res))) return;
+  const access = await hasAccess(req); // v485: without access code the stored menu is shown (read only)
   const lang = String((req.query || {}).lang || "");
   if (!LANGS.includes(lang)) return res.status(400).json({ error: "messages" });
   if (await overLimit(req, "rl:wm:", 30)) return fail(res, "rate");
   try {
-    return res.status(200).json(await getWeek(lang));
+    return res.status(200).json(await getWeek(lang, undefined, !access));
   } catch (e) {
     console.error("week-menu: failed", e && e.code, e && e.message, e && e.why);
-    if (e && e.code) return res.status(e.code === "timeout" ? 504 : e.code === "rate" ? 429 : 502).json({ error: e.code, detail: String(e.why || e.detail || "").slice(0, 300) });
+    if (e && e.code) return res.status(e.code === "none" ? 404 : e.code === "timeout" ? 504 : e.code === "rate" ? 429 : 502).json({ error: e.code, detail: String(e.why || e.detail || "").slice(0, 300) });
     return res.status(502).json({ error: "storage", detail: String((e && e.message) || "").slice(0, 160) });
   }
 }
