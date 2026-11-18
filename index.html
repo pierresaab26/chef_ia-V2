@@ -3517,7 +3517,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v476',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v477',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -3585,7 +3585,7 @@ function resolveVi(e,i,content){if(e.messages&&e.messages[i]&&e.messages[i].cont
 function favItems(list){const a=loadH(),seen=new Set(),out=[];list.forEach(e=>{if(e.qa){if(e.fav)out.push(e);return}if(!famFav(e))return;ownIdx(e).forEach(i=>{const m=e.messages[i];if(m.fav)out.push({...e,fav:true,_vi:i,title:recipeTitle(m.content)||e.title,_fam:famVersions(e).length>1})})});return out} // v128: ONE row per favorite recipe (it groups all its versions)
 function verBar(e,vi,isLast,noDel){ // favorite, rating, share of THIS version + « Commencer la recette » (full width)
   const t=T(),rid=e.id,bar=document.createElement('div');bar.className='chact';bar.dataset.rid=rid;bar.dataset.vi=vi;const on=favAt(e,vi);
-  const fv=document.createElement('button');fv.type='button';fv.className='cbtn fvb'+(on?' on':'');fv.textContent=(on?'❤️ ':'🤍 ')+t.fav;fv.onclick=()=>{if(toggleFav(rid,vi))offerVis(rid,vi)};
+  const fv=document.createElement('button');fv.type='button';fv.className='cbtn fvb'+(on?' on':'');fv.textContent=(on?'❤️ ':'🤍 ')+t.fav;fv.onclick=()=>{toggleFav(rid,vi)};
   const sh=shareMenuBtn(()=>loadH().find(x=>x.id===rid)||e,vi); // v404
   bar.append(fv,rateBox(rid,vi),sh); // v139: the heart is back on every version / variant (it still marks the whole recipe)
   if(isLast&&e.from&&loadH().some(x=>x.id===e.from)){const og=document.createElement('button');og.type='button';og.className='cbtn';og.textContent=t.origB;og.onclick=()=>openSaved(e.from);bar.appendChild(og)}
@@ -3838,7 +3838,7 @@ function shareIcon(){const i=document.createElement('span');i.className='shi';i.
 function chatCardBar(e,vi){ /* v431: the action row of the card, for the chat opened from a card: ❤️, share (icon), ★ Noter (+ its panel), ⋯ (origin, report, delete) */
   const t=T(),id=e.id,w=document.createElement('div');w.className='chcard';const act=document.createElement('div');act.className='cact c4';
   const cf=favAt(e,vi),fv=document.createElement('button');fv.type='button';fv.className='cbtn'+(cf?' on':'');actIc(fv,cf?'❤️':'🤍',t.fav);fv.setAttribute('aria-label',t.fav);
-  fv.onclick=()=>{const f=toggleFav(id,vi);actIc(fv,f?'❤️':'🤍',t.fav);fv.classList.toggle('on',!!f);if(f)offerVis(id,vi)};
+  fv.onclick=()=>{const f=toggleFav(id,vi);actIc(fv,f?'❤️':'🤍',t.fav);fv.classList.toggle('on',!!f)};
   const sh=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,vi,'pub'),sl=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,vi,'link');
   const rw=rateBox(id,vi,{noOffer:1}),rb=document.createElement('button'),rp=document.createElement('div');rb.type='button';rb.className='cbtn rtb';rp.className='rpanel';rp.hidden=true;rp.appendChild(rw);
   const rl=()=>{const ri=rw.querySelector('.ri'),x=ri&&ri.textContent.trim();actIc(rb,'★',x||t.rateB)};rl();{const ri=rw.querySelector('.ri');if(ri&&window.MutationObserver)new MutationObserver(rl).observe(ri,{childList:true,characterData:true,subtree:true})}
@@ -4942,7 +4942,7 @@ function openCard(id,vi){track('recipe_card_open');
   const mb=metaBar(hd,info.find(x=>x.startsWith('🍽️'))||'',(info.find(x=>x.startsWith('⏱'))||'')); // v117: shown AFTER the action row
   const act=document.createElement('div');act.className='cact c4'; /* v421: 4 compact options, centred */
   const cvi=vm?vi:lastVi(e),cf=favAt(e,cvi);const fv=document.createElement('button');fv.className='cbtn'+(cf?' on':'');actIc(fv,cf?'❤️':'🤍',t.fav);fv.setAttribute('aria-label',t.fav);
-  fv.onclick=()=>{const f=toggleFav(id,cvi);actIc(fv,f?'❤️':'🤍',t.fav);fv.classList.toggle('on',!!f);if(f)offerVis(id,cvi)};
+  fv.onclick=()=>{const f=toggleFav(id,cvi);actIc(fv,f?'❤️':'🤍',t.fav);fv.classList.toggle('on',!!f)};
   const sh=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,cvi,'pub'),sl=shareMenuBtn(()=>loadH().find(x=>x.id===id)||e,cvi,'link'); // v432: « Publier » (Privée / Cercle / Publique) and the link share are two buttons
   { /* v420: the rating is a button next to Partager; it opens the rating panel under the row */
     const rw=rateBox(id,cvi,{noOffer:1}),rb3=document.createElement('button');var rp=document.createElement('div');rb3.type='button';rb3.className='cbtn rtb';rb3.setAttribute('aria-expanded','false');rp.className='rpanel';rp.hidden=true;rp.appendChild(rw);
