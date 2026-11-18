@@ -141,6 +141,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (changelog, newest first, up to v348)
 
+v451 (owner: « dans ce cas-là affiche un message correctement »; « Aide et contact » with a message under 5 characters only showed a toast hidden behind the dialog, so it looked frozen): the dialog now shows the error INLINE, in red under the text box (`role=alert`, cleared when typing): « message too short » (the existing `hlpShort`), and also send failures / rate limit (`hlpErr`, `accRate`) instead of toasts. Minimum stays 5 characters. No new i18n key. Test: Playwright iPhone SE / 13 / iPad. Not pushed.
+
 v450 (owner created the free IONOS redirection `contact@cheffeevalie.com` → a dedicated Gmail, tested OK): contact e-mail filled in `legal.html` (mentions légales and privacy sections, a `mailto:` link). Still open there: publisher name, minimum age, retention, Upstash region, transfer safeguards. Owner to set `SUPPORT_EMAIL` and `MOD_EMAIL` = that address in Vercel (Edit, then Redeploy). Not pushed.
 
 v449 (owner: sign-in mails not received on cheffeevalie.com): `sendLoginMail()` in `api/_auth.js` now logs the reason of a failure to the Vercel logs (`sendLoginMail failed <status> from=<which variable> <Resend answer>`, or missing `RESEND_API_KEY`, or network error); no secret, code or address logged. Cause found before: Resend Logs showed 403 « Testing domain restriction » because the deployment still sent from `onboarding@resend.dev` (`AUTH_FROM` needs a redeploy). Test: `node --check api/*.js`. Not pushed.
