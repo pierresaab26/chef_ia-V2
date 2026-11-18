@@ -29,6 +29,10 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .mascot{width:40px;height:40px;border-radius:14px;flex:none}
 .hi{color:var(--pink);font-weight:700;font-size:19px;line-height:1.1}
 .sub{color:var(--mut);font-size:13px}
+/* v478: visitors without access code (social networks) see the home with a « coming soon » bar */
+#soonBar{display:flex;flex-direction:column;gap:2px;margin:0 0 10px;padding:10px 14px;border-radius:16px;background:var(--pink);color:#fff;text-align:center;font-size:13px;line-height:1.35}
+#soonBar[hidden]{display:none}
+#soonBar b{font-size:15px}
 .ask{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:var(--rc);border:1px solid var(--bd);box-sizing:border-box;height:52px;padding:0 7px 0 14px;margin-bottom:10px;box-shadow:var(--sh)}
 .ask input{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:0;min-width:0}
 .ask button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:6px 12px;font-size:14px}
@@ -809,6 +813,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         <svg class="mascot"><use href="#mascot"/></svg>
         <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><div id="verpill"><i></i><span></span></div>
       </div>
+      <div id="soonBar" hidden><b id="soonT"></b><span id="soonS"></span></div>
       <div class="ask"><span class="askico" aria-hidden="true">🧑‍🍳</span><input id="hq"><button id="hgo">Go</button></div>
       <div id="hqcs"></div>
       <div class="tiles"><!-- v211: three compact tiles -->
@@ -998,6 +1003,7 @@ fr:{
   eBan:"Trop de demandes non sérieuses ou interdites : l’accès au Chef est suspendu pendant 24 h. Le support a été prévenu et reviendra vers vous.",
   err:"Une erreur est survenue, réessayez.",
   code:"Code d’accès :",
+  soonT:"Bientôt disponible",soonS:"L’app ouvre très prochainement. Reviens vite !",soonD:"Bientôt disponible : l’app ouvre très prochainement. Tu as déjà un code d’accès ?",soonHave:"J’ai un code",
   send:"Envoyer",
   req:"Donne-moi une recette de ",
   cu:["Cuisine italienne","Cuisine asiatique","Cuisine française","Monde et fusion"],
@@ -1353,6 +1359,7 @@ en:{
   eBan:"Too many silly or forbidden requests: access to the Chef is suspended for 24 hours. Support has been notified and will get back to you.",
   err:"Something went wrong, please try again.",
   code:"Access code:",
+  soonT:"Coming soon",soonS:"The app opens very soon. Come back shortly!",soonD:"Coming soon: the app opens very soon. Do you already have an access code?",soonHave:"I have a code",
   send:"Send",
   req:"Give me a recipe for ",
   cu:["Italian cuisine","Asian cuisine","French cuisine","World & fusion"],
@@ -1708,6 +1715,7 @@ es:{
   eBan:"Demasiadas peticiones poco serias o prohibidas: el acceso al Chef queda suspendido 24 horas. El soporte ha sido avisado y se pondrá en contacto contigo.",
   err:"Ha ocurrido un error, inténtalo de nuevo.",
   code:"Código de acceso:",
+  soonT:"Próximamente",soonS:"La app abre muy pronto. ¡Vuelve enseguida!",soonD:"Próximamente: la app abre muy pronto. ¿Ya tienes un código de acceso?",soonHave:"Tengo un código",
   send:"Enviar",
   req:"Dame una receta de ",
   cu:["Cocina italiana","Cocina asiática","Cocina francesa","Mundo y fusión"],
@@ -2063,6 +2071,7 @@ de:{
   eBan:"Zu viele unernste oder verbotene Anfragen: der Zugang zum Chef ist 24 Stunden gesperrt. Der Support wurde informiert und meldet sich bei dir.",
   err:"Es ist ein Fehler aufgetreten, bitte erneut versuchen.",
   code:"Zugangscode:",
+  soonT:"Bald verfügbar",soonS:"Die App startet in Kürze. Schau bald wieder vorbei!",soonD:"Bald verfügbar: Die App startet in Kürze. Hast du schon einen Zugangscode?",soonHave:"Ich habe einen Code",
   send:"Senden",
   req:"Gib mir ein Rezept für ",
   cu:["Italienische Küche","Asiatische Küche","Französische Küche","Welt & Fusion"],
@@ -2418,6 +2427,7 @@ it:{
   eBan:"Troppe richieste non serie o vietate: l’accesso allo Chef è sospeso per 24 ore. Il supporto è stato avvisato e ti risponderà.",
   err:"Si è verificato un errore, riprova.",
   code:"Codice di accesso:",
+  soonT:"Presto disponibile",soonS:"L’app apre a breve. Torna presto!",soonD:"Presto disponibile: l’app apre a breve. Hai già un codice di accesso?",soonHave:"Ho un codice",
   send:"Invia",
   req:"Dammi una ricetta per ",
   cu:["Cucina italiana","Cucina asiatica","Cucina francese","Mondo e fusion"],
@@ -2773,6 +2783,7 @@ pt:{
   eBan:"Demasiados pedidos pouco sérios ou proibidos: o acesso ao Chef está suspenso durante 24 horas. O suporte foi avisado e entrará em contacto contigo.",
   err:"Ocorreu um erro, tente novamente.",
   code:"Código de acesso:",
+  soonT:"Em breve",soonS:"O app abre em breve. Volte logo!",soonD:"Em breve: o app abre em breve. Já tens um código de acesso?",soonHave:"Tenho um código",
   send:"Enviar",
   req:"Dê-me uma receita de ",
   cu:["Cozinha italiana","Cozinha asiática","Cozinha francesa","Mundo e fusão"],
@@ -3164,7 +3175,10 @@ function ask({text,input=false,okLabel,noLabel}){
 }
 // Asks for the access code once, even when several requests get a 401 at the same time.
 let codeAsk=null;
-function askCode(){if(!codeAsk)codeAsk=ask({text:T().code,input:true}).then(c=>{codeAsk=null;if(c){try{localStorage.setItem('code',c)}catch(x){}}return c});return codeAsk}
+function hasCode(){try{return !!localStorage.getItem('code')}catch(e){return false}}
+function soonPaint(){const b=document.getElementById('soonBar');if(!b)return;const t=T();document.getElementById('soonT').textContent='🚧 '+t.soonT;document.getElementById('soonS').textContent=t.soonS;b.hidden=hasCode()}
+// v478: without an access code the visitor gets « coming soon » first; « I have a code » opens the original code prompt.
+function askCode(){if(!codeAsk)codeAsk=(async()=>{const t=T();if(!await ask({text:t.soonD,okLabel:t.soonHave}))return null;const c=await ask({text:T().code,input:true});if(c){try{localStorage.setItem('code',c)}catch(x){}try{soonPaint()}catch(x){}}return c})().then(c=>{codeAsk=null;return c});return codeAsk}
 
 let curView='home';
 // v303: the long home placeholder (« Qu’est-ce qu’on cuisine aujourd’hui ? ») is replaced by its short form (« On cuisine quoi ? ») when it does not fit the box
@@ -3178,7 +3192,7 @@ function markDrawer(){document.querySelectorAll('.ditem').forEach(b=>b.classList
 function applyUI(){
   const t=T();document.documentElement.lang=lang;
   $('#hi').textContent=t.hi;$('#sub').textContent=t.sub;fitAsk();
-  $('#hT').textContent=t.hist;$('#hmore').textContent=t.more;$('#hpT').textContent=t.hist;$('#snT').textContent=t.snT;$('#chT').textContent=t.chefs;
+  try{soonPaint()}catch(x){}$('#hT').textContent=t.hist;$('#hmore').textContent=t.more;$('#hpT').textContent=t.hist;$('#snT').textContent=t.snT;$('#chT').textContent=t.chefs;
   inp.placeholder=t.ph;sendB.textContent=t.send;$('#toorig').textContent=t.origR;
   drawSeason();drawChefs();refreshChat();drawHistory();drawFavs();drawerText();
 }
@@ -3517,7 +3531,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v477',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v478',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
