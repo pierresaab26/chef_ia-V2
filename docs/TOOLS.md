@@ -88,4 +88,4 @@ Columns: **Tool** · what it is used for · since · where / how.
 Hard-coded in `index.html` (`META_PIXEL_ID`, `metaPixelLoad()`), loaded only after consent to the « Publicité » category (service `gtmads`). Events: `PageView` only. No `<noscript>` image (no tracking without consent). Do not duplicate it in GTM.
 
 ## TikTok Pixel (v490)
-Hard-coded in `index.html` (`TT_PIXEL_ID`, `ttPixelLoad()`), loaded only after consent to the « Publicité » category (service `gtmads`, right after Meta). Event: `page` only. Do NOT also add a TikTok tag in GTM.
+Hard-coded in `index.html` (`TT_PIXEL_ID`, `ttPixelLoad()`), loaded only after consent to the « Publicité » category (service `gtmads`, right after Meta; GTM is off since v491). Event: `page` only. Do NOT also add a TikTok tag in GTM.
