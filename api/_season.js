@@ -69,7 +69,7 @@ export function occasionNowFR(now = new Date()) {
   if (md >= 125 && md <= 202) return "chandeleur";
   if (t >= E - 14 * D && t <= E + D) return "paques";
   if (md >= 1015 && md <= 1031) return "halloween";
-  if (md >= 1201 && md <= 1226) return "noel";
+  if (md >= 1118 && md <= 1226) return "noel"; // v454: same start as NOEL_FROM in index.html
   return p.m === 12 || p.m <= 2 ? "hiver" : p.m <= 5 ? "printemps" : p.m <= 8 ? "ete" : "automne";
 }
 
