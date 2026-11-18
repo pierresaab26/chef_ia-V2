@@ -73,3 +73,10 @@ Columns: **Tool** · what it is used for · since · where / how.
 - Google / Apple sign-in: prepared in code, not active.
 - Privacy policy, terms (CGU) and legal notices pages: to be written (reminder set for 2026-11-18).
 - Android comment bug: waiting for the exact symptom and browser.
+
+## Google Tag Manager (v462)
+- Purpose: one container for the Meta (Instagram) and TikTok pixels, managed at tagmanager.google.com.
+- Where: `GTM_ID` and `gtmStart()` in `index.html`; consent service `gtm` in `ckInit()` (tarteaucitron).
+- Status: inert while `GTM_ID` is empty. Loads only after consent; trigger tags on the `cookie_consent_granted` event.
+- Data: IP, device/browser, page, referrer (sent by the tags). No names, e-mails or recipe content.
+- Legal: `legal.html` sections 3 and 4 (consent basis, recipients Google/Meta/TikTok).
