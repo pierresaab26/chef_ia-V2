@@ -3126,7 +3126,16 @@ const log=$('#log'),inp=$('#inp'),sendB=$('#send');autoTA(inp,136);
 let hist=[],busy=false,persona="",chefNow=null,lang="en",currentId=null,branchFrom=null,qaMode=false,qaId=null,qaComs={},qaHide=new Set(); // qaId = the saved favorite of this Questions conversation (ONE per conversation) // qaMode = « Cooking questions » screen; qaComs / qaHide = comment blocks and hidden state per answer
 try{lang=localStorage.getItem('lang')||''}catch(e){}
 if(!I18[lang]){const n=(navigator.language||'en').slice(0,2).toLowerCase();lang=I18[n]?n:'en'}
-const T=()=>I18[lang];
+/* v476: French wording follows the Chef/Cheffe choice everywhere (« le chef » → « la cheffe », « du chef » → « de la cheffe »…); the 4 cuisine chefs and « Chef libre » keep their names */
+let GF=false,_frF={o:null,r:null};
+function frFem(v){
+  if(typeof v==='string')return v.replace(/\bVotre chef de poche, propulsé/g,'Votre cheffe de poche, propulsée').replace(/\bVotre chef de poche/g,'Votre cheffe de poche').replace(/\bTon chef de poche/g,'Ta cheffe de poche')
+    .replace(/\bLe chef\b/g,'La cheffe').replace(/\ble chef\b/g,'la cheffe').replace(/\bdu chef\b/g,'de la cheffe').replace(/\bau chef\b/g,'à la cheffe').replace(/\bau Chef\b/g,'à la Cheffe')
+    .replace(/recette Chef\b/g,'recette Cheffe').replace(/(cheffe n’est pas encore connecté)/g,'$1e');
+  if(Array.isArray(v))return v.map(frFem);
+  if(v&&typeof v==='object'){const r={};for(const k in v)r[k]=frFem(v[k]);return r}
+  return v}
+const T=()=>{const o=I18[lang];if(lang!=='fr'||!GF)return o;if(_frF.o!==o){_frF.o=o;_frF.r=frFem(o)}return _frF.r};
 // Conversation token: bumped each time another conversation is put on screen. A chef reply that arrives later
 // for an older conversation is dropped (it must not land in the new thread), and `busy` is released right away.
 let convTok=0;
@@ -3508,7 +3517,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v475',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v476',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -5611,7 +5620,7 @@ $('#dHelpB').onclick=contactFlow;$('#dLegal').onclick=()=>{try{closeDrawer()}cat
 /* v412: Chef / Cheffe choice (stored in chefPrefs.g, synced with the account); changes the word of the bottom bar and the mascot */
 function gen(){return prefsGet().g}
 function gnWord(){const t=T();return gen()==='f'?t.gnF:t.gnM}
-function applyGender(){const f=gen()==='f',m=gen()==='m';[['gfem',f],['gmal',m],['gneu',!f&&!m]].forEach(a=>document.querySelectorAll('#mascot .'+a[0]).forEach(g=>g.setAttribute('display',a[1]?'inline':'none')));try{const e=document.getElementById('rT');if(e)e.textContent=gnWord()}catch(x){}try{if(typeof refreshChat==='function'&&typeof hist!=='undefined'){const n=document.getElementById('cname'),d=document.getElementById('cdesc');if(n&&d&&!chefNow){n.textContent=chefName(chefNow);d.textContent=chefDesc(chefNow)}}}catch(x){}}
+function applyGender(){const f=gen()==='f',m=gen()==='m';if(GF!==f){GF=f;_frF.o=null;try{applyUI()}catch(x){}}[['gfem',f],['gmal',m],['gneu',!f&&!m]].forEach(a=>document.querySelectorAll('#mascot .'+a[0]).forEach(g=>g.setAttribute('display',a[1]?'inline':'none')));try{const e=document.getElementById('rT');if(e)e.textContent=gnWord()}catch(x){}try{if(typeof refreshChat==='function'&&typeof hist!=='undefined'){const n=document.getElementById('cname'),d=document.getElementById('cdesc');if(n&&d&&!chefNow){n.textContent=chefName(chefNow);d.textContent=chefDesc(chefNow)}}}catch(x){}}
 function setGender(v){const p=prefsGet();p.g=v==='f'?'f':'m';prefsSet(p);applyGender();try{track('gender_set',{g:p.g})}catch(x){}}
 function askGender(){return new Promise(done=>{const t=T();const w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
   const q=document.createElement('p');q.style.cssText='font-weight:700;font-size:18px;margin:0 0 4px';q.textContent=t.gnQ;const s2=document.createElement('p');s2.style.cssText='color:var(--mut);font-size:14px;margin:0 0 14px';s2.textContent=t.gnS;d.append(q,s2);
