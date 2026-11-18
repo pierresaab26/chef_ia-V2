@@ -992,6 +992,7 @@ fr:{
   chefs:"Chefs IA",
   disc:"Discuter ›",
   cd:"Chef étoilé · Cuisine du monde",
+  cdF:"Cheffe étoilée · Cuisine du monde",
   ph:"Ex. : sans persil, j’ai du cajun",
   e429:"Trop de demandes, réessayez dans un instant.",
   eBan:"Trop de demandes non sérieuses ou interdites : l’accès au Chef est suspendu pendant 24 h. Le support a été prévenu et reviendra vers vous.",
@@ -3177,8 +3178,8 @@ function refreshChat(){syncCardBtn();const t=T();if(!hist.length){log.innerHTML=
   qaUI();if(!qaMode&&$('#quick').children.length)drawQuick()}
 // Home « Chefs »: 4 cuisine chefs (tap → Starters / Mains / Desserts / Drinks → 4 ideas from that chef) + the free chef (free text → 4 ideas).
 let chefOpen=-1;
-function chefName(c){return c&&c.free?T().frN:c?"Chef "+c.n:"CheffeEvalie"}
-function chefDesc(c){const t=T();return c&&c.free?t.frD:c&&c.k>=0?t.cu[c.k]:t.cd}
+function chefName(c){return c&&c.free?T().frN:c?"Chef "+c.n:(gen()==="f"?"Cheffe Evalie":gen()==="m"?"Chef Evalie":"CheffeEvalie")}
+function chefDesc(c){const t=T();return c&&c.free?t.frD:c&&c.k>=0?t.cu[c.k]:(gen()==="f"&&t.cdF)||t.cd}
 /* v316: original code-drawn chef portraits (index = CHEFS index: 0 Giulia, 1 Hiro, 2 Marcel, 3 Lina) */
 function chefSvg(k){const sk=['#f6cfae','#f3d2b0','#f1c9a5','#c98f66'][k],bgc=['#ffe3e0','#e4ecff','#e3efff','#e4f5e6'][k];
   const hat={0:'<path d="M20 25c-5-9 2-15 8-12 3-5 11-5 14 0 6-3 13 3 8 12z" fill="#fff" stroke="#e8e2dc"/><rect x="20" y="24" width="24" height="5" rx="2" fill="#fff" stroke="#e8e2dc"/>',
@@ -3507,7 +3508,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v474',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v475',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -5610,7 +5611,7 @@ $('#dHelpB').onclick=contactFlow;$('#dLegal').onclick=()=>{try{closeDrawer()}cat
 /* v412: Chef / Cheffe choice (stored in chefPrefs.g, synced with the account); changes the word of the bottom bar and the mascot */
 function gen(){return prefsGet().g}
 function gnWord(){const t=T();return gen()==='f'?t.gnF:t.gnM}
-function applyGender(){const f=gen()==='f',m=gen()==='m';[['gfem',f],['gmal',m],['gneu',!f&&!m]].forEach(a=>document.querySelectorAll('#mascot .'+a[0]).forEach(g=>g.setAttribute('display',a[1]?'inline':'none')));try{const e=document.getElementById('rT');if(e)e.textContent=gnWord()}catch(x){}}
+function applyGender(){const f=gen()==='f',m=gen()==='m';[['gfem',f],['gmal',m],['gneu',!f&&!m]].forEach(a=>document.querySelectorAll('#mascot .'+a[0]).forEach(g=>g.setAttribute('display',a[1]?'inline':'none')));try{const e=document.getElementById('rT');if(e)e.textContent=gnWord()}catch(x){}try{if(typeof refreshChat==='function'&&typeof hist!=='undefined'){const n=document.getElementById('cname'),d=document.getElementById('cdesc');if(n&&d&&!chefNow){n.textContent=chefName(chefNow);d.textContent=chefDesc(chefNow)}}}catch(x){}}
 function setGender(v){const p=prefsGet();p.g=v==='f'?'f':'m';prefsSet(p);applyGender();try{track('gender_set',{g:p.g})}catch(x){}}
 function askGender(){return new Promise(done=>{const t=T();const w=document.createElement('div');w.className='dlgw';const d=document.createElement('div');d.className='dlg';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
   const q=document.createElement('p');q.style.cssText='font-weight:700;font-size:18px;margin:0 0 4px';q.textContent=t.gnQ;const s2=document.createElement('p');s2.style.cssText='color:var(--mut);font-size:14px;margin:0 0 14px';s2.textContent=t.gnS;d.append(q,s2);
