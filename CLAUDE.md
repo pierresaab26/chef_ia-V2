@@ -140,6 +140,7 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (changelog, newest first, up to v348)
+- **v466** Google Analytics 4 is added INSIDE GTM (Tag → Google tag, Tag ID `G-XXXXXXXXXX`, trigger = `cookie_consent_granted`), not in the code. Code/legal change only: banner, service names and `legal.html` now also say « Google Analytics » (6 languages). The GA4 measurement ID is still to be created and put in GTM.
 - **v465** `GTM_ID` switched to `GTM-PTQ2KHW6` (container « Cheffe Evalie », created by Google Ads, already holds the tag `AW-18582452764`). In GTM the tag must use the custom-event trigger `cookie_consent_granted` (named « Consentement accepté »). `GTM-PSJRZ6F8` is no longer used.
 - **v464** Google Ads tag `AW-18582452764` is configured INSIDE GTM (Tag → Google tag, trigger = custom event `cookie_consent_granted`), not in the code, so it stays consent-gated. Code change: banner/service names and `legal.html` now also say « Google Ads » (6 languages).
 - **v463** `GTM_ID='GTM-PSJRZ6F8'`: Google Tag Manager is now ACTIVE (after consent only). The standard GTM snippet must NOT be pasted into the page: it would load before consent. Banner text with the GTM wording is now live.
