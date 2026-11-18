@@ -1,5 +1,5 @@
 import { createHash, randomBytes, randomInt } from "node:crypto";
-import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { authOk, hasAccess, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { isOffensive } from "./_words.js";
 import { indexPerson } from "./_index.js"; // v358: people search index // v356: offensive handles / e-mails refused
 
@@ -183,6 +183,7 @@ export default async function authHandler(req, res, pidOf) {
     if (!owner || owner.length < 8) return res.status(400).json({ error: "key" });
 
     if (body.act === "start") {
+      if (!(await hasAccess(req))) return res.status(401).json({ error: "code" }); // v488: no sign-in code is e-mailed to visitors without access code
       if (await overLimit(req, "rl:au:", 10)) return res.status(429).json({ error: "rate" });
       const email = normMail(body.email);
       if (!mailOk(email)) return res.status(400).json({ error: "email" });

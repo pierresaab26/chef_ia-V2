@@ -3546,7 +3546,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v487',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v488',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -4516,7 +4516,8 @@ function prevVerOf(msgs,content){let i=-1;(msgs||[]).forEach((m,k)=>{if(m.role==
 const LISTS_KEY='chefLists';
 const LOCALES={fr:'fr-FR',en:'en-GB',es:'es-ES',de:'de-DE',it:'it-IT',pt:'pt-PT'};
 const sameTxt=(a,b)=>String(a).toLowerCase()===String(b).toLowerCase();
-function saveLists(L){try{localStorage.setItem(LISTS_KEY,JSON.stringify(L));try{navPaint()}catch(x){}syncSoon();try{shSoon()}catch(x){}}catch(x){toast(T().stFull)}}
+function saveLists(L){if(!hasCode()){try{toast('🚧 '+T().soonT)}catch(x){}return} /* v488: shopping lists are locked for visitors without access code */
+  try{localStorage.setItem(LISTS_KEY,JSON.stringify(L));try{navPaint()}catch(x){}syncSoon();try{shSoon()}catch(x){}}catch(x){toast(T().stFull)}}
 function loadLists(){
   try{const v=JSON.parse(localStorage.getItem(LISTS_KEY)||'null');if(Array.isArray(v))return v}catch(x){}
   // first use after v182: the flat list becomes one named list
@@ -6189,10 +6190,10 @@ async function checkLive(id,dl){try{const e0=loadH().find(x=>x.id===id);if(!e0||
   const ob=dl&&dl.querySelector('.obadge'),nb=originBadge(e);if(ob&&nb)ob.replaceWith(nb)}catch(x){}}
 {let cc='';try{cc=(new URLSearchParams(location.search).get('c')||'').trim().toLowerCase().slice(0,16)}catch(e){}
   if(/^[a-z0-9]{8,16}$/.test(cc))setTimeout(()=>afterCookies(()=>joinCircle(cc)),300);
-  else if(!nick()&&!accLink)setTimeout(()=>afterCookies(()=>{if(!document.querySelector('.dlgw'))askNick()}),1200); // first opening: choose a nickname (step 6)
+  else if(!nick()&&!accLink)setTimeout(()=>afterCookies(()=>{if(hasCode()&&!document.querySelector('.dlgw'))askNick()}),1200); // first opening: choose a nickname (step 6)
   else if(nick()!==(()=>{try{return localStorage.getItem('nickSync')||''}catch(x){return''}})())setTimeout(()=>syncNick(true),2000)}
 setTimeout(demoWarm,6000);
-setTimeout(()=>{if(!accLink)afterCookies(()=>setTimeout(()=>gnStart(0),2500))},3000);applyGender();
+setTimeout(()=>{if(!accLink)afterCookies(()=>{if(hasCode())setTimeout(()=>gnStart(0),2500)})},3000);applyGender();
 {let ss='';try{ss=(new URLSearchParams(location.search).get('s')||'').trim().slice(0,64)}catch(e){}
   if(/^[a-z0-9-]{8,64}$/.test(ss))importShared(ss)}
 // Shared link « /?q=question »: opens the cooking-questions screen on that question (the chef answers again; the comments are the shared ones for that question).
