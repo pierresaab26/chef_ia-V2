@@ -80,3 +80,5 @@ Columns: **Tool** · what it is used for · since · where / how.
 - Status: inert while `GTM_ID` is empty. Loads only after consent (cookie banner). Tags can use the normal « Initialization – All Pages » trigger. Container: GTM-PSJRZ6F8 (v468).
 - Data: IP, device/browser, page, referrer (sent by the tags). No names, e-mails or recipe content.
 - Legal: `legal.html` sections 3 and 4 (consent basis, recipients Google/Meta/TikTok).
+
+- v469: consent by category with Google Consent Mode v2 (`gtmEnsure`, `gtmConsent`, services `gtmaud` / `gtmads`). For Meta/TikTok tags in GTM: Advanced settings → Consent settings → « Require additional consent » → `ad_storage`.

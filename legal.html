@@ -106,7 +106,8 @@ a{color:var(--pink)}
 <tr><td>Générer les recettes avec l’IA</td><td>Exécution du service demandé</td></tr>
 <tr><td>Sécurité, lutte contre les abus, modération (dont contrôle automatisé par IA des publications)</td><td>Intérêt légitime</td></tr>
 <tr><td>Suivi des erreurs (Sentry)</td><td>Consentement</td></tr>
-<tr><td>Mesure de nos publications sur les réseaux sociaux (Google Tag Manager, Google Analytics, Google Ads, Meta, TikTok)</td><td>Consentement</td></tr>
+<tr><td>Mesure d’audience (Google Analytics, via Google Tag Manager)</td><td>Consentement (catégorie « Mesure d’audience »)</td></tr>
+<tr><td>Mesure de l’effet de nos publicités (Google Ads, Meta, TikTok, via Google Tag Manager)</td><td>Consentement (catégorie « Publicité »)</td></tr>
 <tr><td>Mesure d’audience anonyme (PostHog)</td><td>Intérêt légitime <span class="todo">[À VALIDER : voir remarque ci-dessous]</span></td></tr>
 <tr><td>E-mails de connexion et de support</td><td>Exécution du service demandé</td></tr>
 </tbody>
@@ -146,7 +147,7 @@ a{color:var(--pink)}
 <h3>Stockage strictement nécessaire (sans consentement)</h3>
 <p>Le stockage local de votre navigateur conserve vos recettes, préférences, codes d’accès et session. Il est indispensable au fonctionnement de l’application. Un petit cache permet aussi de l’ouvrir hors connexion.</p>
 <h3>Stockage soumis à votre choix</h3>
-<p>Le suivi des erreurs (Sentry) et la mesure de nos publications (Google Tag Manager, qui charge les balises de Google Analytics, de Google Ads, de Meta et de TikTok, lesquelles peuvent déposer des cookies sur votre appareil) ne se chargent qu’après votre accord, donné via le bandeau. Si vous refusez, rien n’est chargé ni envoyé. Vous pouvez retirer votre accord à tout moment, aussi simplement que vous l’avez donné. Le choix est mémorisé par le gestionnaire de consentement tarteaucitron.</p>
+<p>Le suivi des erreurs (Sentry) et la mesure de nos publications (Google Tag Manager, qui charge les balises de Google Analytics, de Google Ads, de Meta et de TikTok, lesquelles peuvent déposer des cookies sur votre appareil) ne se chargent qu’après votre accord, donné via le bandeau. Vous choisissez par catégorie (suivi des erreurs, mesure d’audience, publicité) : seules les catégories acceptées sont activées. Si vous refusez tout, rien n’est chargé ni envoyé. Le mode de consentement de Google est utilisé : tant qu’une catégorie n’est pas acceptée, les services Google correspondants ne peuvent ni lire ni écrire de cookies. Vous pouvez retirer votre accord à tout moment, aussi simplement que vous l’avez donné. Le choix est mémorisé par le gestionnaire de consentement tarteaucitron.</p>
 <h3>Mesure d’usage</h3>
 <p>PostHog fonctionne sans cookie, avec un identifiant anonyme dans le stockage local.</p>
 <h3>Modifier mes choix</h3>
