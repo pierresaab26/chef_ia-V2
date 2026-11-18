@@ -141,6 +141,8 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 
 ## 5. Done (changelog, newest first, up to v348)
 
+v452 (owner, iPhone screenshot: with the keyboard open the « Aide et contact » dialog was cut at the bottom, the error and the Annuler / Envoyer buttons hidden behind the keyboard, and it could not scroll): every app dialog (`.dlgw` / `.dlg`) now follows the visible height (`--appH`, set from `visualViewport` by the keyboard code), scrolls inside when it is taller (`overflow-y:auto`), and stays centred when it fits (`margin:auto` on `.dlg`, flex instead of grid). CSS only. Test: Playwright with a reduced `--appH`: buttons reachable by scroll on iPhone SE / 13 / iPad; centred when there is room. NOT tested with the real iOS keyboard. Not pushed.
+
 v451 (owner: « dans ce cas-là affiche un message correctement »; « Aide et contact » with a message under 5 characters only showed a toast hidden behind the dialog, so it looked frozen): the dialog now shows the error INLINE, in red under the text box (`role=alert`, cleared when typing): « message too short » (the existing `hlpShort`), and also send failures / rate limit (`hlpErr`, `accRate`) instead of toasts. Minimum stays 5 characters. No new i18n key. Test: Playwright iPhone SE / 13 / iPad. Not pushed.
 
 v450 (owner created the free IONOS redirection `contact@cheffeevalie.com` → a dedicated Gmail, tested OK): contact e-mail filled in `legal.html` (mentions légales and privacy sections, a `mailto:` link). Still open there: publisher name, minimum age, retention, Upstash region, transfer safeguards. Owner to set `SUPPORT_EMAIL` and `MOD_EMAIL` = that address in Vercel (Edit, then Redeploy). Not pushed.
