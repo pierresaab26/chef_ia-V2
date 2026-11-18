@@ -140,6 +140,7 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (changelog, newest first, up to v348)
+- **v453** Christmas mode starts today (18 Nov) instead of 1 Dec: new `NOEL_FROM=1118` shared by `eventOf()` (Santa hat on the mascot) and `snWindow('noel')` (dark green palette + Christmas seasonal menu). Side effect: US/CA users get the Christmas menu instead of the Thanksgiving one from 18 Nov. To go back, set `NOEL_FROM=1201`.
 
 v452 (owner, iPhone screenshot: with the keyboard open the « Aide et contact » dialog was cut at the bottom, the error and the Annuler / Envoyer buttons hidden behind the keyboard, and it could not scroll): every app dialog (`.dlgw` / `.dlg`) now follows the visible height (`--appH`, set from `visualViewport` by the keyboard code), scrolls inside when it is taller (`overflow-y:auto`), and stays centred when it fits (`margin:auto` on `.dlg`, flex instead of grid). CSS only. Test: Playwright with a reduced `--appH`: buttons reachable by scroll on iPhone SE / 13 / iPad; centred when there is room. NOT tested with the real iOS keyboard. Not pushed.
 

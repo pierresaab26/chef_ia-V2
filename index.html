@@ -3259,10 +3259,11 @@ function openIdeas(e){
 // merging local and remote recipes using id + updatedAt.
 // Mascot outfit by French calendar event (device date). Outside these windows the mascot stays plain.
 function easterOf(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=(h+l-7*m+114)%31+1;return new Date(y,mo-1,da)}
+const NOEL_FROM=1118; // v453: Christmas mode (hat + dark green palette + seasonal menu) starts 18 Nov instead of 1 Dec
 function eventOf(d){d=d||new Date();const y=d.getFullYear(),m=d.getMonth(),n=d.getDate(),md=(m+1)*100+n,t=new Date(y,m,n).getTime(),E=easterOf(y).getTime(),D=864e5;
   if(md>=1227||md<=102)return'nouvelan';if(md>=103&&md<=112)return'epiphanie';if(md>=201&&md<=203)return'chandeleur';if(md>=210&&md<=214)return'valentin';
   if(t>=E-9*D&&t<=E+D)return'paques';if(md>=710&&md<=714)return'quatorzejuillet';if(md>=625&&md<=831)return'vacances';
-  if(md>=901&&md<=920)return'rentree';if(md>=1015&&md<=1102)return'halloween';if(md>=1201&&md<=1226)return'noel';return''}
+  if(md>=901&&md<=920)return'rentree';if(md>=1015&&md<=1102)return'halloween';if(md>=NOEL_FROM&&md<=1226)return'noel';return''}
 const EVENTS=['rentree','halloween','noel','nouvelan','epiphanie','chandeleur','valentin','paques','quatorzejuillet','vacances'];
 function applySeason(){const z=eventOf();EVENTS.forEach(k=>{const g=document.getElementById('sz-'+k);if(g)g.setAttribute('display',k===z?'inline':'none')});document.documentElement.dataset.season=z}
 applySeason();document.addEventListener('visibilitychange',()=>{if(document.hidden)return;applySeason();const was=document.documentElement.dataset.amb;applyAmb();if(was!==document.documentElement.dataset.amb||(snUntil&&Date.now()>snUntil))try{drawSeason()}catch(e){}}); // new day: background AND seasonal panel follow
@@ -3295,7 +3296,7 @@ function snWindow(k,d,c){const y=d.getFullYear(),t=new Date(y,d.getMonth(),d.get
     case 'chandeleur':return md>=125&&md<=202;
     case 'paques':{const E=easterOf(y).getTime();return t>=E-14*D&&t<=E+D}
     case 'halloween':return md>=1015&&md<=1031;
-    case 'noel':return md>=1201&&md<=1226;
+    case 'noel':return md>=NOEL_FROM&&md<=1226;
     case 'muertos':return md>=1025&&md<=1102;
     case 'thanksgiving':{let T0;if(c==='CA'){const f=new Date(y,9,1);T0=new Date(y,9,1+((8-f.getDay())%7)+7).getTime()}
       else{const f=new Date(y,10,1);T0=new Date(y,10,1+((11-f.getDay())%7)+21).getTime()}return t>=T0-10*D&&t<=T0}
@@ -3416,7 +3417,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v452',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v453',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
