@@ -3273,7 +3273,7 @@ const SN=[
  ['hiver','s','❄️','#e3edf7','#c9daee','#1f4e79'],['chandeleur','f','🥞','#fdf0dc','#f6dcb4','#a55b00'],
  ['printemps','s','🌱','#e3f2d3','#c8e4b0','#3d7a1f'],['paques','f','🐣','#f3e6fb','#e0c9f2','#7a2fa8'],
  ['ete','s','☀️','#fff0bd','#ffe08a','#b06d00'],['automne','s','🍂','#f6e2d3','#ecc7aa','#9a3d12'],
- ['halloween','f','🎃','#2b1a0e','#120a04','#ff8a1f',1],['noel','f','🎄','#0f3d2e','#08241b','#ff6f7f',1],
+ ['halloween','f','🎃','#2b1a0e','#120a04','#ff8a1f',1],['noel','f','🎄','#2a7a5c','#1c5c45','#ff6f7f',1],
  ['cny','w','🧧','#fde3e0','#f7c4bd','#c62828'],['holi','w','🎨','#fde2f3','#f9c3e6','#c2185b'],['thanksgiving','w','🦃','#f6e6d0','#ebcfa6','#8d4a12'],
  ['muertos','w','💀','#fde7f0','#f8c9dd','#ad1457'],['diwali','w','🪔','#fff0d6','#ffd99a','#c66900']];
 const SN_IDX=Object.fromEntries(SN.map((x,i)=>[x[0],i]));
@@ -3312,8 +3312,8 @@ function snCurrent(d,c){d=d||new Date();c=c||snCountry();
 // Seasonal background: only --bg1/--bg2 change (light mode); Halloween and Christmas switch to their own dark palette.
 (function(){const st=document.createElement('style');let css='';
   SN.forEach(x=>{if(x[0]==='automne')return; /* v419: no autumn tint, the cream background stays */const sel=':root[data-amb="'+x[0]+'"]';
-    if(x[6]){const card=x[0]==='halloween'?'#3a2414':'#174a39',mut=x[0]==='halloween'?'#c9a98a':'#9fc3b3',ink=x[0]==='halloween'?'#f8ece0':'#e6f2ec';
-      css+=sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+';--card:'+card+';--ink:'+ink+';--mut:'+mut+';--dark:#060403;--bd:rgba(255,255,255,.1)'+(x[0]==='halloween'?';--pink:#ff8a1f':'')+'}'}
+    if(x[6]){const card=x[0]==='halloween'?'#3a2414':'#2f8a69',mut=x[0]==='halloween'?'#c9a98a':'#d4ece2',ink=x[0]==='halloween'?'#f8ece0':'#ffffff';
+      css+=sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+';--card:'+card+';--ink:'+ink+';--mut:'+mut+';--dark:#060403;--bd:rgba(255,255,255,.1)'+(x[0]==='halloween'?';--pink:#ff8a1f':';--pink:#ff6f7f')+'}'}
     else css+='@media (prefers-color-scheme:light){'+sel+'{--bg1:'+x[3]+';--bg2:'+x[4]+'}}'+'@media (prefers-color-scheme:light){'+sel+'{--bg1:color-mix(in srgb,'+x[3]+' 38%,#fffaf2);--bg2:color-mix(in srgb,'+x[4]+' 38%,#f9eddc)}}'}); // v115: the season only TINTS the cream (browsers without color-mix keep the full season colour)
   st.textContent=css;document.head.appendChild(st)})();
 function applyAmb(){document.documentElement.dataset.amb=snCurrent();try{localStorage.removeItem('ambOff')}catch(e){}} // always on since v81 (the on/off button was removed)
@@ -3417,7 +3417,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v454',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v455',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
