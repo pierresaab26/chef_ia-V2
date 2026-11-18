@@ -140,6 +140,7 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (changelog, newest first, up to v348)
+- **v459** Christmas green lightened (v458 `#165B40` was too heavy): bg `#2d7f5e`→`#216a4d`, cards `#3a8d6b`.
 - **v458** Christmas green set by Pierre: bg `#165B40` (gradient to `#0f4531`), cards `#1f7050`. Rest as v457.
 - **v457** Christmas mode back to a medium-dark green theme (palette « D »): bg `#4f9a78`/`#3a8463`, card `#5aa885`, white ink, muted `#e6f4ec`, accent `--pink:#ff7a90`. Replaces the light mint of v456 (kept in history).
 - **v456** Christmas mode is now a LIGHT theme: ultra-light mint background (`#e6f5ec`/`#d3ecdf`), normal pink and ink, white cards (replaces the dark green of v453–v455, too heavy). Only in light mode; dark-mode phones keep the normal dark theme. Hat and Christmas menu unchanged.
