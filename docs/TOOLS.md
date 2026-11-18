@@ -77,6 +77,6 @@ Columns: **Tool** · what it is used for · since · where / how.
 ## Google Tag Manager (v462)
 - Purpose: one container for the Meta (Instagram) and TikTok pixels, managed at tagmanager.google.com.
 - Where: `GTM_ID` and `gtmStart()` in `index.html`; consent service `gtm` in `ckInit()` (tarteaucitron).
-- Status: inert while `GTM_ID` is empty. Loads only after consent; trigger tags on the `cookie_consent_granted` event.
+- Status: inert while `GTM_ID` is empty. Loads only after consent (cookie banner). Tags can use the normal « Initialization – All Pages » trigger. Container: GTM-PSJRZ6F8 (v468).
 - Data: IP, device/browser, page, referrer (sent by the tags). No names, e-mails or recipe content.
 - Legal: `legal.html` sections 3 and 4 (consent basis, recipients Google/Meta/TikTok).
