@@ -140,6 +140,7 @@ Files starting with `_` in `api/` are helpers, not routes. Vercel Hobby plan: at
 - The claude.ai artifact preview is built from `index.html` plus a preview-only bridge that sends `/api/chat` to Claude through the artifact `sample` capability with the same `BASE` prompt. The bridge is never committed to the repo.
 
 ## 5. Done (changelog, newest first, up to v348)
+- **v456** Christmas mode is now a LIGHT theme: ultra-light mint background (`#e6f5ec`/`#d3ecdf`), normal pink and ink, white cards (replaces the dark green of v453–v455, too heavy). Only in light mode; dark-mode phones keep the normal dark theme. Hat and Christmas menu unchanged.
 - **v455** Christmas palette lighter: bg `#2a7a5c`/`#1c5c45`, card `#2f8a69`, ink white, muted `#d4ece2`; accent `--pink:#ff6f7f` in Christmas mode (the normal pink was unreadable on green, like the orange for Halloween). Only active 18 Nov–26 Dec.
 - **v454** Server side of the Christmas mode: `occasionNowFR()` in `api/_season.js` now returns `noel` from 18 Nov (was 1 Dec), so the cron pre-generates the Christmas menu ideas in the 6 languages. Keep in step with `NOEL_FROM` in `index.html`.
 - **v453** Christmas mode starts today (18 Nov) instead of 1 Dec: new `NOEL_FROM=1118` shared by `eventOf()` (Santa hat on the mascot) and `snWindow('noel')` (dark green palette + Christmas seasonal menu). Side effect: US/CA users get the Christmas menu instead of the Thanksgiving one from 18 Nov. To go back, set `NOEL_FROM=1201`.
