@@ -3546,7 +3546,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v484',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v486',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -3581,10 +3581,34 @@ function readStoreRaw(){
   }catch(e){}
   return {v:STORE_V,recipes:[]};
 }
+/* v486: DEMO mode for visitors without access code (social networks): a read-only preview of the app, never stored.
+   5 example recipes (2 favourites) shown in « Récentes / Favoris / Historique » while the visitor has no recipe of his own and no code.
+   Frozen objects + guards: no favourite, delete or edit sticks; every AI feature still says « Bientôt disponible ». French only. */
+const DEMO_SRC=[
+ ['Soupe à l’oignon gratinée','4 personnes · 20 min + 40 min de cuisson',['6 oignons jaunes','40 g de beurre','1 c. à soupe de farine','1 l de bouillon de bœuf','15 cl de vin blanc sec','8 tranches de baguette','150 g de comté râpé'],['Émincez les oignons et faites-les fondre 25 minutes dans le beurre, à feu doux.','Saupoudrez de farine, mélangez, puis déglacez au vin blanc.','Versez le bouillon et laissez mijoter 15 minutes.','Répartissez dans des bols, posez le pain et le comté, puis gratinez 5 minutes.'],1],
+ ['Lasagnes aux champignons','6 personnes · 30 min + 40 min de four',['12 feuilles de lasagne','600 g de champignons de Paris','50 cl de béchamel','100 g de parmesan','2 gousses d’ail','thym frais'],['Poêlez les champignons avec l’ail et le thym jusqu’à ce que l’eau s’évapore.','Alternez feuilles, champignons, béchamel et parmesan dans un plat.','Terminez par de la béchamel et du parmesan.','Enfournez 40 minutes à 180 °C.'],1],
+ ['Tarte tatin express','6 personnes · 15 min + 30 min de four',['1 pâte feuilletée','6 pommes','80 g de sucre','40 g de beurre'],['Faites un caramel avec le sucre et le beurre dans un moule.','Disposez les pommes en quartiers, couvrez de pâte.','Enfournez 30 minutes à 190 °C, puis retournez.'],0],
+ ['Mousse au chocolat noir','4 personnes · 20 min + 4 h de repos',['200 g de chocolat noir','6 œufs','1 pincée de fleur de sel'],['Faites fondre le chocolat, ajoutez les jaunes.','Montez les blancs en neige et incorporez-les délicatement.','Réfrigérez 4 heures.'],0],
+ ['Poulet rôti aux agrumes','4 personnes · 15 min + 1 h de four',['1 poulet fermier','2 oranges','1 citron','4 pommes de terre','thym et huile d’olive'],['Frottez le poulet d’huile, de thym et de zestes.','Glissez les agrumes dans la cavité et entourez de pommes de terre.','Enfournez 1 h à 200 °C en arrosant.'],0]];
+let DEMO_CACHE=null;
+const DEMO_TITLES=DEMO_SRC.map(x=>x[0]);
+function demoRecipes(){if(DEMO_CACHE)return DEMO_CACHE;const day=864e5,now=Date.now();
+  DEMO_CACHE=DEMO_SRC.map(([t,meta,ing,steps,fav],k)=>{const id='demo'+k,at=now-k*day;
+    const txt='# '+t+'\n\n'+meta+'\n\n## Ingrédients\n'+ing.map(x=>'- '+x).join('\n')+'\n\n## Préparation\n'+steps.map((x,i)=>(i+1)+'. '+x).join('\n')+'\n';
+    const m={role:'assistant',content:txt,rid:id,at,vn:1,vk:'demovk'+('0000000000'+k).slice(-10)};if(fav)m.fav=true;
+    return deepFreeze({id,title:t,date:new Date(at).toISOString(),updatedAt:at,k:-1,fav:false,lang:'fr',demo:1,messages:[{role:'user',content:'Donne-moi une recette : '+t},m]})});
+  return DEMO_CACHE}
+function deepFreeze(o){if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.freeze(o);Object.values(o).forEach(deepFreeze)}return o}
+function demoOn(st){try{return lang==='fr'&&!hasCode()&&!(st&&st.recipes&&st.recipes.length)&&/^https?:/.test(location.href)}catch(e){return false}}
+function demoBlock(e){if(e&&e.demo){try{toast('🚧 '+T().soonT)}catch(x){}return true}return false}
+// People WITH a code: once a day, ask the server for the photos of the 5 example dishes so that visitors (who can only read the photo cache) see them.
+function demoWarm(){try{if(!hasCode()||!/^https?:/.test(location.href))return;const d=new Date().toDateString();if(localStorage.getItem('demoWarm')===d)return;localStorage.setItem('demoWarm',d);
+  const code=localStorage.getItem('code')||'';DEMO_TITLES.reduce((p,t)=>p.then(()=>fetchT('/api/photo',{method:'POST',headers:{'Content-Type':'application/json','x-code':code},body:JSON.stringify({title:t,lang:'fr',skip:[]})},30000).catch(()=>{})),Promise.resolve())}catch(e){}}
 function loadH(){const st=readStore();if(!st._fm){st.recipes.forEach(favMig);st._fm=1}if(!st._fv){st.recipes.forEach(e=>{if(e&&!e.qa&&e.fav&&e.messages&&!ownIdx(e).some(i=>e.messages[i].fav)){const o=ownIdx(e);if(o.length)e.messages[o[0]].fav=true}});st._fv=1} // v147: old recipe-level favorites move onto the first version of that recipe
-  if(!st._vk){st.recipes.forEach(e=>{if(!e.qa)ownIdx(e).forEach(i=>{const m=e.messages[i];if(!m.vk)m.vk=vKey(e,i)})});st._vk=1}return st.recipes} // v129: the recipes that already exist keep their title-based comment keys (frozen), the new ones get a unique key
+  if(!st._vk){st.recipes.forEach(e=>{if(!e.qa)ownIdx(e).forEach(i=>{const m=e.messages[i];if(!m.vk)m.vk=vKey(e,i)})});st._vk=1}if(demoOn(st))return demoRecipes();return st.recipes} // v129: the recipes that already exist keep their title-based comment keys (frozen), the new ones get a unique key
 function newVk(){let r='';try{r=crypto.randomUUID().replace(/-/g,'').slice(0,16)}catch(x){}if(r.length<12)r=(Math.random().toString(36).slice(2)+Date.now().toString(36)+'0000000000').replace(/[^a-z0-9]/g,'').slice(0,16);return 'u-'+r} // v129: unique key (comments + ratings) of one recipe version
 function saveH(a){
+  if(a.some(x=>x&&x.demo))a=a.filter(x=>x&&!x.demo); // v486: example recipes are never stored
   a.forEach(e=>{if(e&&!e.qa)ownIdx(e).forEach(i=>{const m=e.messages[i];if(!m.vk)m.vk=newVk()})});
   let n=0;const out=a.filter(x=>famFav(x)||x.arch||(n++<MAX_RECENT)); // favorites and archived recipes are never removed automatically
   const st={v:STORE_V,updatedAt:Date.now(),device:deviceId(),recipes:out,_vk:1};
@@ -3750,7 +3774,7 @@ function rowFor(e,del,heart,sc,unarch){
     const u=document.createElement('button');u.type='button';u.className='hunar';u.textContent='↩ '+T().hUnarchB;u.setAttribute('aria-label',T().hUnarchB+' – '+e.title);
     u.onclick=()=>{const a=loadH(),z=a.find(x=>x.id===e.id);if(!z)return;delete z.arch;if(!saveH(a))toast(T().stFull);else toast(T().hUnarchD.replace('{n}',1));if(hsel)hsel.delete(e.id);refreshAll()};r.appendChild(u)}
   if(del){const k=document.createElement('button');k.className='hdel';k.textContent='✕';k.setAttribute('aria-label',T().del);
-    k.onclick=async()=>{if(await ask({text:T().delq,okLabel:T().del})){wipeKeys(keysOf(e));offerListCleanup([e]);saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{drawMenu()}catch(x){}}};r.appendChild(k)}
+    k.onclick=async()=>{if(demoBlock(e))return;if(await ask({text:T().delq,okLabel:T().del})){wipeKeys(keysOf(e));offerListCleanup([e]);saveH(loadH().filter(z=>z.id!==e.id));if(currentId===e.id){currentId=null;syncCardBtn()}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{drawMenu()}catch(x){}}};r.appendChild(k)}
   return r;
 }
 var hsel=null,harch=false,hshown=[],hfold=(()=>{try{return new Set(JSON.parse(localStorage.getItem('hFold')||'[]'))}catch(e){return new Set()}})(); // hfold = category indexes folded in the « Favoris » tab (kept on the device)
@@ -4164,7 +4188,7 @@ function drawFavs(){
   l.appendChild(grid);
 }
 const slug=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'recipe';
-function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
+function updEntry(id,fn){const a=loadH();const e=a.find(x=>x.id===id);if(e&&e.demo)return e;if(e){fn(e);e.updatedAt=Date.now();saveH(a)}return e}
 // « ↺ Original recipe » (chat header): erase everything that came after the original recipe.
 // - a variant (made with « Without » / « Replace », `e.from`): the variant is deleted and its original recipe is opened;
 // - otherwise: the conversation is cut right after the FIRST version of the current recipe (later changes are deleted).
@@ -4388,7 +4412,7 @@ async function getPhoto(e){
   }catch(x){return null}
   updEntry(e.id,z=>{z.photo=url});return url;
 }
-function toggleFav(id,vi){let res=false;const a=loadH(),e=a.find(x=>x.id===id);if(e){if(e.qa){e.fav=!e.fav;res=e.fav}else{const o=ownIdx(e);if(vi==null){if(famFav(e)){o.forEach(i=>{delete e.messages[i].fav});res=false}else if(o.length){e.messages[o[0]].fav=true;res=true}}else{const m=e.messages[vi];if(m){if(m.fav)delete m.fav;else m.fav=true;res=!!m.fav}}}e.updatedAt=Date.now();saveH(a)}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}if(res)track('favorite_add');return res}
+function toggleFav(id,vi){let res=false;const a=loadH(),e=a.find(x=>x.id===id);if(demoBlock(e))return famFav(e);if(e){if(e.qa){e.fav=!e.fav;res=e.fav}else{const o=ownIdx(e);if(vi==null){if(famFav(e)){o.forEach(i=>{delete e.messages[i].fav});res=false}else if(o.length){e.messages[o[0]].fav=true;res=true}}else{const m=e.messages[vi];if(m){if(m.fav)delete m.fav;else m.fav=true;res=!!m.fav}}}e.updatedAt=Date.now();saveH(a)}drawHistory();drawFavs();try{drawHomeSearch()}catch(x){}try{syncFavUI()}catch(x){}if(res)track('favorite_add');return res}
 // v139: the shared copy of a version is created ONCE and kept (shareMemo), ideally BEFORE the tap (card opened, finger down on the button):
 // iOS refuses navigator.share() when the page has waited for the server after the tap, which made the share button look broken.
 const shareMemo={};
@@ -6166,6 +6190,7 @@ async function checkLive(id,dl){try{const e0=loadH().find(x=>x.id===id);if(!e0||
   if(/^[a-z0-9]{8,16}$/.test(cc))setTimeout(()=>afterCookies(()=>joinCircle(cc)),300);
   else if(!nick()&&!accLink)setTimeout(()=>afterCookies(()=>{if(!document.querySelector('.dlgw'))askNick()}),1200); // first opening: choose a nickname (step 6)
   else if(nick()!==(()=>{try{return localStorage.getItem('nickSync')||''}catch(x){return''}})())setTimeout(()=>syncNick(true),2000)}
+setTimeout(demoWarm,6000);
 setTimeout(()=>{if(!accLink)afterCookies(()=>setTimeout(()=>gnStart(0),2500))},3000);applyGender();
 {let ss='';try{ss=(new URLSearchParams(location.search).get('s')||'').trim().slice(0,64)}catch(e){}
   if(/^[a-z0-9-]{8,64}$/.test(ss))importShared(ss)}
