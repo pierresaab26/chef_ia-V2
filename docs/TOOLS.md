@@ -82,3 +82,7 @@ Columns: **Tool** · what it is used for · since · where / how.
 - Legal: `legal.html` sections 3 and 4 (consent basis, recipients Google/Meta/TikTok).
 
 - v469: consent by category with Google Consent Mode v2 (`gtmEnsure`, `gtmConsent`, services `gtmaud` / `gtmads`). For Meta/TikTok tags in GTM: Advanced settings → Consent settings → « Require additional consent » → `ad_storage`.
+
+
+## Meta Pixel (v489)
+Hard-coded in `index.html` (`META_PIXEL_ID`, `metaPixelLoad()`), loaded only after consent to the « Publicité » category (service `gtmads`). Events: `PageView` only. No `<noscript>` image (no tracking without consent). Do not duplicate it in GTM.
