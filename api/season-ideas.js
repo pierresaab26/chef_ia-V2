@@ -136,8 +136,10 @@ export default async function handler(req, res) {
 
   if (q.status) return res.status(200).json(await status());
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
-  if (!(await authOk(req, res))) return;
   const lang = String(q.lang || ""), occ = String(q.occ || "");
+  // v484: the chef's ideas of the CURRENT occasion are the same for everybody and are public (visitors from social networks see the menu without an access code);
+  // any other occasion still needs the access code.
+  if (occ !== occasionNowFR() && !(await authOk(req, res))) return;
   if (!LANGS.includes(lang) || !OCC[occ]) return res.status(400).json({ error: "messages" });
   if (await overLimit(req, "rl:si:", 30)) return fail(res, "rate");
   try {
