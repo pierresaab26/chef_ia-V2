@@ -95,7 +95,7 @@ a{color:var(--pink)}
 <li><strong>Échanges avec le chef :</strong> les messages que vous envoyez, les photos importées et les liens analysés sont transmis au fournisseur d’IA pour produire la réponse. Les photos importées ne sont pas conservées sur nos serveurs. Si vous cliquez sur « contactez-nous » après un import raté, l’image ou le lien est envoyé par e-mail à l’éditeur pour un contrôle manuel, uniquement pour cela.</li>
 <li><strong>Données techniques :</strong> adresse IP (limitation des abus), type d’appareil et de navigateur. Avec votre accord, les erreurs de l’application sont envoyées à Sentry (version de l’app, type d’appareil, taille d’écran, message d’erreur ; sans nom, sans e-mail, sans contenu de recette).</li>
 <li><strong>Mesure de nos publications (avec votre accord) :</strong> Google Tag Manager charge les balises de mesure de Google Analytics (statistiques de fréquentation), de Google Ads, de Meta (Instagram) et de TikTok, afin de savoir si nos publications et publicités amènent des visiteurs. Sont transmis : l’adresse IP, le type d’appareil et de navigateur, la page consultée et l’origine de la visite. Aucune recette, aucun nom, aucun e-mail n’est transmis. Balises actuellement actives : Meta Pixel et TikTok Pixel, chargés directement par l’application uniquement après votre accord à la catégorie « Publicité ». Google Analytics et Google Ads, via Google Tag Manager, seront ajoutés ultérieurement.</li>
-<li><strong>Mesure d’usage :</strong> PostHog (hébergé dans l’UE) enregistre de façon anonyme les écrans consultés et certains clics ; sans cookie, sans lien avec votre identité, sans enregistrement de session.</li>
+<li><strong>Mesure d’usage :</strong> PostHog (hébergé dans l’UE) enregistre de façon anonyme les écrans consultés et certains clics ; sans cookie, sans lien avec votre identité, sans enregistrement de session. Il sert uniquement à comprendre le parcours des utilisateurs dans l’application, pour l’améliorer.</li>
 </ul>
 <h3>Ce qui est public</h3>
 <p>Selon votre choix : le pseudo, l’@identifiant, le nombre d’abonnés et les recettes que vous publiez en visibilité publique sont visibles de tous ; vos recettes de cercle ne sont visibles que de votre cercle ; les commentaires sont visibles avec le nom que vous avez choisi. Votre adresse e-mail n’est jamais affichée.</p>
@@ -124,7 +124,7 @@ a{color:var(--pink)}
 <tr><td>Sentry</td><td>Suivi des erreurs (avec consentement)</td></tr>
 <tr><td>Google (Tag Manager)</td><td>Chargement des balises de mesure (avec consentement)</td></tr>
 <tr><td>Google Analytics, Google Ads, Meta (Instagram) et TikTok</td><td>Mesure de l’effet de nos publications, via Tag Manager (avec consentement)</td></tr>
-<tr><td>PostHog</td><td>Mesure d’usage anonyme</td></tr>
+<tr><td>PostHog</td><td>Mesure d’usage anonyme (comprendre le parcours des utilisateurs)</td></tr>
 <tr><td>Unsplash</td><td>Photos des recettes</td></tr>
 <tr><td>Cloudflare (Turnstile)</td><td>Vérification anti-robot avant un import</td></tr>
 </tbody>
@@ -151,7 +151,7 @@ a{color:var(--pink)}
 <h3>Stockage soumis à votre choix</h3>
 <p>Le suivi des erreurs (Sentry) et la mesure de nos publications (Google Tag Manager, qui charge les balises de Google Analytics, de Google Ads, de Meta et de TikTok, lesquelles peuvent déposer des cookies sur votre appareil) ne se chargent qu’après votre accord, donné via le bandeau. Vous choisissez par catégorie (suivi des erreurs, mesure d’audience, publicité) : seules les catégories acceptées sont activées. Si vous refusez tout, rien n’est chargé ni envoyé. Le mode de consentement de Google est utilisé : tant qu’une catégorie n’est pas acceptée, les services Google correspondants ne peuvent ni lire ni écrire de cookies. Vous pouvez retirer votre accord à tout moment, aussi simplement que vous l’avez donné. Le choix est mémorisé par le gestionnaire de consentement tarteaucitron.</p>
 <h3>Mesure d’usage</h3>
-<p>PostHog fonctionne sans cookie, avec un identifiant anonyme dans le stockage local.</p>
+<p>PostHog fonctionne sans cookie, avec un identifiant anonyme dans le stockage local. Il sert uniquement à comprendre le parcours des utilisateurs dans l’application.</p>
 <h3>Modifier mes choix</h3>
 <p><a href="/#tarteaucitron">Ouvrir mes préférences cookies</a>. Elles sont aussi accessibles depuis le menu de l’application (« Confidentialité et cookies »).</p>
 <p class="note">Remarque : la mesure d’usage PostHog est aujourd’hui active sans demande d’accord. Selon les règles françaises, une mesure d’audience n’est dispensée de consentement qu’à certaines conditions (paramétrage strict, finalité limitée). À faire valider, ou à passer sous consentement.</p>
