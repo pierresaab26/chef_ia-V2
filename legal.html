@@ -90,6 +90,7 @@ a{color:var(--pink)}
 <ul>
 <li><strong>Sur votre appareil (sans compte) :</strong> vos recettes, favoris, notes, listes de courses, préférences (équipement, régime, Chef ou Cheffe), pseudo et codes d’accès sont enregistrés dans le stockage local de votre navigateur.</li>
 <li><strong>Compte :</strong> adresse e-mail, @identifiant, pseudo, date de création, sessions de connexion. Si vous utilisez la synchronisation, vos recettes, listes, menu de la semaine et cercle sont aussi enregistrés sur nos serveurs.</li>
+<li><strong>Demande de code d’accès :</strong> si vous demandez un code, l’adresse e-mail que vous saisissez est envoyée par e-mail à l’éditeur (via Resend) pour qu’il vous réponde avec un code. Elle n’est pas enregistrée par l’application.</li>
 <li><strong>Activité sociale :</strong> membres de votre cercle et demandes, auteurs suivis, recettes partagées ou publiées, commentaires, notes et mentions « j’ai cuisiné », signalements.</li>
 <li><strong>Échanges avec le chef :</strong> les messages que vous envoyez, les photos importées et les liens analysés sont transmis au fournisseur d’IA pour produire la réponse. Les photos importées ne sont pas conservées sur nos serveurs. Si vous cliquez sur « contactez-nous » après un import raté, l’image ou le lien est envoyé par e-mail à l’éditeur pour un contrôle manuel, uniquement pour cela.</li>
 <li><strong>Données techniques :</strong> adresse IP (limitation des abus), type d’appareil et de navigateur. Avec votre accord, les erreurs de l’application sont envoyées à Sentry (version de l’app, type d’appareil, taille d’écran, message d’erreur ; sans nom, sans e-mail, sans contenu de recette).</li>
@@ -109,7 +110,7 @@ a{color:var(--pink)}
 <tr><td>Mesure d’audience (Google Analytics, via Google Tag Manager)</td><td>Consentement (catégorie « Mesure d’audience »)</td></tr>
 <tr><td>Mesure de l’effet de nos publicités (Google Ads, Meta, TikTok, via Google Tag Manager)</td><td>Consentement (catégorie « Publicité »)</td></tr>
 <tr><td>Mesure d’audience anonyme (PostHog)</td><td>Intérêt légitime <span class="todo">[À VALIDER : voir remarque ci-dessous]</span></td></tr>
-<tr><td>E-mails de connexion et de support</td><td>Exécution du service demandé</td></tr>
+<tr><td>E-mails de connexion, de support et de demande de code d’accès</td><td>Exécution du service demandé</td></tr>
 </tbody>
 </table>
 <h3>Destinataires et sous-traitants</h3>
@@ -132,6 +133,7 @@ a{color:var(--pink)}
 <h3>Durée de conservation</h3>
 <ul>
 <li>Codes et liens de connexion : 15 minutes. Sessions : jusqu’à 1 an, ou jusqu’à votre déconnexion.</li>
+<li>Demandes de code d’accès : l’e-mail reçu par l’éditeur est conservé le temps de répondre, puis supprimé sur demande (il suffit de répondre à cet e-mail).</li>
 <li>Liens de partage de liste de courses : 30 jours après la dernière utilisation.</li>
 <li>Compte, recettes synchronisées, commentaires, recettes partagées : jusqu’à la suppression par vous ou de votre compte <span class="todo">[À CONFIRMER : durée d’inactivité avant suppression, aujourd’hui non automatisée]</span>.</li>
 <li>Données de PostHog, de Sentry, de Google (dont Analytics et Ads), de Meta et de TikTok : selon les durées par défaut de ces services <span class="todo">[À CONFIRMER dans leurs réglages]</span>.</li>
