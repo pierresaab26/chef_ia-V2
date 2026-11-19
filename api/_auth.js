@@ -1,5 +1,5 @@
 import { createHash, randomBytes, randomInt } from "node:crypto";
-import { authOk, hasAccess, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { authOk, captchaOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { isOffensive } from "./_words.js";
 import { indexPerson } from "./_index.js"; // v358: people search index // v356: offensive handles / e-mails refused
 
@@ -177,14 +177,17 @@ export default async function authHandler(req, res, pidOf) {
       return res.status(200).json({ ok: true });
     }
 
-    // Starting or finishing a sign-in needs app access (shared code or invitation), like every other feature.
-    if (!(await authOk(req, res))) return;
+    // v505 OPEN BETA: starting / finishing a sign-in no longer needs an access code. Abuse guards instead: Turnstile (when TURNSTILE_SECRET is set),
+    // 10 requests / min / IP, 15 sign-in mails / day / IP, 5 mails / hour / address (below).
     const owner = clean(req.headers["x-owner"], 60);
     if (!owner || owner.length < 8) return res.status(400).json({ error: "key" });
 
     if (body.act === "start") {
-      if (!(await hasAccess(req))) return res.status(401).json({ error: "code" }); // v488: no sign-in code is e-mailed to visitors without access code
       if (await overLimit(req, "rl:au:", 10)) return res.status(429).json({ error: "rate" });
+      if (!(await captchaOk(req))) return res.status(403).json({ error: "captcha" });
+      { const ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "x", dk = "rl:aday:" + ip + ":" + new Date().toISOString().slice(0, 10);
+        const [n] = await redis([["INCR", dk], ["EXPIRE", dk, 172800]]);
+        if (Number(n) > 15) return res.status(429).json({ error: "rate" }); }
       const email = normMail(body.email);
       if (!mailOk(email)) return res.status(400).json({ error: "email" });
       if (isOffensive(email.split("@")[0])) return res.status(400).json({ error: "badword" }); // v356: no account for « nazi@… »

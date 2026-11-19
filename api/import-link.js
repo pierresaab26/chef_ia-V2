@@ -1,4 +1,4 @@
-import { captchaOk, authOk, fail, askClaude, parseJsonLoose, overLimit, hasRedis, redis } from "./_lib.js";
+import { captchaOk, authOk, fail, askClaude, parseJsonLoose, overLimit, hasRedis, redis, genQuota, genCount } from "./_lib.js";
 import { fetchPage, recipeFromJsonLd, pageText, looksBlocked, looksLogin } from "./_page.js";
 
 // v335: a link import keeps ONLY the title and the ingredients (no steps, times, servings, notes, site name or address),
@@ -77,6 +77,8 @@ export default async function handler(req, res) {
   if (!/^https?:\/\//i.test(target)) target = "https://" + target;
   const lang = String(body.lang || "").slice(0, 5);
   const qk = quotaKeys(req, body);
+  const gq = await genQuota(req); // v505: accounts without code: blocked once the free recipe generations are used; counted only when the AI had to read the page
+  if (!gq.byCode && gq.used >= gq.max) return fail(res, "quota");
   if (DAILY_MAX > 0 && (await quotaUsed(qk)) >= DAILY_MAX) return fail(res, "daily");
 
   let page;
@@ -119,6 +121,7 @@ export default async function handler(req, res) {
     const recipe = parsed && parsed.found === false ? null : slim(parsed);
     if (!recipe) return fail(res, "norecipe");
     await quotaCount(qk);
+    if (!gq.byCode) await genCount(gq.uid);
     return res.status(200).json({ recipe, source: "text" });
   } catch (e) {
     return fail(res, e.code || "upstream");

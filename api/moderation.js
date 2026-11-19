@@ -21,6 +21,14 @@ export default async function handler(req, res) {
   const un = String((req.query && req.query.unblock) || "");
   const q = req.query || {};
   try {
+    if (q.grant) { // v505: +N free recipe generations for an account (link in the « quota supplémentaire » e-mail)
+      const uid = String(q.grant);
+      if (!/^[a-f0-9]{24}$/.test(uid)) return res.status(400).json({ error: "key" });
+      const n = Math.max(1, Math.min(100, Number(q.n) || 10));
+      const [raw, tot] = await redis([["GET", "au:" + uid], ["INCRBY", "ag:" + uid, n]]);
+      let e = ""; try { e = JSON.parse(raw || "{}").e || ""; } catch {}
+      return res.status(200).json({ ok: !!raw, account: e, added: n, freeTotal: 3 + Number(tot) });
+    }
     if (q.stats) return res.status(200).json(await stats());
     if (q.creports || q.cok || q.cdel || q.cunban) return res.status(200).json(await commentReports(q));
     if (q.handles) return res.status(200).json(await deviceHandles(!!q.apply));

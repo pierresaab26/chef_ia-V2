@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
-import { authOk, hasAccess, captchaOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { authOk, hasAccess, captchaOk, hasRedis, redis, overLimit, clean, sessUid } from "./_lib.js";
 import { notifyCircle, notifyOne, readNotes, markSeen } from "./_notify.js";
 import { indexPerson, searchPeople } from "./_index.js"; // v358: find people by pseudo / @
 import { isOffensive } from "./_words.js"; // v356
@@ -83,6 +83,40 @@ export default async function handler(req, res) {
     }
   }
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
+  // v505 open beta: « Demander un quota supplémentaire » → e-mail to the support with a one-click grant link (api/moderation.js ?grant=<uid>&n=10).
+  if (req.method === "POST" && req.body && typeof req.body === "object" && req.body.act === "quota") {
+    try {
+      const uid = await sessUid(req);
+      if (!uid) return res.status(401).json({ error: "session" });
+      if (await overLimit(req, "rl:qq:", 5)) return res.status(429).json({ error: "rate" });
+      const key = process.env.RESEND_API_KEY, to = process.env.SUPPORT_EMAIL || process.env.MOD_EMAIL, adm = process.env.ADMIN_KEY || process.env.CRON_SECRET;
+      if (!key || !to) return res.status(503).json({ error: "nomail" });
+      const [first] = await redis([["SET", "aqr:" + uid, "1", "NX", "EX", "86400"]]); // one request per account and per day
+      if (!first) return res.status(200).json({ ok: true, again: true });
+      const [raw, used, extra] = await redis([["GET", "au:" + uid], ["GET", "aq:" + uid], ["GET", "ag:" + uid]]);
+      let acc = {}; try { acc = JSON.parse(raw || "{}"); } catch {}
+      const host = String(req.headers["x-forwarded-host"] || req.headers.host || "").split(",")[0].trim();
+      const base = String(process.env.APP_URL || "").replace(/\/$/, "") || (/^[a-z0-9.-]+$/i.test(host) ? "https://" + host : "https://www.cheffeevalie.com");
+      const note = String(req.body.message || "").trim().slice(0, 500).replace(/[\r<>]/g, "");
+      const gl = (n) => adm ? "+" + n + " recettes : " + base + "/api/moderation?key=" + encodeURIComponent(adm) + "&grant=" + uid + "&n=" + n : "(ADMIN_KEY manquante)";
+      const link = [3, 5, 10].map(gl).join("\n");
+      const email = String(acc.e || "").replace(/[\r\n<>]/g, "");
+      const r = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
+        body: JSON.stringify({
+          from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>",
+          to: [to],
+          ...(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? { reply_to: email } : {}),
+          subject: "CheffeEvalie : demande de quota supplémentaire (bêta)",
+          text: "Utilisateur : " + (email || "?") + (acc.h ? " (@" + acc.h + ")" : "") + "\nRecettes utilisées : " + Number(used || 0) + " / " + (3 + Number(extra || 0)) + "\n" + (note ? "Message : " + note + "\n" : "") + "\nChoisis combien de recettes donner (un clic) ; ne clique sur rien pour refuser :\n" + link,
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!r.ok) { await redis([["DEL", "aqr:" + uid]]); return res.status(502).json({ error: "upstream" }); }
+      return res.status(200).json({ ok: true });
+    } catch { return res.status(502).json({ error: "upstream" }); }
+  }
   if (req.query && req.query.via === "lnk") return linkHandler(req, res); // v378: /l/<code> → /api/circle?via=lnk&c=<code> (no access code: the secret code is the key)
   // v329: ONE invitation link (/?c=<code>) = join my circle AND, for a friend who has no access yet, get in.
   // « redeem » is the only call allowed without access: someone who already has access gets nothing new (free, unlimited);

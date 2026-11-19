@@ -1,4 +1,4 @@
-import { captchaOk, authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES, overLimit } from "./_lib.js";
+import { captchaOk, authOk, fail, askClaude, parseJsonLoose, normRecipe, EXTRACT_RULES, overLimit, genQuota, genCount } from "./_lib.js";
 
 // v330: two cases. (1) the image contains a WRITTEN recipe: faithful extraction (kind "text").
 // (2) the image shows a prepared dish or drink with no recipe text: the model recognises it and reconstructs a plausible recipe (kind "dish").
@@ -55,6 +55,8 @@ export default async function handler(req, res) {
   if (!m) return fail(res, "badimage");
   if (m[2].length > 3_400_000) return fail(res, "toobig");
   const lang = String((req.body || {}).lang || "").slice(0, 2).toLowerCase();
+  const gq = await genQuota(req); // v505: an account without code pays one of its free recipe generations per photo import
+  if (!gq.byCode && gq.used >= gq.max) return fail(res, "quota");
 
   try {
     const out = await askClaude({
@@ -69,6 +71,7 @@ export default async function handler(req, res) {
     const parsed = parseJsonLoose(out);
     const recipe = normRecipe(parsed);
     if (!recipe) return fail(res, "norecipe");
+    if (!gq.byCode) await genCount(gq.uid);
     const kind = parsed && parsed.kind === "dish" ? "dish" : "text";
     return res.status(200).json({ recipe, source: "photo", kind });
   } catch (e) {

@@ -39,12 +39,57 @@ async function inviteOk(tok) {
   akCache.delete(tok);
   return false;
 }
+// v505: OPEN BETA. A signed-in account (x-session, Redis `as:`) gets in like a code holder, but with a quota of FREE_GEN recipe generations
+// (counter `aq:<uid>`, extra granted by the admin in `ag:<uid>`). Code holders (APP_PASSWORD / invitation) stay unlimited.
+export const FREE_GEN = 3, DAY_CHAT = 60;
+const sessH = (s) => createHash("sha256").update("auth|" + s).digest("hex").slice(0, 32);
+const sesCache = new Map();
+export async function sessUid(req) {
+  const t = String(req.headers["x-session"] || "");
+  if (!/^[a-f0-9]{48}$/.test(t) || !hasRedis()) return "";
+  const k = sessH(t), c = sesCache.get(k);
+  if (c && c.until > Date.now()) return c.uid;
+  try {
+    const [uid] = await redis([["GET", "as:" + k]]);
+    if (uid) { sesCache.set(k, { uid, until: Date.now() + 60000 }); return uid; }
+  } catch {}
+  sesCache.delete(k);
+  return "";
+}
+// Quota of an account that has no code. `byCode` = unlimited (never counted).
+export async function genQuota(req) {
+  if ((await codeOnly(req)) === "ok") return { byCode: true, uid: "", used: 0, max: Infinity };
+  const uid = await sessUid(req);
+  if (!uid) return { byCode: false, uid: "", used: 0, max: 0 };
+  try {
+    const [u, g] = await redis([["GET", "aq:" + uid], ["GET", "ag:" + uid]]);
+    return { byCode: false, uid, used: Number(u || 0), max: FREE_GEN + Number(g || 0) };
+  } catch { return { byCode: false, uid, used: 0, max: FREE_GEN }; } // Redis down: do not lock people out
+}
+export async function genCount(uid) { if (uid) try { await redis([["INCR", "aq:" + uid]]); } catch {} }
+// Cost guard for accounts without code: at most DAY_CHAT chef messages per account and per day.
+export async function dayCap(uid) {
+  if (!uid) return false;
+  try {
+    const k = "ad:" + uid + ":" + new Date().toISOString().slice(0, 10);
+    const [n] = await redis([["INCR", k], ["EXPIRE", k, 172800]]);
+    return Number(n) > DAY_CHAT;
+  } catch { return false; }
+}
+// A chef answer that is a full recipe (same shape the app displays): « ## Title », a « N/3 » health line, at least 2 numbered steps.
+export const isRecipeText = (t) => /^\s*##\s+\S/.test(t) && /\b\d\s*\/\s*3\b/.test(t) && (t.match(/^\s*\d+[.)]\s+\S/gm) || []).length >= 2;
+
 // v329: same check as authOk, but answers nothing (used by the invitation link, which also works for people without access).
 export async function hasAccess(req) {
   return (await codeState(req)) === "ok";
 }
 // "ok" | "bad" (no / wrong code) | "limited" (too many wrong codes from this IP: refused even with the right one)
 async function codeState(req) {
+  const c = await codeOnly(req);
+  if (c === "ok") return "ok";
+  return (await sessUid(req)) ? "ok" : c; // v505: a signed-in account is accepted too
+}
+async function codeOnly(req) {
   const need = process.env.APP_PASSWORD;
   if (!need) return "ok";
   const got = String(req.headers["x-code"] || "");
@@ -82,7 +127,7 @@ export async function captchaOk(req) {
 
 const STATUS = {
   badurl: 400, badimage: 400, private: 400, toobig: 413, nokey: 503, messages: 400, method: 405,
-  norecipe: 422, nomail: 503, blocked: 422, banned: 403, login: 422, notfound: 422, rate: 429, daily: 429, storage: 502,
+  quota: 402, norecipe: 422, nomail: 503, blocked: 422, banned: 403, login: 422, notfound: 422, rate: 429, daily: 429, storage: 502,
   captcha: 403, timeout: 504, unreachable: 502, upstream: 502, badkey: 502, credit: 502, model: 502,
 };
 export function fail(res, code) {

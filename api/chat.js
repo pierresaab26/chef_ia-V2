@@ -1,4 +1,4 @@
-import { authOk, fail, callClaude, overLimit } from "./_lib.js";
+import { authOk, fail, callClaude, overLimit, genQuota, genCount, dayCap, isRecipeText } from "./_lib.js";
 import { stripFlag, warnText, FLAG_WARN } from "./_flags.js";
 import { who, isBanned, recordFlag } from "./_mod.js";
 import { cleanTaste, tasteText } from "./_taste.js";
@@ -81,6 +81,12 @@ export default async function handler(req, res) {
     return fail(res, "messages");
   }
 
+  // v505 open beta: an account without code gets FREE_GEN recipe generations (counted on the answer, see below) and a daily cap.
+  const gq = await genQuota(req);
+  if (!gq.byCode) {
+    if (await dayCap(gq.uid)) return fail(res, "daily");
+    if (mode !== "qa" && gq.used >= gq.max) return fail(res, "quota"); // « Questions » never makes a recipe: still allowed
+  }
   try {
     const out = await callClaude({
       model: process.env.MODEL || "claude-haiku-5-5",
@@ -95,7 +101,8 @@ export default async function handler(req, res) {
       const r = await recordFlag(w, f.kind, last, lang);
       out.text = r.n >= FLAG_WARN ? f.text.trimEnd() + "\n\n⚠️ " + warnText(f.lang || lang, f.kind) : f.text;
     }
-    return res.status(200).json(out);
+    if (!gq.byCode && mode !== "qa" && isRecipeText(out.text)) await genCount(gq.uid);
+    return res.status(200).json({ ...out, ...(gq.byCode ? {} : { quota: { used: Math.min(gq.max, gq.used + (isRecipeText(out.text) ? 1 : 0)), max: gq.max } }) });
   } catch (e) {
     return fail(res, e.code || "upstream");
   }
