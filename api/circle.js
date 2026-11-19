@@ -25,6 +25,33 @@ export default async function handler(req, res) {
   if (req.query && req.query.via === "sync") return syncHandler(req, res); // v368
   if (req.query && req.query.via === "pub") return publishHandler(req, res); // v293: /api/publish → /api/circle?via=pub
   if (req.query && req.query.via === "auth") return authHandler(req, res, pidOf); // v354: /api/auth → /api/circle?via=auth
+  // v492: « Demander un code » (visitor without access): e-mail address → mail to the support, who sends a code by hand. No access needed; 3 per window per IP; nothing is stored.
+  if (req.method === "POST" && req.body && typeof req.body === "object" && req.body.act === "reqcode") {
+    if (await overLimit(req, "rl:rq:", 3)) return res.status(429).json({ error: "rate" });
+    const email = String(req.body.email || "").trim().slice(0, 120).replace(/[\r\n<>]/g, "");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return res.status(400).json({ error: "email" });
+    const key = process.env.RESEND_API_KEY, to = process.env.SUPPORT_EMAIL || process.env.MOD_EMAIL;
+    if (!key || !to) return res.status(503).json({ error: "nomail" });
+    const lang = String(req.body.lang || "").slice(0, 5).replace(/[^a-z-]/gi, "");
+    try {
+      const r = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + key, "content-type": "application/json" },
+        body: JSON.stringify({
+          from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>",
+          to: [to],
+          reply_to: email,
+          subject: "CheffeEvalie : demande de code d'accès",
+          text: "Quelqu'un demande un code d'accès.\nE-mail : " + email + "\nLangue : " + (lang || "?") + "\n\nRéponds directement à ce mail avec son code.",
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!r.ok) return res.status(502).json({ error: "upstream" });
+      return res.status(200).json({ ok: true });
+    } catch {
+      return res.status(502).json({ error: "upstream" });
+    }
+  }
   // v398: « Aide et contact » message → e-mail to the support (nothing is stored). Works without Redis (the rate limit then never blocks).
   if (req.method === "POST" && req.body && typeof req.body === "object" && req.body.act === "contact") {
     if (!(await authOk(req, res))) return;
