@@ -7,7 +7,7 @@
 //   &invites=1       → lists the invitations (name, date, link)
 //   &revoke=<name>   → removes every invitation of that name (or the one whose token is given); effective within 60 s
 // &stats=1 → counts of users (there are no accounts: a user = a device nickname) and activity, read-only.
-import { fail, redis, hasRedis, adminOk } from "./_lib.js";
+import { fail, redis, hasRedis, adminOk, FREE_GEN } from "./_lib.js";
 import { randomBytes } from "node:crypto";
 import { suggest, handleOk } from "./_auth.js";
 import { indexPerson } from "./_index.js";
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       const n = Math.max(1, Math.min(100, Number(q.n) || 10));
       const [raw, tot] = await redis([["GET", "au:" + uid], ["INCRBY", "ag:" + uid, n]]);
       let e = ""; try { e = JSON.parse(raw || "{}").e || ""; } catch {}
-      return res.status(200).json({ ok: !!raw, account: e, added: n, freeTotal: 3 + Number(tot) });
+      return res.status(200).json({ ok: !!raw, account: e, added: n, freeTotal: FREE_GEN + Number(tot) });
     }
     if (q.stats) return res.status(200).json(await stats());
     if (q.creports || q.cok || q.cdel || q.cunban) return res.status(200).json(await commentReports(q));

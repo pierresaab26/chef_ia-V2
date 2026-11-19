@@ -41,7 +41,7 @@ async function inviteOk(tok) {
 }
 // v505: OPEN BETA. A signed-in account (x-session, Redis `as:`) gets in like a code holder, but with a quota of FREE_GEN recipe generations
 // (counter `aq:<uid>`, extra granted by the admin in `ag:<uid>`). Code holders (APP_PASSWORD / invitation) stay unlimited.
-export const FREE_GEN = 3, DAY_CHAT = 60;
+export const FREE_GEN = 10, DAY_CHAT = 60;
 const sessH = (s) => createHash("sha256").update("auth|" + s).digest("hex").slice(0, 32);
 const sesCache = new Map();
 export async function sessUid(req) {

@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
-import { authOk, hasAccess, captchaOk, hasRedis, redis, overLimit, clean, sessUid } from "./_lib.js";
+import { authOk, hasAccess, captchaOk, hasRedis, redis, overLimit, clean, sessUid, FREE_GEN } from "./_lib.js";
 import { notifyCircle, notifyOne, readNotes, markSeen } from "./_notify.js";
 import { indexPerson, searchPeople } from "./_index.js"; // v358: find people by pseudo / @
 import { isOffensive } from "./_words.js"; // v356
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
       const base = String(process.env.APP_URL || "").replace(/\/$/, "") || (/^[a-z0-9.-]+$/i.test(host) ? "https://" + host : "https://www.cheffeevalie.com");
       const note = String(req.body.message || "").trim().slice(0, 500).replace(/[\r<>]/g, "");
       const gl = (n) => adm ? "+" + n + " recettes : " + base + "/api/moderation?key=" + encodeURIComponent(adm) + "&grant=" + uid + "&n=" + n : "(ADMIN_KEY manquante)";
-      const link = [3, 5, 10].map(gl).join("\n");
+      const link = [10, 15, 20].map(gl).join("\n");
       const email = String(acc.e || "").replace(/[\r\n<>]/g, "");
       const r = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -109,7 +109,7 @@ export default async function handler(req, res) {
           to: [to],
           ...(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? { reply_to: email } : {}),
           subject: "CheffeEvalie : demande de quota supplémentaire (bêta)",
-          text: "Utilisateur : " + (email || "?") + (acc.h ? " (@" + acc.h + ")" : "") + "\nRecettes utilisées : " + Number(used || 0) + " / " + (3 + Number(extra || 0)) + "\n" + (note ? "Message : " + note + "\n" : "") + "\nChoisis combien de recettes donner (un clic) ; ne clique sur rien pour refuser :\n" + link,
+          text: "Utilisateur : " + (email || "?") + (acc.h ? " (@" + acc.h + ")" : "") + "\nRecettes utilisées : " + Number(used || 0) + " / " + (FREE_GEN + Number(extra || 0)) + "\n" + (note ? "Message : " + note + "\n" : "") + "\nChoisis combien de recettes donner (un clic) ; ne clique sur rien pour refuser :\n" + link,
         }),
         signal: AbortSignal.timeout(15000),
       });
