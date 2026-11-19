@@ -1,4 +1,4 @@
-import { callClaude, redis, hasRedis, parseJsonLoose } from "./_lib.js";
+import { callClaude, redis, hasRedis, parseJsonLoose, safeEq } from "./_lib.js";
 import { systemFor, PARTS } from "./chat.js";
 import { CASES } from "./_selftest-cases.js";
 
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
 
   const secret = process.env.CRON_SECRET;
   if (!secret) return res.status(501).json({ error: "nocron" });
-  if ((req.headers.authorization || "") !== "Bearer " + secret) return res.status(401).json({ error: "code" });
+  if (!safeEq(String(req.headers.authorization || ""), "Bearer " + secret)) return res.status(401).json({ error: "code" });
   const part = q.part === "2" ? 2 : 1;
   const d = day();
   const results = await runPart(part);

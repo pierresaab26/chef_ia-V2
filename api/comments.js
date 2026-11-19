@@ -183,7 +183,7 @@ async function report(req, res, key, listKey, owner, body) {
   const [n] = await redis([["HLEN", rk]]);
   c.rp = Number(n) || 1;
   const host = "https://" + String(req.headers.host || "chefia-v3.vercel.app");
-  const adm = (q) => host + "/api/moderation?key=" + encodeURIComponent(process.env.CRON_SECRET || "") + "&" + q;
+  const adm = (q) => host + "/api/moderation?key=" + encodeURIComponent(process.env.ADMIN_KEY || process.env.CRON_SECRET || "") + "&" + q;
   const [reasons] = await redis([["HVALS", rk]]);
   const ref = key + "|" + id;
   const hideNow = c.rp >= 3 && !c.h;

@@ -1,4 +1,4 @@
-import { authOk, hasAccess, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js";
+import { authOk, hasAccess, adminOk, fail, callClaude, hasRedis, redis, overLimit } from "./_lib.js";
 import { systemFor, PARTS } from "./chat.js";
 import { LANGS, OCC, periodOf, periodById, occasionNowFR, parseIdeas, ideasPrompt, norm } from "./_season.js";
 
@@ -129,8 +129,9 @@ export default async function handler(req, res) {
   if (q.run) { // scheduled warm-up
     const secret = process.env.CRON_SECRET;
     // v282: the owner can also open the link in a browser: /api/season-ideas?run=1&key=<CRON_SECRET> (add &reset=1 to erase and regenerate today's series)
-    const asCron = (req.headers.authorization || "") === "Bearer " + secret, asOwner = String(q.key || "") === secret;
-    if (!secret || (!asCron && !asOwner)) return res.status(401).json({ error: "code" });
+    const asCron = !!secret && String(req.headers.authorization || "") === "Bearer " + secret; // header only (Vercel cron)
+    const asOwner = !asCron && !!q.key && (await adminOk(req, q.key)); // v502: constant-time + failed attempts counted
+    if (!asCron && !asOwner) return res.status(401).json({ error: "code" });
     if (!hasRedis()) return res.status(501).json({ error: "storage" });
     try { return res.status(200).json(await warmup(asOwner && !!q.reset)); } catch (e) { return fail(res, e.code || "upstream"); }
   }

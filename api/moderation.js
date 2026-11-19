@@ -7,17 +7,16 @@
 //   &invites=1       → lists the invitations (name, date, link)
 //   &revoke=<name>   → removes every invitation of that name (or the one whose token is given); effective within 60 s
 // &stats=1 → counts of users (there are no accounts: a user = a device nickname) and activity, read-only.
-import { fail, redis, hasRedis } from "./_lib.js";
+import { fail, redis, hasRedis, adminOk } from "./_lib.js";
 import { randomBytes } from "node:crypto";
 import { suggest, handleOk } from "./_auth.js";
 import { indexPerson } from "./_index.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return fail(res, "method");
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return fail(res, "nokey");
+  if (!process.env.CRON_SECRET && !process.env.ADMIN_KEY) return fail(res, "nokey");
   const key = String((req.query && req.query.key) || "");
-  if (key !== secret) return res.status(401).json({ error: "code" });
+  if (!(await adminOk(req, key))) return res.status(401).json({ error: "code" });
   if (!hasRedis()) return fail(res, "storage");
   const un = String((req.query && req.query.unblock) || "");
   const q = req.query || {};

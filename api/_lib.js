@@ -1,6 +1,30 @@
 // Helpers shared by all API routes (access code, errors, Claude calls, Redis, rate limit).
 // The "_" prefix tells Vercel this file is not a route.
 
+import { createHash, timingSafeEqual } from "node:crypto";
+// v502: constant-time string compare (hash both sides so lengths never leak)
+export const safeEq = (a, b) => timingSafeEqual(createHash("sha256").update(String(a)).digest(), createHash("sha256").update(String(b)).digest());
+// v502: wrong-secret attempts are counted per IP (one minute window). Over `max` -> everything is refused, even the right secret, until the minute ends. Fails open without Redis.
+const ipOf = (req) => String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "x";
+const badKey = (kind, req) => "rl:" + kind + ":" + ipOf(req) + ":" + Math.floor(Date.now() / 60000);
+async function blocked(kind, req, max) {
+  if (!hasRedis()) return false;
+  try { const [n] = await redis([["GET", badKey(kind, req)]]); return Number(n || 0) >= max; } catch { return false; }
+}
+async function countBad(kind, req) {
+  if (!hasRedis()) return;
+  try { await redis([["INCR", badKey(kind, req)], ["EXPIRE", badKey(kind, req), 120]]); } catch {}
+}
+// Admin / cron secret. CRON_SECRET: Vercel crons (Authorization header). ADMIN_KEY (optional): the secret used in browser links ?key=...; falls back to CRON_SECRET.
+export async function adminOk(req, key) {
+  const cron = process.env.CRON_SECRET, adm = process.env.ADMIN_KEY || cron;
+  if (!cron && !adm) return false;
+  if (await blocked("ak", req, 10)) return false;
+  const auth = String(req.headers.authorization || ""), k = String(key || "");
+  if ((cron && safeEq(auth, "Bearer " + cron)) || (k && adm && safeEq(k, adm))) return true;
+  if (auth || k) await countBad("ak", req);
+  return false;
+}
 // Access: the shared code (APP_PASSWORD) or a personal invitation token (v320: Redis hash `ak`, token -> {n:name, at}).
 // Invitations are created / listed / revoked with the admin key (see api/moderation.js). A revoked token stops working within 60 s.
 const akCache = new Map();
@@ -17,18 +41,23 @@ async function inviteOk(tok) {
 }
 // v329: same check as authOk, but answers nothing (used by the invitation link, which also works for people without access).
 export async function hasAccess(req) {
+  return (await codeState(req)) === "ok";
+}
+// "ok" | "bad" (no / wrong code) | "limited" (too many wrong codes from this IP: refused even with the right one)
+async function codeState(req) {
   const need = process.env.APP_PASSWORD;
-  if (!need) return true;
+  if (!need) return "ok";
   const got = String(req.headers["x-code"] || "");
-  return got === need || (await inviteOk(got));
+  if (got && (await blocked("bad", req, 15))) return "limited";
+  if ((got && safeEq(got, need)) || (await inviteOk(got))) return "ok";
+  if (got) await countBad("bad", req);
+  return "bad";
 }
 
 export async function authOk(req, res) {
-  const need = process.env.APP_PASSWORD;
-  if (!need) return true;
-  const got = String(req.headers["x-code"] || "");
-  if (got === need || (await inviteOk(got))) return true;
-  res.status(401).json({ error: "code" });
+  const s = await codeState(req);
+  if (s === "ok") return true;
+  res.status(s === "limited" ? 429 : 401).json({ error: s === "limited" ? "rate" : "code" });
   return false;
 }
 

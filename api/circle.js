@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from "node:crypto";
-import { authOk, hasAccess, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { authOk, hasAccess, captchaOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { notifyCircle, notifyOne, readNotes, markSeen } from "./_notify.js";
 import { indexPerson, searchPeople } from "./_index.js"; // v358: find people by pseudo / @
 import { isOffensive } from "./_words.js"; // v356
@@ -28,6 +28,7 @@ export default async function handler(req, res) {
   // v492: « Demander un code » (visitor without access): e-mail address → mail to the support, who sends a code by hand. No access needed; 3 per window per IP; nothing is stored.
   if (req.method === "POST" && req.body && typeof req.body === "object" && req.body.act === "reqcode") {
     if (await overLimit(req, "rl:rq:", 3)) return res.status(429).json({ error: "rate" });
+    if (!(await captchaOk(req))) return res.status(403).json({ error: "captcha" }); // v502: Cloudflare Turnstile (active only when TURNSTILE_SECRET is set)
     const email = String(req.body.email || "").trim().slice(0, 120).replace(/[\r\n<>]/g, "");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return res.status(400).json({ error: "email" });
     const key = process.env.RESEND_API_KEY, to = process.env.SUPPORT_EMAIL || process.env.MOD_EMAIL;

@@ -1,4 +1,4 @@
-import { authOk, hasRedis, redis, overLimit, clean, callClaude, parseJsonLoose } from "./_lib.js";
+import { authOk, adminOk, hasRedis, redis, overLimit, clean, callClaude, parseJsonLoose } from "./_lib.js";
 import { pidOf, liveRoots } from "./circle.js";
 import { notifyCircle, notifyOne, notifyFollowers } from "./_notify.js";
 import { PUB } from "./shared.js";
@@ -20,7 +20,7 @@ import { sendModMail } from "./_mod.js";
 const pubSid = (sid) => ("pub-" + sid).slice(0, 64);
 const REPORTS_TO_HIDE = 3;
 const site = (req) => "https://" + String(req.headers["x-forwarded-host"] || req.headers.host || "chefia-v3.vercel.app").split(",")[0].trim();
-const adminLink = (req, p) => site(req) + "/api/publish?key=" + encodeURIComponent(process.env.CRON_SECRET || "<CRON_SECRET>") + p;
+const adminLink = (req, p) => site(req) + "/api/publish?key=" + encodeURIComponent(process.env.ADMIN_KEY || process.env.CRON_SECRET || "<ADMIN_KEY>") + p;
 
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
@@ -170,8 +170,7 @@ function answer(res, q, code, json, msg) {
 }
 
 async function admin(req, res, q) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || String(q.key) !== secret) return res.status(401).json({ error: "code" });
+  if (!(await adminOk(req, q.key))) return res.status(401).json({ error: "code" });
   const note = clean(q.note, 300); // v302: the moderator's comment, sent to the author with the answer
   try {
     if (q.review) {
