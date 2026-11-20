@@ -20,7 +20,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="CheffeEvalie">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"><text y=%22.9em%22 font-size=%2290%22>🍳</text></svg>">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 <style>
 :root{--psoft:#fde6ee;--psbd:rgba(229,25,95,.22);--bg1:#fffaf2;--bg2:#f9eddc;--card:#fff;--ink:#16121a;--mut:#7b7684;--pink:#e5195f;--dark:#15121a;--bd:rgba(0,0,0,.07);--sh:0 2px 12px rgba(0,0,0,.06);--rc:22px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @supports(background:color-mix(in srgb,red,blue)){:root{--psoft:color-mix(in srgb,var(--pink) 14%,var(--card))}} /* v118: ONE soft-pink style for every action button and selected chip */
@@ -44,8 +44,8 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 #soonBar[hidden]{display:none}
 #soonBar{cursor:pointer;-webkit-tap-highlight-color:transparent}#soonBar:active{opacity:.85} /* v504: tap the bar = request / enter a code */
 #soonBar b{font-size:15px;font-weight:800}
-.ask{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:var(--rc);border:1px solid var(--bd);box-sizing:border-box;height:52px;padding:0 7px 0 14px;margin-bottom:10px;box-shadow:var(--sh)}
-.ask input{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:0;min-width:0}
+.ask{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:var(--rc);border:1px solid var(--bd);box-sizing:border-box;min-height:52px;padding:0 7px 0 14px;margin-bottom:10px;box-shadow:var(--sh)}
+.ask input,.ask textarea{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:0;min-width:0;resize:none;margin:0;padding:15px 0;line-height:22px;display:block;overflow-y:hidden;max-height:136px;-webkit-appearance:none;appearance:none} /* v516: the home box grows on 2+ lines */
 .ask button{background:var(--psoft);color:var(--pink);border:1px solid var(--psbd);font-weight:700;border-radius:999px;padding:6px 12px;font-size:14px}
 h2{font-size:15px;margin:12px 0 8px;display:flex;justify-content:space-between;align-items:baseline}
 h2 small{color:var(--pink);font-weight:600;font-size:12px}
@@ -842,7 +842,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         <div style="flex:1"><div class="hi" id="hi"></div><div class="sub" id="sub"></div></div><div id="verpill"><i></i><span></span></div>
       </div>
       <div id="soonBar" role="button" tabindex="0" hidden><b id="soonT"></b><span id="soonS"></span></div>
-      <div class="ask"><span class="askico" aria-hidden="true">🧑‍🍳</span><input id="hq"><button id="hgo">Go</button></div>
+      <div class="ask"><span class="askico" aria-hidden="true">🧑‍🍳</span><textarea id="hq" rows="1" autocomplete="off"></textarea><button id="hgo">Go</button></div>
       <div id="hqcs"></div>
       <div class="tiles"><!-- v211: three compact tiles -->
       <button class="impcard" id="impHome"><i>📥</i><div><b id="impHomeT"></b><span id="impHomeS"></span></div></button>
@@ -3571,7 +3571,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v515',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v516',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -5468,7 +5468,7 @@ $('#isheetwrap').addEventListener('click',e=>{if(e.target.id==='isheetwrap')clos
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#isheetwrap').classList.contains('on'))closeImgSheet()});
 $('#hgo').onclick=()=>{const v=$('#hq').value.trim();if(v){$('#hq').value='';try{drawTopCs()}catch(x){}start(v)}};
 $('#hq').addEventListener('input',()=>drawTopCs());
-$('#hq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#hgo').click()});
+autoTA($('#hq'),136);$('#hq').addEventListener('keydown',e=>{if(enterSends(e)){e.preventDefault();$('#hgo').click()}});
 $('#back').onclick=()=>show('home');
 $('#hback').onclick=()=>show('home');
 $('#hsearch').addEventListener('input',drawHistory);
