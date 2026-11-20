@@ -3571,7 +3571,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v520',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v521',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -5693,7 +5693,7 @@ async function accFlow(){closeDrawer();const t=T();
     if(!r.ok){let c='';try{c=(await r.json()).error}catch(x){}toast(c==='badword'?t.accBadW:c==='email'?t.accBadMail:c==='rate'?t.accRate:c==='nomail'?t.accNoMail:c==='captcha'?t.e_captcha:t.accErr);return}}catch(x){toast(t.accErr);return}
   for(;;){accInput('text','numeric','one-time-code');const c=await ask({text:t.accCodeQ.replace('{e}',e),input:true});if(!c)return;
     try{const{r,j}=await accVerify({email:e,code:c});
-      if(r.ok){track('account_login',{via:'code',created:!!j.created});await accApply(j);return}
+      if(r.ok){track('account_login',{via:'code',created:!!j.created});if(j.created)track('signup',{via:'code'});await accApply(j);return}
       if(j.error==='badcode'&&j.left>0){toast(t.accBad.replace('{n}',j.left));continue}
       toast(j.error==='expired'||j.error==='badcode'?t.accExp:j.error==='rate'?t.accRate:t.accErr);return}catch(x){toast(t.accErr);return}}}
 $('#dAcc').onclick=accFlow;
@@ -5777,7 +5777,7 @@ $('#dPrefB').onclick=prefsFlow;
 // Magic link « /?login=<token> » (single use, 15 min)
 const accLink=(()=>{try{const k=(new URLSearchParams(location.search).get('login')||'').trim().toLowerCase();return/^[a-f0-9]{32}$/.test(k)?k:''}catch(x){return''}})();
 if(accLink){try{history.replaceState(null,'',location.pathname)}catch(x){}
-  setTimeout(async()=>{const t=T();try{const{r,j}=await accVerify({token:accLink});if(r.ok){track('account_login',{via:'link',created:!!j.created});await accApply(j)}else toast(j.error==='expired'?t.accExp:t.accErr)}catch(x){toast(t.accErr)}},300)}
+  setTimeout(async()=>{const t=T();try{const{r,j}=await accVerify({token:accLink});if(r.ok){track('account_login',{via:'link',created:!!j.created});if(j.created)track('signup',{via:'link'});await accApply(j)}else toast(j.error==='expired'?t.accExp:t.accErr)}catch(x){toast(t.accErr)}},300)}
 else setTimeout(accCheck,1800); // v355: account without @handle → asked once at opening
 
 /* v368: SYNC of the account's data across devices (accounts only; without an account nothing is sent).

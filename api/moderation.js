@@ -55,6 +55,27 @@ async function countKeys(pat) {
   return n;
 }
 
+// v521: sign-ups per day = accounts (Redis au:<uid>, field `at` = creation time) grouped by Paris day; last 60 days listed.
+async function signupsByDay() {
+  const keys = [];
+  let cur = "0";
+  do {
+    const [r] = await redis([["SCAN", cur, "MATCH", "au:*", "COUNT", 500]]);
+    cur = String(r[0]);
+    keys.push(...r[1]);
+  } while (cur !== "0" && keys.length < 50000);
+  const fmt = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" });
+  const perDay = {};
+  for (let i = 0; i < keys.length; i += 200) {
+    const [vals] = await redis([["MGET", ...keys.slice(i, i + 200)]]);
+    for (const v of vals || []) {
+      try { const a = JSON.parse(v); if (a && a.at) { const d = fmt.format(new Date(Number(a.at))); perDay[d] = (perDay[d] || 0) + 1; } } catch {}
+    }
+  }
+  const days = Object.keys(perDay).sort().slice(-60);
+  return { total: keys.length, perDay: Object.fromEntries(days.map((d) => [d, perDay[d]])) };
+}
+
 // No accounts exist: "users" = devices that picked a nickname (cu:<pid>). Invitations = personal access links (hash ak).
 async function stats() {
   const [[invitations], nicknames, inCircle, sharedAll, publicCopies] = await Promise.all([
@@ -64,7 +85,9 @@ async function stats() {
     countKeys("s:*"),
     countKeys("s:pub-*"),
   ]);
+  const signups = await signupsByDay();
   return {
+    signups, // v521: accounts created per day (Paris time) + total, from the creation date stored in every account
     users: nicknames, // devices with a nickname (the closest thing to "registered")
     inCircle, // of those, how many have at least one circle member
     invitations: Number(invitations) || 0, // personal access links still active
