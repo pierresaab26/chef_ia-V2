@@ -130,7 +130,7 @@ function shell({ lang, title, desc, canonical, noindex, ld, body, img }) {
     + '<meta property="og:type" content="' + (ld && ld["@type"] === "Recipe" ? "article" : "website") + '"><meta property="og:site_name" content="CheffeEvalie"><meta property="og:title" content="' + esc(title) + '">'
     + (desc ? '<meta property="og:description" content="' + esc(desc) + '">' : "") + (canonical ? '<meta property="og:url" content="' + esc(canonical) + '">' : "")
     + '<meta property="og:image" content="' + esc(img || b + "/icons/icon-512.png") + '"><meta name="twitter:card" content="' + (img ? "summary_large_image" : "summary") + '">'
-    + '<link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">'
+    + '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">'
     + (ld ? '<script type="application/ld+json">' + ldJson(ld) + "</script>" : "")
     + "<style>" + CSS + "</style></head><body>"
     + '<header class="top"><a class="brand" href="/">🍳 CheffeEvalie</a><nav><a href="/">' + esc(t.open) + '</a><a href="/recettes">' + esc(t.all) + "</a></nav></header>"
