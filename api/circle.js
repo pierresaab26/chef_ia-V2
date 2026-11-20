@@ -108,7 +108,7 @@ export default async function handler(req, res) {
           from: process.env.MOD_FROM || "CheffeEvalie <onboarding@resend.dev>",
           to: [to],
           ...(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? { reply_to: email } : {}),
-          subject: "CheffeEvalie : demande de quota supplémentaire (bêta)",
+          subject: "CheffeEvalie : demande de quota supplémentaire",
           text: "Utilisateur : " + (email || "?") + (acc.h ? " (@" + acc.h + ")" : "") + "\nRecettes utilisées : " + Number(used || 0) + " / " + (FREE_GEN + Number(extra || 0)) + "\n" + (note ? "Message : " + note + "\n" : "") + "\nChoisis combien de recettes donner (un clic) ; ne clique sur rien pour refuser :\n" + link,
         }),
         signal: AbortSignal.timeout(15000),
