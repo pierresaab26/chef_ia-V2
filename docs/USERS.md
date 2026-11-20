@@ -39,13 +39,25 @@ Accounts only (header `x-session`); without an account nothing is sent and data 
 - **Triggers**: 3.5 s after start, return to the app, 4 s after any local save (`syncSoon()` called by `saveH`, `saveLists`, `saveMenu`, `circSave`, `pubSave`), after sign-in, and the drawer row « Synchroniser maintenant » (last sync time shown).
 - **Known limits**: the automatic 50-recipe trimming of `saveH` counts as a deletion for the other devices; two devices editing the same recipe at once keep the later one; ratings are server-side by version key already (shared); iOS install still off.
 
-## Redis keys
-`ae:<h(email)>` → uid, `au:<uid>` JSON `{e,o,at,m,h}`, `al:` link, `ac:` code, `as:` session → uid, `aS:<uid>` sessions, `am:` mail counter, `sy:<uid>` / `sy:<uid>:c` synced data (v368), `ah:<handle>` → uid or `p:<pid>`, `hp:<pid>` → handle, `cu:<pid>` pseudo, `hx` / `hxn:<pid>` search index, `ak` invitation tokens, `ai:<pid>` access given. Reserved: `ap:<provider>:<sub>`.
+## Deletion of inactive accounts (v511)
+Promised in `legal.html` (2 years without activity, warning e-mail first). Code: `api/_inactive.js` (not a route), served by `api/moderation.js` with `&inactive=1`.
 
-## Admin links (`CRON_SECRET`)
-`GET /api/moderation?key=<CRON_SECRET>` with `&stats=1` (counts), `&invite=<name>`, `&invites=1`, `&revoke=`, `&handles=1[&apply=1]`, `&creports=1`, `&cok=`, `&cdel=`, `&cunban=`, `&unblock=`.
+- **Activity** = any request carrying a valid session (`sessUid` in `api/_lib.js`, one write per account, instance and day) or any sign-in (`openSession`). Redis: zset `ax:act` (uid → last activity), hash `ax:rem` (uid → date of the warning e-mail), hash `ax:lang` (uid → language of the e-mails), flag `ax:bf`. Any activity removes the warning (`ax:rem`) and restarts the clock.
+- **Backfill (once)**: accounts created before v511 get their creation date as starting point. Only a real run (`&run=1` or the cron) writes it and sets `ax:bf`; a dry run counts them and writes nothing, so it keeps showing the same `backfilled` until the first real run.
+- **Rules**: at 700 days without activity ONE warning e-mail (Resend, `AUTH_FROM` / `MOD_FROM`, 6 languages, deletion date = +30 days). At 730 days the account is erased, only if the warning was sent at least 29 days earlier and nothing happened since. No warning sent (no `RESEND_API_KEY`, send error, no e-mail on the account) = no deletion. Limits per run: 50 warnings, 20 erasures. A run stopped halfway is simply redone the next day (the account record is deleted last).
+- **Modes**: `GET /api/moderation?key=<ADMIN_KEY>&inactive=1` = dry run (answer: `dry`, `backfilled`, `orphans`, `toWarn`, `warned`, `mailFailed`, `toErase`, `erased`, `anonymised`, `comments`, `ratings`, `details`; no e-mail address in it); `&inactive=1&run=1` does it. The daily cron (`30 3 * * *` UTC in `vercel.json`) calls the real run with `Authorization: Bearer <CRON_SECRET>`.
+- **Erased**: account, e-mail, @handle, pseudo, sessions, synced data (`sy:`), quota, circle / family / follows (the other side forgets the person), shopping lists (own ones deleted, shared ones just lose the member), search index, notifications, comments and ratings (found by SCAN of `c:*`, `r:*`, `rc:*`, `rt:*`, `ra:*`), circle / link copies `s:<sid>` listed in `cp:<pid>`.
+- **Kept, anonymised**: published recipes `s:pub-…` (`by`, `bp`, `o` blanked; `og` = original author is untouched). A person can ask for their removal at contact@cheffeevalie.com (`legal.html`); removal is manual (`/api/publish?key=<ADMIN_KEY>&remove=<pub sid>`).
+- **Known limit**: a copy shared by link but never put in the circle nor published is listed nowhere and stays (it holds the old device key, not the e-mail). Nothing can be erased before about the end of 2028 (the accounts are recent).
+- **Not covered**: a button « Supprimer mon compte » in the app (today: write to contact@cheffeevalie.com, answered within one month); an account with no e-mail is never warned, so never erased.
+
+## Redis keys
+`ae:<h(email)>` → uid, `au:<uid>` JSON `{e,o,at,m,h}`, `al:` link, `ac:` code, `as:` session → uid, `aS:<uid>` sessions, `am:` mail counter, `sy:<uid>` / `sy:<uid>:c` synced data (v368), `ah:<handle>` → uid or `p:<pid>`, `hp:<pid>` → handle, `cu:<pid>` pseudo, `hx` / `hxn:<pid>` search index, `ak` invitation tokens, `ai:<pid>` access given. Reserved: `ap:<provider>:<sub>`. Inactive accounts (v511): `ax:act`, `ax:rem`, `ax:lang`, `ax:bf`.
+
+## Admin links (`ADMIN_KEY` since v502, falls back to `CRON_SECRET` when unset)
+`GET /api/moderation?key=<ADMIN_KEY>` with `&stats=1` (counts), `&invite=<name>`, `&invites=1`, `&revoke=`, `&handles=1[&apply=1]`, `&creports=1`, `&cok=`, `&cdel=`, `&cunban=`, `&unblock=`, `&grant=<uid>&n=`, `&inactive=1[&run=1]`. Crons use `Authorization: Bearer <CRON_SECRET>`.
 
 ## Not done
 - A « famille » status to share the shopping list.
 - Changing the @ from the interface (the server supports it).
-- Account deletion from the interface.
+- Account deletion from the interface (« Supprimer mon compte » button). Automatic deletion of inactive accounts exists since v511.
