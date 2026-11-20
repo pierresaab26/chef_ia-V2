@@ -20,6 +20,8 @@ Routes: no new function (still 12). `vercel.json` rewrites `/recettes`, `/recett
 - Private previews `/r/<sid>` and `/q/<id>` are `noindex`; `/l/<code>` was already. `chefia-v3.vercel.app` answers `X-Robots-Tag: noindex` (the canonical site is `https://www.cheffeevalie.com`, constant in `api/_seo.js`, override with the env var `SEO_BASE`).
 - Recipe text is read by `parseRecipe()` (format of `api/chat.js`: `## Title`, `Servings` / `Prep` / `Rest` / `Cook` lines, `## Ingredients`, `## Utensils`, `## Preparation`, `## Chef's tip`; 6 languages). If the chef's format changes, update this parser.
 
+`legal.html` (Contenus publiés, Données collectées) says that a public recipe has a public web page, may be indexed by search engines and read by AI assistants, without name or @.
+
 ## Not done / to do by the owner
 - Google Search Console: add the property `https://www.cheffeevalie.com`, submit `https://www.cheffeevalie.com/sitemap.xml`, then « inspect URL » on `/recettes` and one recipe page; check « Rich results » for `Recipe`. Bing Webmaster Tools: import from Search Console.
 - Domain: make `cheffeevalie.com` (without www) redirect to `https://www.cheffeevalie.com` in Vercel → Domains (otherwise duplicate pages).
