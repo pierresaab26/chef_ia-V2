@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>CheffeEvalie – Admin</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+:root{--bg1:#fffaf2;--bg2:#f9eddc;--card:#fff;--ink:#16121a;--mut:#7b7684;--pink:#e5195f;--psoft:#fde8ef;--psbd:#f6b9cf;--bd:rgba(0,0,0,.07);--sh:0 2px 12px rgba(0,0,0,.06);--rc:22px}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;min-height:100vh}
+main{max-width:900px;margin:0 auto;padding:16px 14px 80px}
+h1{font-size:22px;margin:6px 0 2px}h2{font-size:16px;margin:0 0 10px}
+.sub{color:var(--mut);margin:0 0 14px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rc);box-shadow:var(--sh);padding:16px;margin:0 0 14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+input[type=text],input[type=password],select{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--bd);border-radius:12px;background:#fff;color:var(--ink);min-width:0;flex:1 1 160px}
+button{font:inherit;font-size:14px;font-weight:600;padding:9px 14px;border-radius:999px;border:1px solid var(--psbd);background:var(--psoft);color:var(--pink);cursor:pointer}
+button.ghost{background:#fff;color:var(--ink);border-color:var(--bd)}
+button.warn{background:#fff;color:#c04a42;border-color:#e8b9b5}
+button:disabled{opacity:.5}
+small,.mut{color:var(--mut);font-size:13px}
+#out{white-space:pre-wrap;word-break:break-word;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;background:#faf7f2;border:1px solid var(--bd);border-radius:14px;padding:12px;max-height:60vh;overflow:auto;margin-top:10px}
+#view{margin-top:10px}
+.stat{display:inline-block;margin:0 8px 8px 0;padding:10px 14px;border-radius:16px;background:var(--bg1);border:1px solid var(--bd)}
+.stat b{display:block;font-size:22px}
+.bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin:10px 0 4px}
+.bars i{flex:1;background:var(--pink);border-radius:4px 4px 0 0;min-height:2px;opacity:.85}
+table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:5px 8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+#status{font-size:13px;color:var(--mut);margin-top:6px}
+.ok{color:#2f8f4e}.ko{color:#c04a42}
+#login{max-width:420px;margin:12vh auto 0}
+</style>
+</head>
+<body>
+<main>
+<div id="login" class="card">
+  <h1>🔐 Admin CheffeEvalie</h1>
+  <p class="sub">Entre ta clé admin (<code>ADMIN_KEY</code>). Elle reste dans cet onglet, jamais enregistrée sur le serveur ni dans le code.</p>
+  <div class="row"><input id="key" type="password" placeholder="Clé admin" autocomplete="off"><button id="go">Entrer</button></div>
+  <div id="lerr" class="ko"></div>
+</div>
+
+<div id="app" hidden>
+  <div class="row" style="justify-content:space-between"><h1>🛠️ Admin CheffeEvalie</h1><button class="ghost" id="bye">Se déconnecter</button></div>
+  <p class="sub">Chaque bouton appelle le lien admin correspondant. Les actions qui modifient des données demandent une confirmation.</p>
+
+  <section class="card">
+    <h2>📊 Chiffres</h2>
+    <div class="row"><button data-act="stats">Statistiques et inscriptions par jour</button><button class="ghost" data-act="status">État du serveur (idées de saison)</button><button class="ghost" data-act="selftest">Dernier auto-test</button></div>
+  </section>
+
+  <section class="card">
+    <h2>🎟️ Invitations personnelles</h2>
+    <div class="row"><input id="invName" type="text" placeholder="Prénom de l’ami"><button data-act="invite">Créer un lien</button></div>
+    <div class="row"><button class="ghost" data-act="invites">Lister les liens</button></div>
+    <div class="row"><input id="revName" type="text" placeholder="Nom ou jeton à révoquer"><button class="warn" data-act="revoke">Révoquer</button></div>
+  </section>
+
+  <section class="card">
+    <h2>➕ Quota supplémentaire</h2>
+    <div class="row"><input id="grUid" type="text" placeholder="Identifiant du compte (uid)"><select id="grN"><option>10</option><option>15</option><option>20</option></select><button data-act="grant">Accorder</button></div>
+  </section>
+
+  <section class="card">
+    <h2>🛡️ Modération</h2>
+    <div class="row"><button data-act="modlog">Journal de modération</button><button class="ghost" data-act="creports">Commentaires signalés</button></div>
+    <div class="row"><input id="cId" type="text" placeholder="clé|id du commentaire"><button data-act="cok">Remettre en ligne</button><button class="warn" data-act="cdel">Supprimer</button></div>
+    <div class="row"><input id="cuPid" type="text" placeholder="pid à débloquer (commentaires)"><button data-act="cunban">Débloquer</button></div>
+    <div class="row"><input id="ubId" type="text" placeholder="id bloqué (IP / appareil) ou all"><button data-act="unblock">Débloquer</button></div>
+  </section>
+
+  <section class="card">
+    <h2>🌍 Publication des recettes</h2>
+    <div class="row"><button data-act="pubq">File d’attente et appels</button></div>
+    <div class="row"><input id="pSid" type="text" placeholder="sid de la recette"><button data-act="review" class="ghost">Ouvrir la page de réponse</button></div>
+    <div class="row"><button data-act="approve">Publier</button><button class="warn" data-act="reject">Refuser</button><button class="ghost" data-act="restore">Remettre en ligne</button><button class="warn" data-act="remove">Retirer définitivement</button></div>
+    <small>Pour un commentaire à l’auteur, utilise « Ouvrir la page de réponse ».</small>
+  </section>
+
+  <section class="card">
+    <h2>🧹 Comptes inactifs (2 ans)</h2>
+    <div class="row"><button data-act="inactive">Simulation (ne supprime rien)</button><button class="warn" data-act="inactiveRun">Lancer pour de vrai</button></div>
+  </section>
+
+  <section class="card">
+    <h2>@ pour les appareils avec pseudo</h2>
+    <div class="row"><button data-act="handles">Simulation</button><button class="warn" data-act="handlesApply">Appliquer</button></div>
+  </section>
+
+  <section class="card">
+    <h2>✨ Idées de saison</h2>
+    <div class="row"><button data-act="ideasRun">Générer la série du jour</button><button class="warn" data-act="ideasReset">Effacer et régénérer</button></div>
+  </section>
+
+  <section class="card">
+    <h2>📷 Photos</h2>
+    <div class="row"><button data-act="photoMissing">Recettes sans photo</button><button class="ghost" data-act="photoStatus">État de la clé Unsplash</button></div>
+  </section>
+
+  <section class="card">
+    <h2>Résultat</h2>
+    <div id="status"></div>
+    <div id="view"></div>
+    <div id="out" hidden></div>
+  </section>
+</div>
+</main>
+<script>
+(function(){
+  var K='';
+  var $=function(s){return document.querySelector(s)};
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]})}
+  function enc(s){return encodeURIComponent(String(s||'').trim())}
+  function val(id){return $(id).value.trim()}
+
+  function enter(k){K=k;try{sessionStorage.setItem('adminKey',k)}catch(e){}$('#login').hidden=true;$('#app').hidden=false}
+  function leave(){K='';try{sessionStorage.removeItem('adminKey')}catch(e){}$('#app').hidden=true;$('#login').hidden=false;$('#key').value=''}
+  try{var s=sessionStorage.getItem('adminKey');if(s)enter(s)}catch(e){}
+
+  $('#go').onclick=function(){var k=$('#key').value.trim();if(!k){$('#lerr').textContent='Clé vide.';return}$('#lerr').textContent='';enter(k)};
+  $('#key').addEventListener('keydown',function(e){if(e.key==='Enter')$('#go').click()});
+  $('#bye').onclick=leave;
+
+  function need(v,label){if(!v){alert(label+' manquant.');return false}return true}
+
+  // act -> {url, confirm?, need?}
+  function build(act){
+    var m='/api/moderation?key='+enc(K), p='/api/publish?key='+enc(K), si='/api/season-ideas?key='+enc(K);
+    switch(act){
+      case 'stats': return {url:m+'&stats=1',stats:1};
+      case 'status': return {url:'/api/season-ideas?status=1'};
+      case 'selftest': return {url:'/api/selftest'};
+      case 'invite': if(!need(val('#invName'),'Prénom'))return null;return {url:m+'&invite='+enc(val('#invName')),link:1};
+      case 'invites': return {url:m+'&invites=1'};
+      case 'revoke': if(!need(val('#revName'),'Nom ou jeton'))return null;return {url:m+'&revoke='+enc(val('#revName')),confirm:'Révoquer « '+val('#revName')+' » ? Le lien cessera de fonctionner.'};
+      case 'grant': if(!need(val('#grUid'),'uid'))return null;return {url:m+'&grant='+enc(val('#grUid'))+'&n='+val('#grN'),confirm:'Accorder +'+val('#grN')+' recettes à ce compte ?'};
+      case 'modlog': return {url:m};
+      case 'creports': return {url:m+'&creports=1'};
+      case 'cok': if(!need(val('#cId'),'clé|id'))return null;return {url:m+'&cok='+enc(val('#cId'))};
+      case 'cdel': if(!need(val('#cId'),'clé|id'))return null;return {url:m+'&cdel='+enc(val('#cId')),confirm:'Supprimer définitivement ce commentaire ?'};
+      case 'cunban': if(!need(val('#cuPid'),'pid'))return null;return {url:m+'&cunban='+enc(val('#cuPid'))};
+      case 'unblock': if(!need(val('#ubId'),'id'))return null;return {url:m+'&unblock='+enc(val('#ubId')),confirm:val('#ubId')==='all'?'Débloquer TOUT LE MONDE ?':null};
+      case 'pubq': return {url:p};
+      case 'review': if(!need(val('#pSid'),'sid'))return null;window.open(p+'&review='+enc(val('#pSid')),'_blank','noopener');return null;
+      case 'approve': if(!need(val('#pSid'),'sid'))return null;return {url:p+'&approve='+enc(val('#pSid')),confirm:'Publier cette recette ? L’auteur sera prévenu.'};
+      case 'reject': if(!need(val('#pSid'),'sid'))return null;return {url:p+'&reject='+enc(val('#pSid')),confirm:'Refuser cette recette ? L’auteur ne pourra plus faire appel.'};
+      case 'restore': if(!need(val('#pSid'),'sid'))return null;return {url:p+'&restore='+enc(val('#pSid'))};
+      case 'remove': if(!need(val('#pSid'),'sid'))return null;return {url:p+'&remove='+enc(val('#pSid')),confirm:'Retirer définitivement cette recette publique ?'};
+      case 'inactive': return {url:m+'&inactive=1'};
+      case 'inactiveRun': return {url:m+'&inactive=1&run=1',confirm:'Lancer la suppression des comptes inactifs pour de vrai ? Les envois d’e-mails et les suppressions éligibles seront faits.'};
+      case 'handles': return {url:m+'&handles=1'};
+      case 'handlesApply': return {url:m+'&handles=1&apply=1',confirm:'Réserver ces @ pour les appareils listés ?'};
+      case 'ideasRun': return {url:si+'&run=1',confirm:'Générer la série du jour (appels au modèle, ~6 langues) ?'};
+      case 'ideasReset': return {url:si+'&run=1&reset=1',confirm:'Effacer la série actuelle puis la régénérer ?'};
+      case 'photoMissing': return {url:'/api/photo?missing=1'};
+      case 'photoStatus': return {url:'/api/photo?status=1'};
+    }
+    return null;
+  }
+
+  function showStats(j){
+    var h='';
+    ['users','inCircle','invitations','sharedRecipes','publicRecipes'].forEach(function(k){
+      if(j[k]!=null)h+='<div class="stat"><b>'+esc(j[k])+'</b>'+esc(k)+'</div>';
+    });
+    var s=j.signups;
+    if(s&&s.perDay){
+      h+='<div class="stat"><b>'+esc(s.total)+'</b>inscrits au total</div>';
+      var days=Object.keys(s.perDay).sort(), max=Math.max.apply(null,days.map(function(d){return s.perDay[d]}).concat([1]));
+      h+='<div class="bars">'+days.map(function(d){return '<i title="'+esc(d)+' : '+s.perDay[d]+'" style="height:'+Math.round(100*s.perDay[d]/max)+'%"></i>'}).join('')+'</div>';
+      h+='<small>'+(days.length?esc(days[0])+' → '+esc(days[days.length-1]):'aucune donnée')+' (jours de Paris, 60 max)</small>';
+      h+='<table><tr><th>Jour</th><th>Inscriptions</th></tr>'+days.slice().reverse().slice(0,14).map(function(d){return '<tr><td>'+esc(d)+'</td><td>'+s.perDay[d]+'</td></tr>'}).join('')+'</table>';
+    }
+    $('#view').innerHTML=h;
+  }
+  function showLinks(j){
+    var arr=[];
+    if(j&&j.link)arr.push({name:j.name,link:j.link});
+    var l=j&&(j.invites||j.items||j.list);
+    if(Array.isArray(l))l.forEach(function(x){if(x&&x.link)arr.push(x)});
+    if(!arr.length){$('#view').innerHTML='';return}
+    $('#view').innerHTML='<table><tr><th>Nom</th><th>Lien</th></tr>'+arr.map(function(x,i){return '<tr><td>'+esc(x.name||x.n||'')+'</td><td><a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.link)+'</a> <button class="ghost" data-copy="'+esc(x.link)+'">Copier</button></td></tr>'}).join('')+'</table>';
+  }
+
+  async function run(act,btn){
+    var spec=build(act); if(!spec)return;
+    if(spec.confirm&&!confirm(spec.confirm))return;
+    btn.disabled=true; $('#status').textContent='…'; $('#view').innerHTML=''; $('#out').hidden=true;
+    try{
+      var r=await fetch(spec.url,{headers:{'accept':'application/json'},cache:'no-store'});
+      var t=await r.text(), j=null; try{j=JSON.parse(t)}catch(e){}
+      $('#status').innerHTML=(r.ok?'<span class="ok">✓ '+r.status+'</span>':'<span class="ko">✗ '+r.status+(r.status===401?' – clé refusée ou accès verrouillé':'')+'</span>')+' · '+new Date().toLocaleTimeString('fr-FR');
+      if(r.status===401&&act!=='status'&&act!=='selftest'&&act!=='photoStatus'&&act!=='photoMissing'){/* keep session, user may retype */}
+      if(j){
+        if(spec.stats)showStats(j); else showLinks(j);
+        $('#out').textContent=JSON.stringify(j,null,2);
+      }else{ $('#out').textContent=t.slice(0,20000) }
+      $('#out').hidden=false;
+      $('#out').scrollIntoView({behavior:'smooth',block:'nearest'});
+    }catch(e){
+      $('#status').innerHTML='<span class="ko">✗ Erreur réseau</span>'; $('#out').textContent=String(e); $('#out').hidden=false;
+    }
+    btn.disabled=false;
+  }
+
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('button');
+    if(!b)return;
+    if(b.dataset.copy){navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy);b.textContent='Copié ✓';return}
+    if(b.dataset.act)run(b.dataset.act,b);
+  });
+})();
+</script>
+</body>
+</html>
