@@ -3571,7 +3571,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v517',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v518',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}
@@ -5527,11 +5527,9 @@ function updTop(){
   const b=$('#totop'),sc=topScroller();if(!b)return;
   if(!sc||sc.scrollTop<400){b.classList.remove('on');return}
   const r=sc.getBoundingClientRect(),c4=sc===log?[...document.querySelectorAll('#quick .qcol')].pop():null;
-  if(c4){ // chat: sits in the free space under the SHORTEST filter column, so it never covers a chip; falls back to the bottom of the grid
-    const cols=[...$('#quick').querySelectorAll('.qcol')].map(x=>x.getBoundingClientRect()),low=Math.max(...cols.map(x=>x.bottom));
-    const short=cols.reduce((a,b)=>b.bottom<a.bottom?b:a);
-    if(low-short.bottom>=45){b.style.left=Math.round(short.left+short.width/2-22)+'px';b.style.top=Math.round(short.bottom+1)+'px'}
-    else{b.style.left=Math.round(r.right-62)+'px';b.style.top=Math.round(r.top+10)+'px'} // no free cell in the grid (small screens): top right of the chat, away from the chips
+  if(c4){ // v518: chat = ONE fixed spot, bottom right, just above the filters panel (or above the message bar when the filters are folded / hidden); no more hunting for a free cell in the grid
+    const q=$('#quick'),bar=$('#bar'),qr=q&&q.offsetParent!==null?q.getBoundingClientRect():null,anchor=Math.min(qr?qr.top:1e9,bar?bar.getBoundingClientRect().top:r.bottom);
+    b.style.left=Math.round(r.right-62)+'px';b.style.top=Math.round(anchor-44-8)+'px';
   }else{ // recipe card: above the bottom bar, centered over its last icon (✨), never on top of it
     const nv=document.querySelector('nav'),nb=nv&&nv.offsetParent!==null?nv.querySelector('button:last-child'):null;
     if(nb){const n=nv.getBoundingClientRect(),c=nb.getBoundingClientRect();b.style.left=Math.round(c.left+c.width/2-22)+'px';b.style.top=Math.round(n.top-44-12)+'px'}
