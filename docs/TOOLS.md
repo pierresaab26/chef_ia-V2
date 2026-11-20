@@ -24,7 +24,7 @@ Columns: **Tool** · what it is used for · since · where / how.
 |---|---|---|---|
 | Node.js serverless functions | the API | start | `api/*.js` (files starting with `_` are shared helpers) |
 | Upstash Redis | comments, ratings, circles, accounts, shared recipes | start | env `KV_REST_API_URL`/`KV_REST_API_TOKEN` (or `UPSTASH_REDIS_REST_*`) |
-| Vercel cron | seasonal ideas refresh, daily jobs | v76+ | `vercel.json`, protected by `CRON_SECRET` |
+| Vercel cron | seasonal ideas refresh, daily jobs (v511: inactive-account warning + deletion, `api/_inactive.js`) | v76+ | `vercel.json`, protected by `CRON_SECRET` |
 
 ## AI
 | Tool | Used for | Since | Where / how |

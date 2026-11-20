@@ -43,6 +43,17 @@ async function inviteOk(tok) {
 // (counter `aq:<uid>`, extra granted by the admin in `ag:<uid>`). Code holders (APP_PASSWORD / invitation) stay unlimited.
 export const FREE_GEN = 10, DAY_CHAT = 60;
 const sessH = (s) => createHash("sha256").update("auth|" + s).digest("hex").slice(0, 32);
+// v511: last activity of an account, for the automatic deletion of inactive accounts (api/_inactive.js).
+// ax:act = zset uid → time of the last activity · ax:rem = hash uid → time of the warning e-mail (any activity cancels it) · ax:lang = hash uid → e-mail language.
+// One write per account, instance and day (the sign-in forces it); a Redis error never blocks a request.
+const touched = new Map();
+export async function touchActive(uid, lang, force) {
+  const day = new Date().toISOString().slice(0, 10);
+  if (!uid || (!force && touched.get(uid) === day)) return;
+  if (touched.size > 5000) touched.clear();
+  touched.set(uid, day);
+  try { await redis([["ZADD", "ax:act", String(Date.now()), uid], ["HDEL", "ax:rem", uid], ...(lang ? [["HSET", "ax:lang", uid, lang]] : [])]); } catch { touched.delete(uid); }
+}
 const sesCache = new Map();
 export async function sessUid(req) {
   const t = String(req.headers["x-session"] || "");
@@ -51,7 +62,7 @@ export async function sessUid(req) {
   if (c && c.until > Date.now()) return c.uid;
   try {
     const [uid] = await redis([["GET", "as:" + k]]);
-    if (uid) { sesCache.set(k, { uid, until: Date.now() + 60000 }); return uid; }
+    if (uid) { sesCache.set(k, { uid, until: Date.now() + 60000 }); await touchActive(uid); return uid; }
   } catch {}
   sesCache.delete(k);
   return "";

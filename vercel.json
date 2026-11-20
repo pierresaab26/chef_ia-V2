@@ -12,6 +12,10 @@
     {
       "path": "/api/season-ideas?run=1&at=8",
       "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/moderation?inactive=1&run=1",
+      "schedule": "30 3 * * *"
     }
   ],
   "rewrites": [

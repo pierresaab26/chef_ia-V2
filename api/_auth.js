@@ -1,5 +1,5 @@
 import { createHash, randomBytes, randomInt } from "node:crypto";
-import { authOk, captchaOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
+import { authOk, captchaOk, hasRedis, redis, overLimit, clean, touchActive } from "./_lib.js";
 import { isOffensive } from "./_words.js";
 import { indexPerson } from "./_index.js"; // v358: people search index // v356: offensive handles / e-mails refused
 
@@ -89,7 +89,7 @@ function appUrl(req) {
 }
 
 // Opens a session for the e-mail: creates the account on first sign-in (it adopts the device owner), returns the account owner.
-async function openSession(email, owner, pidOf) {
+async function openSession(email, owner, pidOf, lang) {
   const eh = h(email);
   let [uid] = await redis([["GET", "ae:" + eh]]);
   let acc = null, created = false;
@@ -109,6 +109,7 @@ async function openSession(email, owner, pidOf) {
     if (drop.length) await redis([["SREM", "aS:" + uid, ...drop], ...drop.map((x) => ["DEL", "as:" + x])]);
   }
   await adoptDeviceHandle(acc, uid, pidOf);
+  await touchActive(uid, lang, true); // v511: sign-in = activity (and remembers the e-mail language)
   const [name] = await redis([["GET", "cu:" + pidOf(acc.o)]]);
   return { ok: true, session: tok, owner: acc.o, email: acc.e, created, name: name || "", handle: acc.h || "" };
 }
@@ -195,24 +196,24 @@ export default async function authHandler(req, res, pidOf) {
       const [sent] = await redis([["INCR", "am:" + eh], ["EXPIRE", "am:" + eh, "3600", "NX"]]);
       if (Number(sent) > MAX_MAILS) return res.status(429).json({ error: "rate" });
       const code = String(randomInt(0, 1000000)).padStart(6, "0"), lt = randomBytes(16).toString("hex");
-      await redis([
-        ["SET", "ac:" + eh, JSON.stringify({ ch: h(code), n: 0, lt: h(lt) }), "EX", String(TTL_LOGIN)],
-        ["SET", "al:" + h(lt), JSON.stringify({ e: email }), "EX", String(TTL_LOGIN)],
-      ]);
       const lang = MAIL[body.lang] ? body.lang : "fr";
+      await redis([
+        ["SET", "ac:" + eh, JSON.stringify({ ch: h(code), n: 0, lt: h(lt), l: lang }), "EX", String(TTL_LOGIN)],
+        ["SET", "al:" + h(lt), JSON.stringify({ e: email, l: lang }), "EX", String(TTL_LOGIN)],
+      ]);
       if (!(await sendLoginMail(email, code, appUrl(req) + "/?login=" + lt, lang))) return res.status(503).json({ error: "nomail" });
       return res.status(200).json({ ok: true });
     }
 
     if (body.act === "verify") {
       if (await overLimit(req, "rl:av:", 20)) return res.status(429).json({ error: "rate" });
-      let email = "";
+      let email = "", lang = "";
       if (body.token) { // magic link: single use
         const lt = String(body.token);
         if (!/^[a-f0-9]{32}$/.test(lt)) return res.status(400).json({ error: "badcode" });
         const [raw] = await redis([["GET", "al:" + h(lt)]]);
         if (!raw) return res.status(410).json({ error: "expired" });
-        email = JSON.parse(raw).e;
+        { const j = JSON.parse(raw); email = j.e; lang = MAIL[j.l] ? j.l : ""; }
         await redis([["DEL", "al:" + h(lt)], ["DEL", "ac:" + h(email)]]);
       } else { // 6-digit code: MAX_TRIES tries, then a new mail is needed
         email = normMail(body.email);
@@ -222,6 +223,7 @@ export default async function authHandler(req, res, pidOf) {
         const [raw] = await redis([["GET", "ac:" + eh]]);
         if (!raw) return res.status(410).json({ error: "expired" });
         const c = JSON.parse(raw);
+        lang = MAIL[c.l] ? c.l : "";
         if (c.ch !== h(code)) {
           c.n = (c.n || 0) + 1;
           if (c.n >= MAX_TRIES) await redis([["DEL", "ac:" + eh], ["DEL", "al:" + c.lt]]);
@@ -230,7 +232,7 @@ export default async function authHandler(req, res, pidOf) {
         }
         await redis([["DEL", "ac:" + eh], ["DEL", "al:" + c.lt]]);
       }
-      return res.status(200).json(await openSession(email, owner, pidOf));
+      return res.status(200).json(await openSession(email, owner, pidOf, lang));
     }
 
     if (body.act === "oauth") return res.status(501).json({ error: "disabled" }); // v354: Google / Apple prepared, not active (see providers())

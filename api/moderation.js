@@ -6,11 +6,13 @@
 //   &invite=<name>   → creates a personal link  https://<site>/?k=<token>  (answer: {name, link})
 //   &invites=1       → lists the invitations (name, date, link)
 //   &revoke=<name>   → removes every invitation of that name (or the one whose token is given); effective within 60 s
+// v511: &inactive=1 → DRY RUN of the inactive-account clean-up (api/_inactive.js); &inactive=1&run=1 does it (daily cron).
 // &stats=1 → counts of users (there are no accounts: a user = a device nickname) and activity, read-only.
 import { fail, redis, hasRedis, adminOk, FREE_GEN } from "./_lib.js";
 import { randomBytes } from "node:crypto";
 import { suggest, handleOk } from "./_auth.js";
 import { indexPerson } from "./_index.js";
+import { runInactive } from "./_inactive.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return fail(res, "method");
@@ -29,6 +31,7 @@ export default async function handler(req, res) {
       let e = ""; try { e = JSON.parse(raw || "{}").e || ""; } catch {}
       return res.status(200).json({ ok: !!raw, account: e, added: n, freeTotal: FREE_GEN + Number(tot) });
     }
+    if (q.inactive) return res.status(200).json(await runInactive({ dry: q.run !== "1" })); // v511: warning e-mail then deletion of accounts inactive for 2 years (dry run unless &run=1; daily cron in vercel.json)
     if (q.stats) return res.status(200).json(await stats());
     if (q.creports || q.cok || q.cdel || q.cunban) return res.status(200).json(await commentReports(q));
     if (q.handles) return res.status(200).json(await deviceHandles(!!q.apply));
