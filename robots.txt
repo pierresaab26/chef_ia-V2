@@ -1,0 +1,7 @@
+# CheffeEvalie: everything public may be read (search engines and AI assistants).
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /l/
+
+Sitemap: https://www.cheffeevalie.com/sitemap.xml

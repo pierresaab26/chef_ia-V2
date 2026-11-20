@@ -1,6 +1,7 @@
 import { authOk, hasRedis, redis, overLimit, clean } from "./_lib.js";
 import { createHash } from "node:crypto";
 import { rank, recommended } from "./_score.js";
+import { seoHandler } from "./_seo.js";
 const pidOf = (owner) => createHash("sha256").update("circle|" + owner).digest("hex").slice(0, 16); // same as api/circle.js
 // v364: @ of the author of a public copy (the publisher's pid is stored as `bp`; older copies: derived from the owner key)
 const isMine = (d, owner) => !!(owner && d && d.pub && ((d.bp && d.bp === pidOf(owner)) || (d.o && d.o === owner)));
@@ -12,6 +13,8 @@ const handleOf = async (docs) => { const ps = docs.map((d) => (d && d.pub ? d.bp
 // v248: index « s:ck » (comment/rating key → {sid,t,l}) and counter « s:pop » (people who really shared it, POST {sid, hit:1}), read by the weekly menu (api/week-menu.js).
 export default async function handler(req, res) {
   if (!hasRedis()) return res.status(501).json({ error: "storage" });
+  // v512: PUBLIC SEO pages (/recettes, /recette/<slug>--<id>, /sitemap.xml: rewrites in vercel.json), see api/_seo.js
+  if (req.method === "GET" && req.query && req.query.seo != null) return seoHandler(req, res);
   // v373: PUBLIC preview page of a shared cooking QUESTION (/q/<id> → here): the card shows the question and the start of the answer. The text comes from a record the app stored (POST {qa:1}), never from the URL, so nobody can print arbitrary text under our address.
   if (req.method === "GET" && req.query && req.query.ogq != null) {
     const qid = String(req.query.ogq || "");
@@ -28,7 +31,7 @@ export default async function handler(req, res) {
     const target = qq ? "/?q=" + encodeURIComponent(qq) : "/";
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
-    return res.status(200).send('<!DOCTYPE html><html lang="' + (fr ? "fr" : "en") + '"><head><meta charset="utf-8"><title>' + esc(title) + ' – CheffeEvalie</title><meta name="viewport" content="width=device-width,initial-scale=1">'
+    return res.status(200).send('<!DOCTYPE html><html lang="' + (fr ? "fr" : "en") + '"><head><meta charset="utf-8"><title>' + esc(title) + ' – CheffeEvalie</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">'
       + '<meta property="og:type" content="article"><meta property="og:site_name" content="CheffeEvalie"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
       + (base ? '<meta property="og:image" content="' + esc(base + "/icons/icon-512.png") + '"><meta property="og:url" content="' + esc(base + "/q/" + qid) + '">' : "")
       + '<meta http-equiv="refresh" content="0;url=' + esc(target) + '"></head><body><script>location.replace(' + JSON.stringify(target) + ')</script><p><a href="' + esc(target) + '">CheffeEvalie</a></p></body></html>');
@@ -62,7 +65,7 @@ export default async function handler(req, res) {
     const target = "/?s=" + encodeURIComponent(osid);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
-    return res.status(200).send('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>' + esc(title) + ' – CheffeEvalie</title><meta name="viewport" content="width=device-width,initial-scale=1">'
+    return res.status(200).send('<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>' + esc(title) + ' – CheffeEvalie</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">'
       + '<meta property="og:type" content="article"><meta property="og:site_name" content="CheffeEvalie"><meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(desc) + '">'
       + (img ? '<meta property="og:image" content="' + esc(img) + '"><meta name="twitter:card" content="summary_large_image">' : (base ? '<meta property="og:image" content="' + esc(base + "/icons/icon-512.png") + '">' : ""))
       + (base ? '<meta property="og:url" content="' + esc(base + "/r/" + osid) + '">' : "")

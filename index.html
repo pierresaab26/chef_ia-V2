@@ -3,7 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<title>CheffeEvalie – Recettes</title>
+<title>CheffeEvalie – Recettes à votre façon, adaptées par une IA</title>
+<meta name="description" content="Trouvez une recette, puis adaptez-la à vos goûts : sans gluten, végane, plus rapide, pour 2 ou 8 personnes. La cheffe IA réécrit la recette complète en quelques secondes.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://www.cheffeevalie.com/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="CheffeEvalie"><meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="CheffeEvalie – Recettes à votre façon, adaptées par une IA">
+<meta property="og:description" content="Trouvez une recette, puis personnalisez-la : sans gluten, végane, plus rapide, pour 2 ou 8 personnes. La cheffe IA l’adapte à vos goûts et à votre frigo.">
+<meta property="og:url" content="https://www.cheffeevalie.com/"><meta property="og:image" content="https://www.cheffeevalie.com/icons/icon-512.png">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.cheffeevalie.com/#site","url":"https://www.cheffeevalie.com/","name":"CheffeEvalie","inLanguage":["fr","en","es","de","it","pt"]},{"@type":"WebApplication","@id":"https://www.cheffeevalie.com/#app","name":"CheffeEvalie","url":"https://www.cheffeevalie.com/","applicationCategory":"LifestyleApplication","operatingSystem":"Web, iOS, Android","description":"Application de cuisine avec une cheffe IA : trouvez une recette puis personnalisez-la (sans gluten, végane, plus rapide, pour 2 ou 8 personnes), importez une recette depuis une photo ou un lien, planifiez le menu de la semaine et partagez vos listes de courses.","inLanguage":["fr","en","es","de","it","pt"]}]}</script>
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#fffaf2">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
@@ -18,6 +27,7 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#1f1b33;--bg2:#12101d;--card:#272339;--ink:#f4f1fa;--mut:#a29cb3;--dark:#0b0910;--bd:rgba(255,255,255,.09)}}
 :root[data-theme="dark"]{--bg1:#1f1b33;--bg2:#12101d;--card:#272339;--ink:#f4f1fa;--mut:#a29cb3;--dark:#0b0910;--bd:rgba(255,255,255,.09)}
 *{box-sizing:border-box}
+.seo{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0} /* v512: intro text for search engines and screen readers */
 html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
 body{background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
@@ -799,6 +809,7 @@ textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body>
+<div class="seo"><h1>CheffeEvalie : trouvez une recette et adaptez-la à votre façon</h1><p>CheffeEvalie est une application de cuisine avec une cheffe IA. Cherchez une recette, puis personnalisez-la : sans gluten, sans lactose, végane, plus rapide, pour 2 ou 8 personnes, ou avec ce que vous avez dans le frigo. La recette complète est réécrite en quelques secondes. Vous pouvez aussi importer une recette depuis une photo ou un lien, préparer le menu de la semaine et partager vos listes de courses.</p><p><a href="/recettes">Recettes de la communauté</a> · <a href="/legal">Infos légales</a></p></div>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="mascot" viewBox="0 0 512 512">
 <clipPath id="mzclip"><rect width="512" height="512" rx="112"/></clipPath>
@@ -3559,7 +3570,7 @@ function drawSeason(){const t=T(),box=$('#seasonBox');if(!box)return;box.innerHT
   const fb=document.createElement('button');fb.type='button';fb.className='snfold';const fl=()=>{fb.textContent=(fo.hidden?'▸ ':'▾ ')+t.snFold;fb.setAttribute('aria-expanded',fo.hidden?'false':'true')};fl();fb.onclick=()=>{fo.hidden=!fo.hidden;fl()};
   pn.append(h,st,sg,more,ex,fb,fo);box.appendChild(pn);
 }
-const APP_VERSION='v511',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
+const APP_VERSION='v512',STORE_KEY='chefStore',OLD_KEY='chefHistory',STORE_V=2,MAX_RECENT=50;
 /* v439: error monitoring (Sentry), self-hosted /sentry.js. Does nothing while SENTRY_DSN is empty. No replay, no tracing, no console/click breadcrumbs, no IP/user, URLs stripped of ?query/#hash (invitation tokens), exception text cut to 300 chars. Tags: app version (release), platform ios/android, standalone (home-screen app). */
 const SENTRY_DSN='https://901477e5883415ac809ce1d60983f04c@o4512447912804352.ingest.de.sentry.io/4512447953895504';
 function sentryStart(){if(!SENTRY_DSN||window.__sentryOn)return;window.__sentryOn=1;const clean=u=>String(u||'').replace(/[?#].*$/,'');const s=document.createElement('script');s.src='/sentry.js';s.async=true;s.onload=function(){try{const ua=navigator.userAgent||'',pl=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1)?'ios':/Android/.test(ua)?'android':'other',sa=!!(navigator.standalone||(matchMedia&&matchMedia('(display-mode: standalone)').matches));Sentry.init({dsn:SENTRY_DSN,release:APP_VERSION,environment:location.hostname==='chefia-v3.vercel.app'?'production':'other',sendDefaultPii:false,tracesSampleRate:0,maxBreadcrumbs:20,ignoreErrors:['ResizeObserver loop','Script error.','Non-Error promise rejection captured'],denyUrls:[/^chrome-extension:/,/^moz-extension:/,/^safari-extension:/],beforeBreadcrumb:b=>{if(b.category==='console'||b.category==='ui.input'||b.category==='ui.click')return null;if(b.data&&b.data.url)b.data.url=clean(b.data.url);if(b.data&&b.data.to)b.data.to=clean(b.data.to);if(b.data&&b.data.from)b.data.from=clean(b.data.from);return b},beforeSend:ev=>{try{delete ev.user;if(ev.request){ev.request.url=clean(ev.request.url);delete ev.request.query_string;delete ev.request.cookies;delete ev.request.headers}(ev.exception&&ev.exception.values||[]).forEach(x=>{if(x.value)x.value=String(x.value).slice(0,300)});if(ev.message)ev.message=String(ev.message).slice(0,300);const v=window.visualViewport;ev.contexts=ev.contexts||{};ev.contexts.viewport={w:innerWidth,h:innerHeight,vvh:v?Math.round(v.height):null,dpr:devicePixelRatio}}catch(e){}return ev}});Sentry.setTag('platform',pl);Sentry.setTag('standalone',sa?'yes':'no');Sentry.setTag('lang',(document.documentElement.lang||'').slice(0,5))}catch(e){}};document.head.appendChild(s)}

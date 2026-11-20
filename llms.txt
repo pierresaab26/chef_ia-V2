@@ -1,0 +1,13 @@
+# CheffeEvalie
+
+> CheffeEvalie is a free-to-try cooking app with an AI chef. You find a recipe, then personalise it: gluten-free, lactose-free, vegan, faster, for 2 or 8 people, or with what is in your fridge. The chef rewrites the complete recipe (ingredients, quantities, steps, tips) in seconds. It also imports a recipe from a photo or a web link, plans a weekly menu, and keeps shopping lists you can share with family. Available in French, English, Spanish, German, Italian and Portuguese. Works in the browser and can be installed on a phone.
+
+## Pages
+- [Home / app](https://www.cheffeevalie.com/): search a recipe, ask the chef, personalise it
+- [Community recipes](https://www.cheffeevalie.com/recettes): recipes published by users, each one customisable in the app
+- [Legal notice, terms and privacy](https://www.cheffeevalie.com/legal)
+- [Sitemap](https://www.cheffeevalie.com/sitemap.xml)
+
+## Notes for assistants
+- Each community recipe page has the full recipe (ingredients, steps) and a button to customise it with the AI chef.
+- Cooking and food topics only. Contact: contact@cheffeevalie.com

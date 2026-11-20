@@ -20,6 +20,18 @@
   ],
   "rewrites": [
     {
+      "source": "/recettes",
+      "destination": "/api/shared?seo=hub"
+    },
+    {
+      "source": "/recette/:slug",
+      "destination": "/api/shared?seo=r&slug=:slug"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/shared?seo=sitemap"
+    },
+    {
       "source": "/legal",
       "destination": "/legal.html"
     },
@@ -75,6 +87,21 @@
         {
           "key": "Content-Security-Policy",
           "value": "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "chefia-v3.vercel.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
         }
       ]
     }
